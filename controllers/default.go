@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"blog/utils"
+	// "fmt"
 	"github.com/astaxie/beego"
 )
 
@@ -10,7 +11,15 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.Ctx.WriteString("home page, random string: " + utils.RandString(10))
+	u := this.GetSession("username")
+
+	uinfo := "nil"
+	if nil != u {
+		uinfo = u.(string)
+	}
+
+	this.Ctx.WriteString("home page, random string: " + utils.RandString(10) + "\nuser:" + uinfo)
+
 }
 
 func (this *MainController) Post() {

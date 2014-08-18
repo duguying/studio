@@ -63,8 +63,10 @@ func (this *LoginController) Post() {
 	} else {
 		passwd := utils.Md5(password + user.Salt)
 		if passwd == user.Password {
-			// TODO Session
+			this.SetSession("username", username)
 			this.Data["json"] = map[string]interface{}{"result": true, "msg": "user[" + user.Username + "] login success ", "refer": "/"}
+		} else {
+			this.Data["json"] = map[string]interface{}{"result": false, "msg": "login failed ", "refer": "/"}
 		}
 	}
 	this.ServeJson()

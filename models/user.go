@@ -2,11 +2,12 @@ package models
 
 import (
 	"blog/utils"
+	// "fmt"
 	"github.com/astaxie/beego/orm"
 )
 
 type Users struct {
-	Id       int64
+	Id       int
 	Username string
 	Password string
 	Salt     string
@@ -25,7 +26,16 @@ func AddUser(username string, password string) (int64, error) {
 	o.Using("default")
 	user := new(Users)
 	user.Username = username
-	user.Password = password
 	user.Salt = utils.RandString(10)
+	user.Password = utils.Md5(password + user.Salt)
 	return o.Insert(user)
+}
+
+func FindUser(username string) (Users, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	user := Users{Username: username}
+	err := o.Read(&user, "username")
+
+	return user, err
 }

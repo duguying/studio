@@ -4,12 +4,17 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strconv"
+	"time"
 )
 
 type Article struct {
-	Id      int
-	Title   string
-	Content string
+	Id       int
+	Title    string
+	Keywords string
+	Content  string
+	Author   string
+	Time     time.Time
+	Count    int
 }
 
 func (u *Article) TableName() string {
@@ -41,4 +46,20 @@ func List() {
 		}
 	}
 
+}
+
+func GetArticle(id int) (Article, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	art := Article{Id: id}
+	err := o.Read(&art, "id")
+	return art, err
+}
+
+func GetArticleByTitle(title string) (Article, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	art := Article{Title: title}
+	err := o.Read(&art, "title")
+	return art, err
 }

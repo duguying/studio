@@ -3,8 +3,9 @@ package controllers
 import (
 	. "blog/models"
 	"blog/utils"
-	// "fmt"
+	"fmt"
 	"github.com/astaxie/beego"
+	// "strconv"
 )
 
 /**
@@ -15,10 +16,24 @@ type RegistorController struct {
 }
 
 func (this *RegistorController) Get() {
-	this.TplNames = "registor.tpl"
+	registorable, err := beego.AppConfig.Bool("registorable")
+	if registorable || nil != err {
+		this.TplNames = "registor.tpl"
+	} else {
+		this.Ctx.WriteString("registor closed")
+	}
 }
 
 func (this *RegistorController) Post() {
+	registorable, err := beego.AppConfig.Bool("registorable")
+	if nil != err {
+		// default registorable is true, do nothing
+	} else if !registorable {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "registorable is false", "refer": "/"}
+		this.ServeJson()
+		return
+	}
+
 	username := this.GetString("username")
 	password := this.GetString("password")
 
@@ -32,7 +47,7 @@ func (this *RegistorController) Post() {
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "registor failed", "refer": "/"}
 	} else {
-		this.Data["json"] = map[string]interface{}{"result": true, "msg": string(id) + "registor success", "refer": "/"}
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": fmt.Sprintf("[%d] ", id) + "registor success", "refer": "/"}
 	}
 	this.ServeJson()
 }

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"blog/utils"
+	// "blog/utils"
 	// "fmt"
 	"github.com/astaxie/beego"
 )
@@ -11,15 +11,16 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	u := this.GetSession("username")
+	// u := this.GetSession("username")
 
-	uinfo := "nil"
-	if nil != u {
-		uinfo = u.(string)
-	}
+	// uinfo := "nil"
+	// if nil != u {
+	// 	uinfo = u.(string)
+	// }
 
-	this.Ctx.WriteString("home page, random string: " + utils.RandString(10) + "\nuser:" + uinfo)
+	// this.Ctx.WriteString("home page, random string: " + utils.RandString(10) + "\nuser:" + uinfo)
 
+	this.TplNames = "index.tpl"
 }
 
 func (this *MainController) Post() {

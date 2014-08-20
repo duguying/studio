@@ -25,12 +25,14 @@ func init() {
 	orm.RegisterModel(new(Article))
 }
 
-func AddArticle(title string, content string, keywords string) (int64, error) {
+func AddArticle(title string, content string, keywords string, author string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	art := new(Article)
 	art.Title = title
+	art.Keywords = keywords
 	art.Content = content
+	art.Author = author
 	return o.Insert(art)
 }
 
@@ -62,4 +64,37 @@ func GetArticleByTitle(title string) (Article, error) {
 	art := Article{Title: title}
 	err := o.Read(&art, "title")
 	return art, err
+}
+
+func UpdateArticle(id int64, title string, newArt Article) error {
+	o := orm.NewOrm()
+	o.Using("default")
+	var art Article
+
+	if 0 != id {
+		art = Article{Id: int(id)}
+	} else if "" != title {
+		art = Article{Title: title}
+	}
+
+	art.Title = newArt.Title
+	art.Keywords = newArt.Keywords
+	art.Content = newArt.Content
+
+	_, err := o.Update(&art, "title", "keywords", "content")
+	return err
+}
+
+func DeleteArticle(id int64, title string) (int64, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	var art Article
+
+	if 0 != id {
+		art.Id = int(id)
+	} else if "" != title {
+		art.Title = title
+	}
+
+	return o.Delete(&art)
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	// "strconv"
+	"log"
 )
 
 /**
@@ -85,4 +86,75 @@ func (this *LoginController) Post() {
 		}
 	}
 	this.ServeJson()
+}
+
+/**
+ * 登出
+ */
+type LogoutController struct {
+	beego.Controller
+}
+
+func (this *LogoutController) Get() {
+	this.DelSession("username")
+	this.Ctx.WriteString("you have logout")
+}
+
+func (this *LogoutController) Post() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
+	this.ServeJson()
+}
+
+/**
+ * 测试暂用页
+ */
+type TestController struct {
+	beego.Controller
+}
+
+func (this *TestController) Get() {
+	this.Data["username"] = this.GetSession("username")
+	this.TplNames = "test.tpl"
+}
+
+func (this *TestController) Post() {
+	this.Data["username"] = this.GetSession("username")
+	this.TplNames = "test.tpl"
+}
+
+/**
+ * 修改用户名
+ */
+type ChangeUsernameController struct {
+	beego.Controller
+}
+
+func (this *ChangeUsernameController) Get() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
+	this.ServeJson()
+}
+
+func (this *ChangeUsernameController) Post() {
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	oldUsername := user.(string)
+	newUsername := this.GetString("username")
+
+	err := ChangeUsername(oldUsername, newUsername)
+
+	if nil != err {
+		log.Println(err)
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "change username failed", "refer": "/"}
+		this.ServeJson()
+	} else {
+		this.SetSession("username", newUsername)
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "change username success", "refer": "/"}
+		this.ServeJson()
+	}
 }

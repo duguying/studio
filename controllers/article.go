@@ -32,6 +32,11 @@ func (this *AddArticleController) Post() {
 		return
 	}
 
+	if "" == title {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
+		this.ServeJson()
+	}
+
 	username := user.(string)
 
 	id, err := AddArticle(title, content, keywords, username)
@@ -111,6 +116,11 @@ func (this *UpdateArticleController) Post() {
 	newContent := this.GetString("content")
 	newKeywords := this.GetString("keywords")
 
+	if "" == newTitle {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
+		this.ServeJson()
+	}
+
 	var art Article
 
 	if nil == err {
@@ -128,7 +138,6 @@ func (this *UpdateArticleController) Post() {
 	err = UpdateArticle(id, title, art)
 
 	if nil != err {
-		log.Fatal(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "update failed", "refer": "/"}
 		this.ServeJson()
 	} else {

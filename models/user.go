@@ -4,6 +4,7 @@ import (
 	"blog/utils"
 	// "fmt"
 	"github.com/astaxie/beego/orm"
+	// "log"
 )
 
 type Users struct {
@@ -38,4 +39,13 @@ func FindUser(username string) (Users, error) {
 	err := o.Read(&user, "username")
 
 	return user, err
+}
+
+func ChangeUsername(oldUsername string, newUsername string) error {
+	o := orm.NewOrm()
+	o.Using("default")
+	_, err := o.QueryTable("users").Filter("username", oldUsername).Update(orm.Params{
+		"username": newUsername,
+	})
+	return err
 }

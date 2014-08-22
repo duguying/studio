@@ -53,6 +53,19 @@ func GetArticleByTitle(title string) (Article, error) {
 	return art, err
 }
 
+func UpdateCount(id int) error {
+	o := orm.NewOrm()
+	o.Using("default")
+	art := Article{Id: id}
+	err := o.Read(&art)
+
+	o.QueryTable("article").Filter("id", id).Update(orm.Params{
+		"count": art.Count + 1,
+	})
+
+	return err
+}
+
 func UpdateArticle(id int64, title string, newArt Article) error {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -142,4 +155,12 @@ func ListPage(page int) ([]orm.Params, bool, int, error) {
 	} else {
 		return nil, false, pages, err
 	}
+}
+
+/**
+ * 同关键词文章列表
+ * select * from article where keywords like '%keyword%'
+ */
+func ListByKeyword(keyword string) {
+
 }

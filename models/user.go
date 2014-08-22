@@ -5,6 +5,8 @@ import (
 	// "fmt"
 	"github.com/astaxie/beego/orm"
 	// "log"
+	"errors"
+	"regexp"
 )
 
 type Users struct {
@@ -12,6 +14,7 @@ type Users struct {
 	Username string
 	Password string
 	Salt     string
+	Email    string
 }
 
 func (u *Users) TableName() string {
@@ -48,4 +51,28 @@ func ChangeUsername(oldUsername string, newUsername string) error {
 		"username": newUsername,
 	})
 	return err
+}
+
+/**
+ * 修改邮箱
+ */
+func ChangeEmail(username string, email string) error {
+	o := orm.NewOrm()
+	o.Using("default")
+
+	reg := regexp.MustCompile(`^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$`)
+	result := reg.MatchString(email)
+	if !result {
+		return errors.New("not a email")
+	}
+
+	num, err := o.QueryTable("users").Filter("username", username).Update(orm.Params{"email": email})
+
+	if nil != err {
+		return err
+	} else if 0 == num {
+		return errors.New("not update")
+	} else {
+		return nil
+	}
 }

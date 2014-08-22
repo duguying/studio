@@ -158,3 +158,43 @@ func (this *ChangeUsernameController) Post() {
 		this.ServeJson()
 	}
 }
+
+/**
+ * 修改Email
+ */
+type SetEmailController struct {
+	beego.Controller
+}
+
+func (this *SetEmailController) Get() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
+	this.ServeJson()
+}
+
+func (this *SetEmailController) Post() {
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
+	}
+	username := user.(string)
+
+	email := this.GetString("email")
+	if "" == email {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "email is needed", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	err := ChangeEmail(username, email)
+
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "set email failed", "refer": nil}
+		this.ServeJson()
+		return
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "set email success", "refer": "/"}
+		this.ServeJson()
+	}
+}

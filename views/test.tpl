@@ -41,5 +41,12 @@
 				<input type="submit" value="修改">
 			</form>
 		</div>
+		<div>
+			<h3>修改Email</h3>
+			<form action="/email" method="post">
+				<label for="">Email</label><input type="text" name="email" id=""><br>
+				<input type="submit" value="修改">
+			</form>
+		</div>
 </body>
 </html>

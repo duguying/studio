@@ -73,6 +73,10 @@ func (this *ArticleController) Get() {
 		this.ServeJson()
 	}
 
+	if 0 != art.Id {
+		UpdateCount(art.Id)
+	}
+
 	this.Data["id"] = art.Id
 	this.Data["title"] = art.Title
 	this.Data["content"] = art.Content

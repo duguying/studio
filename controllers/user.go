@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego"
 	// "strconv"
 	"log"
+	"time"
 )
 
 /**
@@ -197,4 +198,100 @@ func (this *SetEmailController) Post() {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "set email success", "refer": "/"}
 		this.ServeJson()
 	}
+}
+
+/**
+ * 发送找回密码验证邮件
+ */
+type SendEmailToGetBackPasswordController struct {
+	beego.Controller
+}
+
+func (this *SendEmailToGetBackPasswordController) Get() {
+	user := this.GetSession("username")
+	username := user.(string)
+	time := time.Now()
+	code := utils.Md5(utils.RandString(20) + time.String())
+
+	err := AddVerify(username, code, time)
+
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "create varify failed", "refer": "/"}
+		this.ServeJson()
+	} else {
+		subject := "blog system get your password back"
+		body := `click the following link to get your password back <font color="red"><a href="http://127.0.0.1:81/password/reset/` + code + `">http://127.0.0.1:81/password/reset/` + code + `</a></font>`
+		currentUser, _ := FindUser(username)
+		email := currentUser.Email
+
+		err := utils.SendMail(email, subject, body)
+		if nil != err {
+			this.Data["json"] = map[string]interface{}{"result": false, "msg": "send mail failed", "refer": "/"}
+			this.ServeJson()
+		} else {
+			this.Data["json"] = map[string]interface{}{"result": true, "msg": "create varify success", "refer": "/"}
+			this.ServeJson()
+		}
+	}
+
+}
+
+func (this *SendEmailToGetBackPasswordController) Post() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
+	this.ServeJson()
+}
+
+/**
+ * 设置密码
+ */
+type SetPasswordController struct {
+	beego.Controller
+}
+
+func (this *SetPasswordController) Get() {
+	varify := this.Ctx.Input.Param(":varify")
+
+	if "" == varify {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
+		this.ServeJson()
+	}
+
+	result, err := CheckVarify(varify)
+
+	if nil != err {
+		this.Ctx.WriteString("找回密码已过期")
+	} else if result {
+		this.Ctx.WriteString("验证错误")
+	} else {
+		this.TplNames = "resetpasswd.tpl"
+	}
+}
+
+func (this *SetPasswordController) Post() { // TODO
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	username := user.(string)
+	newPassword := this.GetString("password")
+	if "" == newPassword {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "password is needed", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	err := SetPassword(username, newPassword)
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "set password failed", "refer": nil}
+		this.ServeJson()
+		return
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "set password success", "refer": "/"}
+		this.ServeJson()
+	}
+
 }

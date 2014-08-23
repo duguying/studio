@@ -41,11 +41,28 @@
 				<input type="submit" value="修改">
 			</form>
 		</div>
+		<hr>
 		<div>
 			<h3>修改Email</h3>
 			<form action="/email" method="post">
 				<label for="">Email</label><input type="text" name="email" id=""><br>
 				<input type="submit" value="修改">
+			</form>
+		</div>
+		<hr>
+		<div>
+			<h3>发送Email验证找回密码</h3>
+			<form action="/password/sendemail" method="get">
+				<input type="submit" value="发送">
+			</form>
+		</div>
+		<hr>
+		<div>
+			<h3>修改密码</h3>
+			<form action="/password/change" method="post">
+				<label for="">旧密码</label><input type="password" name="oldpassword" id="">
+				<label for="">新密码</label><input type="password" name="password" id="">
+				<input type="submit" value="发送">
 			</form>
 		</div>
 </body>

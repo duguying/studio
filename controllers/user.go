@@ -256,13 +256,14 @@ func (this *SetPasswordController) Get() {
 		this.ServeJson()
 	}
 
-	result, err := CheckVarify(varify)
+	result, username, err := CheckVarify(varify)
 
 	if nil != err {
 		this.Ctx.WriteString("找回密码已过期")
 	} else if result {
 		this.Ctx.WriteString("验证错误")
 	} else {
+		this.Data["username"] = username
 		this.TplNames = "resetpasswd.tpl"
 	}
 }

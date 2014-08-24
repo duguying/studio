@@ -101,7 +101,7 @@ func AddVerify(username string, code string, overdue time.Time) error {
 /**
  * 检查验证码
  */
-func CheckVarify(code string) (bool, error) {
+func CheckVarify(code string) (bool, string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
@@ -109,9 +109,9 @@ func CheckVarify(code string) (bool, error) {
 	err := o.Raw("select * from varify where code='" + code + "' and overdue > now()").QueryRow(&varifyItem)
 	if code == varifyItem.Code {
 		o.Raw("delete from varify where code='" + code + "'").Exec()
-		return true, err
+		return true, varifyItem.UserName, err
 	} else {
-		return false, err
+		return false, varifyItem.UserName, err
 	}
 }
 

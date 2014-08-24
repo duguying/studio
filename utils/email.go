@@ -7,13 +7,9 @@ import (
 )
 
 /*
- *  user : example@example.com login smtp server user
- *  password: xxxxx login smtp server password
- *  host: smtp.example.com:port   smtp.163.com:25
  *  to: example@example.com;example1@163.com;example2@sina.com.cn;...
  *  subject:The subject of mail
  *  body: The content of mail
- *  mailtyoe: mail type html or text
  */
 
 func SendMail(to string, subject string, body string) error {

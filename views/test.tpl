@@ -65,5 +65,13 @@
 				<input type="submit" value="发送">
 			</form>
 		</div>
+		<hr>
+		<div>
+			<h3>上传文件</h3>
+			<form action="/upload" method="post" enctype="multipart/form-data">
+				<input type="file" name="file" id="">
+				<input type="submit" value="上传">
+			</form>
+		</div>
 </body>
 </html>

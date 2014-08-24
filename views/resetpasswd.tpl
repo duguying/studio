@@ -7,7 +7,7 @@
 <body>
 	<hr>
 	<div>
-		<h3>重置密码</h3>
+		<h3>用户{{.username}}: 重置密码</h3>
 		<form action="/password/reset" method="post">
 			<input type="password" name="password" id="">
 			<input type="submit" value="修改">

@@ -54,3 +54,37 @@ func (this *MainController) Get() {
 func (this *MainController) Post() {
 	this.Ctx.WriteString("home page")
 }
+
+/**
+ * Upload
+ */
+type UploadController struct {
+	beego.Controller
+}
+
+func (this *UploadController) Get() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "only post method available", "refer": nil}
+	this.ServeJson()
+}
+
+func (this *UploadController) Post() {
+	f, h, err := this.GetFile("file")
+	f.Close()
+
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "upload failed", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	err = this.SaveToFile("file", "static/upload/"+h.Filename)
+
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "upload failed", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	this.Data["json"] = map[string]interface{}{"result": true, "msg": "successfully uploaded", "refer": nil}
+	this.ServeJson()
+}

@@ -73,5 +73,14 @@
 				<input type="submit" value="上传">
 			</form>
 		</div>
+		<hr>
+		<div>
+			<h3>修改密码</h3>
+			<form action="/password/change" method="post">
+				<label for="">输入密码</label><input type="password" name="old_password"><br>
+				<label for="">新密码</label><input type="password" name="password"><br>
+				<input type="submit" value="修改">
+			</form>
+		</div>
 </body>
 </html>

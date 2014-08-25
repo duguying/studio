@@ -160,7 +160,41 @@ func ListPage(page int) ([]orm.Params, bool, int, error) {
 /**
  * 同关键词文章列表
  * select * from article where keywords like '%keyword%'
+ * 返回值:
+ * []orm.Params 文章
+ * bool 是否有下一页
+ * error 错误
  */
-func ListByKeyword(keyword string) {
+func ListByKeyword(keyword string, page int) ([]orm.Params, bool, int, error) {
+	pagePerNum := 6
+	sql1 := "select * from article where keywords like '%" + keyword + "%' limit ?," + fmt.Sprintf("%d", pagePerNum)
+	sql2 := "select count(*) as number from article where keywords like '%" + keyword + "%'"
+	var maps, maps2 []orm.Params
+	o := orm.NewOrm()
+	num, err := o.Raw(sql1, 6*(page-1)).Values(&maps)
+	o.Raw(sql2).Values(&maps2)
 
+	number, _ := strconv.Atoi(maps2[0]["number"].(string))
+
+	var addFlag int
+	if 0 == (number % pagePerNum) {
+		addFlag = 0
+	} else {
+		addFlag = 1
+	}
+
+	pages := number/pagePerNum + addFlag
+
+	var flagNextPage bool
+	if pages == page {
+		flagNextPage = false
+	} else {
+		flagNextPage = true
+	}
+
+	if err == nil && num > 0 {
+		return maps, flagNextPage, pages, nil
+	} else {
+		return nil, false, pages, err
+	}
 }

@@ -5,7 +5,6 @@ import (
 	"blog/utils"
 	"fmt"
 	"github.com/astaxie/beego"
-	// "strconv"
 	"log"
 	"time"
 )
@@ -295,4 +294,40 @@ func (this *SetPasswordController) Post() { // TODO
 		this.ServeJson()
 	}
 
+}
+
+/**
+ * 修改密码
+ */
+type ChangePasswordController struct {
+	beego.Controller
+}
+
+func (this *ChangePasswordController) Get() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
+	this.ServeJson()
+}
+
+func (this *ChangePasswordController) Post() {
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	username := user.(string)
+	oldPassword := this.GetString("old_password")
+	newPassword := this.GetString("password")
+
+	err := ChangePassword(username, oldPassword, newPassword)
+
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "change password faild", "refer": nil}
+		this.ServeJson()
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "change password success", "refer": nil}
+		this.ServeJson()
+	}
 }

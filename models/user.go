@@ -133,3 +133,28 @@ func SetPassword(username string, password string) error {
 
 	return err
 }
+
+/**
+ * 修改密码
+ */
+func ChangePassword(username string, oldPassword string, newPassword string) error {
+	o := orm.NewOrm()
+	o.Using("default")
+	salt := utils.RandString(10)
+
+	user := Users{Username: username}
+	err := o.Read(&user, "username")
+	if nil != err {
+		return err
+	} else {
+		if user.Password == utils.Md5(oldPassword+user.Salt) {
+			_, err := o.QueryTable("users").Filter("username", username).Update(orm.Params{
+				"salt":     salt,
+				"password": utils.Md5(newPassword + salt),
+			})
+			return err
+		} else {
+			return errors.New("verification failed")
+		}
+	}
+}

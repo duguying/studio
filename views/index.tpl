@@ -4,17 +4,21 @@
   	<head>
     	<title>blog</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+		<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	</head>
   	<body>
 		<div>
-			<h2>月份文章统计列表</h2>
+			<h3>月份文章统计列表</h3>
 			{{range $k,$v := .count_by_month}}
 				<span>{{$v.month}}[{{$v.number}}]</span><br>
 			{{end}}
 		</div>
 		<hr>
 		<div>
-			<h2>当前页文章列表</h2>
+			<h3>当前页文章列表</h3>
 			{{range $k,$v := .articles_in_page}}
 				<div style="border:1px solid gray;">{{$v.title}}<br>{{$v.content}}</div><br>
 			{{end}}

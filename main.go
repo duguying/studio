@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "blog/routers"
-	// "blog/utils"
+	"blog/utils"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -19,22 +19,10 @@ func init() {
 		port = 3306
 	}
 
-	// to := "xxxx@gmail.com;ssssss@gmail.com"
-	// subject := "Test send email by golang"
-	// body := `
-	//    <html>
-	//    <body>
-	//    <h3>
-	//    "Test send email by golang"
-	//    </h3>
-	//    </body>
-	//    </html>
-	// `
-	// utils.SendMail(to, subject, body, "html")
-
 	orm.RegisterDataBase("default", "mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", user, passwd, host, port, dbname))
 }
 
 func main() {
+	utils.OssStore("test.swf", "test.swf")
 	beego.Run()
 }

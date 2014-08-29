@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	// "time"
+	"strings"
 )
 
 /**
@@ -44,4 +45,11 @@ func Md5(value string) string {
 	h := md5.New()
 	h.Write([]byte(value))
 	return fmt.Sprintf("%s\n", hex.EncodeToString(h.Sum(nil)))
+}
+
+/**
+ * 获取用户头像
+ */
+func GetGravatar(email string) string {
+	return "http://www.gravatar.com/avatar/" + Md5(strings.ToUpper(email))
 }

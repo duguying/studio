@@ -26,6 +26,7 @@ func init() {
 	beego.Router("/password/change", &controllers.ChangePasswordController{})
 	beego.Router("/password/reset/:varify", &controllers.SetPasswordController{})
 	beego.Router("/upload", &controllers.UploadController{})
+	beego.Router("/project", &controllers.ProjectListController{})
 
 	beego.Router("/test", &controllers.TestController{})
 }

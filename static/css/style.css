@@ -1,7 +1,59 @@
+*{
+	font-family: '微软雅黑';
+}
+
 body{
 	background: url("/static/img/background.jpg");
 	background-position: center center;
 	background-attachment: fixed;
+}
+
+::-webkit-scrollbar-track-piece {
+	background-color:#f5f5f5;
+	border-left:1px solid #d2d2d2;
+}
+::-webkit-scrollbar {
+	width:13px;
+	height:13px;
+}
+::-webkit-scrollbar-thumb {
+	background-color:#c2c2c2;
+	background-clip:padding-box;
+	border:1px solid #979797;
+	min-height:28px;
+}
+::-webkit-scrollbar-thumb:hover {
+	border:1px solid #636363;
+	background-color:#929292;
+}
+
+a {
+    color: #1982d1;
+    cursor: pointer;
+    text-decoration: none;
+}
+a:hover {
+    color: orange;
+    text-decoration: none;
+}
+a:link, a:visited, a:active {
+    text-decoration: none;
+    transition: text-shadow 500ms ease-in 0ms, color 500ms ease-in 0ms;
+}
+a:hover, a:focus {
+    color: orange;
+    text-decoration: none;
+    transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms;
+}
+
+hr{
+	color: aqua;
+	margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.syntaxhighlighter {
+	padding-bottom: 5px !important;
 }
 
 .main{
@@ -20,14 +72,12 @@ body{
 
 .header .icons{
 	width: 100%;
-	background-color: rgba(0,0,255,.2);
+	background-color: #3c454f;
 	overflow: hidden;
 }
 
 .header .icons span{
 	float: right;
-	padding-left: 5px;
-	padding-right: 5px;
 }
 
 .menu{
@@ -48,6 +98,7 @@ body{
 	padding-left: 20px;
 	padding-right: 20px;
 	font-size: 18px;
+	font-family: "微软雅黑";
 	cursor: pointer;
 }
 
@@ -68,6 +119,11 @@ body{
 	color: white;
 }
 
+.banner .title:hover{
+	text-shadow: 0 0 10px;
+	transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms;
+}
+
 .gap{
 	width: 100%;
 	height: 40px;
@@ -76,7 +132,6 @@ body{
 .gap .gravatar{
 	width: 80px;
 	height: 80px;
-	background: url("http://www.gravatar.com/avatar/5fedd018b3227bc4043934309da8c290");
 	display: block;
 	border-radius: 40px;
 	margin: 0 auto;
@@ -84,24 +139,78 @@ body{
 	top: -40px;
 }
 
-.article_list{
+.article-list{
 	float: left;
-	width: 80%;
-	padding: 20px;
+	width: 720px;
+	padding: 0 25px 20px;
 }
 
 .article{
 	font-size: 15px;
 }
 
-.box_right{
+.article-title{
+	color: #1982d1;
+	font-family: 'Michroma','Segoe UI Light','Segoe UI','Segoe UI WP','Microsoft Jhenghei','微软雅黑',sans-serif,Times;
+	font-size: 26px;
+	text-decoration: none;
+}
+
+.article-title:hover{
+	color: orange;
+	text-decoration: none;	
+}
+
+.article-ps{
+	font-size: 12px;
+	padding-top: 10px;
+}
+
+.article-content{
+	padding-top: 25px;
+}
+
+.page-nav{
+	border: solid 1px black;
+	padding: 3px;
+	box-shadow: 0 0 7px 3px gray;
+}
+
+.page-nav:hover{
+	background-color: #3c454f;
+}
+
+.box-right{
 	float: left;
-	width: 20%;
-	padding: 10px;
+	width: 250px;
+	/*padding: 10px;*/
+}
+
+.box-right .box{
+	margin-top: 10px;
+}
+.box-right .box ul{
+	margin: 0px;
+	padding: 0px;
+}
+.box-right .box ul li{
+	font-size: 14px;
+	list-style-type: square;
+	margin-left: 25px;
+	margin-right: 25px;
+}
+.box-right .box .box-title{
+	color: black;
+}
+.box-right .box ul a{
+	color: gray;
+}
+.box-right .box ul a:hover{
+	color: black;
+	transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms;
 }
 
 .footer{
-	/*border: 1px solid black;*/
 	float: left;
 	text-align: center;
 	width: 100%;
@@ -110,7 +219,21 @@ body{
 }
 
 .footer .links{
-	background-color: rgba(0,0,255,.2);
+	background-color: #3c454f;
+	overflow: hidden;
+	color: white;
+}
+.footer .links .colume{
+	float: left;
+    margin-left: 40px;
+    width: 28%;
+}
+.footer .links .colume li{
+	text-align: left;
+	width: 100%;
+	list-style: none;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .footer ul{
@@ -119,7 +242,8 @@ body{
 }
 
 .footer .copyright{
-	background-color: rgba(0,0,255,.7);
+	background-color: #111;
+	color: white;
 }
 
 .icon{

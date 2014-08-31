@@ -2,7 +2,7 @@
 
 <html>
   	<head>
-    	<title>独孤影-登录</title>
+    	<title>独孤影 - 找回密码</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="stylesheet" href="/static/css/style.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
@@ -22,39 +22,36 @@
 	</head>
   	<body>
   		<div class="main">
-			<form action="/login" method="post" class="center">
-				<label for="">Login</label><br>
+  			<div class="center">
+				<label for="">Getback Password</label><br>
 				<input type="text" name="username" id="" class="input" placeholder="usernmae"><br>
-				<input type="password" name="password" id="" class="input" placeholder="password"><br>
-				<input type="submit" value="登录"><a href="/password/getback">找回密码</a>
-			</form>
+				<button>找回</button>
+			</div>
 			<div class="footer">
 				<div class="copyright">©2014 the theme designed by Rex Lee inspired by <a href="https://www.byvoid.com/">byvoid</a>, the program written by Rex Lee with Golang base on <a href="http://beego.me/">Beego</a> framework.</div>
 			</div>
  		</div>
 	</body>
-</html>
-<script>
+	<script>
 	$(document).ready(function (e) {
-		$("form").submit( function () {
+		$("button").click(function (e) {
 			var user_name = $("input[name='username']").val();
-			var pass_word = $("input[name='password']").val();
 			$.ajax({
-				type: "post",
-				url: "/login",
-				data: { username: user_name, password: pass_word },
+				type: "get",
+				url: "/password/sendemail",
+				data: { username: user_name },
 				dataType: "json",
 				success: function(msg){
 					console.log(msg);
 					if (msg.result) {
-						alert("登录成功-"+msg.msg);
-						window.location = msg.refer
+						alert("邮件发送成功-"+msg.msg);
 					} else{
-						alert("登录失败-"+msg.msg);
+						alert("邮件发送失败-"+msg.msg);
 					};
 				}
 			});
-			return false;
 		});
+		
 	})
-</script>
+	</script>
+</html>

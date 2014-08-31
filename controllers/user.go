@@ -5,7 +5,7 @@ import (
 	"blog/utils"
 	"fmt"
 	"github.com/astaxie/beego"
-	"log"
+	// "log"
 	"time"
 )
 
@@ -78,9 +78,12 @@ func (this *LoginController) Post() {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "user does not exist", "refer": "/"}
 	} else {
 		passwd := utils.Md5(password + user.Salt)
+		// log.Println(password)
+		// log.Println(passwd)
 		if passwd == user.Password {
+
 			this.SetSession("username", username)
-			this.Data["json"] = map[string]interface{}{"result": true, "msg": "user[" + user.Username + "] login success ", "refer": "/"}
+			this.Data["json"] = map[string]interface{}{"result": true, "msg": "user[" + user.Username + "] login success ", "refer": "/admin"}
 		} else {
 			this.Data["json"] = map[string]interface{}{"result": false, "msg": "login failed ", "refer": "/"}
 		}
@@ -149,7 +152,7 @@ func (this *ChangeUsernameController) Post() {
 	err := ChangeUsername(oldUsername, newUsername)
 
 	if nil != err {
-		log.Println(err)
+		// log.Println(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "change username failed", "refer": "/"}
 		this.ServeJson()
 	} else {
@@ -200,6 +203,22 @@ func (this *SetEmailController) Post() {
 }
 
 /**
+ * 找回密码
+ */
+type GetBackPasswordController struct {
+	beego.Controller
+}
+
+func (this *GetBackPasswordController) Get() {
+	this.TplNames = "getbackpasswd.tpl"
+}
+
+func (this *GetBackPasswordController) Post() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
+	this.ServeJson()
+}
+
+/**
  * 发送找回密码验证邮件
  */
 type SendEmailToGetBackPasswordController struct {
@@ -207,8 +226,12 @@ type SendEmailToGetBackPasswordController struct {
 }
 
 func (this *SendEmailToGetBackPasswordController) Get() {
-	user := this.GetSession("username")
-	username := user.(string)
+	username := this.GetString("username")
+	if "" == username {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "username could not be empty", "refer": "/"}
+		this.ServeJson()
+	}
+
 	time := time.Now()
 	code := utils.Md5(utils.RandString(20) + time.String())
 
@@ -259,7 +282,7 @@ func (this *SetPasswordController) Get() {
 
 	if nil != err {
 		this.Ctx.WriteString("找回密码已过期")
-	} else if result {
+	} else if !result {
 		this.Ctx.WriteString("验证错误")
 	} else {
 		this.Data["username"] = username

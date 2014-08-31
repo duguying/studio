@@ -1,17 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Article Page {{.id}}</title>
-</head>
-<body>
-	<div>
-		<h1>{{.title}}</h1>
-		<span>{{.time}}</span><br>
-		<span>Author {{.author}}</span><br>
-		<span>Count:{{.count}}</span><br>
-		<span>Keywords {{.keywords}}</span><br><br>
-		<div>{{.content}}</div>
-	</div>
-</body>
+
+<html>
+  	<head>
+    	<title>独孤影 - {{.title}}</title>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="/static/css/style.css">
+		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
+		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+	</head>
+  	<body>
+  		<div class="main">
+
+  			{{template "inc/header.tpl" .}}
+
+  			<div class="article-list">
+	  			<div class="article">
+	  				<a class="article-title" title="{{.title}}" href="/article/{{.title}}">{{.title}}</a>
+	  				<div class="article-ps">
+						Tag <a>{{.keywords}}</a> on <a>{{.time}}</a> by <a title="作者: {{.author}}">{{.author}}</a> view <a title="{{.count}}次阅读">{{.count}}</a>
+					</div>
+					<div class="article-content">
+						{{str2html .content}}
+					</div>
+
+					<!-- 多说评论框 start -->
+					<div class="ds-thread" data-thread-key="{{.id}}" data-title="{{.title}}" data-url="http://duguying.net/article/{{.title}}"></div>
+					<!-- 多说评论框 end -->
+					<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+					<script type="text/javascript">
+						var duoshuoQuery = {short_name:"duguying"};
+						(function() {
+							var ds = document.createElement('script');
+							ds.type = 'text/javascript';ds.async = true;
+							ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+							ds.charset = 'UTF-8';
+							(document.getElementsByTagName('head')[0] 
+							 || document.getElementsByTagName('body')[0]).appendChild(ds);
+						})();
+					</script>
+					<!-- 多说公共JS代码 end -->
+
+				</div>
+			</div>
+
+			{{template "inc/rightbar.tpl" .}}
+
+			{{template "inc/footer.tpl" .}}
+
+		</div>
+	</body>
 </html>

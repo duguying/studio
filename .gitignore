@@ -6,3 +6,9 @@
 
 # tmp
 /tmp/
+
+# deps
+/static/syntaxhighlighter/
+/static/umeditor/
+/static/upload/
+/static/ztree/

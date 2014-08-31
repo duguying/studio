@@ -21,12 +21,14 @@ func init() {
 	beego.Router("/update", &controllers.UpdateArticleController{})
 	beego.Router("/delete/:title", &controllers.DeleteArticleController{})
 	beego.Router("/delete", &controllers.DeleteArticleController{})
+	beego.Router("/password/getback", &controllers.GetBackPasswordController{})
 	beego.Router("/password/sendemail", &controllers.SendEmailToGetBackPasswordController{})
 	beego.Router("/password/reset", &controllers.SetPasswordController{})
 	beego.Router("/password/change", &controllers.ChangePasswordController{})
 	beego.Router("/password/reset/:varify", &controllers.SetPasswordController{})
 	beego.Router("/upload", &controllers.UploadController{})
 	beego.Router("/project", &controllers.ProjectListController{})
+	beego.Router("/admin", &controllers.AdminController{})
 
 	beego.Router("/test", &controllers.TestController{})
 }

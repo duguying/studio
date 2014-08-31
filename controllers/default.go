@@ -58,6 +58,12 @@ func (this *MainController) Get() {
 		this.Data["articles_in_page"] = maps
 	}
 
+	hottest, err := HottestArticleList()
+
+	if nil == err {
+		this.Data["hottest"] = hottest
+	}
+
 	this.TplNames = "index.tpl"
 }
 

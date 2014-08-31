@@ -198,3 +198,15 @@ func ListByKeyword(keyword string, page int) ([]orm.Params, bool, int, error) {
 		return nil, false, pages, err
 	}
 }
+
+/**
+ * 最热文章列表
+ * select * from article order by count desc limit 10
+ */
+func HottestArticleList() ([]orm.Params, error) {
+	sql := "select * from article order by count desc limit 20"
+	var maps []orm.Params
+	o := orm.NewOrm()
+	_, err := o.Raw(sql).Values(&maps)
+	return maps, err
+}

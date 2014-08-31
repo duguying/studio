@@ -1,0 +1,49 @@
+.admin-left-banner{
+	float: left;
+	width: 20%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.admin-title{
+	height: 40px;
+	background-color: red;
+	font-family: '华文行楷';
+	color: white;
+	font-size: 36px;
+	text-align: center;
+}
+
+.admin-menu-left{
+	height: 525px;
+	background-color: #3B4F67;
+}
+
+.admin-menu-left ul{
+	margin: 0px;
+	padding: 20px;
+	color: white;
+}
+
+.admin-menu-left ul li{
+	border: 1px inset white;
+    list-style: none outside none;
+    margin: 5px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.admin-menu-left ul li:hover{
+	background-color: #314256;
+}
+
+.admin-right-pannel{
+	float: left;
+	width: 80%;
+}
+
+.admin-top-menu{
+	height: 40px;
+	background-color: #3c454f;
+}

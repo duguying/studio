@@ -68,6 +68,16 @@ func (this *ArticleController) Get() {
 		this.Ctx.WriteString("not found")
 	}
 
+	maps, err := CountByMonth()
+	if nil == err {
+		this.Data["count_by_month"] = maps
+	}
+
+	hottest, err := HottestArticleList()
+	if nil == err {
+		this.Data["hottest"] = hottest
+	}
+
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
 		this.ServeJson()

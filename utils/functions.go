@@ -44,7 +44,7 @@ func CheckUsername(username string) bool {
 func Md5(value string) string {
 	h := md5.New()
 	h.Write([]byte(value))
-	return fmt.Sprintf("%s\n", hex.EncodeToString(h.Sum(nil)))
+	return fmt.Sprintf("%s", hex.EncodeToString(h.Sum(nil)))
 }
 
 /**

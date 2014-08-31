@@ -107,6 +107,7 @@ func CheckVarify(code string) (bool, string, error) {
 
 	var varifyItem Varify
 	err := o.Raw("select * from varify where code='" + code + "' and overdue > now()").QueryRow(&varifyItem)
+
 	if code == varifyItem.Code {
 		o.Raw("delete from varify where code='" + code + "'").Exec()
 		return true, varifyItem.UserName, err

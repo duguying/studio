@@ -125,7 +125,7 @@ func CountByMonth() ([]orm.Params, error) {
  */
 func ListPage(page int) ([]orm.Params, bool, int, error) {
 	pagePerNum := 6
-	sql1 := "select * from article limit ?," + fmt.Sprintf("%d", pagePerNum)
+	sql1 := "select * from article order by time desc limit ?," + fmt.Sprintf("%d", pagePerNum)
 	sql2 := "select count(*) as number from article"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()

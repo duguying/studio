@@ -43,7 +43,8 @@ func (this *AddArticleController) Post() {
 	if nil == err {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "success added, id " + fmt.Sprintf("[%d] ", id), "refer": nil}
 	} else {
-		this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": nil}
+		log.Println(err)
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "added failed", "refer": nil}
 	}
 	this.ServeJson()
 }

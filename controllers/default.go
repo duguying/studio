@@ -2,10 +2,11 @@ package controllers
 
 import (
 	// "blog/utils"
-	// "fmt"
 	. "blog/models"
+	"fmt"
 	"github.com/astaxie/beego"
 	// "log"
+	"blog/utils"
 	"strconv"
 )
 
@@ -79,8 +80,8 @@ type UploadController struct {
 }
 
 func (this *UploadController) Get() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "only post method available", "refer": nil}
-	this.ServeJson()
+	conf := utils.ReadFile("conf/ueditor.json")
+	this.Ctx.WriteString(conf)
 }
 
 func (this *UploadController) Post() {
@@ -92,8 +93,10 @@ func (this *UploadController) Post() {
 		return
 	}
 
-	f, h, err := this.GetFile("file")
-	f.Close()
+	f, h, err := this.GetFile("upfile")
+	if nil == err {
+		f.Close()
+	}
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "upload failed", "refer": nil}
@@ -101,7 +104,7 @@ func (this *UploadController) Post() {
 		return
 	}
 
-	err = this.SaveToFile("file", "static/upload/"+h.Filename)
+	err = this.SaveToFile("upfile", "static/upload/"+h.Filename)
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "upload failed", "refer": nil}
@@ -109,7 +112,12 @@ func (this *UploadController) Post() {
 		return
 	}
 
-	this.Data["json"] = map[string]interface{}{"result": true, "msg": "successfully uploaded", "refer": nil}
+	this.Data["json"] = map[string]interface{}{
+		"url":      fmt.Sprintf("/static/upload/%s", h.Filename), //保存后的文件路径
+		"title":    "",                                           //文件描述，对图片来说在前端会添加到title属性上
+		"original": h.Filename,                                   //原始文件名
+		"state":    "SUCCESS",
+	}
 	this.ServeJson()
 }
 

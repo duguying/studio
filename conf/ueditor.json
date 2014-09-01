@@ -1,0 +1,9 @@
+{
+    "imageUrl": "http://localhost:81/upload",
+	"imageActionName": "uploadimage",
+	"imageUrlPrefix": "http://localhost:81",
+    "imagePath": "/static/upload",
+    "imageFieldName": "upfile",
+    "imageMaxSize": 2048,
+    "imageAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"]
+}

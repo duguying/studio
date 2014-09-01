@@ -9,10 +9,9 @@
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
 		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 
-		<link href="/static/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
-		<script type="text/javascript" charset="utf-8" src="/static/umeditor/umeditor.config.js"></script>
-		<script type="text/javascript" charset="utf-8" src="/static/umeditor/umeditor.min.js"></script>
-		<script type="text/javascript" src="/static/umeditor/lang/zh-cn/zh-cn.js"></script>
+		<script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.config.js"></script>
+	    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.all.min.js"> </script>
+	    <script type="text/javascript" charset="utf-8" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
 
 	</head>
   	<body>
@@ -43,7 +42,7 @@
 				</div>
 			</div>
 		</div>
+		<script src="/static/js/admin.js"></script>
 	</body>
 </html>
 
-<script src="/static/js/admin.js"></script>

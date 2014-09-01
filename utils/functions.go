@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 	// "time"
+	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -52,4 +54,15 @@ func Md5(value string) string {
  */
 func GetGravatar(email string) string {
 	return "http://www.gravatar.com/avatar/" + Md5(strings.ToUpper(email))
+}
+
+func ReadFile(path string) string {
+	fi, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	defer fi.Close()
+	fd, err := ioutil.ReadAll(fi)
+	// fmt.Println(string(fd))
+	return string(fd)
 }

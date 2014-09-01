@@ -18,7 +18,7 @@
 					<div class="article">
 						<a class="article-title" title="{{$v.title}}" href="/article/{{$v.title}}">{{$v.title}}</a>
 						<div class="article-ps">
-							Tag <a>fork</a> on <a>{{$v.time}}</a> by <a title="作者: {{$v.author}}">{{$v.author}}</a> view <a title="{{$v.count}}次阅读">{{$v.count}}</a>
+							Tag <a>{{$v.keywords}}</a> on <a>{{$v.time}}</a> by <a title="作者: {{$v.author}}">{{$v.author}}</a> view <a title="{{$v.count}}次阅读">{{$v.count}}</a>
 						</div>
 						<div class="article-content">
 							{{str2html $v.content}}

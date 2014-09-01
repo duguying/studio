@@ -117,7 +117,7 @@ func CountByMonth() ([]orm.Params, error) {
 
 /**
  * 文章分页列表
- * select * from article limit 0,6
+ * select * from article order by time desc limit 0,6
  * 返回值:
  * []orm.Params 文章
  * bool 是否有下一页

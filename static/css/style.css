@@ -1,5 +1,5 @@
 *{
-	font-family: '微软雅黑';
+	font-family: '微软雅黑','宋体';
 }
 
 body{
@@ -79,6 +79,62 @@ hr{
 .header .icons span{
 	float: right;
 }
+
+/* copy from alloyteam */
+#dynamic-to-top {
+	display: none;
+	overflow: hidden;
+	width: auto;
+	z-index: 90;
+	position: fixed;
+	bottom: 50px;
+	right: 20px;
+	top: auto;
+	left: auto;
+	font-family: sans-serif;
+	font-size: 1em;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 0 1px 0 #333;
+	font-weight: bold;
+	padding: 20px 23px;
+	border: 1px solid #aba6a6;
+	background: #3C454F;
+	-webkit-background-origin: border;
+	-moz-background-origin: border;
+	-icab-background-origin: border;
+	-khtml-background-origin: border;
+	-o-background-origin: border;
+	background-origin: border;
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding-box;
+	-icab-background-clip: padding-box;
+	-khtml-background-clip: padding-box;
+	-o-background-clip: padding-box;
+	background-clip: padding-box;
+	-webkit-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	-ms-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	-moz-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	-o-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	-khtml-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	-icab-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-icab-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	border-radius: 2px;
+}
+
+#dynamic-to-top span {
+	display: block;
+	overflow: hidden;
+	width: 14px;
+	height: 12px;
+	background: url('/static/img/up.png') no-repeat center center;
+}
+
+/* dynamic top over */
 
 .menu{
 	display: block;
@@ -170,6 +226,14 @@ hr{
 	padding-top: 25px;
 }
 
+.article-content img {
+	max-width: 720px;
+}
+
+.article-content table {
+	max-width: 720px;
+}
+
 .page-nav{
 	border: solid 1px black;
 	padding: 3px;
@@ -226,14 +290,37 @@ hr{
 .footer .links .colume{
 	float: left;
     margin-left: 40px;
-    width: 28%;
+    width: 20%;
+    margin-top: 10px;
 }
 .footer .links .colume li{
-	text-align: left;
+	text-align: center;
 	width: 100%;
 	list-style: none;
 	padding-top: 5px;
 	padding-bottom: 5px;
+}
+
+.footer .links .colume li a{
+	color: white;
+	font-size: 12px;
+	border-bottom: 1px outset;
+	width: 50px;
+	display: block;
+	margin: 0 auto;
+}
+
+.footer .links .colume li a:hover{
+    color: orange;
+    text-decoration: none;
+    transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms;
+}
+
+.footer .links .colume .blogroll{
+	color: gray;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .footer ul{

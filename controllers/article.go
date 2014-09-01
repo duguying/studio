@@ -35,6 +35,7 @@ func (this *AddArticleController) Post() {
 	if "" == title {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
 		this.ServeJson()
+		return
 	}
 
 	username := user.(string)

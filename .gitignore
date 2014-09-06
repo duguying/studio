@@ -1,5 +1,6 @@
 # bin
 *.exe
+blog
 
 # swap
 *~
@@ -8,7 +9,5 @@
 /tmp/
 
 # deps
-/static/syntaxhighlighter/
 /static/ueditor/
 /static/upload/
-/static/ztree/

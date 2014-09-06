@@ -101,11 +101,7 @@
 				 * Image load error, load default image
 				 */
 				$(function (e) {
-					$("img").error(function (e) {
-						this.src = '';
-						$(this).css('background-image','url(/static/img/loadfailed.png)')
-						return;
-					});
+					$("img").css('background-image','url(/static/img/loadfailed.png)')
 				})
 				</script>
 			</div>

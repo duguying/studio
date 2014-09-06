@@ -47,3 +47,54 @@
 	height: 40px;
 	background-color: #3c454f;
 }
+
+#article-manage-box ul{
+	padding-left:0;
+	margin-left: 10px;
+}
+
+#article-manage-box li{
+	list-style: none;
+}
+
+.admin-amb-banner ul{
+	overflow: hidden;
+}
+
+.admin-amb-banner ul li{
+	float: left;
+}
+
+.admin-amb-line ul{
+	overflow: hidden;
+}
+
+.admin-amb-line ul li{
+	float: left;
+}
+
+.admin-amb-cell{
+	border: solid 1px #ccc;
+	text-align: center;
+	/*table-layout:fixed;*/
+	height: 21px;
+}
+
+.admin-col-id{
+	width: 30px;
+}
+.admin-col-title{
+	width: 300px;
+}
+.admin-col-author{
+	width: 60px;
+}
+.admin-col-time{
+	width: 70px;
+}
+.admin-col-count{
+	width: 60px;
+}
+.admin-col-operation{
+	width: 80px;
+}

@@ -35,6 +35,9 @@
   font-size: 1em !important;
   min-height: inherit !important;
   min-height: auto !important;
+  white-space: pre-wrap !important;
+  word-break: break-all;
+  /* 如果是需要保留一行内的单词完整性则需要把break-all改为break-word  */
 }
 
 .syntaxhighlighter {

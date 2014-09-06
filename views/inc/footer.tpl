@@ -65,6 +65,7 @@
 				  'js jscript javascript  @shBrushJScript.js',
 				  'perl pl                @shBrushPerl.js',
 				  'php                    @shBrushPhp.js',
+				  'ps powershell          @shBrushPowerShell.js',
 				  'text plain             @shBrushPlain.js',
 				  'py python              @shBrushPython.js',
 				  'ruby rails ror rb      @shBrushRuby.js',

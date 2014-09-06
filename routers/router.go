@@ -15,11 +15,11 @@ func init() {
 	beego.Router("/rename", &controllers.ChangeUsernameController{})
 	beego.Router("/email", &controllers.SetEmailController{})
 	beego.Router("/add", &controllers.AddArticleController{})
-	beego.Router("/article/:title", &controllers.ArticleController{})
+	beego.Router("/article/:uri", &controllers.ArticleController{})
 	beego.Router("/article", &controllers.ArticleController{})
-	beego.Router("/update/:title", &controllers.UpdateArticleController{})
+	beego.Router("/update/:uri", &controllers.UpdateArticleController{})
 	beego.Router("/update", &controllers.UpdateArticleController{})
-	beego.Router("/delete/:title", &controllers.DeleteArticleController{})
+	beego.Router("/delete/:uri", &controllers.DeleteArticleController{})
 	beego.Router("/delete", &controllers.DeleteArticleController{})
 	beego.Router("/password/getback", &controllers.GetBackPasswordController{})
 	beego.Router("/password/sendemail", &controllers.SendEmailToGetBackPasswordController{})
@@ -31,7 +31,7 @@ func init() {
 	beego.Router("/project", &controllers.ProjectListController{})
 
 	beego.Router("/admin", &controllers.AdminController{})
-	beego.Router("/admin/article/page/:page", &controllers.AdminArticleListController{})
+	beego.Router("/admin/article/page/:page", &controllers.AdminArticleListController{}) //TODO
 
 	beego.Router("/test", &controllers.TestController{})
 }

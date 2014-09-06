@@ -33,6 +33,7 @@ func init() {
 	orm.RegisterModel(new(Users))
 }
 
+// 添加用户
 func AddUser(username string, password string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -43,6 +44,7 @@ func AddUser(username string, password string) (int64, error) {
 	return o.Insert(user)
 }
 
+// 通过用户名查找用户
 func FindUser(username string) (Users, error) {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -52,6 +54,7 @@ func FindUser(username string) (Users, error) {
 	return user, err
 }
 
+// 修改用户名
 func ChangeUsername(oldUsername string, newUsername string) error {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -61,9 +64,7 @@ func ChangeUsername(oldUsername string, newUsername string) error {
 	return err
 }
 
-/**
- * 修改邮箱
- */
+// 修改邮箱
 func ChangeEmail(username string, email string) error {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -85,10 +86,8 @@ func ChangeEmail(username string, email string) error {
 	}
 }
 
-/**
- * 增加验证码
- * insert into varify (`username`, `code`, `overdue`) value ('lijun', 'wasdfgert', '2014-08-23 14:51:14')
- */
+// 增加验证码
+// insert into varify (`username`, `code`, `overdue`) value ('lijun', 'wasdfgert', '2014-08-23 14:51:14')
 func AddVerify(username string, code string, overdue time.Time) error {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -98,9 +97,7 @@ func AddVerify(username string, code string, overdue time.Time) error {
 	return err
 }
 
-/**
- * 检查验证码
- */
+// 检查验证码
 func CheckVarify(code string) (bool, string, error) {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -116,9 +113,7 @@ func CheckVarify(code string) (bool, string, error) {
 	}
 }
 
-/**
- * 设置密码
- */
+// 设置密码
 func SetPassword(username string, password string) error {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -135,9 +130,7 @@ func SetPassword(username string, password string) error {
 	return err
 }
 
-/**
- * 修改密码
- */
+// 修改密码
 func ChangePassword(username string, oldPassword string, newPassword string) error {
 	o := orm.NewOrm()
 	o.Using("default")

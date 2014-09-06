@@ -11,9 +11,7 @@ import (
 	"strings"
 )
 
-/**
- * 随机串
- */
+// 随机串
 func RandString(n int) string {
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	b := make([]rune, n)
@@ -23,9 +21,7 @@ func RandString(n int) string {
 	return string(b)
 }
 
-/**
- * 检查用户名
- */
+// 检查用户名
 func CheckUsername(username string) bool {
 	if username[0] >= '0' && username[0] <= '9' {
 		return false
@@ -49,13 +45,12 @@ func Md5(value string) string {
 	return fmt.Sprintf("%s", hex.EncodeToString(h.Sum(nil)))
 }
 
-/**
- * 获取用户头像
- */
+// 获取用户头像
 func GetGravatar(email string) string {
 	return "http://www.gravatar.com/avatar/" + Md5(strings.ToUpper(email))
 }
 
+// 读取文本文件
 func ReadFile(path string) string {
 	fi, err := os.Open(path)
 	if err != nil {
@@ -63,6 +58,17 @@ func ReadFile(path string) string {
 	}
 	defer fi.Close()
 	fd, err := ioutil.ReadAll(fi)
-	// fmt.Println(string(fd))
+
 	return string(fd)
+}
+
+// 切割关键词为html片段
+func TagSplit(keywords string) string {
+	content := ""
+	tags := strings.Split(keywords, ",")
+	for _, value := range tags {
+		// fmt.Printf("arr[%d]=%d \n", index, value)
+		content = content + fmt.Sprintf(`<a class="tags" href="/tag/%s">%s</a>,`, value, value)
+	}
+	return content
 }

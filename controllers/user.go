@@ -9,9 +9,7 @@ import (
 	"time"
 )
 
-/**
- * 注册
- */
+// 注册
 type RegistorController struct {
 	beego.Controller
 }
@@ -53,9 +51,7 @@ func (this *RegistorController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 登录
- */
+// 登录
 type LoginController struct {
 	beego.Controller
 }
@@ -91,9 +87,7 @@ func (this *LoginController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 登出
- */
+// 登出
 type LogoutController struct {
 	beego.Controller
 }
@@ -108,9 +102,7 @@ func (this *LogoutController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 测试暂用页
- */
+// 测试暂用页
 type TestController struct {
 	beego.Controller
 }
@@ -125,9 +117,7 @@ func (this *TestController) Post() {
 	this.TplNames = "test.tpl"
 }
 
-/**
- * 修改用户名
- */
+// 修改用户名
 type ChangeUsernameController struct {
 	beego.Controller
 }
@@ -162,9 +152,7 @@ func (this *ChangeUsernameController) Post() {
 	}
 }
 
-/**
- * 修改Email
- */
+// 修改Email
 type SetEmailController struct {
 	beego.Controller
 }
@@ -202,9 +190,7 @@ func (this *SetEmailController) Post() {
 	}
 }
 
-/**
- * 找回密码
- */
+// 找回密码
 type GetBackPasswordController struct {
 	beego.Controller
 }
@@ -218,9 +204,7 @@ func (this *GetBackPasswordController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 发送找回密码验证邮件
- */
+// 发送找回密码验证邮件
 type SendEmailToGetBackPasswordController struct {
 	beego.Controller
 }
@@ -263,9 +247,7 @@ func (this *SendEmailToGetBackPasswordController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 设置密码
- */
+// 设置密码
 type SetPasswordController struct {
 	beego.Controller
 }
@@ -319,9 +301,7 @@ func (this *SetPasswordController) Post() { // TODO
 
 }
 
-/**
- * 修改密码
- */
+// 修改密码
 type ChangePasswordController struct {
 	beego.Controller
 }

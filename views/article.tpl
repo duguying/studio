@@ -15,9 +15,9 @@
 
   			<div class="article-list">
 	  			<div class="article">
-	  				<a class="article-title" title="{{.title}}" href="/article/{{.title}}">{{.title}}</a>
+	  				<a class="article-title" title="{{.title}}" href="/article/{{.uri}}">{{.title}}</a>
 	  				<div class="article-ps">
-						Tag <a>{{.keywords}}</a> on <a>{{.time}}</a> by <a title="作者: {{.author}}">{{.author}}</a> view <a title="{{.count}}次阅读">{{.count}}</a>
+						Tag {{.keywords|tags|str2html}} on <a>{{.time}}</a> by <a title="作者: {{.author}}">{{.author}}</a> view <a title="{{.count}}次阅读">{{.count}}</a>
 					</div>
 					<div class="article-content">
 						{{str2html .content}}

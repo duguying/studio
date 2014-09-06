@@ -7,9 +7,12 @@ import (
 	"github.com/astaxie/beego"
 	// "log"
 	"blog/utils"
+	"os"
 	"strconv"
+	"time"
 )
 
+// 首页
 type MainController struct {
 	beego.Controller
 }
@@ -72,9 +75,7 @@ func (this *MainController) Post() {
 	this.Ctx.WriteString("home page")
 }
 
-/**
- * Upload
- */
+// 上传
 type UploadController struct {
 	beego.Controller
 }
@@ -93,6 +94,7 @@ func (this *UploadController) Post() {
 		return
 	}
 
+	// 获取上传文件
 	f, h, err := this.GetFile("upfile")
 	if nil == err {
 		f.Close()
@@ -104,26 +106,46 @@ func (this *UploadController) Post() {
 		return
 	}
 
-	err = this.SaveToFile("upfile", "static/upload/"+h.Filename)
-
+	// 文件保存到本地
+	err = this.SaveToFile("upfile", "./static/upload/"+h.Filename)
 	if nil != err {
-		this.Data["json"] = map[string]interface{}{"result": false, "msg": "upload failed", "refer": nil}
+		this.Data["json"] = map[string]interface{}{
+			"result": false,
+			"state":  "upload to local FAILED",
+			"msg":    "upload failed",
+			"refer":  nil,
+		}
 		this.ServeJson()
 		return
 	}
 
+	// 文件保存到OSS
+	t := time.Now()
+	ossFilename := fmt.Sprintf("%d/%d/%d/%s", t.Year(), t.Month(), t.Day(), h.Filename)
+	err = utils.OssStore(ossFilename, "static/upload/"+h.Filename)
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{
+			"result": false,
+			"state":  "upload to oss FAILED, " + fmt.Sprint(err),
+			"msg":    "upload failed",
+			"refer":  nil,
+		}
+		this.ServeJson()
+		return
+	} else {
+		os.Remove("./static/upload/" + h.Filename)
+	}
+
 	this.Data["json"] = map[string]interface{}{
-		"url":      fmt.Sprintf("/static/upload/%s", h.Filename), //保存后的文件路径
-		"title":    "",                                           //文件描述，对图片来说在前端会添加到title属性上
-		"original": h.Filename,                                   //原始文件名
+		"url":      utils.OssGetURL(ossFilename), //保存后的文件路径
+		"title":    "",                           //文件描述，对图片来说在前端会添加到title属性上
+		"original": h.Filename,                   //原始文件名
 		"state":    "SUCCESS",
 	}
 	this.ServeJson()
 }
 
-/**
- * 按关键词列表
- */
+// 按关键词列表
 type TagController struct {
 	beego.Controller
 }

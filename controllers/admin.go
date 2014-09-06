@@ -7,9 +7,7 @@ import (
 	// "log"
 )
 
-/**
- * 管理面板
- */
+// 管理面板
 type AdminController struct {
 	beego.Controller
 }
@@ -29,9 +27,7 @@ func (this *AdminController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 管理- 获取文章列表
- */
+// 管理- 获取文章列表
 type AdminArticleListController struct {
 	beego.Controller
 }

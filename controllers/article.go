@@ -7,9 +7,7 @@ import (
 	"log"
 )
 
-/**
- * 添加文章
- */
+// 添加文章
 type AddArticleController struct {
 	beego.Controller
 }
@@ -50,22 +48,20 @@ func (this *AddArticleController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 获取文章
- */
+// 获取文章
 type ArticleController struct {
 	beego.Controller
 }
 
 func (this *ArticleController) Get() {
 	id, err := this.GetInt("id")
-	title := this.Ctx.Input.Param(":title")
+	uri := this.Ctx.Input.Param(":uri")
 
 	var art Article
 	if nil == err {
 		art, err = GetArticle(int(id))
-	} else if "" != title {
-		art, err = GetArticleByTitle(title)
+	} else if "" != uri {
+		art, err = GetArticleByUri(uri)
 	} else {
 		this.Ctx.WriteString("not found")
 	}
@@ -91,6 +87,7 @@ func (this *ArticleController) Get() {
 
 	this.Data["id"] = art.Id
 	this.Data["title"] = art.Title
+	this.Data["uri"] = art.Uri
 	this.Data["content"] = art.Content
 	this.Data["author"] = art.Author
 	this.Data["time"] = art.Time
@@ -104,9 +101,7 @@ func (this *ArticleController) Post() {
 	this.ServeJson()
 }
 
-/**
- * 修改文章
- */
+// 修改文章
 type UpdateArticleController struct {
 	beego.Controller
 }
@@ -126,7 +121,7 @@ func (this *UpdateArticleController) Post() {
 	}
 
 	id, err := this.GetInt("id")
-	title := this.Ctx.Input.Param(":title")
+	uri := this.Ctx.Input.Param(":uri")
 
 	newTitle := this.GetString("title")
 	newContent := this.GetString("content")
@@ -141,8 +136,8 @@ func (this *UpdateArticleController) Post() {
 
 	if nil == err {
 		art, err = GetArticle(int(id))
-	} else if "" != title {
-		art, err = GetArticleByTitle(title)
+	} else if "" != uri {
+		art, err = GetArticleByUri(uri)
 	} else {
 		this.Ctx.WriteString("not found")
 	}
@@ -151,7 +146,7 @@ func (this *UpdateArticleController) Post() {
 	art.Content = newContent
 	art.Keywords = newKeywords
 
-	err = UpdateArticle(id, title, art)
+	err = UpdateArticle(id, uri, art)
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "update failed", "refer": "/"}
@@ -163,9 +158,7 @@ func (this *UpdateArticleController) Post() {
 
 }
 
-/**
- * 删除文章
- */
+// 删除文章
 type DeleteArticleController struct {
 	beego.Controller
 }
@@ -205,3 +198,5 @@ func (this *DeleteArticleController) Post() {
 		this.ServeJson()
 	}
 }
+
+// BUG(duguying): #1: 有一个bug待解决，当用户发表的文档标题中有/符号时，无法通过url中文档标题访问文档

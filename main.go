@@ -23,6 +23,6 @@ func init() {
 }
 
 func main() {
-	utils.OssStore("test.swf", "test.swf")
+	beego.AddFuncMap("tags", utils.TagSplit)
 	beego.Run()
 }

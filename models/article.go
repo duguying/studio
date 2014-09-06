@@ -5,12 +5,14 @@ import (
 	"github.com/astaxie/beego/orm"
 	// "log"
 	"strconv"
+	"strings"
 	"time"
 )
 
 type Article struct {
 	Id       int
 	Title    string
+	Uri      string
 	Keywords string
 	Content  string
 	Author   string
@@ -26,17 +28,20 @@ func init() {
 	orm.RegisterModel(new(Article))
 }
 
+// 添加文章
 func AddArticle(title string, content string, keywords string, author string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	art := new(Article)
 	art.Title = title
+	art.Uri = strings.Replace(title, "/", "-", -1)
 	art.Keywords = keywords
 	art.Content = content
 	art.Author = author
 	return o.Insert(art)
 }
 
+// 通过id获取文章
 func GetArticle(id int) (Article, error) {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -45,6 +50,16 @@ func GetArticle(id int) (Article, error) {
 	return art, err
 }
 
+// 通过uri获取文章
+func GetArticleByUri(uri string) (Article, error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	art := Article{Uri: uri}
+	err := o.Read(&art, "uri")
+	return art, err
+}
+
+// 通过文章标题获取文章
 func GetArticleByTitle(title string) (Article, error) {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -53,6 +68,7 @@ func GetArticleByTitle(title string) (Article, error) {
 	return art, err
 }
 
+// 更新阅览数统计
 func UpdateCount(id int) error {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -66,15 +82,16 @@ func UpdateCount(id int) error {
 	return err
 }
 
-func UpdateArticle(id int64, title string, newArt Article) error {
+// 更新文章
+func UpdateArticle(id int64, uri string, newArt Article) error {
 	o := orm.NewOrm()
 	o.Using("default")
 	var art Article
 
 	if 0 != id {
 		art = Article{Id: int(id)}
-	} else if "" != title {
-		art = Article{Title: title}
+	} else if "" != uri {
+		art = Article{Uri: uri}
 	}
 
 	art.Title = newArt.Title
@@ -85,24 +102,23 @@ func UpdateArticle(id int64, title string, newArt Article) error {
 	return err
 }
 
-func DeleteArticle(id int64, title string) (int64, error) {
+// 通过uri删除文章
+func DeleteArticle(id int64, uri string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 	var art Article
 
 	if 0 != id {
 		art.Id = int(id)
-	} else if "" != title {
-		art.Title = title
+	} else if "" != uri {
+		art.Uri = uri
 	}
 
 	return o.Delete(&art)
 }
 
-/**
- * 按月份统计文章数
- * select DATE_FORMAT(time,'%Y-%m') as month,count(*) as number from article group by month order by month
- */
+// 按月份统计文章数
+// select DATE_FORMAT(time,'%Y-%m') as month,count(*) as number from article group by month order by month
 func CountByMonth() ([]orm.Params, error) {
 	sql := "select DATE_FORMAT(time,'%Y年%m月') as month,count(*) as number from article group by month order by month"
 	var maps []orm.Params
@@ -115,14 +131,12 @@ func CountByMonth() ([]orm.Params, error) {
 	}
 }
 
-/**
- * 文章分页列表
- * select * from article order by time desc limit 0,6
- * 返回值:
- * []orm.Params 文章
- * bool 是否有下一页
- * error 错误
- */
+// 文章分页列表
+// select * from article order by time desc limit 0,6
+// 返回值:
+// []orm.Params 文章
+// bool 是否有下一页
+// error 错误
 func ListPage(page int) ([]orm.Params, bool, int, error) {
 	pagePerNum := 6
 	sql1 := "select * from article order by time desc limit ?," + fmt.Sprintf("%d", pagePerNum)
@@ -157,14 +171,12 @@ func ListPage(page int) ([]orm.Params, bool, int, error) {
 	}
 }
 
-/**
- * 同关键词文章列表
- * select * from article where keywords like '%keyword%'
- * 返回值:
- * []orm.Params 文章
- * bool 是否有下一页
- * error 错误
- */
+// 同关键词文章列表
+// select * from article where keywords like '%keyword%'
+// 返回值:
+// []orm.Params 文章
+// bool 是否有下一页
+// error 错误
 func ListByKeyword(keyword string, page int) ([]orm.Params, bool, int, error) {
 	pagePerNum := 6
 	sql1 := "select * from article where keywords like '%" + keyword + "%' limit ?," + fmt.Sprintf("%d", pagePerNum)
@@ -199,10 +211,8 @@ func ListByKeyword(keyword string, page int) ([]orm.Params, bool, int, error) {
 	}
 }
 
-/**
- * 最热文章列表
- * select * from article order by count desc limit 10
- */
+// 最热文章列表
+// select * from article order by count desc limit 10
 func HottestArticleList() ([]orm.Params, error) {
 	sql := "select * from article order by count desc limit 20"
 	var maps []orm.Params

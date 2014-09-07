@@ -41,7 +41,7 @@ func (this *MainController) Get() {
 		this.Data["count_by_month"] = maps
 	}
 
-	maps, nextPageFlag, totalPages, err := ListPage(int(page))
+	maps, nextPageFlag, totalPages, err := ListPage(int(page), 6)
 
 	if totalPages < int(page) {
 		page = int64(totalPages)
@@ -158,7 +158,7 @@ func (this *TagController) Get() {
 		page = 1
 	}
 
-	maps, nextPageFlag, totalPages, err := ListByKeyword(tag, int(page))
+	maps, nextPageFlag, totalPages, err := ListByKeyword(tag, int(page), 6)
 
 	if totalPages < int(page) {
 		page = int64(totalPages)

@@ -26,18 +26,3 @@ func (this *AdminController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
 	this.ServeJson()
 }
-
-// 管理- 获取文章列表
-type AdminArticleListController struct {
-	beego.Controller
-}
-
-func (this *AdminArticleListController) Get() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
-}
-
-func (this *AdminArticleListController) Post() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
-}

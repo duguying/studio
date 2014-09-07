@@ -137,25 +137,25 @@ func CountByMonth() ([]orm.Params, error) {
 // []orm.Params 文章
 // bool 是否有下一页
 // error 错误
-func ListPage(page int) ([]orm.Params, bool, int, error) {
-	pagePerNum := 6
-	sql1 := "select * from article order by time desc limit ?," + fmt.Sprintf("%d", pagePerNum)
+func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
+	// pagePerNum := 6
+	sql1 := "select * from article order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
 	sql2 := "select count(*) as number from article"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
-	num, err := o.Raw(sql1, 6*(page-1)).Values(&maps)
+	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
 	o.Raw(sql2).Values(&maps2)
 
 	number, _ := strconv.Atoi(maps2[0]["number"].(string))
 
 	var addFlag int
-	if 0 == (number % pagePerNum) {
+	if 0 == (number % numPerPage) {
 		addFlag = 0
 	} else {
 		addFlag = 1
 	}
 
-	pages := number/pagePerNum + addFlag
+	pages := number/numPerPage + addFlag
 
 	var flagNextPage bool
 	if pages == page {
@@ -177,25 +177,25 @@ func ListPage(page int) ([]orm.Params, bool, int, error) {
 // []orm.Params 文章
 // bool 是否有下一页
 // error 错误
-func ListByKeyword(keyword string, page int) ([]orm.Params, bool, int, error) {
-	pagePerNum := 6
-	sql1 := "select * from article where keywords like '%" + keyword + "%' limit ?," + fmt.Sprintf("%d", pagePerNum)
+func ListByKeyword(keyword string, page int, numPerPage int) ([]orm.Params, bool, int, error) {
+	// numPerPage := 6
+	sql1 := "select * from article where keywords like '%" + keyword + "%' limit ?," + fmt.Sprintf("%d", numPerPage)
 	sql2 := "select count(*) as number from article where keywords like '%" + keyword + "%'"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
-	num, err := o.Raw(sql1, 6*(page-1)).Values(&maps)
+	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
 	o.Raw(sql2).Values(&maps2)
 
 	number, _ := strconv.Atoi(maps2[0]["number"].(string))
 
 	var addFlag int
-	if 0 == (number % pagePerNum) {
+	if 0 == (number % numPerPage) {
 		addFlag = 0
 	} else {
 		addFlag = 1
 	}
 
-	pages := number/pagePerNum + addFlag
+	pages := number/numPerPage + addFlag
 
 	var flagNextPage bool
 	if pages == page {

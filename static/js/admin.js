@@ -3,9 +3,10 @@
  * @author rex lee
  * @email duguying2008@gmai;
  */
-var ue;
+
 $(document).ready(function (e) {
-    
+	var ue;
+    var ueditor_request_url = "/add";
 	
 	var new_article_menu = $("#new-article-menu");
 	var article_manage_menu = $("#article-manage-menu");
@@ -14,14 +15,52 @@ $(document).ready(function (e) {
 
 	var new_ariticle_box = $("#new-article-box")
 	var new_ariticle_clicked = false;
-	var article_manage_box = $("article-manage-box");
+	var article_manage_box = $("#article-manage-box");
 	var article_manage_clicked = false;
-	var attach_manage = $("#attach-manage-box");
+	var attach_manage_box = $("#attach-manage-box");
 	var attach_manage_clicked = false;
-	var oss_manage = $("#oss-manage-box");
+	var oss_manage_box = $("#oss-manage-box");
 	var oss_manage_clicked = false;
 
-	$("#new_ariticle").click(function (e) {
+	function show_frame (item) {
+		var box1 = new_ariticle_box;
+		var banner1 = new_article_menu;
+		var box2 = article_manage_box;
+		var banner2 = article_manage_menu;
+		var box3 = attach_manage_box;
+		var banner3 = attach_manage_menu;
+		var box4 = oss_manage_box;
+		var banner4 = oss_manage_menu;
+
+		if ("box1" == item) {
+			box1.show();banner1.show();
+			box2.hide();banner2.hide();
+			box3.hide();banner3.hide();
+			box4.hide();banner4.hide();
+		} else if("box2" == item){
+			box1.hide();banner1.hide();
+			box2.show();banner2.show();
+			box3.hide();banner3.hide();
+			box4.hide();banner4.hide();
+		} else if("box3" == item){
+			box1.hide();banner1.hide();
+			box2.hide();banner2.hide();
+			box3.show();banner3.show();
+			box4.hide();banner4.hide();
+		}else if("box4" == item){
+			box1.hide();banner1.hide();
+			box2.hide();banner2.hide();
+			box3.hide();banner3.hide();
+			box4.show();banner4.show();
+		}else{
+			;
+		};
+	}
+
+	$("#new-ariticle").click(function (e) {
+		show_frame("box1");
+		ueditor_request_url = "/add";
+
 		var menu_bar_html = '<label for="article-title" style="margin-left: 10px;color:white;">文章标题</label><input type="text" name="title" id="article-title" style="margin-left: 10px;margin-top: 7px;width: 250px;"><label for="article-tags" style="color: white;margin-left: 10px;margin-right: 10px;">关键词</label><input type="text" name="tags" placeholder="逗号,分隔" id="article-tags" class="article-tags"><button id="submit" style="margin-left: 10px;background-color: white;border-radius: 4px;">发布</button>';
 		var editor_html = '<textarea class="m-input d-input" name="content" id="myEditor" style="width:100%;height:430px;"></textarea>';
 
@@ -45,7 +84,7 @@ $(document).ready(function (e) {
 
                 $.ajax({
                     type: "post",
-                    url: "/add",
+                    url: ueditor_request_url,
                     data: { title: current_title, keywords: tags, content: current_content },
                     dataType: "json",
                     success: function(msg){
@@ -68,14 +107,16 @@ $(document).ready(function (e) {
 	});
 
 	$("#article-manage").click(function (e) {
-		;
+		show_frame("box2");
+		ueditor_request_url = "/update";
+		
 	});
 
 	$("#attach-manage").click(function (e) {
-		;
+		show_frame("box3");
 	});
 
 	$("#oss-manage").click(function (e) {
-		;
+		show_frame("box4");
 	});
 });

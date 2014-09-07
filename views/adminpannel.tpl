@@ -4,6 +4,7 @@
   	<head>
     	<title>独孤影</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		
 		<link rel="stylesheet" href="/static/css/style.css">
 		<link rel="stylesheet" href="/static/css/admin.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
@@ -20,10 +21,10 @@
 				<div class="admin-title">独孤影</div>
 				<div class="admin-menu-left">
 					<ul>
-						<li id="new_ariticle">新文章</li>
-						<li id="ariticle_manage">文章管理</li>
-						<li id="attach_manage">附件管理</li>
-						<li id="oss_manage">OSS管理</li>
+						<li id="new-ariticle">新文章</li>
+						<li id="article-manage">文章管理</li>
+						<li id="attach-manage">附件管理</li>
+						<li id="oss-manage">OSS管理</li>
 					</ul>
 				</div>
 			</div>
@@ -34,7 +35,7 @@
 					<div id="attach-manage-menu"></div>
 					<div id="oss-manage-menu"></div>
 				</div>
-				<div class="admin-main-pannel">
+				<div class="admin-main-pannel" >
 					<div id="new-article-box"></div>
 
 

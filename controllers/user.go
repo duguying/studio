@@ -225,8 +225,9 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "create varify failed", "refer": "/"}
 		this.ServeJson()
 	} else {
+		host := beego.AppConfig.String("host")
 		subject := "blog system get your password back"
-		body := `click the following link to get your password back <font color="red"><a href="http://127.0.0.1:81/password/reset/` + code + `">http://127.0.0.1:81/password/reset/` + code + `</a></font>`
+		body := `click the following link to get your password back <font color="red"><a href="` + host + `/password/reset/` + code + `">http://127.0.0.1:81/password/reset/` + code + `</a></font>`
 		currentUser, _ := FindUser(username)
 		email := currentUser.Email
 
@@ -268,19 +269,26 @@ func (this *SetPasswordController) Get() {
 		this.Ctx.WriteString("验证错误")
 	} else {
 		this.Data["username"] = username
+		this.SetSession("username", username)
+		this.SetSession("reset", true)
 		this.TplNames = "resetpasswd.tpl"
 	}
 }
 
-func (this *SetPasswordController) Post() { // TODO
-	// if not login, permission deny
+func (this *SetPasswordController) Post() {
 	user := this.GetSession("username")
-	if user == nil {
-		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+	reset := this.GetSession("reset")
+	resetable := reset.(bool)
+	if !resetable {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "resetable is false", "refer": nil}
 		this.ServeJson()
 		return
 	}
-
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "session failed", "refer": nil}
+		this.ServeJson()
+		return
+	}
 	username := user.(string)
 	newPassword := this.GetString("password")
 	if "" == newPassword {

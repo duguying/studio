@@ -1,3 +1,6 @@
+<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="bookmark" type="image/x-icon" /> 
+<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="icon" type="image/x-icon" /> 
+<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
         <div class="header">
   				<div class="icons">
   					<a href="https://github.com/duguying" target="_black"><span class="icon-github icon"></span></a>

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"log"
+	"strconv"
 )
 
 // 添加文章
@@ -199,4 +200,37 @@ func (this *DeleteArticleController) Post() {
 	}
 }
 
-// BUG(duguying): #1: 有一个bug待解决，当用户发表的文档标题中有/符号时，无法通过url中文档标题访问文档
+// 管理- 获取文章列表
+type AdminArticleListController struct {
+	beego.Controller
+}
+
+func (this *AdminArticleListController) Get() {
+	s := this.Ctx.Input.Param(":page")
+	page, err := strconv.Atoi(s)
+	if nil != err || page < 0 {
+		page = 1
+	}
+
+	maps, netPage, pages, err := ListPage(int(page), 10)
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
+		this.ServeJson()
+	} else {
+		this.Data["json"] = map[string]interface{}{
+			"result":  true,
+			"msg":     "get list success",
+			"refer":   "/",
+			"pages":   pages,
+			"netPage": netPage,
+			"data":    maps,
+		}
+		this.ServeJson()
+	}
+
+}
+
+func (this *AdminArticleListController) Post() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
+	this.ServeJson()
+}

@@ -57,7 +57,13 @@ type LoginController struct {
 }
 
 func (this *LoginController) Get() {
-	this.TplNames = "login.tpl"
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user != nil {
+		this.Redirect("/admin", 302)
+	} else {
+		this.TplNames = "login.tpl"
+	}
 }
 
 func (this *LoginController) Post() {
@@ -214,6 +220,7 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 	if "" == username {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "username could not be empty", "refer": "/"}
 		this.ServeJson()
+		return
 	}
 
 	time := time.Now()
@@ -227,7 +234,7 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 	} else {
 		host := beego.AppConfig.String("host")
 		subject := "blog system get your password back"
-		body := `click the following link to get your password back <font color="red"><a href="` + host + `/password/reset/` + code + `">http://127.0.0.1:81/password/reset/` + code + `</a></font>`
+		body := `click the following link to get your password back <font color="red"><a href="` + host + `/password/reset/` + code + `">` + host + `/password/reset/` + code + `</a></font>`
 		currentUser, _ := FindUser(username)
 		email := currentUser.Email
 
@@ -291,6 +298,7 @@ func (this *SetPasswordController) Post() {
 	}
 	username := user.(string)
 	newPassword := this.GetString("password")
+	// fmt.Println(username)
 	if "" == newPassword {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "password is needed", "refer": nil}
 		this.ServeJson()

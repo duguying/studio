@@ -179,6 +179,17 @@ func (this *TagController) Get() {
 		this.Data["articles_in_page"] = maps
 	}
 
+	hottest, err := HottestArticleList()
+
+	if nil == err {
+		this.Data["hottest"] = hottest
+	}
+	monthMaps, err := CountByMonth()
+
+	if nil == err {
+		this.Data["count_by_month"] = monthMaps
+	}
+
 	this.TplNames = "index.tpl"
 }
 

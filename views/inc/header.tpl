@@ -11,7 +11,7 @@
   				<ul class="menu">
   					<li>关于</li>
   					<li>项目</li>
-  					<li>列表</li>
+  					<li><a href="/list">列表</a></li>
   					<li><a href="/">博文</a></li>
   				</ul>
   				<div class="banner">

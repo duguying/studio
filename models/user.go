@@ -20,7 +20,7 @@ type Users struct {
 
 type Varify struct {
 	Id       int
-	UserName string
+	Username string
 	Code     string
 	Overdue  time.Time
 }
@@ -107,9 +107,9 @@ func CheckVarify(code string) (bool, string, error) {
 
 	if code == varifyItem.Code {
 		o.Raw("delete from varify where code='" + code + "'").Exec()
-		return true, varifyItem.UserName, err
+		return true, varifyItem.Username, err
 	} else {
-		return false, varifyItem.UserName, err
+		return false, varifyItem.Username, err
 	}
 }
 

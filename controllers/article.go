@@ -200,6 +200,43 @@ func (this *DeleteArticleController) Post() {
 	}
 }
 
+// 文章列表页
+type ArticleListPageController struct {
+	beego.Controller
+}
+
+func (this *ArticleListPageController) Get() {
+	s := this.Ctx.Input.Param(":page")
+	page, err := strconv.Atoi(s)
+	if nil != err || page < 0 {
+		page = 1
+	}
+
+	maps, nextPageFlag, _, err := ListPage(int(page), 30)
+	var prevPageFlag bool
+	if 1 == page {
+		prevPageFlag = false
+	} else {
+		prevPageFlag = true
+	}
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
+		this.ServeJson()
+	} else {
+		this.Data["list"] = maps
+		this.Data["prev_page"] = page - 1
+		this.Data["prev_page_flag"] = prevPageFlag
+		this.Data["next_page"] = page + 1
+		this.Data["next_page_flag"] = nextPageFlag
+		this.TplNames = "list.tpl"
+	}
+}
+
+func (this *ArticleListPageController) Post() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
+	this.ServeJson()
+}
+
 // 管理- 获取文章列表
 type AdminArticleListController struct {
 	beego.Controller
@@ -212,18 +249,18 @@ func (this *AdminArticleListController) Get() {
 		page = 1
 	}
 
-	maps, netPage, pages, err := ListPage(int(page), 10)
+	maps, nextPage, pages, err := ListPage(int(page), 10)
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
 		this.ServeJson()
 	} else {
 		this.Data["json"] = map[string]interface{}{
-			"result":  true,
-			"msg":     "get list success",
-			"refer":   "/",
-			"pages":   pages,
-			"netPage": netPage,
-			"data":    maps,
+			"result":   true,
+			"msg":      "get list success",
+			"refer":    "/",
+			"pages":    pages,
+			"nextPage": nextPage,
+			"data":     maps,
 		}
 		this.ServeJson()
 	}

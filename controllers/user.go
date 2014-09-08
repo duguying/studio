@@ -311,6 +311,7 @@ func (this *SetPasswordController) Post() {
 		this.ServeJson()
 		return
 	} else {
+		this.DelSession("reset")
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "set password success", "refer": "/"}
 		this.ServeJson()
 	}

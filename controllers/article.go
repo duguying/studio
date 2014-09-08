@@ -261,6 +261,7 @@ func (this *AdminArticleListController) Get() {
 			"pages":    pages,
 			"nextPage": nextPage,
 			"data":     maps,
+			"page":     page,
 		}
 		this.ServeJson()
 	}

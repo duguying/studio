@@ -37,43 +37,7 @@
 				</div>
 				<div class="admin-main-pannel" >
 					<div id="new-article-box"></div>
-
-
-					<div id="article-manage-box">
-						<ul>
-							<li class="admin-amb-banner">
-								<ul>
-									<li class="admin-col-id admin-amb-cell">ID</li>
-									<li class="admin-col-title admin-amb-cell">文章标题</li>
-									<li class="admin-col-author admin-amb-cell">作者</li>
-									<li class="admin-col-time admin-amb-cell">发布时间</li>
-									<li class="admin-col-count admin-amb-cell">阅读量</li>
-									<li class="admin-col-operation admin-amb-cell">操作</li>
-								</ul>
-							</li>
-							<li class="admin-amb-line">
-								<ul>
-									<li class="admin-col-id admin-amb-cell">100</li>
-									<li class="admin-col-title admin-amb-cell">这是一个很长很长很长很长很长很长很长很长的标题</li>
-									<li class="admin-col-author admin-amb-cell">内容</li>
-									<li class="admin-col-time admin-amb-cell">内容</li>
-									<li class="admin-col-count admin-amb-cell">内容</li>
-									<li class="admin-col-operation admin-amb-cell"><a href="" style="padding-right: 5px;">辑</a><a href="" style="padding-left: 5px;">删</a></li>
-								</ul>
-							</li>
-							
-							<li class="admin-amb-banner">
-								<ul>
-									<li class="admin-col-id admin-amb-cell">ID</li>
-									<li class="admin-col-title admin-amb-cell">文章标题</li>
-									<li class="admin-col-author admin-amb-cell">作者</li>
-									<li class="admin-col-time admin-amb-cell">发布时间</li>
-									<li class="admin-col-count admin-amb-cell">阅读量</li>
-									<li class="admin-col-operation admin-amb-cell">操作</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
+					<div id="article-manage-box"></div>
 
 
 					<div id="attach-manage-box"></div>

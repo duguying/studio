@@ -6,8 +6,7 @@
 
 $(document).ready(function (e) {
 	var ue;
-    // var ueditor_request_url = "/add";
-	
+    
 	var new_article_menu = $("#new-article-menu");
 	var article_manage_menu = $("#article-manage-menu");
 	var attach_manage_menu = $("#attach-manage-menu");
@@ -74,7 +73,7 @@ $(document).ready(function (e) {
 			// 新建文章
 			$("#submit").unbind("click");
 			$("#submit").click(function (e) {
-	            var current_content = ue.getContent();;
+	            var current_content = ue.getContent();
 	            var current_title = $("#article-title").val();
 	            var tags = $("#article-tags").val();
 
@@ -174,13 +173,9 @@ $(document).ready(function (e) {
 
 	$("#new-ariticle").click(function (e) {
 		show_frame("box1");
-		// ueditor_request_url = "/add";
-
         edit_submit();
 		
 	});
-
-	
 
 	function get_page (page) {
 		ueditor_request_url = "/admin/article/page/"+page;

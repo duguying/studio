@@ -35,5 +35,9 @@ func init() {
 	beego.Router("/admin", &controllers.AdminController{})
 	beego.Router("/admin/article/page/:page", &controllers.AdminArticleListController{}) //TODO
 
-	beego.Router("/test", &controllers.TestController{})
+	model := beego.AppConfig.String("runmode")
+	if "dev" == model {
+		beego.Router("/test", &controllers.TestController{})
+	}
+
 }

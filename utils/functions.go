@@ -68,7 +68,7 @@ func TagSplit(keywords string) string {
 	tags := strings.Split(keywords, ",")
 	for _, value := range tags {
 		// fmt.Printf("arr[%d]=%d \n", index, value)
-		content = content + fmt.Sprintf(`<a class="tags" href="/tag/%s">%s</a>,`, value, value)
+		content = content + fmt.Sprintf(`<a class="tags" href="/tag/%s/1">%s</a>,`, value, value)
 	}
 	return content
 }

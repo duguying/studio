@@ -12,7 +12,7 @@
 					<a class="box-title">按月归档</a>
 					<ul>
 						{{range $k,$v := .count_by_month}}
-							<li><a href=""><span>{{$v.month}} [{{$v.number}}]</span></a></li>
+							<li><a href="/archive/{{$v.year}}/{{$v.month}}/1"><span>{{$v.date}} [{{$v.number}}]</span></a></li>
 						{{end}}
 					</ul>
 				</div>

@@ -272,3 +272,67 @@ func (this *AdminArticleListController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
 	this.ServeJson()
 }
+
+// 按月归档-按月文章列表
+type ArchiveController struct {
+	beego.Controller
+}
+
+func (this *ArchiveController) Get() {
+	s := this.Ctx.Input.Param(":year")
+	year, err := strconv.Atoi(s)
+	if nil != err || year < 0 {
+		year = 1970
+	}
+
+	s = this.Ctx.Input.Param(":month")
+	month, err := strconv.Atoi(s)
+	if nil != err || month < 0 {
+		month = 1
+	}
+
+	s = this.Ctx.Input.Param(":page")
+	page, err := strconv.Atoi(s)
+	if nil != err || page < 0 {
+		page = 1
+	}
+
+	maps, nextPageFlag, pages, err := ListByMonth(year, month, page, 10)
+
+	if pages < int(page) {
+		page = pages
+	}
+
+	var prevPageFlag bool
+	if 1 == page {
+		prevPageFlag = false
+	} else {
+		prevPageFlag = true
+	}
+
+	if nil == err {
+		this.Data["prev_page"] = fmt.Sprintf("/archive/%d/%d/%d", year, month, page-1)
+		this.Data["prev_page_flag"] = prevPageFlag
+		this.Data["next_page"] = fmt.Sprintf("/archive/%d/%d/%d", year, month, page+1)
+		this.Data["next_page_flag"] = nextPageFlag
+		this.Data["articles_in_page"] = maps
+	}
+
+	hottest, err := HottestArticleList()
+
+	if nil == err {
+		this.Data["hottest"] = hottest
+	}
+	monthMaps, err := CountByMonth()
+
+	if nil == err {
+		this.Data["count_by_month"] = monthMaps
+	}
+
+	this.TplNames = "index.tpl"
+}
+
+func (this *ArchiveController) Post() {
+	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
+	this.ServeJson()
+}

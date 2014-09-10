@@ -118,9 +118,9 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 }
 
 // 按月份统计文章数
-// select DATE_FORMAT(time,'%Y-%m') as month,count(*) as number from article group by month order by month
+// select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by month order by month
 func CountByMonth() ([]orm.Params, error) {
-	sql := "select DATE_FORMAT(time,'%Y年%m月') as month,count(*) as number from article group by month order by month"
+	sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by month order by month"
 	var maps []orm.Params
 	o := orm.NewOrm()
 	num, err := o.Raw(sql).Values(&maps)
@@ -131,11 +131,75 @@ func CountByMonth() ([]orm.Params, error) {
 	}
 }
 
-// 文章分页列表
-// select * from article order by time desc limit 0,6
+// 获取某月的文章列表
+// select * from article where year(time)=2014 and month(time)=8
+// year 年
+// month 月
+// page 页码
+// numPerPage 每页条数
 // 返回值:
 // []orm.Params 文章
 // bool 是否有下一页
+// int 总页数
+// error 错误
+func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, bool, int, error) {
+	if year < 0 {
+		year = 1970
+	}
+
+	if month < 0 || month > 12 {
+		month = 1
+	}
+
+	if page < 1 {
+		page = 1
+	}
+
+	if numPerPage < 1 {
+		numPerPage = 10
+	}
+
+	sql1 := "select * from article where year(time)=? and month(time)=? limit ?,?"
+	sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
+
+	var maps, maps2 []orm.Params
+	o := orm.NewOrm()
+	num, err := o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
+	o.Raw(sql2, year, month).Values(&maps2)
+
+	// calculate pages
+	number, _ := strconv.Atoi(maps2[0]["number"].(string))
+	var addFlag int
+	if 0 == (number % numPerPage) {
+		addFlag = 0
+	} else {
+		addFlag = 1
+	}
+	pages := number/numPerPage + addFlag
+
+	var flagNextPage bool
+	if pages == page {
+		flagNextPage = false
+	} else {
+		flagNextPage = true
+	}
+
+	if err == nil && num > 0 {
+		return maps, flagNextPage, pages, nil
+	} else {
+		return nil, false, pages, err
+	}
+
+}
+
+// 文章分页列表
+// select * from article order by time desc limit 0,6
+// page 页码
+// numPerPage 每页条数
+// 返回值:
+// []orm.Params 文章
+// bool 是否有下一页
+// int 总页数
 // error 错误
 func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// pagePerNum := 6

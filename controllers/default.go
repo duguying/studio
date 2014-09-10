@@ -55,9 +55,9 @@ func (this *MainController) Get() {
 	}
 
 	if nil == err {
-		this.Data["prev_page"] = page - 1
+		this.Data["prev_page"] = fmt.Sprintf("/page/%d", page-1)
 		this.Data["prev_page_flag"] = prevPageFlag
-		this.Data["next_page"] = page + 1
+		this.Data["next_page"] = fmt.Sprintf("/page/%d", page+1)
 		this.Data["next_page_flag"] = nextPageFlag
 		this.Data["articles_in_page"] = maps
 	}
@@ -153,7 +153,8 @@ type TagController struct {
 func (this *TagController) Get() {
 	tag := this.Ctx.Input.Param(":tag")
 
-	page, err := this.GetInt("page")
+	s := this.Ctx.Input.Param(":page")
+	page, err := strconv.Atoi(s)
 	if nil != err || page <= 0 {
 		page = 1
 	}
@@ -161,7 +162,7 @@ func (this *TagController) Get() {
 	maps, nextPageFlag, totalPages, err := ListByKeyword(tag, int(page), 6)
 
 	if totalPages < int(page) {
-		page = int64(totalPages)
+		page = totalPages
 	}
 
 	var prevPageFlag bool
@@ -172,9 +173,9 @@ func (this *TagController) Get() {
 	}
 
 	if nil == err {
-		this.Data["prev_page"] = page - 1
+		this.Data["prev_page"] = fmt.Sprintf("/tag/%s/%d", tag, page-1)
 		this.Data["prev_page_flag"] = prevPageFlag
-		this.Data["next_page"] = page + 1
+		this.Data["next_page"] = fmt.Sprintf("/tag/%s/%d", tag, page+1)
 		this.Data["next_page_flag"] = nextPageFlag
 		this.Data["articles_in_page"] = maps
 	}

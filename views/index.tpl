@@ -27,10 +27,10 @@
 					<hr>
 				{{end}}
 				{{if .prev_page_flag}}
-				<a href="/page/{{.prev_page}}" class="page-nav">上一页</a>
+				<a href="{{.prev_page}}" class="page-nav">上一页</a>
 				{{end}}
 				{{if .next_page_flag}}
-				<a href="/page/{{.next_page}}" class="page-nav">下一页</a>
+				<a href="{{.next_page}}" class="page-nav">下一页</a>
 				{{end}}
 			</div>
 

@@ -8,7 +8,7 @@ import (
 func init() {
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/page/:page", &controllers.MainController{})
-	beego.Router("/tag/:tag", &controllers.TagController{})
+	beego.Router("/tag/:tag/:page", &controllers.TagController{})
 	beego.Router("/registor", &controllers.RegistorController{})
 	beego.Router("/login", &controllers.LoginController{})
 	beego.Router("/logout", &controllers.LogoutController{})
@@ -17,6 +17,7 @@ func init() {
 	beego.Router("/add", &controllers.AddArticleController{})
 	beego.Router("/article/:uri", &controllers.ArticleController{})
 	beego.Router("/article", &controllers.ArticleController{})
+	beego.Router("/archive/:year/:month/:page", &controllers.ArchiveController{})
 	beego.Router("/list", &controllers.ArticleListPageController{})
 	beego.Router("/list/:page", &controllers.ArticleListPageController{})
 	beego.Router("/update/:uri", &controllers.UpdateArticleController{})

@@ -2,7 +2,7 @@
 
 <html>
   	<head>
-    	<title>独孤影</title>
+    	<title>独孤影 {{.title}}</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="stylesheet" href="/static/css/style.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />

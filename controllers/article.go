@@ -329,6 +329,8 @@ func (this *ArchiveController) Get() {
 		this.Data["count_by_month"] = monthMaps
 	}
 
+	this.Data["title"] = fmt.Sprintf("- %d年%d月", year, month)
+
 	this.TplNames = "index.tpl"
 }
 

@@ -68,6 +68,8 @@ func (this *MainController) Get() {
 		this.Data["hottest"] = hottest
 	}
 
+	this.Data["title"] = ""
+
 	this.TplNames = "index.tpl"
 }
 
@@ -190,6 +192,8 @@ func (this *TagController) Get() {
 	if nil == err {
 		this.Data["count_by_month"] = monthMaps
 	}
+
+	this.Data["title"] = "- " + tag
 
 	this.TplNames = "index.tpl"
 }

@@ -52,6 +52,16 @@ $(document).ready(function (e) {
 		};
 	};
 
+	/* 获取编辑器本地存储 */
+	function get_local() {
+		var index = window.location.href.replace(/\./g,'_')
+										.replace(/:/g,'_')
+										.replace(/\//g,'_')
+										.replace(/___/g,'_')+'myEditor-drafts-data';
+		console.log(index);
+		return eval('['+localStorage.getItem("ueditor_preference")+']')[0][index];
+	}
+
 	(function init () {
 		var menu_bar_html = '<label for="article-title" style="margin-left: 10px;color:white;">文章标题</label>\
 <input type="text" name="title" id="article-title" style="margin-left: 10px;margin-top: 7px;width: 250px;">\
@@ -174,7 +184,12 @@ $(document).ready(function (e) {
 	$("#new-ariticle").click(function (e) {
 		show_frame("box1");
         edit_submit();
-		
+		var data = get_local();
+		if(data&&data!=ue.getContent()){
+			if(window.confirm("是否加载上次未保存的内容？")){
+				ue.setContent(data);
+			}
+		}
 	});
 
 	function get_page (page) {
@@ -203,6 +218,10 @@ $(document).ready(function (e) {
 					edit_submit(item);
 					
 				}).delegate("#del","click",function(){
+					if(!window.confirm("是否确认要删除文档？")){
+						return;
+					}
+					
 					var id = $(this).attr("data");
 					console.log("delete "+id);
 					$.ajax({

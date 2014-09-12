@@ -9,32 +9,12 @@ func init() {
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/page/:page", &controllers.MainController{})
 	beego.Router("/tag/:tag/:page", &controllers.TagController{})
-	beego.Router("/registor", &controllers.RegistorController{})
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/logout", &controllers.LogoutController{})
-	beego.Router("/rename", &controllers.ChangeUsernameController{})
-	beego.Router("/email", &controllers.SetEmailController{})
-	beego.Router("/add", &controllers.AddArticleController{})
 	beego.Router("/article/:uri", &controllers.ArticleController{})
 	beego.Router("/article", &controllers.ArticleController{})
 	beego.Router("/archive/:year/:month/:page", &controllers.ArchiveController{})
 	beego.Router("/list", &controllers.ArticleListPageController{})
 	beego.Router("/list/:page", &controllers.ArticleListPageController{})
-	beego.Router("/update/:uri", &controllers.UpdateArticleController{})
-	beego.Router("/update", &controllers.UpdateArticleController{})
-	beego.Router("/delete/:uri", &controllers.DeleteArticleController{})
-	beego.Router("/delete", &controllers.DeleteArticleController{})
-	beego.Router("/password/getback", &controllers.GetBackPasswordController{})
-	beego.Router("/password/sendemail", &controllers.SendEmailToGetBackPasswordController{})
-	beego.Router("/password/reset", &controllers.SetPasswordController{})
-	beego.Router("/password/change", &controllers.ChangePasswordController{})
-	beego.Router("/password/reset/:varify", &controllers.SetPasswordController{})
-	beego.Router("/upload", &controllers.UploadController{})
-
 	beego.Router("/project", &controllers.ProjectListController{})
-
-	beego.Router("/admin", &controllers.AdminController{})
-	beego.Router("/admin/article/page/:page", &controllers.AdminArticleListController{}) //TODO
 
 	model := beego.AppConfig.String("runmode")
 	if "dev" == model {

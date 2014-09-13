@@ -118,9 +118,9 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 }
 
 // 按月份统计文章数
-// select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by month order by month
+// select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by month
 func CountByMonth() ([]orm.Params, error) {
-	sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by month order by month"
+	sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by month"
 	var maps []orm.Params
 	o := orm.NewOrm()
 	num, err := o.Raw(sql).Values(&maps)

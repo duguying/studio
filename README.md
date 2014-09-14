@@ -1,5 +1,15 @@
 blog
 ----------
+基于beego的博客
+
+# Install #
+
+```shell
+go get github.com/beego/bee
+go get github.com/yanunon/oss-go-api
+git clone https://github.com/duguying/blog
+bee run
+```
 
 # 功能单元及完成进度 #
 
@@ -17,7 +27,7 @@ blog
 		- [x] 重置密码
 	- [x] 修改密码
 	- [ ] 销户
-- [ ] 文章管理
+- [x] 文章管理
 	- [x] 添加文章
 	- [x] 修改文章
 	- [x] 删除文章
@@ -25,12 +35,13 @@ blog
 	- [x] 文章分页
 	- [x] 最热文章列表
 	- [x] 所有文章列表页
-	- [ ] 文章按月份分页
+	- [x] 文章按月份分页
 	- [x] 文章按关键词分页
 	- [x] 文章阅读统计
 	- [x] 管理-文章列表
 - [ ] 其他
 	- [x] 附件上传
+	- [x] 附件数据库记录
 	- [ ] 附件删除
 	- [x] 阿里云OSS上传
 	- [x] 文章草稿保存

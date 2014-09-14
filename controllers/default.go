@@ -3,10 +3,10 @@ package controllers
 import (
 	// "blog/utils"
 	. "blog/models"
+	"blog/utils"
 	"fmt"
 	"github.com/astaxie/beego"
 	// "log"
-	"blog/utils"
 	"os"
 	"strconv"
 	"time"
@@ -108,6 +108,8 @@ func (this *UploadController) Post() {
 		return
 	}
 
+	mime := h.Header.Get("Content-Type")
+
 	// 文件保存到本地
 	err = this.SaveToFile("upfile", "./static/upload/"+h.Filename)
 	if nil != err {
@@ -125,7 +127,9 @@ func (this *UploadController) Post() {
 	t := time.Now()
 	ossFilename := fmt.Sprintf("%d/%d/%d/%s", t.Year(), t.Month(), t.Day(), h.Filename)
 	err = utils.OssStore(ossFilename, "static/upload/"+h.Filename)
+
 	if nil != err {
+		// 保存到oss失败
 		this.Data["json"] = map[string]interface{}{
 			"result": false,
 			"state":  "upload to oss FAILED, " + fmt.Sprint(err),
@@ -135,7 +139,17 @@ func (this *UploadController) Post() {
 		this.ServeJson()
 		return
 	} else {
+		// 保存到oss成功
 		os.Remove("./static/upload/" + h.Filename)
+		if err = AddFile(h.Filename, ossFilename, "oss", mime); nil != err {
+			this.Data["json"] = map[string]interface{}{
+				"result": false,
+				"state":  "save info to database FAILED, " + fmt.Sprint(err),
+				"msg":    "upload failed",
+				"refer":  nil,
+			}
+			this.ServeJson()
+		}
 	}
 
 	this.Data["json"] = map[string]interface{}{

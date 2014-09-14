@@ -65,6 +65,8 @@ CREATE TABLE IF NOT EXISTS `file` (
   `filename` varchar(128) NOT NULL COMMENT '文件名',
   `path` text NOT NULL COMMENT '路径',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `store` enum('local','oss') NOT NULL,
+  `mime` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `filename` (`filename`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件';

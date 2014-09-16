@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -25,9 +26,10 @@ func (this *XmlrpcController) Get() {
 func (this *XmlrpcController) Post() {
 	result := ""
 	params := utils.Unserialize(this.Ctx.Input.RequestBody)
-	log.Println(string(this.Ctx.Input.RequestBody))
+	// log.Println(string(this.Ctx.Input.RequestBody))
 	// log.Println(params)
 	methodName, _ := utils.GetMethodName(string(this.Ctx.Input.RequestBody))
+	log.Println(methodName)
 	if "blogger.getUsersBlogs" == methodName {
 		result = getBlog(params)
 	} else if "metaWeblog.newPost" == methodName {
@@ -38,27 +40,14 @@ func (this *XmlrpcController) Post() {
 		result = setCata(params)
 	} else if "metaWeblog.newMediaObject" == methodName {
 		result = newMedia(params)
+	} else if "metaWeblog.editPost" == methodName {
+		result = editPost(params)
+	} else if "blogger.deletePost" == methodName {
+		result = deletePost(params)
 	}
 
 	this.Ctx.WriteString(result)
 	this.ServeXml()
-}
-
-//////////////////////////////////////////////////////
-
-// 测试
-type XmlTestController struct {
-	beego.Controller
-}
-
-func (this *XmlTestController) Get() {
-
-}
-
-func (this *XmlTestController) Post() {
-	rst := utils.Unserialize(this.Ctx.Input.RequestBody)
-	utils.GetMethodName(string(this.Ctx.Input.RequestBody))
-	log.Println(rst)
 }
 
 /////////////////////////////////////////////////////////////////
@@ -83,8 +72,9 @@ func getBlog(params interface{}) string {
 	result := login(username, password)
 
 	if result {
+		host := beego.AppConfig.String("host")
 		str := utils.ReadFile("views/rpcxml/response_login.xml")
-		return fmt.Sprintf(str, "http://127.0.0.1:81/", 1, "独孤影", "http://127.0.0.1:81/xmlrpc")
+		return fmt.Sprintf(str, host+"/", 1, "独孤影", host+"/xmlrpc")
 	} else {
 		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
@@ -195,4 +185,76 @@ func newMedia(params interface{}) string {
 		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 
+}
+
+// 编辑(更新)文章
+func editPost(params interface{}) string {
+	strId := params.([]interface{})[0].(string)
+	username := params.([]interface{})[1].(string)
+	password := params.([]interface{})[2].(string)
+	result := login(username, password)
+
+	if result {
+
+		title := params.([]interface{})[3].(map[string]interface{})["title"].(string)
+		content := params.([]interface{})[3].(map[string]interface{})["description"].(string)
+		keywords := ""
+		categories := params.([]interface{})[3].(map[string]interface{})["categories"]
+		if categories != nil {
+			cata := categories.([]interface{})
+			for _, v := range cata {
+				keywords = fmt.Sprintf(keywords+"%s,", v.(string))
+			}
+			keywords = strings.TrimSuffix(keywords, ",")
+		}
+
+		id, err := strconv.ParseInt(strId, 10, 64)
+		if err != nil {
+			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			return fmt.Sprintf(str, "非法文章ID")
+		}
+
+		var newArt Article
+
+		newArt.Title = title
+		newArt.Keywords = keywords
+		newArt.Content = content
+
+		err = UpdateArticle(id, "", newArt)
+
+		if err == nil {
+			return utils.ReadFile("views/rpcxml/response_edit_post.xml")
+		} else {
+			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			return fmt.Sprintf(str, "文章发布失败! 注意标题不能重名")
+		}
+	} else {
+		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+	}
+}
+
+// 删除文章
+func deletePost(params interface{}) string {
+	strId := params.([]interface{})[1].(string)
+	username := params.([]interface{})[2].(string)
+	password := params.([]interface{})[3].(string)
+	result := login(username, password)
+
+	id, err := strconv.ParseInt(strId, 10, 64)
+	if err != nil {
+		str := utils.ReadFile("views/rpcxml/response_failed.xml")
+		return fmt.Sprintf(str, "非法文章ID")
+	}
+
+	if result {
+		_, err := DeleteArticle(id, "")
+		if nil != err {
+			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			return fmt.Sprintf(str, "文章删除失败!")
+		} else {
+			return utils.ReadFile("views/rpcxml/response_delete_post.xml")
+		}
+	} else {
+		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+	}
 }

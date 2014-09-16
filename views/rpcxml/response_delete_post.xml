@@ -3,7 +3,6 @@
   <params>
     <param>
       <value>
-      <!-- set post catalog success -->
       <boolean>1</boolean>
       </value>
     </param>

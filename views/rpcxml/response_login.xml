@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<methodResponse>
+  <params>
+    <param>
+      <value>
+        <array>
+          <data>
+            <value>
+              <struct>
+                <!-- 1 -->
+                <member><name>isAdmin</name><value><boolean>1</boolean></value></member>
+                <!-- homepage -->
+                <member><name>url</name><value><string>%s</string></value></member>
+                <!-- userid -->
+                <member><name>blogid</name><value><string>%d</string></value></member>
+                <!-- blogname -->
+                <member><name>blogName</name><value><string>%s</string></value></member>
+                <!-- xmlrpc url address -->
+                <member><name>xmlrpc</name><value><string>%s</string></value></member>
+              </struct>
+            </value>
+          </data>
+        </array>
+      </value>
+    </param>
+  </params>
+</methodResponse>

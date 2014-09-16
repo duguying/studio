@@ -19,7 +19,10 @@ type XmlrpcController struct {
 }
 
 func (this *XmlrpcController) Get() {
-	this.Ctx.WriteString(utils.ReadFile("views/rpcxml/rsd.xml"))
+	str := utils.ReadFile("views/rpcxml/rsd.xml")
+	host := beego.AppConfig.String("host")
+	result := fmt.Sprintf(str, host, host)
+	this.Ctx.WriteString(result)
 	this.ServeXml()
 }
 

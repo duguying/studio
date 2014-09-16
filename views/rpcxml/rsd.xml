@@ -2,9 +2,9 @@
   <service>
     <engineName>WordPress</engineName>
     <engineLink>http://wordpress.org/</engineLink>
-    <homePageLink>http://127.0.0.1:81</homePageLink>
+    <homePageLink>%s</homePageLink>
     <apis>
-      <api name="WordPress" blogID="1" preferred="true" apiLink="http://127.0.0.1:81/xmlrpc" />
+      <api name="WordPress" blogID="1" preferred="true" apiLink="%s/xmlrpc" />
     </apis>
   </service>
 </rsd>

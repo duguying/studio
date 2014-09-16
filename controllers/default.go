@@ -69,6 +69,7 @@ func (this *MainController) Get() {
 	}
 
 	this.Data["title"] = ""
+	this.Data["host"] = beego.AppConfig.String("host")
 
 	this.TplNames = "index.tpl"
 }

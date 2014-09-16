@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<methodResponse>
+  <params>
+    <param>
+      <value>
+      <!-- post id -->
+      <string>%d</string>
+      </value>
+    </param>
+  </params>
+</methodResponse>

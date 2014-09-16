@@ -11,3 +11,6 @@ blog
 # deps
 /static/ueditor/
 /static/upload/
+
+# debug
+/debug/

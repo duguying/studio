@@ -4,7 +4,7 @@
     <engineLink>http://wordpress.org/</engineLink>
     <homePageLink>http://127.0.0.1:81</homePageLink>
     <apis>
-      <api name="WordPress" blogID="1" preferred="true" apiLink="http://127.0.0.1:81/xmlrpc.php" />
+      <api name="WordPress" blogID="1" preferred="true" apiLink="http://127.0.0.1:81/xmlrpc" />
     </apis>
   </service>
 </rsd>

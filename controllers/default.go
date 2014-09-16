@@ -141,7 +141,7 @@ func (this *UploadController) Post() {
 	} else {
 		// 保存到oss成功
 		os.Remove("./static/upload/" + h.Filename)
-		if err = AddFile(h.Filename, ossFilename, "oss", mime); nil != err {
+		if _, err = AddFile(h.Filename, ossFilename, "oss", mime); nil != err {
 			this.Data["json"] = map[string]interface{}{
 				"result": false,
 				"state":  "save info to database FAILED, " + fmt.Sprint(err),

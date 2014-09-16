@@ -31,7 +31,7 @@ func init() {
 // store 存储类型
 // mime 文件类型信息
 // error 返回错误
-func AddFile(filename string, path string, store string, mime string) error {
+func AddFile(filename string, path string, store string, mime string) (int64, error) {
 	o := orm.NewOrm()
 	var file File
 	file.Filename = filename
@@ -43,11 +43,11 @@ func AddFile(filename string, path string, store string, mime string) error {
 	}
 	file.Mime = mime
 
-	_, err := o.Insert(&file)
+	id, err := o.Insert(&file)
 	if err == nil {
-		return nil
+		return id, nil
 	} else {
-		return err
+		return id, err
 	}
 }
 

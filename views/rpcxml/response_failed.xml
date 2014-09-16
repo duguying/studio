@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<methodResponse>
+  <fault>
+    <value>
+      <struct>
+        <member>
+          <name>faultCode</name>
+          <value><int>500</int></value>
+        </member>
+        <member>
+          <name>faultString</name>
+          <!-- failed message -->
+          <value><string>%s</string></value>
+        </member>
+      </struct>
+    </value>
+  </fault>
+</methodResponse>

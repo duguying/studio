@@ -188,6 +188,8 @@ $(document).ready(function (e) {
 		if(data&&data!=ue.getContent()){
 			if(window.confirm("是否加载上次未保存的内容？")){
 				ue.setContent(data);
+			}else{
+				ue.setContent("");
 			}
 		}
 	});

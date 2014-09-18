@@ -39,6 +39,10 @@
 				<script src="/static/syntaxhighlighter/scripts/shCore.js"></script>
 				<script src="/static/syntaxhighlighter/scripts/shAutoloader.js"></script>
 				<script>
+				// nprogress bar
+				$('body').show();
+				NProgress.start();
+
 				function path()
 				{
 				  var args = arguments,
@@ -98,11 +102,6 @@
 				var $toTop=$('<a href=\"#\" id=\"'+settings.id+'\"></a>').html(settings.text);$toTop.hide().appendTo('body').click(function(){$('html, body').stop().animate({scrollTop:0},settings.speed,settings.easing);return false;});$(window).scroll(function(){var sd=jQuery(window).scrollTop();if(typeof document.body.style.maxHeight==="undefined"){$toTop.css({'position':'absolute','top':sd+$(window).height()-mv_dynamic_to_top.margin});}
 				if(sd>settings.min){$toTop.fadeIn(settings.fade_in);}else{$toTop.fadeOut(settings.fade_out);}});};$('body').DynamicToTop();})(jQuery,mv_dynamic_to_top);
 
-				/**
-				 * Image load error, load default image
-				 */
-				$(function (e) {
-					$("img").css('background-image','url(/static/img/loadfailed.png)')
-				})
 				</script>
 			</div>
+			<script src="/static/js/main.js"></script>

@@ -216,3 +216,16 @@ func (this *TagController) Get() {
 func (this *TagController) Post() {
 	this.Ctx.WriteString("home page")
 }
+
+// 统计
+type StatisticsController struct {
+	beego.Controller
+}
+
+func (this *StatisticsController) Get() {
+	this.TplNames = "statistics.tpl"
+}
+
+func (this *StatisticsController) Post() {
+	this.TplNames = "statistics.tpl"
+}

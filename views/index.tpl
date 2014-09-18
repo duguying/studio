@@ -11,7 +11,7 @@
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
 		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	</head>
-	<body>
+	<body style='display: none'>
 		<div class="main">
 
   			{{template "inc/header.tpl" .}}
@@ -37,13 +37,12 @@
 				{{end}}
 			</div>
 
-
 			{{template "inc/rightbar.tpl" .}}
 
 			{{template "inc/footer.tpl" .}}
 
-
 		</div>
+		
 	</body>
 </html>
 

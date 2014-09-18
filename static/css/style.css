@@ -141,6 +141,7 @@ hr{
     list-style: none outside none;
     overflow: hidden;
     width: 100%;
+    height: 34px;
     padding: 0px;
     margin: 0px;
 }
@@ -148,11 +149,10 @@ hr{
 .menu li{
 	display: block;
 	float: right;
-	margin-left: 5px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	padding-left: 20px;
-	padding-right: 20px;
+	width: 76px;
+	text-align: center;
 	font-size: 18px;
 	font-family: "微软雅黑";
 	cursor: pointer;
@@ -202,7 +202,7 @@ hr{
 }
 
 .article{
-	font-size: 15px;
+	font-size: 14px;
 }
 
 .article-title{
@@ -444,4 +444,35 @@ hr{
     padding: 20px;
     padding-left: 80px;
     width: 1020px;
+}
+
+.drop-menu{
+	display: none;
+}
+
+.drop-list{
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	background-color: black;
+	margin-top: 5px;
+	/*border-radius: 8px;
+	box-shadow: 0px 0px 5px 0px black;*/
+}
+
+.drop-list li{
+	float: none;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	color: white;
+	font-size: 14px;
+}
+
+.droplist-array-down{
+	display: block;
+	position: absolute;
+	margin-left: 32px;
+	margin-top: -15px;
+	font-size: 30px;
 }

@@ -7,6 +7,8 @@ blog [![Build Status](https://drone.io/github.com/duguying/blog/status.png)](htt
 ```shell
 go get github.com/beego/bee
 go get github.com/yanunon/oss-go-api
+go get github.com/astaxie/beego/cache
+go get -u github.com/astaxie/beego/cache/memcache
 git clone https://github.com/duguying/blog
 bee run
 ```

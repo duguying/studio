@@ -238,11 +238,11 @@ type LogoController struct {
 func (this *LogoController) Get() {
 	localfile := "tmp/logo.png"
 
-	data, err := utils.ReadFileByte(localfile)
-
-	if err != nil {
+	if !utils.PathExist(localfile) {
 		utils.GetImage(beego.AppConfig.String("logo"), localfile)
 	}
+
+	data, _ := utils.ReadFileByte(localfile)
 
 	this.Ctx.Output.Body(data)
 	this.Ctx.Output.ContentType("image/png")

@@ -52,6 +52,13 @@ func GetGravatar(email string) string {
 	return "http://www.gravatar.com/avatar/" + Md5(strings.ToUpper(email))
 }
 
+// 检查文件或目录是否存在
+// 如果由 filename 指定的文件或目录存在则返回 true，否则返回 false
+func PathExist(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil || os.IsExist(err)
+}
+
 // 读取文件
 func ReadFileByte(path string) ([]byte, error) {
 	fi, err := os.Open(path)

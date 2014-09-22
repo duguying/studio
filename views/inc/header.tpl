@@ -31,6 +31,6 @@
   					<a href="/"><span class="title">独孤影</span></a>
   				</div>
   				<div class="gap">
-  					<img class="gravatar" src="http://www.gravatar.com/avatar/5fedd018b3227bc4043934309da8c290" />
+  					<img class="gravatar" src="/logo" />
   				</div>
   			</div>

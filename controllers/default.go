@@ -229,3 +229,26 @@ func (this *StatisticsController) Get() {
 func (this *StatisticsController) Post() {
 	this.TplNames = "statistics.tpl"
 }
+
+// Logo
+type LogoController struct {
+	beego.Controller
+}
+
+func (this *LogoController) Get() {
+	localfile := "tmp/logo.png"
+
+	data, err := utils.ReadFileByte(localfile)
+
+	if err != nil {
+		utils.GetImage(beego.AppConfig.String("logo"), localfile)
+	}
+
+	this.Ctx.Output.Body(data)
+	this.Ctx.Output.ContentType("image/png")
+
+}
+
+func (this *LogoController) Post() {
+	this.Ctx.WriteString("get method only")
+}

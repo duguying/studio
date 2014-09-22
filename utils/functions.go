@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 	// "regexp"
+	"encoding/json"
 	"strings"
 )
 
@@ -51,6 +52,16 @@ func GetGravatar(email string) string {
 	return "http://www.gravatar.com/avatar/" + Md5(strings.ToUpper(email))
 }
 
+// 读取文件
+func ReadFileByte(path string) ([]byte, error) {
+	fi, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	defer fi.Close()
+	return ioutil.ReadAll(fi)
+}
+
 // 读取文本文件
 func ReadFile(path string) string {
 	fi, err := os.Open(path)
@@ -72,4 +83,10 @@ func TagSplit(keywords string) string {
 		content = content + fmt.Sprintf(`<a class="tags" href="/tag/%s/1">%s</a>,`, value, value)
 	}
 	return content
+}
+
+// json编码
+func JsonEncode(data interface{}) (string, error) {
+	a, err := json.Marshal(data)
+	return string(a), err
 }

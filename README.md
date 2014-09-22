@@ -1,4 +1,4 @@
-blog
+blog [![Build Status](https://drone.io/github.com/duguying/blog/status.png)](https://drone.io/github.com/duguying/blog/latest)
 ----------
 基于beego的博客
 

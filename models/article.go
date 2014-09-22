@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	// "log"
+	"blog/config"
+	"blog/utils"
+	"encoding/json"
 	"strconv"
 	"strings"
 	"time"
@@ -41,30 +44,69 @@ func AddArticle(title string, content string, keywords string, author string) (i
 	return o.Insert(art)
 }
 
-// 通过id获取文章
+// 通过id获取文章-cached
 func GetArticle(id int) (Article, error) {
-	o := orm.NewOrm()
-	o.Using("default")
-	art := Article{Id: id}
-	err := o.Read(&art, "id")
+	var err error
+	var art Article
+
+	cache := config.GetCache("GetArticle.id." + fmt.Sprintf("%d", id))
+	if cache != nil { // check cache
+		json.Unmarshal([]byte(cache.(string)), &art)
+		return art, nil
+	} else {
+		o := orm.NewOrm()
+		o.Using("default")
+		art = Article{Id: id}
+		err = o.Read(&art, "id")
+
+		data, _ := utils.JsonEncode(art)
+		config.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data)
+	}
+
 	return art, err
 }
 
-// 通过uri获取文章
+// 通过uri获取文章-cached
 func GetArticleByUri(uri string) (Article, error) {
-	o := orm.NewOrm()
-	o.Using("default")
-	art := Article{Uri: uri}
-	err := o.Read(&art, "uri")
+	var err error
+	var art Article
+
+	cache := config.GetCache("GetArticleByUri.uri." + uri)
+	if cache != nil {
+		json.Unmarshal([]byte(cache.(string)), &art)
+		return art, nil
+	} else {
+		o := orm.NewOrm()
+		o.Using("default")
+		art = Article{Uri: uri}
+		err = o.Read(&art, "uri")
+
+		data, _ := utils.JsonEncode(art)
+		config.SetCache("GetArticleByUri.uri."+uri, data)
+	}
+
 	return art, err
 }
 
-// 通过文章标题获取文章
+// 通过文章标题获取文章-cached
 func GetArticleByTitle(title string) (Article, error) {
-	o := orm.NewOrm()
-	o.Using("default")
-	art := Article{Title: title}
-	err := o.Read(&art, "title")
+	var err error
+	var art Article
+
+	cache := config.GetCache("GetArticleByTitle.title." + title)
+	if cache != nil {
+		json.Unmarshal([]byte(cache.(string)), &art)
+		return art, nil
+	} else {
+		o := orm.NewOrm()
+		o.Using("default")
+		art = Article{Title: title}
+		err = o.Read(&art, "title")
+
+		data, _ := utils.JsonEncode(art)
+		config.SetCache("GetArticleByTitle.title."+title, data)
+	}
+
 	return art, err
 }
 
@@ -117,21 +159,31 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 	return o.Delete(&art)
 }
 
-// 按月份统计文章数
+// 按月份统计文章数-cached
 // select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by year desc, month desc
 func CountByMonth() ([]orm.Params, error) {
-	sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by year desc, month desc"
 	var maps []orm.Params
-	o := orm.NewOrm()
-	num, err := o.Raw(sql).Values(&maps)
-	if err == nil && num > 0 {
+
+	cache := config.GetCache("CountByMonth")
+	if nil != cache {
+		json.Unmarshal([]byte(cache.(string)), &maps)
 		return maps, nil
 	} else {
-		return nil, err
+		sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by year desc, month desc"
+		o := orm.NewOrm()
+		num, err := o.Raw(sql).Values(&maps)
+		if err == nil && num > 0 {
+			data, _ := utils.JsonEncode(maps)
+			config.SetCache("CountByMonth", data)
+			return maps, nil
+		} else {
+			return nil, err
+		}
 	}
+
 }
 
-// 获取某月的文章列表
+// 获取某月的文章列表-cached
 // select * from article where year(time)=2014 and month(time)=8
 // year 年
 // month 月
@@ -159,13 +211,32 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		numPerPage = 10
 	}
 
-	sql1 := "select * from article where year(time)=? and month(time)=? limit ?,?"
-	sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
-
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
-	num, err := o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
-	o.Raw(sql2, year, month).Values(&maps2)
+	var err error
+
+	// get data - cached
+	cache1 := config.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page))
+	if nil != cache1 {
+		json.Unmarshal([]byte(cache1.(string)), &maps)
+	} else {
+		sql1 := "select * from article where year(time)=? and month(time)=? limit ?,?"
+		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
+
+		data1, _ := utils.JsonEncode(maps)
+		config.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1)
+	}
+
+	cache2 := config.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month))
+	if nil != cache2 {
+		json.Unmarshal([]byte(cache2.(string)), &maps2)
+	} else {
+		sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
+		o.Raw(sql2, year, month).Values(&maps2)
+
+		data2, _ := utils.JsonEncode(maps2)
+		config.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2)
+	}
 
 	// calculate pages
 	number, _ := strconv.Atoi(maps2[0]["number"].(string))
@@ -184,7 +255,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		flagNextPage = true
 	}
 
-	if err == nil && num > 0 {
+	if err == nil {
 		return maps, flagNextPage, pages, nil
 	} else {
 		return nil, false, pages, err

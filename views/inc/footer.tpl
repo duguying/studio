@@ -104,4 +104,4 @@
 
 				</script>
 			</div>
-			<script src="/static/js/main.js"></script>
+			<script src="/static/src/bin/js/main.min.js"></script>

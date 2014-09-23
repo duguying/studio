@@ -5,8 +5,8 @@
     	<title>独孤影</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
-		<link rel="stylesheet" href="/static/style/build/style.min.css">
-		<link rel="stylesheet" href="/static/style/build/admin.min.css">
+		<link rel="stylesheet" href="/static/src/bin/css/style.min.css">
+		<link rel="stylesheet" href="/static/src/bin/css/admin.min.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
 		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 		</div>
-		<script src="/static/js/admin.js"></script>
+		<script src="/static/src/bin/js/admin.min.js"></script>
 	</body>
 </html>
 

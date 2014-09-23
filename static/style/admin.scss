@@ -1,0 +1,106 @@
+@import 'common';
+
+
+.admin-left-banner{
+	float: left;
+	width: 20%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.admin-title{
+	height: 40px;
+	background-color: red;
+	font-family: $site-title-font-family;
+	color: white;
+	font-size: 36px;
+	text-align: center;
+}
+
+.admin-menu-left{
+	height: 570px;
+	background-color: #3B4F67;
+	ul{
+		margin: 0px;
+		padding: 20px;
+		color: white;
+		li{
+			border: 1px inset white;
+		    list-style: none outside none;
+		    margin: 5px;
+		    padding: 5px;
+		    text-align: center;
+		    cursor: pointer;
+		}
+		li:hover{
+			background-color: #314256;
+		}
+	}
+}
+
+.admin-right-pannel{
+	float: left;
+	width: 80%;
+	.admin-top-menu{
+		height: 40px;
+		background-color: #3c454f;
+	}
+	.admin-main-pannel{
+		#new-article-box{}
+		#article-manage-box {
+			ul{
+				padding-left:0;
+				margin-left: 10px;
+			}
+			li{
+				list-style: none;
+			}
+			div{
+				:nth-child(2){
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+}
+
+.admin-amb-banner ul{
+	overflow: hidden;
+	li{
+		float: left;
+	}
+}
+
+.admin-amb-line ul{
+	overflow: hidden;
+	li{
+		float: left;
+	}
+}
+
+.admin-col-id{
+	width: 30px;
+}
+.admin-col-title{
+	width: 300px;
+}
+.admin-col-author{
+	width: 80px;
+}
+.admin-col-time{
+	width: 170px;
+}
+.admin-col-count{
+	width: 60px;
+}
+.admin-col-operation{
+	width: 80px;
+}
+
+.admin-amb-cell{
+	border: solid 1px #ccc;
+	text-align: center;
+	height: 21px;
+}
+
+

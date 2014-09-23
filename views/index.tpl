@@ -7,7 +7,7 @@
 		<meta content="独孤影,博客,个人网站,IT,技术,编程" name="keywords" />
 		<meta content="独孤影的博客" name="description" />
 		<link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{.host}}/xmlrpc" />
-		<link rel="stylesheet" href="/static/css/style.css">
+		<link rel="stylesheet" href="/static/style/build/style.min.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
 		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	</head>

@@ -4,7 +4,7 @@
   	<head>
     	<title>独孤影-登录</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="/static/css/style.css">
+		<link rel="stylesheet" href="/static/style/build/style.min.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
 		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 		<style>

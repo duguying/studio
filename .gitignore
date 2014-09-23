@@ -14,3 +14,7 @@ blog
 
 # debug
 /debug/
+
+# style build
+!/static/style/build/*.min.css
+/static/style/build/

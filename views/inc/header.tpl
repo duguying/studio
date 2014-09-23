@@ -1,5 +1,5 @@
-<link href='/static/css/nprogress.css' rel='stylesheet' />
-<script src='/static/js/nprogress.js'></script>
+<link href='/static/nprogress/nprogress.css' rel='stylesheet' />
+<script src='/static/nprogress/nprogress.js'></script>
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="bookmark" type="image/x-icon" /> 
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="icon" type="image/x-icon" /> 
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 

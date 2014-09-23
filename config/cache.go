@@ -19,8 +19,8 @@ func InitCache() {
 
 }
 
-func SetCache(key string, value string) error {
-	err := cc.Put(key, value, 10)
+func SetCache(key string, value string, timeout int64) error {
+	err := cc.Put(key, value, timeout)
 	if err != nil {
 		return err
 	} else {

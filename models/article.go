@@ -60,7 +60,7 @@ func GetArticle(id int) (Article, error) {
 		err = o.Read(&art, "id")
 
 		data, _ := utils.JsonEncode(art)
-		config.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data)
+		config.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data, 600)
 	}
 
 	return art, err
@@ -82,7 +82,7 @@ func GetArticleByUri(uri string) (Article, error) {
 		err = o.Read(&art, "uri")
 
 		data, _ := utils.JsonEncode(art)
-		config.SetCache("GetArticleByUri.uri."+uri, data)
+		config.SetCache("GetArticleByUri.uri."+uri, data, 600)
 	}
 
 	return art, err
@@ -104,7 +104,7 @@ func GetArticleByTitle(title string) (Article, error) {
 		err = o.Read(&art, "title")
 
 		data, _ := utils.JsonEncode(art)
-		config.SetCache("GetArticleByTitle.title."+title, data)
+		config.SetCache("GetArticleByTitle.title."+title, data, 600)
 	}
 
 	return art, err
@@ -174,7 +174,7 @@ func CountByMonth() ([]orm.Params, error) {
 		num, err := o.Raw(sql).Values(&maps)
 		if err == nil && num > 0 {
 			data, _ := utils.JsonEncode(maps)
-			config.SetCache("CountByMonth", data)
+			config.SetCache("CountByMonth", data, 3600)
 			return maps, nil
 		} else {
 			return nil, err
@@ -224,7 +224,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
 
 		data1, _ := utils.JsonEncode(maps)
-		config.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1)
+		config.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1, 3600)
 	}
 
 	cache2 := config.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month))
@@ -235,7 +235,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		o.Raw(sql2, year, month).Values(&maps2)
 
 		data2, _ := utils.JsonEncode(maps2)
-		config.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2)
+		config.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2, 3600)
 	}
 
 	// calculate pages

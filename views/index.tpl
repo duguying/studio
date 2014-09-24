@@ -18,12 +18,12 @@
 
 			<div class="article-list">
 				{{range $k,$v := .articles_in_page}}
-					<div class="article">
-						<a class="article-title" title="{{$v.title}}" href="/article/{{$v.uri}}">{{$v.title}}</a>
+					<div class="article" itemscope itemtype="http://schema.org/Article">
+						<a class="article-title" title="{{$v.title}}" href="/article/{{$v.uri}}" itemprop="name">{{$v.title}}</a>
 						<div class="article-ps">
-							Tag {{$v.keywords|tags|str2html}} on <a>{{$v.time}}</a> by <a title="作者: {{$v.author}}">{{$v.author}}</a> view <a title="{{$v.count}}次阅读">{{$v.count}}</a>
+							Tag {{$v.keywords|tags|str2html}} on <a datetime="{{$v.time}}" itemprop="datePublished">{{$v.time}}</a> by <a title="作者: {{$v.author}}" itemprop="author">{{$v.author}}</a> view <a title="{{$v.count}}次阅读">{{$v.count}}</a>
 						</div>
-						<div class="article-content">
+						<div class="article-content" itemprop="articleBody">
 							{{str2html $v.content}}
 						</div>
 					</div>

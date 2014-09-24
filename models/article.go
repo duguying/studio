@@ -220,7 +220,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 	if nil != cache1 {
 		json.Unmarshal([]byte(cache1.(string)), &maps)
 	} else {
-		sql1 := "select * from article where year(time)=? and month(time)=? limit ?,?"
+		sql1 := "select * from article where year(time)=? and month(time)=? order by time desc limit ?,?"
 		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
 
 		data1, _ := utils.JsonEncode(maps)

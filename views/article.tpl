@@ -16,12 +16,12 @@
   			{{template "inc/header.tpl" .}}
 
   			<div class="article-list">
-	  			<div class="article">
-	  				<a class="article-title" title="{{.title}}" href="/article/{{.uri}}">{{.title}}</a>
+	  			<div class="article" itemscope itemtype="http://schema.org/Article">
+	  				<a class="article-title" title="{{.title}}" href="/article/{{.uri}}" itemprop="name">{{.title}}</a>
 	  				<div class="article-ps">
-						Tag {{.keywords|tags|str2html}} on <a>{{.time}}</a> by <a title="作者: {{.author}}">{{.author}}</a> view <a title="{{.count}}次阅读">{{.count}}</a>
+						Tag {{.keywords|tags|str2html}} on <a datetime="{{.time}}" itemprop="datePublished">{{.time}}</a> by <a title="作者: {{.author}}" itemprop="author">{{.author}}</a> view <a title="{{.count}}次阅读">{{.count}}</a>
 					</div>
-					<div class="article-content">
+					<div class="article-content" itemprop="articleBody">
 						{{str2html .content}}
 					</div>
 

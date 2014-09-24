@@ -59,7 +59,7 @@ $ document
 		if not item
 			# 新建文章
 			$("#submit").unbind("click");
-			$("#submit").click(e) ->
+			$("#submit").click (e) ->
 				current_content = ue.getContent();
 				current_title = $("#article-title").val();
 				tags = $("#article-tags").val();

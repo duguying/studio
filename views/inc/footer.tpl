@@ -34,7 +34,7 @@
 						<li></li>
 					</ul>
 				</div>
-				<div class="copyright">©2014 the theme designed by Rex Lee inspired by <a href="https://www.byvoid.com/">byvoid</a>, the program written by Rex Lee with Golang base on <a href="http://beego.me/">Beego</a> framework.</div>
+				<div class="copyright">©2014 the theme designed by Rex Lee inspired by <a href="https://www.byvoid.com/" target="_blank">byvoid</a>, the program written by Rex Lee with Golang base on <a href="http://beego.me/">Beego</a> framework.</div>
 
 				<script src="/static/syntaxhighlighter/scripts/shCore.js"></script>
 				<script src="/static/syntaxhighlighter/scripts/shAutoloader.js"></script>
@@ -64,6 +64,7 @@
 				  'diff patch pas         @shBrushDiff.js',
 				  'erl erlang             @shBrushErlang.js',
 				  'groovy                 @shBrushGroovy.js',
+				  'go golang              @shBrushGo.js',
 				  'java                   @shBrushJava.js',
 				  'jfx javafx             @shBrushJavaFX.js',
 				  'js jscript javascript  @shBrushJScript.js',

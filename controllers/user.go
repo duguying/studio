@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	. "blog/models"
-	"blog/utils"
 	"fmt"
 	"github.com/astaxie/beego"
+	. "github.com/duguying/blog/models"
+	"github.com/duguying/blog/utils"
 	// "log"
 	"time"
 )

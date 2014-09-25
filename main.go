@@ -1,10 +1,10 @@
 package main
 
 import (
-	"blog/config"
-	_ "blog/routers"
-	"blog/utils"
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/config"
+	_ "github.com/duguying/blog/routers"
+	"github.com/duguying/blog/utils"
 )
 
 func init() {

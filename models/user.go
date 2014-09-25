@@ -1,8 +1,8 @@
 package models
 
 import (
-	"blog/utils"
 	"errors"
+	"github.com/duguying/blog/utils"
 	// "fmt"
 	"github.com/astaxie/beego/orm"
 	// "github.com/duguying/go-xmlrpc"

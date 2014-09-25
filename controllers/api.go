@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	. "blog/models"
 	"github.com/astaxie/beego"
+	. "github.com/duguying/blog/models"
 	"time"
 )
 

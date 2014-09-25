@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	. "blog/models"
+	. "github.com/duguying/blog/models"
 	// "fmt"
 	"github.com/astaxie/beego"
 )

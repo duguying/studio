@@ -38,6 +38,7 @@
 
 				<script src="/static/syntaxhighlighter/scripts/shCore.js"></script>
 				<script src="/static/syntaxhighlighter/scripts/shAutoloader.js"></script>
+				<script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
 				<script>
 				// nprogress bar
 				$('body').show();
@@ -103,6 +104,7 @@
 				var $toTop=$('<a href=\"#\" id=\"'+settings.id+'\"></a>').html(settings.text);$toTop.hide().appendTo('body').click(function(){$('html, body').stop().animate({scrollTop:0},settings.speed,settings.easing);return false;});$(window).scroll(function(){var sd=jQuery(window).scrollTop();if(typeof document.body.style.maxHeight==="undefined"){$toTop.css({'position':'absolute','top':sd+$(window).height()-mv_dynamic_to_top.margin});}
 				if(sd>settings.min){$toTop.fadeIn(settings.fade_in);}else{$toTop.fadeOut(settings.fade_out);}});};$('body').DynamicToTop();})(jQuery,mv_dynamic_to_top);
 
+				$("img").parent("a").fancybox();
 				</script>
 			</div>
 			<script src="/static/src/bin/js/main.min.js"></script>

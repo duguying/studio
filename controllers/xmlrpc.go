@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	. "blog/models"
-	"blog/utils"
+	. "github.com/duguying/blog/models"
+	"github.com/duguying/blog/utils"
 	// "encoding/xml"
 	"fmt"
 	"github.com/astaxie/beego"

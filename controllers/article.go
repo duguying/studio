@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	. "blog/models"
 	"fmt"
 	"github.com/astaxie/beego"
+	. "github.com/duguying/blog/models"
 	"log"
 	"strconv"
 )

@@ -2,17 +2,21 @@ $ document
 .ready (e) ->
 	ue = null
 
+	default_menu = $("#default-menu")
 	new_article_menu = $("#new-article-menu")
 	article_manage_menu = $("#article-manage-menu")
 	attach_manage_menu = $("#attach-manage-menu")
 	oss_manage_menu = $("#oss-manage-menu")
 
+	default_box = $("#default-box")
 	new_ariticle_box = $("#new-article-box")
 	article_manage_box = $("#article-manage-box");
 	attach_manage_box = $("#attach-manage-box");
 	oss_manage_box = $("#oss-manage-box");
 
 	show_frame = (item) ->
+		box0 = default_box;
+		banner0 = default_menu;
 		box1 = new_ariticle_box;
 		banner1 = new_article_menu;
 		box2 = article_manage_box;
@@ -22,22 +26,32 @@ $ document
 		box4 = oss_manage_box;
 		banner4 = oss_manage_menu;
 
-		if "box1" is item 
+		if "box0" is item 
+			box0.show();banner0.show();
+			box1.hide();banner1.hide();
+			box2.hide();banner2.hide();
+			box3.hide();banner3.hide();
+			box4.hide();banner4.hide();
+		else if "box1" is item
+			box0.hide();banner0.hide();
 			box1.show();banner1.show();
 			box2.hide();banner2.hide();
 			box3.hide();banner3.hide();
 			box4.hide();banner4.hide();
 		else if "box2" is item
+			box0.hide();banner0.hide();
 			box1.hide();banner1.hide();
 			box2.show();banner2.show();
 			box3.hide();banner3.hide();
 			box4.hide();banner4.hide();
 		else if "box3" is item
+			box0.hide();banner0.hide();
 			box1.hide();banner1.hide();
 			box2.hide();banner2.hide();
 			box3.show();banner3.show();
 			box4.hide();banner4.hide();
 		else if "box4" is item
+			box0.hide();banner0.hide();
 			box1.hide();banner1.hide();
 			box2.hide();banner2.hide();
 			box3.hide();banner3.hide();
@@ -189,6 +203,8 @@ $ document
 				$("#next-page").click (e) ->
 					get_page(page+1);
 
+	$(".admin-title").click (e) ->
+		show_frame("box0");
 
 	$("#new-ariticle").click (e) ->
 		show_frame("box1");

@@ -35,13 +35,14 @@ func init() {
 func AddArticle(title string, content string, keywords string, author string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
-	art := new(Article)
-	art.Title = title
-	art.Uri = strings.Replace(title, "/", "-", -1)
-	art.Keywords = keywords
-	art.Content = content
-	art.Author = author
-	return o.Insert(art)
+
+	sql := "insert into article(title, uri, keywords, content, author) values(?, ?, ?, ?, ?)"
+	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, content, author).Exec()
+	if nil != err {
+		return 0, err
+	} else {
+		return res.LastInsertId()
+	}
 }
 
 // 通过id获取文章-cached

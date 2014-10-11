@@ -83,6 +83,10 @@ func ReadFile(path string) string {
 
 // 切割关键词为html片段
 func TagSplit(keywords string) string {
+	if "" == keywords {
+		return ""
+	}
+
 	content := ""
 	tags := strings.Split(keywords, ",")
 	for _, value := range tags {

@@ -15,6 +15,7 @@
 	color: white;
 	font-size: 36px;
 	text-align: center;
+	cursor: pointer;
 }
 
 .admin-menu-left{
@@ -46,6 +47,10 @@
 		background-color: #3c454f;
 	}
 	.admin-main-pannel{
+		#default-box{
+			height: 560px;
+			overflow-y: scroll;
+		}
 		#new-article-box{}
 		#article-manage-box {
 			ul{

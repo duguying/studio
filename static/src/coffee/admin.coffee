@@ -15,48 +15,17 @@ $ document
 	oss_manage_box = $("#oss-manage-box");
 
 	show_frame = (item) ->
-		box0 = default_box;
-		banner0 = default_menu;
-		box1 = new_ariticle_box;
-		banner1 = new_article_menu;
-		box2 = article_manage_box;
-		banner2 = article_manage_menu;
-		box3 = attach_manage_box;
-		banner3 = attach_manage_menu;
-		box4 = oss_manage_box;
-		banner4 = oss_manage_menu;
+		menus = [default_menu,new_article_menu,article_manage_menu,attach_manage_menu,oss_manage_menu];
+		boxes = [default_box,new_ariticle_box,article_manage_box,attach_manage_box,oss_manage_box]
 
-		if "box0" is item 
-			box0.show();banner0.show();
-			box1.hide();banner1.hide();
-			box2.hide();banner2.hide();
-			box3.hide();banner3.hide();
-			box4.hide();banner4.hide();
-		else if "box1" is item
-			box0.hide();banner0.hide();
-			box1.show();banner1.show();
-			box2.hide();banner2.hide();
-			box3.hide();banner3.hide();
-			box4.hide();banner4.hide();
-		else if "box2" is item
-			box0.hide();banner0.hide();
-			box1.hide();banner1.hide();
-			box2.show();banner2.show();
-			box3.hide();banner3.hide();
-			box4.hide();banner4.hide();
-		else if "box3" is item
-			box0.hide();banner0.hide();
-			box1.hide();banner1.hide();
-			box2.hide();banner2.hide();
-			box3.show();banner3.show();
-			box4.hide();banner4.hide();
-		else if "box4" is item
-			box0.hide();banner0.hide();
-			box1.hide();banner1.hide();
-			box2.hide();banner2.hide();
-			box3.hide();banner3.hide();
-			box4.show();banner4.show();
-		else
+		for menu_item, index in menus
+			# console.log index
+			if item == index
+				menu_item.show();
+				boxes[index].show();
+			else
+				menu_item.hide();
+				boxes[index].hide();
 			
 	get_local = () ->
 		index = window
@@ -66,7 +35,7 @@ $ document
 				.replace(/:/g,'_')
 				.replace(/\//g,'_')
 				.replace(/___/g,'_')+'myEditor-drafts-data'
-		console.log(index)
+		# console.log(index)
 		eval('['+localStorage.getItem("ueditor_preference")+']')[0][index]
 
 	edit_submit = (item) ->
@@ -97,7 +66,7 @@ $ document
 							alert("发布失败-"+msg.msg);
 		else
 			# 修改文章
-			show_frame("box1");
+			show_frame(1);
 			ue.setContent(item.content);
 			$("#article-title").val(item.title);
 			$("#article-tags").val(item.keywords);
@@ -204,10 +173,10 @@ $ document
 					get_page(page+1);
 
 	$(".admin-title").click (e) ->
-		show_frame("box0");
+		show_frame(0);
 
 	$("#new-ariticle").click (e) ->
-		show_frame("box1");
+		show_frame(1);
 		edit_submit();
 		data = get_local();
 		if data&&data!=ue.getContent()
@@ -217,14 +186,14 @@ $ document
 				ue.setContent("");
 
 	$("#article-manage").click (e) ->
-		show_frame("box2");
+		show_frame(2);
 		get_page(1)
 	
 	$("#attach-manage").click (e) ->
-		show_frame("box3");
+		show_frame(3);
 	
 	$("#oss-manage").click (e) ->
-		show_frame("box4");
+		show_frame(4);
 	
 	
 	menu_bar_html = '<label for="article-title" style="margin-left: 10px;color:white;">文章标题</label>\

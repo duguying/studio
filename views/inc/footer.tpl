@@ -19,10 +19,10 @@
 					</ul>
 
 					<ul class="colume">
-						<li></li>
-						<li></li>
-						<li></li>
-						<li></li>
+						<li class="blogroll">Studylinks</li>
+						<li><a href="https://oj.leetcode.com/" target="_blank">leetcode</a></li>
+						<li><a href="http://poj.org/" target="_blank">poj</a></li>
+						<li><a href="http://www.nocow.cn/" target="_blank">nocow</a></li>
 						<li></li>
 					</ul>
 

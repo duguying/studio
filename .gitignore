@@ -15,6 +15,10 @@ blog
 # debug
 /debug/
 
-# style build
-!/static/style/build/*.min.css
-/static/style/build/
+# css build
+/static/src/bin/css/
+!/static/src/bin/css/*.min.css
+
+# js build
+/static/src/bin/js/
+!/static/src/bin/js/*.min.js

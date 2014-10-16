@@ -315,12 +315,12 @@ func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 // error 错误
 func ListByKeyword(keyword string, page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// numPerPage := 6
-	sql1 := "select * from article where keywords like '%" + keyword + "%' limit ?," + fmt.Sprintf("%d", numPerPage)
-	sql2 := "select count(*) as number from article where keywords like '%" + keyword + "%'"
+	sql1 := "select * from article where keywords like ? order by time desc limit ?,?"
+	sql2 := "select count(*) as number from article where keywords like ?"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
-	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
-	o.Raw(sql2).Values(&maps2)
+	num, err := o.Raw(sql1, fmt.Sprintf("%%%s%%", keyword), numPerPage*(page-1), numPerPage).Values(&maps)
+	o.Raw(sql2, fmt.Sprintf("%%%s%%", keyword)).Values(&maps2)
 
 	number, _ := strconv.Atoi(maps2[0]["number"].(string))
 

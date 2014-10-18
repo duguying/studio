@@ -1,6 +1,5 @@
+<link rel="stylesheet" href="//cdnjscn.b0.upaiyun.com/libs/nprogress/0.1.3/nprogress.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
-<link href='/static/nprogress/nprogress.css' rel='stylesheet' />
-<script src='/static/nprogress/nprogress.js'></script>
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="bookmark" type="image/x-icon" /> 
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="icon" type="image/x-icon" /> 
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 

@@ -64,7 +64,13 @@ func (this *ArticleController) Get() {
 	} else if "" != uri {
 		art, err = GetArticleByUri(uri)
 	} else {
-		this.Ctx.WriteString("not found")
+		this.Abort("404")
+		return
+	}
+
+	if 0 == art.Id {
+		this.Abort("404")
+		return
 	}
 
 	maps, err := CountByMonth()

@@ -13,6 +13,10 @@ git clone https://github.com/duguying/blog
 bee run
 ```
 
+# Download #
+您可以直接从下方地址下载
+[http://gobuild.io/github.com/duguying/blog](http://gobuild.io/github.com/duguying/blog "http://gobuild.io/github.com/duguying/blog")
+
 # 功能单元及完成进度 #
 
 ## 后端 ##

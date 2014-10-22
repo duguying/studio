@@ -4,7 +4,7 @@
 					<a class="box-title">最热文章</a>
 					<ul>
 						{{range $k,$v := .hottest}}
-							<li><a href="/article/{{$v.title}}"><span>{{$v.title}} - {{$v.count}}</span></a></li>
+							<li><a href="/article/{{$v.title}}"><span>{{$v.title}}</span> <span class="view-count">{{$v.count}}</span></a></li>
 						{{end}}
 					</ul>
 				</div>

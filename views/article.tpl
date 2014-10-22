@@ -19,7 +19,7 @@
 	  			<div class="article" itemscope itemtype="http://schema.org/Article">
 	  				<a class="article-title" title="{{.title}}" href="/article/{{.uri}}" itemprop="name">{{.title}}</a>
 	  				<div class="article-ps">
-						Tag {{.keywords|tags|str2html}} on <a datetime="{{.time}}" itemprop="datePublished">{{.time}}</a> by <a title="作者: {{.author}}" itemprop="author">{{.author}}</a> view <a title="{{.count}}次阅读">{{.count}}</a>
+						Tag {{.keywords|tags|str2html}} on <span datetime="{{.time}}" itemprop="datePublished" class="post-time">{{.time}}</span> by <span title="作者: {{.author}}" itemprop="author" class="author-name">{{.author}}</span> view <span title="{{.count}}次阅读" class="view-count">{{.count}}</span>
 					</div>
 					<div class="article-content" itemprop="articleBody">
 						{{str2html .content}}

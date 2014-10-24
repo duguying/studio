@@ -1,8 +1,5 @@
-// nprogress bar
-$('body').show();
-NProgress.start();
-
-function path()
+var alloy={};
+alloy.path=function()
 {
   var args = arguments,
       result = []
@@ -11,7 +8,7 @@ function path()
       result.push(args[i].replace('@', '/static/syntaxhighlighter/scripts/'));
   return result
 };
-SyntaxHighlighter.autoloader.apply(null, path(
+SyntaxHighlighter.autoloader.apply(null, alloy.path(
   'applescript            @shBrushAppleScript.js',
   'actionscript3 as3      @shBrushAS3.js',
   'bash shell             @shBrushBash.js',

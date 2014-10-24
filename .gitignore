@@ -19,6 +19,5 @@ blog
 /static/src/bin/css/
 !/static/src/bin/css/*.min.css
 
-# js build
-/static/src/bin/js/
-!/static/src/bin/js/*.min.js
+# config
+/conf/

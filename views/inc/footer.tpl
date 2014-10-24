@@ -39,7 +39,6 @@
 				<script src="/static/syntaxhighlighter/scripts/shCore.js"></script>
 				<script src="/static/syntaxhighlighter/scripts/shAutoloader.js"></script>
 				<script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-				<script src="//cdnjscn.b0.upaiyun.com/libs/nprogress/0.1.3/nprogress.min.js"></script>
 				<script src="/static/js/main.footer.min.js"></script>
 				
 			</div>

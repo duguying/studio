@@ -18,10 +18,26 @@ hr{
 table{
 	table-layout: fixed;
 	word-wrap: break-word;
+	border-spacing: 0;
+	border-collapse: collapse;
 	tr{
 		td{
 			border: 1px solid gray;
+			padding: 8px;
 		}
+		.green{
+			background-color: #76E480;
+		}
+		.red{
+			background-color: #FF6B6B;
+		}
+	}
+	tr:nth-child(odd){
+		background-color: #ccc;
+	}
+	tr:first-child{
+		background-color: #666;
+		font-weight: bolder;
 	}
 }
 
@@ -152,7 +168,7 @@ table{
 	background-color: RGB(255, 113, 112);
 	color: white;
 	font-size: 12px;
-	height: 10px;
+	// height: 10px;
 	text-align: center;
 	line-height: 10px;
 	min-width: 15px;
@@ -168,7 +184,7 @@ table{
 	background-color: #1982d1;
 	color: white;
 	font-size: 12px;
-	height: 10px;
+	// height: 10px;
 	text-align: center;
 	line-height: 10px;
 	min-width: 15px;
@@ -184,7 +200,7 @@ table{
 	background-color: gray;
 	color: white;
 	font-size: 12px;
-	height: 10px;
+	// height: 10px;
 	text-align: center;
 	line-height: 10px;
 	min-width: 15px;
@@ -200,7 +216,7 @@ table{
 	background-color: green;
 	color: white;
 	font-size: 12px;
-	height: 10px;
+	// height: 10px;
 	text-align: center;
 	line-height: 10px;
 	min-width: 15px;

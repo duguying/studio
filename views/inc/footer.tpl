@@ -4,7 +4,7 @@
 						<li class="blogroll">Blogroll</li>
 						<li><a href="https://www.byvoid.com" target="_blank">byvoid</a></li>
 						<li><a href="http://www.alloyteam.com/" target="_blank">alloy</a></li>
-						<li></li>
+						<li><a href="http://blog.daimajia.com/" target="_blank">daimajia</a></li>
 						<li></li>
 						<li></li>
 					</ul>

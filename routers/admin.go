@@ -26,4 +26,6 @@ func init() {
 	beego.Router("/upload", &controllers.UploadController{})
 	beego.Router("/admin", &controllers.AdminController{})
 	beego.Router("/admin/article/page/:page", &controllers.AdminArticleListController{}) //TODO
+
+	beego.Router("/install", &controllers.InstallController{})
 }

@@ -1,10 +1,8 @@
 package controllers
 
 import (
-	// . "blog/models"
 	// "fmt"
 	"github.com/astaxie/beego"
-	// "log"
 )
 
 // 管理面板

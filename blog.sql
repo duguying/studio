@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `draft` (
   `article_id` int(11) NOT NULL DEFAULT '0' COMMENT '文章id',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
   `keywords` varchar(2550) DEFAULT NULL COMMENT '关键词',
-  `content` text COMMENT '正文',
+  `content` LONGTEXT COMMENT '正文',
   `last_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='草稿箱';

@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="/static/css/style.min.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
 		<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+		<meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
 	</head>
 	<body >
 		<div class="main">

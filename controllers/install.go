@@ -28,7 +28,7 @@ func (this *InstallController) Get() {
 				this.Ctx.WriteString(" ~~ ERROR!\n")
 			}
 		}
-		utils.WriteFile("install.lock", "")
+		utils.WriteFile("install.lock", " ")
 	}
 }
 

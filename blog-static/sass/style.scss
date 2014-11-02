@@ -61,6 +61,34 @@ table{
 	}
 }
 
+blockquote{
+	position: relative;
+background: #EEE;
+text-align: left;
+margin: 20px 10px;
+padding: 3px 25px 3px 25px;
+color: #333;
+font-size: 12px;
+line-height: 22px;
+border-left: 3px solid #AAA;
+}
+blockquote:before {
+	content: "“";
+	top: 5px;
+	left: 10px;
+	font-family: Helvetica, arial, '宋体';
+	position: absolute;
+	font-size: 35px;
+}
+blockquote:after {
+	content: "”";
+	bottom: -5px;
+	right: 15px;
+	font-family: Helvetica, arial, '宋体';
+	position: absolute;
+	font-size: 35px;
+}
+
 .header{
 	float: left;
 	width: 100%;

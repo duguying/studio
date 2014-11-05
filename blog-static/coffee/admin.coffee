@@ -26,7 +26,7 @@ $ document
 			else
 				menu_item.hide();
 				boxes[index].hide();
-			
+
 	get_local = () ->
 		index = window
 				.location
@@ -50,7 +50,7 @@ $ document
 				$.ajax
 					type: "post"
 					url: "/add"
-					data: 
+					data:
 						title: current_title
 						keywords: tags
 						content: current_content
@@ -107,11 +107,11 @@ $ document
 
 		if data.page > 1
 			nav_prev += '''<a id="prev-page">上一页</a>'''
-		
+
 		nav_next = '''</a>''';
 		if data.nextPage
 			nav_next += '''<a id="next-page">下一页</a>'''
-		
+
 		if !data.result
 			return "";
 		else
@@ -122,17 +122,17 @@ $ document
 				for key of list
 					# console.log key
 					html += '<li class="admin-amb-line"><ul><li class="admin-col-id admin-amb-cell" title="'+list[key].id+'">'+list[key].id+'</li>\
-<li class="admin-col-title admin-amb-cell" title="'+list[key].title+'">'+list[key].title+'</li>\
+<li class="admin-col-title admin-amb-cell" title="'+list[key].title+'"><a target="_blank" href="/article/'+list[key].uri+'">'+list[key].title+'</a></li>\
 <li class="admin-col-author admin-amb-cell" title="'+list[key].author+'">'+list[key].author+'</li>\
 <li class="admin-col-time admin-amb-cell" title="'+list[key].time+'">'+list[key].time+'</li>\
 <li class="admin-col-count admin-amb-cell" title="'+list[key].count+'">'+list[key].count+'</li>\
 <li class="admin-col-operation admin-amb-cell"><a id="edit" data="'+list[key].id+'" style="padding-right: 5px;">辑</a>\
 <a id="del" data="'+list[key].id+'" style="padding-left: 5px;">删</a></li></ul></li>';
-				
+
 				return header+html+footer+nav_prev+nav_next;
 			else
 				return "";
-	
+
 	get_page = (page) ->
 		ueditor_request_url = "/admin/article/page/"+page;
 		$.ajax
@@ -188,14 +188,14 @@ $ document
 	$("#article-manage").click (e) ->
 		show_frame(2);
 		get_page(1)
-	
+
 	$("#attach-manage").click (e) ->
 		show_frame(3);
-	
+
 	$("#oss-manage").click (e) ->
 		show_frame(4);
-	
-	
+
+
 	menu_bar_html = '<label for="article-title" style="margin-left: 10px;color:white;">文章标题</label>\
 <input type="text" name="title" id="article-title" style="margin-left: 10px;margin-top: 7px;width: 250px;">\
 <label for="article-tags" style="color: white;margin-left: 10px;margin-right: 10px;">关键词</label>\
@@ -208,5 +208,3 @@ $ document
 	ue = UE.getEditor('myEditor');
 	new_article_menu.hide();
 	new_ariticle_box.hide();
-
-	

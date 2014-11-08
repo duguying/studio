@@ -127,7 +127,7 @@ func (this *UpdateArticleController) Post() {
 		return
 	}
 
-	id, err := this.GetInt("id")
+	id, err := this.GetInt64("id")
 	uri := this.Ctx.Input.Param(":uri")
 
 	newTitle := this.GetString("title")
@@ -184,7 +184,7 @@ func (this *DeleteArticleController) Post() {
 		return
 	}
 
-	id, err := this.GetInt("id")
+	id, err := this.GetInt64("id")
 	title := this.Ctx.Input.Param(":title")
 
 	if err != nil {

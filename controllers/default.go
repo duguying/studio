@@ -18,7 +18,7 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	page, err := this.GetInt("page")
+	page, err := this.GetInt64("page")
 	if nil != err || page < 0 {
 		page = 0
 	}

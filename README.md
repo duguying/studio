@@ -5,12 +5,8 @@ blog [![Build Status](https://drone.io/github.com/duguying/blog/status.png)](htt
 # Build #
 
 ```shell
-go get github.com/beego/bee
-go get github.com/yanunon/oss-go-api
-go get github.com/astaxie/beego/cache
-go get -u github.com/astaxie/beego/cache/memcache
-git clone https://github.com/duguying/blog
-bee run
+gopm install
+go build
 ```
 
 # Download #
@@ -63,7 +59,7 @@ bee run
     - [x] 代码高亮
     - [ ] 公式高亮
     - [x] 文章页多说评论框
-    - [ ] 管理页编辑器配置
+    - [x] 管理页编辑器配置
     - [x] 管理页文章添加
     - [x] 管理页文章删除
     - [x] 管理页文章修改

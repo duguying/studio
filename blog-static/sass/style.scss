@@ -456,3 +456,18 @@ blockquote:after {
 	margin-top: -15px;
 	font-size: 30px;
 }
+
+.registor{
+	display: block;
+	margin-left: 350px;
+	margin-right: 350px;
+	text-align: center;
+	
+	span{
+		display: block;
+		label{
+			width: 80px;
+			display: inline-block;
+		}
+	}
+}

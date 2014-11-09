@@ -280,9 +280,20 @@ func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
 	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
-	o.Raw(sql2).Values(&maps2)
+	if err != nil {
+		fmt.Println("execute sql1 error:")
+		fmt.Println(err)
+		return nil, false, 0, err
+	}
 
-	number, _ := strconv.Atoi(maps2[0]["number"].(string))
+	_, err = o.Raw(sql2).Values(&maps2)
+	if err != nil {
+		fmt.Println("execute sql2 error:")
+		fmt.Println(err)
+		return nil, false, 0, err
+	}
+
+	number, err := strconv.Atoi(maps2[0]["number"].(string))
 
 	var addFlag int
 	if 0 == (number % numPerPage) {

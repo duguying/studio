@@ -5,7 +5,7 @@ blog [![Build Status](https://drone.io/github.com/duguying/blog/status.png)](htt
 # Build #
 
 ```shell
-gopm install
+./getdeps.sh
 go build
 ```
 

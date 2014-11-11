@@ -31,4 +31,6 @@ oss_id = "zl8OuO1vBaD7TQRH"
 oss_key = "lr5MwqwQwly9LfKnOcxq8XmBEB5KEw"
 oss_bucket = "duguying"
 
+duoshuo_short_name = "duguying"
+
 enableadmin = true

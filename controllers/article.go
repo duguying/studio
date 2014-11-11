@@ -100,6 +100,7 @@ func (this *ArticleController) Get() {
 	this.Data["time"] = art.Time
 	this.Data["count"] = art.Count
 	this.Data["keywords"] = art.Keywords
+	this.Data["duoshuo"] = beego.AppConfig.String("duoshuo_short_name")
 	this.TplNames = "article.tpl"
 }
 

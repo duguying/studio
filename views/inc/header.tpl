@@ -4,10 +4,10 @@
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
         <div class="header">
   				<div class="icons">
-  					<a href="https://github.com/duguying" target="_black"><span class="icon-github icon"></span></a>
-  					<a href="http://weibo.com/duguying2008" target="_black"><span class="icon-weibo icon"></span></a>
-  					<a href="http://gplus.to/duguying" target="_black"><span class="icon-gplus icon"></span></a>
-  					<a href="https://twitter.com/duguying" target="_black"><span class="icon-twitter icon"></span></a>
+  					<a href="https://github.com/duguying" target="_black"><span title="follow me on Github" class="icon-github icon"></span></a>
+  					<a href="http://weibo.com/duguying2008" target="_black"><span title="find me on Weibo" class="icon-weibo icon"></span></a>
+  					<a href="http://gplus.to/duguying" target="_black"><span title="find me on g+" class="icon-gplus icon"></span></a>
+  					<a href="https://twitter.com/duguying" target="_black"><span title="find me on Twitter" class="icon-twitter icon"></span></a>
   				</div>
   				<ul class="menu">
   					<li id="about">

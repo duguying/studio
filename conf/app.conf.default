@@ -3,7 +3,7 @@ httpport = 81
 runmode = dev
 host = "http://127.0.0.1:81"
 copyrequestbody = true
-logo = "http://www.gravatar.com/avatar/5fedd018b3227bc4043934309da8c290"
+logo = "http://gravatar.duoshuo.com/avatar/5fedd018b3227bc4043934309da8c290"
 
 mysqluser = "root"
 mysqlpass = "lijun"

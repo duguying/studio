@@ -43,7 +43,20 @@ func AddFile(filename string, path string, store string, mime string) (int64, er
 	}
 	file.Mime = mime
 
-	id, err := o.Insert(&file)
+	// select count(*) from file where path=path
+	sql := "select count(*) as number from file where path=?"
+	var maps []orm.Params
+	o.Raw(sql, path).Values(&maps)
+	num, _ := strconv.Atoi(maps[0]["number"].(string))
+
+	var err error
+	var id int64
+	if 0 == num {
+		id, err = o.Insert(&file)
+	} else {
+		id, err = o.Update(&file)
+	}
+
 	if err == nil {
 		return id, nil
 	} else {

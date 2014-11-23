@@ -62,13 +62,13 @@ CREATE TABLE IF NOT EXISTS `draft` (
 -- 导出  表 blog.file 结构
 CREATE TABLE IF NOT EXISTS `file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `filename` varchar(128) NOT NULL COMMENT '文件名',
-  `path` text NOT NULL COMMENT '路径',
+  `filename` varchar(96) NOT NULL COMMENT '文件名',
+  `path` varchar(128) NOT NULL COMMENT '路径',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `store` enum('local','oss') NOT NULL,
-  `mime` varchar(100) DEFAULT NULL,
+  `store` enum('local','oss') NOT NULL COMMENT '存储类型',
+  `mime` varchar(100) DEFAULT NULL COMMENT '文件类型',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `filename` (`filename`)
+  UNIQUE KEY `path` (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件';
 
 -- 数据导出被取消选择。

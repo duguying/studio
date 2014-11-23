@@ -129,6 +129,17 @@ func (this *UploadController) Post() {
 	ossFilename := fmt.Sprintf("%d/%d/%d/%s", t.Year(), t.Month(), t.Day(), h.Filename)
 	err = utils.OssStore(ossFilename, "static/upload/"+h.Filename)
 
+	// 文件名过长
+	if len(h.Filename) > 96 {
+		this.Data["json"] = map[string]interface{}{
+			"result": false,
+			"state":  "upload to oss FAILED, " + fmt.Sprint(err),
+			"msg":    "upload failed",
+			"refer":  nil,
+		}
+		this.ServeJson()
+	}
+
 	if nil != err {
 		// 保存到oss失败
 		this.Data["json"] = map[string]interface{}{

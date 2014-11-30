@@ -9,7 +9,7 @@
 		<link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{.host}}/xmlrpc" />
 		<link rel="stylesheet" href="/static/css/style.min.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="/static/js/jquery.min.js"></script>
 		<meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
 	</head>
 	<body >

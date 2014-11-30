@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="/static/css/style.min.css">
 		<link rel="stylesheet" href="/static/css/admin.min.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="/static/js/jquery.min.js"></script>
 
 		<script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.config.js"></script>
 	    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.all.min.js"> </script>

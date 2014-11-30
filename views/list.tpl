@@ -8,7 +8,7 @@
 	<meta content="博文列表" name="description" />
 	<link rel="stylesheet" href="/static/css/style.min.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="/static/js/jquery.min.js"></script>
 </head>
 <body >
 	<div class="main">

@@ -38,7 +38,7 @@
 
 				<script src="/static/syntaxhighlighter/scripts/shCore.js"></script>
 				<script src="/static/syntaxhighlighter/scripts/shAutoloader.js"></script>
-				<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+				<script src="/static/js/jquery.fancybox.min.js"></script>
 				<script src="/static/js/main.footer.min.js"></script>
 				<script type="text/javascript" src="//tajs.qq.com/stats?sId=31946123" charset="UTF-8"></script>
 			</div>

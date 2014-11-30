@@ -17,7 +17,7 @@ type File struct {
 	Mime     string
 }
 
-func (u *File) TableName() string {
+func (this *File) TableName() string {
 	return "file"
 }
 

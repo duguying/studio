@@ -14,7 +14,7 @@ type Tags struct {
 	Time time.Time
 }
 
-func (u *Tags) TableName() string {
+func (this *Tags) TableName() string {
 	return "tags"
 }
 

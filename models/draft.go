@@ -14,7 +14,7 @@ type Draft struct {
 	LastTime  time.Time
 }
 
-func (u *Draft) TableName() string {
+func (this *Draft) TableName() string {
 	return "draft"
 }
 

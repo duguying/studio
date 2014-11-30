@@ -23,7 +23,7 @@ type Article struct {
 	Count    int
 }
 
-func (u *Article) TableName() string {
+func (this *Article) TableName() string {
 	return "article"
 }
 

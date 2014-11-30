@@ -26,7 +26,7 @@ type Varify struct {
 	Overdue  time.Time
 }
 
-func (u *Users) TableName() string {
+func (this *Users) TableName() string {
 	return "users"
 }
 

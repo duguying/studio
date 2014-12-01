@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	. "github.com/duguying/blog/models"
 	"github.com/duguying/blog/utils"
-	// "log"
+	"github.com/gogather/com"
 	"time"
 )
 
@@ -79,7 +79,7 @@ func (this *LoginController) Post() {
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "user does not exist", "refer": "/"}
 	} else {
-		passwd := utils.Md5(password + user.Salt)
+		passwd := com.Md5(password + user.Salt)
 		// log.Println(password)
 		// log.Println(passwd)
 		if passwd == user.Password {
@@ -224,7 +224,7 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 	}
 
 	time := time.Now()
-	code := utils.Md5(utils.RandString(20) + time.String())
+	code := com.Md5(com.RandString(20) + time.String())
 
 	err := AddVerify(username, code, time)
 

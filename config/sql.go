@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"github.com/duguying/blog/utils"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gogather/com"
 )
 
 func InitSql() {
@@ -18,7 +18,7 @@ func InitSql() {
 		port = 3306
 	}
 
-	if utils.FileExist("install.lock") {
+	if com.FileExist("install.lock") {
 		orm.RegisterDataBase("default", "mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", user, passwd, host, port, dbname))
 	} else {
 		orm.RegisterDataBase("default", "mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8", user, passwd, host, port))

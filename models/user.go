@@ -2,10 +2,8 @@ package models
 
 import (
 	"errors"
-	"github.com/duguying/blog/utils"
-	// "fmt"
 	"github.com/astaxie/beego/orm"
-	// "github.com/duguying/go-xmlrpc"
+	"github.com/gogather/com"
 	// "log"
 	"regexp"
 	"time"
@@ -40,8 +38,8 @@ func AddUser(username string, password string) (int64, error) {
 	o.Using("default")
 	user := new(Users)
 	user.Username = username
-	user.Salt = utils.RandString(10)
-	user.Password = utils.Md5(password + user.Salt)
+	user.Salt = com.RandString(10)
+	user.Password = com.Md5(password + user.Salt)
 	return o.Insert(user)
 }
 
@@ -118,11 +116,11 @@ func CheckVarify(code string) (bool, string, error) {
 func SetPassword(username string, password string) error {
 	o := orm.NewOrm()
 	o.Using("default")
-	salt := utils.RandString(10)
+	salt := com.RandString(10)
 
 	num, err := o.QueryTable("users").Filter("username", username).Update(orm.Params{
 		"salt":     salt,
-		"password": utils.Md5(password + salt),
+		"password": com.Md5(password + salt),
 	})
 	if 0 == num {
 		return errors.New("item not exist")
@@ -135,17 +133,17 @@ func SetPassword(username string, password string) error {
 func ChangePassword(username string, oldPassword string, newPassword string) error {
 	o := orm.NewOrm()
 	o.Using("default")
-	salt := utils.RandString(10)
+	salt := com.RandString(10)
 
 	user := Users{Username: username}
 	err := o.Read(&user, "username")
 	if nil != err {
 		return err
 	} else {
-		if user.Password == utils.Md5(oldPassword+user.Salt) {
+		if user.Password == com.Md5(oldPassword+user.Salt) {
 			_, err := o.QueryTable("users").Filter("username", username).Update(orm.Params{
 				"salt":     salt,
-				"password": utils.Md5(newPassword + salt),
+				"password": com.Md5(newPassword + salt),
 			})
 			return err
 		} else {

@@ -1,12 +1,11 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	// "log"
-	"encoding/json"
 	"github.com/duguying/blog/config"
-	"github.com/duguying/blog/utils"
+	"github.com/gogather/com"
 	"strconv"
 	"strings"
 	"time"
@@ -60,7 +59,7 @@ func GetArticle(id int) (Article, error) {
 		art = Article{Id: id}
 		err = o.Read(&art, "id")
 
-		data, _ := utils.JsonEncode(art)
+		data, _ := com.JsonEncode(art)
 		config.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data, 600)
 	}
 
@@ -82,7 +81,7 @@ func GetArticleByUri(uri string) (Article, error) {
 		art = Article{Uri: uri}
 		err = o.Read(&art, "uri")
 
-		data, _ := utils.JsonEncode(art)
+		data, _ := com.JsonEncode(art)
 		config.SetCache("GetArticleByUri.uri."+uri, data, 600)
 	}
 
@@ -104,7 +103,7 @@ func GetArticleByTitle(title string) (Article, error) {
 		art = Article{Title: title}
 		err = o.Read(&art, "title")
 
-		data, _ := utils.JsonEncode(art)
+		data, _ := com.JsonEncode(art)
 		config.SetCache("GetArticleByTitle.title."+title, data, 600)
 	}
 
@@ -174,7 +173,7 @@ func CountByMonth() ([]orm.Params, error) {
 		o := orm.NewOrm()
 		num, err := o.Raw(sql).Values(&maps)
 		if err == nil && num > 0 {
-			data, _ := utils.JsonEncode(maps)
+			data, _ := com.JsonEncode(maps)
 			config.SetCache("CountByMonth", data, 3600)
 			return maps, nil
 		} else {
@@ -224,7 +223,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		sql1 := "select * from article where year(time)=? and month(time)=? order by time desc limit ?,?"
 		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
 
-		data1, _ := utils.JsonEncode(maps)
+		data1, _ := com.JsonEncode(maps)
 		config.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1, 3600)
 	}
 
@@ -235,7 +234,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
 		o.Raw(sql2, year, month).Values(&maps2)
 
-		data2, _ := utils.JsonEncode(maps2)
+		data2, _ := com.JsonEncode(maps2)
 		config.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2, 3600)
 	}
 

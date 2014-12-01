@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	. "github.com/duguying/blog/models"
-	"github.com/duguying/blog/utils"
-	// "encoding/xml"
 	"fmt"
 	"github.com/astaxie/beego"
+	. "github.com/duguying/blog/models"
+	"github.com/duguying/blog/utils"
+	"github.com/gogather/com"
 	"log"
 	"os"
 	"strconv"
@@ -19,7 +19,7 @@ type XmlrpcController struct {
 }
 
 func (this *XmlrpcController) Get() {
-	str := utils.ReadFile("views/rpcxml/rsd.xml")
+	str := com.ReadFile("views/rpcxml/rsd.xml")
 	host := beego.AppConfig.String("host")
 	result := fmt.Sprintf(str, host, host)
 	this.Ctx.WriteString(result)
@@ -60,7 +60,7 @@ func login(username string, password string) bool {
 	if err != nil {
 		return false
 	} else {
-		passwd := utils.Md5(password + user.Salt)
+		passwd := com.Md5(password + user.Salt)
 		if passwd == user.Password {
 			return true
 		} else {
@@ -76,10 +76,10 @@ func getBlog(params interface{}) string {
 
 	if result {
 		host := beego.AppConfig.String("host")
-		str := utils.ReadFile("views/rpcxml/response_login.xml")
+		str := com.ReadFile("views/rpcxml/response_login.xml")
 		return fmt.Sprintf(str, host+"/", 1, "独孤影", host+"/xmlrpc")
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 }
 
@@ -90,7 +90,7 @@ func newPost(params interface{}) string {
 	result := login(username, password)
 
 	if result {
-		str := utils.ReadFile("views/rpcxml/response_new_post.xml")
+		str := com.ReadFile("views/rpcxml/response_new_post.xml")
 
 		title := params.([]interface{})[3].(map[string]interface{})["title"].(string)
 		content := params.([]interface{})[3].(map[string]interface{})["description"].(string)
@@ -109,12 +109,12 @@ func newPost(params interface{}) string {
 		if err == nil {
 			return fmt.Sprintf(str, id)
 		} else {
-			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			str := com.ReadFile("views/rpcxml/response_failed.xml")
 			return fmt.Sprintf(str, "文章发布失败! 注意标题不能重名")
 		}
 
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 }
 
@@ -128,10 +128,10 @@ func newCata(params interface{}) string {
 	id, _ := NewTag(name.(string))
 
 	if result {
-		str := utils.ReadFile("views/rpcxml/response_new_catalog.xml")
+		str := com.ReadFile("views/rpcxml/response_new_catalog.xml")
 		return fmt.Sprintf(str, id)
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 }
 
@@ -141,9 +141,9 @@ func setCata(params interface{}) string {
 	result := login(username, password)
 
 	if result {
-		return utils.ReadFile("views/rpcxml/response_set_post_catalog.xml")
+		return com.ReadFile("views/rpcxml/response_set_post_catalog.xml")
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 }
 
@@ -161,7 +161,7 @@ func newMedia(params interface{}) string {
 		err := utils.ParseMedia("static/upload/"+name.(string), bits.(string))
 
 		if nil != err {
-			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			str := com.ReadFile("views/rpcxml/response_failed.xml")
 			return fmt.Sprintf(str, "上传写入失败")
 		}
 
@@ -171,21 +171,21 @@ func newMedia(params interface{}) string {
 		err = utils.OssStore(ossFilename, "static/upload/"+name.(string))
 
 		if nil != err {
-			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			str := com.ReadFile("views/rpcxml/response_failed.xml")
 			return fmt.Sprintf(str, "图片保存到OSS失败")
 		} else {
 			os.Remove("./static/upload/" + name.(string))
 			id, err := AddFile(name.(string), ossFilename, "oss", filetype.(string))
 			if nil != err {
 				log.Println(err)
-				str := utils.ReadFile("views/rpcxml/response_failed.xml")
+				str := com.ReadFile("views/rpcxml/response_failed.xml")
 				return fmt.Sprintf(str, "图片信息添加到数据库失败")
 			}
-			str := utils.ReadFile("views/rpcxml/response_new_media_object.xml")
+			str := com.ReadFile("views/rpcxml/response_new_media_object.xml")
 			return fmt.Sprintf(str, id, name.(string), utils.OssGetURL(ossFilename), filetype.(string))
 		}
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 
 }
@@ -213,7 +213,7 @@ func editPost(params interface{}) string {
 
 		id, err := strconv.ParseInt(strId, 10, 64)
 		if err != nil {
-			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			str := com.ReadFile("views/rpcxml/response_failed.xml")
 			return fmt.Sprintf(str, "非法文章ID")
 		}
 
@@ -226,13 +226,13 @@ func editPost(params interface{}) string {
 		err = UpdateArticle(id, "", newArt)
 
 		if err == nil {
-			return utils.ReadFile("views/rpcxml/response_edit_post.xml")
+			return com.ReadFile("views/rpcxml/response_edit_post.xml")
 		} else {
-			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			str := com.ReadFile("views/rpcxml/response_failed.xml")
 			return fmt.Sprintf(str, "文章发布失败! 注意标题不能重名")
 		}
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 }
 
@@ -245,19 +245,19 @@ func deletePost(params interface{}) string {
 
 	id, err := strconv.ParseInt(strId, 10, 64)
 	if err != nil {
-		str := utils.ReadFile("views/rpcxml/response_failed.xml")
+		str := com.ReadFile("views/rpcxml/response_failed.xml")
 		return fmt.Sprintf(str, "非法文章ID")
 	}
 
 	if result {
 		_, err := DeleteArticle(id, "")
 		if nil != err {
-			str := utils.ReadFile("views/rpcxml/response_failed.xml")
+			str := com.ReadFile("views/rpcxml/response_failed.xml")
 			return fmt.Sprintf(str, "文章删除失败!")
 		} else {
-			return utils.ReadFile("views/rpcxml/response_delete_post.xml")
+			return com.ReadFile("views/rpcxml/response_delete_post.xml")
 		}
 	} else {
-		return utils.ReadFile("views/rpcxml/response_login_failed.xml")
+		return com.ReadFile("views/rpcxml/response_login_failed.xml")
 	}
 }

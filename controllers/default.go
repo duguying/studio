@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego"
 	. "github.com/duguying/blog/models"
 	"github.com/duguying/blog/utils"
-	// "log"
+	"github.com/gogather/com"
 	"os"
 	"strconv"
 	"time"
@@ -84,7 +84,7 @@ type UploadController struct {
 }
 
 func (this *UploadController) Get() {
-	conf := utils.ReadFile("conf/ueditor.json")
+	conf := com.ReadFile("conf/ueditor.json")
 	this.Ctx.WriteString(conf)
 }
 
@@ -249,7 +249,7 @@ type LogoController struct {
 func (this *LogoController) Get() {
 	localfile := "tmp/logo.png"
 
-	if !utils.PathExist(localfile) {
+	if !com.PathExist(localfile) {
 		utils.GetImage(beego.AppConfig.String("logo"), localfile)
 	}
 

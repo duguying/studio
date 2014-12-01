@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/duguying/blog/utils"
+	"github.com/gogather/com"
 	"strings"
 )
 
@@ -16,10 +17,10 @@ type InstallController struct {
 func (this *InstallController) Get() {
 	o := orm.NewOrm()
 
-	if utils.FileExist("install.lock") {
+	if com.FileExist("install.lock") {
 		this.Abort("404")
 	} else {
-		sqls := utils.ReadFile("blog.sql")
+		sqls := com.ReadFile("blog.sql")
 		sqlArr := strings.Split(sqls, ";")
 		for index, element := range sqlArr {
 			this.Ctx.WriteString(fmt.Sprintf("[%d] ", index) + element)

@@ -8,7 +8,7 @@ hr{
 }
 
 .main{
-	width: 1020px;
+	width: $main-max-width;
 	background-color: white;
 	margin: 50px auto;
 	box-shadow: 0 0 20px;
@@ -395,7 +395,7 @@ blockquote:after {
 
 /*list page*/
 .lp-article-list{
-	width: 1020px;
+	width: $main-max-width;
 	float: left;
 	li{
 		list-style: none;
@@ -426,7 +426,7 @@ blockquote:after {
     overflow: hidden;
     padding: 20px;
     padding-left: 80px;
-    width: 1020px;
+    width: $main-max-width;
 }
 
 .drop-menu{
@@ -468,6 +468,63 @@ blockquote:after {
 		label{
 			width: 80px;
 			display: inline-block;
+		}
+	}
+}
+
+// projects page
+.main{
+	$projects-box-margin: 25px;
+	.projects{
+		margin: 0 $projects-box-margin;
+		width: $main-max-width - 2 * $projects-box-margin;
+		float: left;
+		color: #444;
+
+		h1{
+			font-size: 30px;
+			line-height: 36px;
+		}
+
+		.intro{
+			margin: 20px 0;
+		}
+
+		.project-box{
+			overflow: hidden;
+			margin: 10px 0;
+
+			img{
+				float: left;
+				max-width: 120px;
+				max-height: 120px;
+				border: 1px solid gray;
+				padding: 5px;
+				border-radius: 4px;
+			}
+
+			.info{
+				float: left;
+				width: 830px;
+				font-size: 15px;
+
+				*{
+					margin-left: 5px;
+				}
+
+				hr{
+					margin: 0;
+					padding: 0;
+					border:0;
+					background-color:gray;
+					height:1px;
+				}
+
+				.name{
+					font-weight: bolder;
+					font-size: 18px;
+				}
+			}
 		}
 	}
 }

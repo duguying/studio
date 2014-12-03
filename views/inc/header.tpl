@@ -21,7 +21,7 @@
               </div>
             </li>
   					<li>
-              <a>项目</a>
+              <a href="/project">项目</a>
             </li>
   					<li><a href="/list">列表</a></li>
   					<li><a href="/">博文</a></li>

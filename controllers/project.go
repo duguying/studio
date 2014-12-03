@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	// . "blog/models"
-	// "fmt"
+	"fmt"
 	"github.com/astaxie/beego"
-	// "log"
+	. "github.com/duguying/blog/models"
+	"strconv"
 )
 
 type ProjectListController struct {
@@ -12,8 +12,52 @@ type ProjectListController struct {
 }
 
 func (this *ProjectListController) Get() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	page, err := this.GetInt64("page")
+	if nil != err || page < 0 {
+		page = 0
+	}
+
+	s := this.Ctx.Input.Param(":page")
+	pageParm, err := strconv.Atoi(s)
+	if nil != err || pageParm < 0 {
+		pageParm = 0
+	} else {
+		page = int64(pageParm)
+	}
+
+	if 0 == page {
+		page = 1
+	}
+
+	maps, err := CountByMonth()
+
+	if nil == err {
+		this.Data["count_by_month"] = maps
+	}
+
+	maps, nextPageFlag, totalPages, err := ListProjects(int(page), 6)
+
+	if totalPages < int(page) {
+		page = int64(totalPages)
+	}
+
+	var prevPageFlag bool
+	if 1 == page {
+		prevPageFlag = false
+	} else {
+		prevPageFlag = true
+	}
+
+	if nil == err {
+		this.Data["prev_page"] = fmt.Sprintf("/project/%d", page-1)
+		this.Data["prev_page_flag"] = prevPageFlag
+		this.Data["next_page"] = fmt.Sprintf("/project/%d", page+1)
+		this.Data["next_page_flag"] = nextPageFlag
+		this.Data["projects_in_page"] = maps
+	}
+
+	this.TplNames = "project.tpl"
+
 }
 
 func (this *ProjectListController) Post() {

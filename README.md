@@ -74,6 +74,10 @@ go build
 之后按照`Attachment`部分安装ueditor。
 最后，将`conf/app.conf`配置为可注册(`registorable = true`)，然后访问`/registor`注册你的第一个帐号，记得注册完成后再配置文件中关闭可注册状态(`registorable = false`)。
 
+### Config ###
+
+请看conf目录下的[README.md](https://github.com/duguying/blog/tree/master/conf "config")。
+
 # License #
 
 MIT License

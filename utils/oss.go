@@ -40,5 +40,16 @@ func OssDelete(opath string) error {
 }
 
 func OssGetURL(opath string) string {
-	return "//" + beego.AppConfig.String("oss_host") + "/" + ossBucket + "/" + opath
+	osd, err := beego.AppConfig.Bool("oss_self_domain")
+
+	if err != nil {
+		osd = false
+	}
+
+	if osd {
+		return "//" + beego.AppConfig.String("oss_get_host") + "/" + opath
+	} else {
+		return "//" + beego.AppConfig.String("oss_host") + "/" + ossBucket + "/" + opath
+	}
+
 }

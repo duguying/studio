@@ -25,6 +25,7 @@
 						<li id="article-manage">文章管理</li>
 						<li id="attach-manage">附件管理</li>
 						<li id="oss-manage">OSS管理</li>
+						<li id="project-manage">项目管理</li>
 					</ul>
 				</div>
 			</div>
@@ -35,6 +36,7 @@
 					<div id="article-manage-menu"></div>
 					<div id="attach-manage-menu"></div>
 					<div id="oss-manage-menu"></div>
+					<div id="project-manage-menu"></div>
 				</div>
 				<div class="admin-main-pannel" >
 
@@ -61,6 +63,7 @@
 						<button class="button" id="buttonUpload" onclick="alert('hello');">上传</button>
 					</div>
 					<div id="oss-manage-box"></div>
+					<div id="project-manage-box"></div>
 				</div>
 			</div>
 		</div>

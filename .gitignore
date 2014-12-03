@@ -21,4 +21,4 @@ install.lock
 !/static/src/bin/css/*.min.css
 
 # config
-/conf/app.conf
+/custom/app.conf

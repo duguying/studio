@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `file` (
 CREATE TABLE IF NOT EXISTS `project` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL COMMENT '项目名称',
+  `icon_url` varchar(256) NOT NULL COMMENT '图标地址',
   `author` varchar(50) NOT NULL COMMENT '作者',
   `description` text NOT NULL COMMENT '描述',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

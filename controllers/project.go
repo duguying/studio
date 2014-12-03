@@ -35,7 +35,7 @@ func (this *ProjectListController) Get() {
 		this.Data["count_by_month"] = maps
 	}
 
-	maps, nextPageFlag, totalPages, err := ListProjects(int(page), 6)
+	maps, nextPageFlag, totalPages, err := ListProjects(int(page), 10)
 
 	if totalPages < int(page) {
 		page = int64(totalPages)

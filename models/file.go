@@ -54,7 +54,7 @@ func AddFile(filename string, path string, store string, mime string) (int64, er
 	if 0 == num {
 		id, err = o.Insert(&file)
 	} else {
-		id, err = o.Update(&file)
+		id, err = o.Update(&file, "path")
 	}
 
 	if err == nil {

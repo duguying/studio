@@ -15,7 +15,7 @@ func init() {
 	beego.Router("/list", &controllers.ArticleListPageController{})
 	beego.Router("/list/:page", &controllers.ArticleListPageController{})
 	beego.Router("/project", &controllers.ProjectListController{})
-	beego.Router("/project/:uri", &controllers.ProjectListController{})
+	beego.Router("/project/:page", &controllers.ProjectListController{})
 	beego.Router("/resume/statistics", &controllers.StatisticsController{})
 	beego.Router("/logo", &controllers.LogoController{})
 

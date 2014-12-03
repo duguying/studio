@@ -30,14 +30,15 @@
 							<div>{{str2html $v.description}}</div>
 						</div>
 					</div>
-					
 				{{end}}
-				{{if .prev_page_flag}}
-				<a href="{{.prev_page}}" class="page-nav">上一页</a>
-				{{end}}
-				{{if .next_page_flag}}
-				<a href="{{.next_page}}" class="page-nav">下一页</a>
-				{{end}}
+				<div class="nav-project-list">
+					{{if .prev_page_flag}}
+					<a href="{{.prev_page}}" class="page-nav">上一页</a>
+					{{end}}
+					{{if .next_page_flag}}
+					<a href="{{.next_page}}" class="page-nav">下一页</a>
+					{{end}}
+				</div>
 			</div>
 
 			{{template "inc/footer.tpl" .}}

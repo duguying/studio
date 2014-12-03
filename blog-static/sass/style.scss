@@ -476,7 +476,7 @@ blockquote:after {
 .main{
 	$projects-box-margin: 25px;
 	.projects{
-		margin: 0 $projects-box-margin;
+		margin: 0 $projects-box-margin 30px $projects-box-margin;
 		width: $main-max-width - 2 * $projects-box-margin;
 		float: left;
 		color: #444;
@@ -492,7 +492,7 @@ blockquote:after {
 
 		.project-box{
 			overflow: hidden;
-			margin: 10px 0;
+			margin: 20px 0;
 
 			img{
 				float: left;

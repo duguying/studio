@@ -27,7 +27,7 @@
 							<span class="name">{{$v.name}}</span><hr>
 							<span class="author">作者: {{$v.author}}</span>
 							<span class="time">时间: {{$v.time}}</span>
-							<div>{{$v.description}}</div>
+							<div>{{str2html $v.description}}</div>
 						</div>
 					</div>
 					

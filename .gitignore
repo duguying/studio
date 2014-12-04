@@ -1,6 +1,7 @@
 # bin
 *.exe
 blog
+map.json
 
 # swap
 *~
@@ -22,3 +23,6 @@ install.lock
 
 # config
 /custom/app.conf
+
+# static
+/static/

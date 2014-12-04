@@ -6,9 +6,8 @@
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     	<meta content="独孤影,博客,项目" name="keywords" />
 		<meta content="独孤影的项目" name="description" />
-		<link rel="stylesheet" href="/static/css/style.min.css">
-		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
-		<script src="/static/js/jquery.min.js"></script>
+		{{asset "sass/style.scss"}}
+		{{asset "syntaxhighlighter/styles/shCoreDefault.css"}}
 	</head>
 	<body >
 		<div class="main">
@@ -43,6 +42,8 @@
 
 			{{template "inc/footer.tpl" .}}
 
+			{{asset "js/main.js"}}
+			
 		</div>
 		
 	</body>

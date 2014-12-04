@@ -12,4 +12,5 @@ func init() {
 	beego.Router("/api/get/server_time", &controllers.ServerTimeController{})
 
 	beego.Router("/xmlrpc", &controllers.XmlrpcController{})
+	beego.Router("/map.json", &controllers.MapJsonController{})
 }

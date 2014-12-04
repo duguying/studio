@@ -5,8 +5,8 @@
 	<title>数据统计</title>
 	<meta content="李俊,数据,Statistics" name="keywords" />
 	<meta content="李俊的数据" name="description" />
-	<script src="/static/js/jquery.min.js"></script>
-	<script src="/static/js/ichart.latest.min.js"></script>
+	{{asset "js/global/jquery.min.js"}}
+      {{asset "js/guest/ichart.latest.min.js"}}
 	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="bookmark" type="image/x-icon" /> 
 	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="icon" type="image/x-icon" /> 
 	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 

@@ -7,9 +7,8 @@
 		<meta content="独孤影,博客,个人网站,IT,技术,编程" name="keywords" />
 		<meta content="独孤影的博客" name="description" />
 		<link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{.host}}/xmlrpc" />
-		<link rel="stylesheet" href="/static/css/style.min.css">
-		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
-		<script src="/static/js/jquery.min.js"></script>
+		{{asset "sass/style.scss"}}
+		{{asset "syntaxhighlighter/styles/shCoreDefault.css"}}
 		<meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
 	</head>
 	<body >
@@ -42,6 +41,8 @@
 
 			{{template "inc/footer.tpl" .}}
 
+			{{asset "js/article.js"}}
+			
 		</div>
 		
 	</body>

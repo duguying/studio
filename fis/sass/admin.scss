@@ -53,18 +53,27 @@
 		}
 		#new-article-box{}
 		#article-manage-box {
-			ul{
-				padding-left:0;
-				margin-left: 10px;
+			.loading{
+				background: url($admin-loading-gif);
+				width: 100px;
+				height: 100px;
+				margin: auto;
 			}
-			li{
-				list-style: none;
-			}
-			div{
-				:nth-child(2){
+			.list{
+				ul{
+					padding-left:0;
 					margin-left: 10px;
 				}
+				li{
+					list-style: none;
+				}
+				div{
+					:nth-child(2){
+						margin-left: 10px;
+					}
+				}
 			}
+			
 		}
 		#attach-manage-box{
 			display: none;

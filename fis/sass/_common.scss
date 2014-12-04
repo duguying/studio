@@ -6,6 +6,12 @@ $code-font-family:'Menlo','Monaco','Consolas',"Courier New",'monospace';
 $article-font-size:14px;
 $main-max-width: 1020px;
 
+$array-up-icon: '../img/up.png';
+$bg-img: "../img/background.jpg";
+$foreground-img: "../img/foreground.jpg";
+$icons: "../img/icons.png";
+$admin-loading-gif: "../img/loading.gif";
+
 *{
 	font-family: $main-font-family;
 }
@@ -26,7 +32,7 @@ a:hover, a:focus {
 }
 
 body{
-	background: url("/static/img/background.jpg");
+	background: url($bg-img);
 	background-position: center center;
 	background-attachment: fixed;
 }

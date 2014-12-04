@@ -1,11 +1,23 @@
 var alloy={};
-alloy.path=function()
-{
+alloy.path=function(){
   var args = arguments,
       result = []
       ;
-  for(var i = 0; i < args.length; i++)
-      result.push(args[i].replace('@', '/static/syntaxhighlighter/scripts/'));
+
+  var json = $.ajax({
+    url: "/map.json",
+    async: false
+  }).responseText;
+
+  var data = eval('('+json+')');
+
+  for(var i = 0; i < args.length; i++){
+    var item = args[i].replace('@', '!syntaxhighlighter/scripts/')
+    item = item.split('!');
+    item = item[0] + data.res[item[1]].uri;
+    result.push(item);
+  }
+      
   return result
 };
 SyntaxHighlighter.autoloader.apply(null, alloy.path(

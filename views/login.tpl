@@ -4,9 +4,8 @@
   	<head>
     	<title>独孤影-登录</title>
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="/static/css/style.min.css">
-		<link rel="stylesheet" type="text/css" media="all" href="/static/syntaxhighlighter/styles/shCoreDefault.css" />
-		<script src="/static/js/jquery.min.js"></script>
+		{{asset "sass/style.scss"}}
+		{{asset "js/global/jquery.min.js"}}
 		<style>
 		.center{
 			display: block;

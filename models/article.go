@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/duguying/blog/config"
+	"github.com/duguying/blog/utils"
 	"github.com/gogather/com"
 	"strconv"
 	"strings"
@@ -49,7 +49,7 @@ func GetArticle(id int) (Article, error) {
 	var err error
 	var art Article
 
-	cache := config.GetCache("GetArticle.id." + fmt.Sprintf("%d", id))
+	cache := utils.GetCache("GetArticle.id." + fmt.Sprintf("%d", id))
 	if cache != nil { // check cache
 		json.Unmarshal([]byte(cache.(string)), &art)
 		return art, nil
@@ -60,7 +60,7 @@ func GetArticle(id int) (Article, error) {
 		err = o.Read(&art, "id")
 
 		data, _ := com.JsonEncode(art)
-		config.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data, 600)
+		utils.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data, 600)
 	}
 
 	return art, err
@@ -71,7 +71,7 @@ func GetArticleByUri(uri string) (Article, error) {
 	var err error
 	var art Article
 
-	cache := config.GetCache("GetArticleByUri.uri." + uri)
+	cache := utils.GetCache("GetArticleByUri.uri." + uri)
 	if cache != nil {
 		json.Unmarshal([]byte(cache.(string)), &art)
 		return art, nil
@@ -82,7 +82,7 @@ func GetArticleByUri(uri string) (Article, error) {
 		err = o.Read(&art, "uri")
 
 		data, _ := com.JsonEncode(art)
-		config.SetCache("GetArticleByUri.uri."+uri, data, 600)
+		utils.SetCache("GetArticleByUri.uri."+uri, data, 600)
 	}
 
 	return art, err
@@ -93,7 +93,7 @@ func GetArticleByTitle(title string) (Article, error) {
 	var err error
 	var art Article
 
-	cache := config.GetCache("GetArticleByTitle.title." + title)
+	cache := utils.GetCache("GetArticleByTitle.title." + title)
 	if cache != nil {
 		json.Unmarshal([]byte(cache.(string)), &art)
 		return art, nil
@@ -104,7 +104,7 @@ func GetArticleByTitle(title string) (Article, error) {
 		err = o.Read(&art, "title")
 
 		data, _ := com.JsonEncode(art)
-		config.SetCache("GetArticleByTitle.title."+title, data, 600)
+		utils.SetCache("GetArticleByTitle.title."+title, data, 600)
 	}
 
 	return art, err
@@ -164,7 +164,7 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 func CountByMonth() ([]orm.Params, error) {
 	var maps []orm.Params
 
-	cache := config.GetCache("CountByMonth")
+	cache := utils.GetCache("CountByMonth")
 	if nil != cache {
 		json.Unmarshal([]byte(cache.(string)), &maps)
 		return maps, nil
@@ -174,7 +174,7 @@ func CountByMonth() ([]orm.Params, error) {
 		num, err := o.Raw(sql).Values(&maps)
 		if err == nil && num > 0 {
 			data, _ := com.JsonEncode(maps)
-			config.SetCache("CountByMonth", data, 3600)
+			utils.SetCache("CountByMonth", data, 3600)
 			return maps, nil
 		} else {
 			return nil, err
@@ -216,7 +216,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 	var err error
 
 	// get data - cached
-	cache1 := config.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page))
+	cache1 := utils.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page))
 	if nil != cache1 {
 		json.Unmarshal([]byte(cache1.(string)), &maps)
 	} else {
@@ -224,10 +224,10 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
 
 		data1, _ := com.JsonEncode(maps)
-		config.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1, 3600)
+		utils.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1, 3600)
 	}
 
-	cache2 := config.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month))
+	cache2 := utils.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month))
 	if nil != cache2 {
 		json.Unmarshal([]byte(cache2.(string)), &maps2)
 	} else {
@@ -235,7 +235,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 		o.Raw(sql2, year, month).Values(&maps2)
 
 		data2, _ := com.JsonEncode(maps2)
-		config.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2, 3600)
+		utils.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2, 3600)
 	}
 
 	// calculate pages

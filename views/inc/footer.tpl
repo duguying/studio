@@ -35,11 +35,7 @@
 					</ul>
 				</div>
 				<div class="copyright">©2014 the theme designed by Rex Lee inspired by <a href="https://www.byvoid.com/" target="_blank">byvoid</a>, the <a href="https://github.com/duguying/blog" target="_blank">program</a> written by Rex Lee with Golang base on <a href="http://beego.me/" target="_blank">Beego</a> framework. <a href="http://www.miitbeian.gov.cn/" target="_blank">鄂ICP备14014288号</a><a href="http://webscan.360.cn/index/checkwebsite/url/duguying.net" style="display:none;" name="0b4237c29fed588ebc57751fce2062ae" >360网站安全检测平台</a></div>
-
-				<script src="/static/syntaxhighlighter/scripts/shCore.js"></script>
-				<script src="/static/syntaxhighlighter/scripts/shAutoloader.js"></script>
-				<script src="/static/js/jquery.fancybox.min.js"></script>
-				<script src="/static/js/main.footer.min.js"></script>
+				
 				<script type="text/javascript" src="//tajs.qq.com/stats?sId=31946123" charset="UTF-8"></script>
 			</div>
 			

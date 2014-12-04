@@ -114,7 +114,7 @@ $(document).ready(function (e) {
 		});
 	}
 
-	$("#article-manage").click(function(e){
+	$("#article-manage").unbind("click").click(function(e){
 		rex.hide_all();
 		$("#article-manage-menu").show();
 		$("#article-manage-box").show();

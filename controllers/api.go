@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	. "github.com/duguying/blog/models"
+	"github.com/gogather/com"
 	"time"
 )
 
@@ -94,5 +95,23 @@ func (this *ServerTimeController) Get() {
 
 func (this *ServerTimeController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "only get request is avalible"}
+	this.ServeJson()
+}
+
+// map.json 接口
+type MapJsonController struct {
+	beego.Controller
+}
+
+func (this *MapJsonController) Get() {
+	staticMap := beego.AppConfig.String("static_map")
+	content := com.ReadFile(staticMap)
+	data, err := com.JsonDecode(content)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "can not get map.json"}
+	} else {
+		this.Data["json"] = data
+	}
+
 	this.ServeJson()
 }

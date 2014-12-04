@@ -4,7 +4,7 @@
  */
 $(document).ready(function (e) {
 	
-	$("#new-article").click(function(e){
+	$("#new-article").unbind("click").click(function(e){
 		rex.hide_all();
 		$("#new-article-menu").show();
 		$("#editor-box").show();

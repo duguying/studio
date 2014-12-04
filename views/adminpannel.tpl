@@ -20,7 +20,7 @@
 				<div class="admin-title">独孤影</div>
 				<div class="admin-menu-left">
 					<ul>
-						<li id="new-ariticle">新文章</li>
+						<li id="new-article">新文章</li>
 						<li id="article-manage">文章管理</li>
 						<li id="attach-manage">附件管理</li>
 						<li id="oss-manage">OSS管理</li>
@@ -31,7 +31,13 @@
 			<div class="admin-right-pannel">
 				<div class="admin-top-menu">
 					<div id="default_menu"></div>
-					<div id="new-article-menu"></div>
+					<div id="new-article-menu">
+						<label for="article-title" style="margin-left: 10px;color:white;">文章标题</label>
+						<input type="text" name="title" id="article-title" style="margin-left: 10px;margin-top: 7px;width: 250px;">
+						<label for="article-tags" style="color: white;margin-left: 10px;margin-right: 10px;">关键词</label>
+						<input type="text" name="tags" placeholder="逗号,分隔" id="article-tags" class="article-tags">
+						<button id="submit" style="margin-left: 10px;background-color: white;border-radius: 4px;">发布</button>
+					</div>
 					<div id="article-manage-menu"></div>
 					<div id="attach-manage-menu"></div>
 					<div id="oss-manage-menu"></div>
@@ -55,8 +61,13 @@
 						<!--多说js加载结束，一个页面只需要加载一次 -->
 					</div>
 
-					<div id="new-article-box"></div>
-					<div id="article-manage-box"></div>
+					<div id="editor-box">
+						<textarea class="m-input d-input" name="content" id="myEditor" style="width:100%;height:430px;"></textarea>
+					</div>
+					<div id="article-manage-box">
+						<div class="loading"></div>
+						<div class="list"></div>
+					</div>
 					<div id="attach-manage-box">
 						<input id="img" type="file" size="45" name="attach" class="input">
 						<button class="button" id="buttonUpload" onclick="alert('hello');">上传</button>

@@ -4,6 +4,8 @@ blog [![Build Status](https://travis-ci.org/duguying/blog.svg)](https://travis-c
 
 # Build #
 
+go version 1.3+
+
 ```shell
 go get
 go build

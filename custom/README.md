@@ -1,37 +1,42 @@
-## 用户定义配置文件
+## 用户自定义配置
 
 ```
-# database
-mysqluser = "root"
-mysqlpass = "lijun"
+# 运行模式
+runmode = prod
+
+# mysql
+mysqluser = "username"
+mysqlpass = "password"
 mysqlurls = "127.0.0.1"
 mysqlport = 3306
 mysqldb   = "blog"
 
-# memcached
+# memcache
 memcache_host = "127.0.0.1:11211"
 
+# blog admin
 registorable = true
-adminemail = "blog_rex@163.com"
-adminemailpass = "xxxxxxxx"
+adminemail = "mail@163.com"
+adminemailpass = "mail_password"
 adminemailhost = "smtp.163.com:25"
 
-# oss
-oss_self_domain = true
-oss_get_host = "media.duguying.net"
+# aliyun oss
+oss_self_domain = false
+oss_get_host = "media.domain.net"
 oss_host = "oss-cn-qingdao.aliyuncs.com"
 oss_internal = false
 oss_host_internal = "oss-cn-qingdao-internal.aliyuncs.com"
 oss_id = "xxxxxxxxxxxxxxxx"
 oss_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-oss_bucket = "duguying"
+oss_bucket = "bucket_name"
 
-# duoshuo comment and logo
-duoshuo_short_name = "duguying"
-logo = "http://gravatar.duoshuo.com/avatar/5fedd018b3227bc4043934309da8c290"
-
+# gravatar
+duoshuo_short_name = "duoshuo_name"
+logo = "http://gravatar.duoshuo.com/avatar/xxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 关于memcache_host，其为可选选项，若未开启不影响使用。
 
 关于oss，若是开启oss_self_domain，则可以通过oss_get_host配置oss自定义域名。否则请将oss_self_domain设置为false.
+
+此处的配置可以覆盖`conf/app.conf`的默认配置。

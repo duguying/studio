@@ -1,0 +1,10 @@
+[target]
+path = github.com/duguying/blog
+
+[deps]
+github.com/astaxie/beego = branch:master
+github.com/gogather/com = branch:master
+github.com/yanunon/oss-go-api = branch:master
+
+[res]
+include = conf|custom|fis|static|scripts|view

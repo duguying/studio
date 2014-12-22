@@ -26,3 +26,9 @@ install.lock
 
 # static
 /static/
+
+# gopm
+/.vendor/
+
+# log
+output

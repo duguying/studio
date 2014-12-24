@@ -1,9 +1,9 @@
-package controllers
+package index
 
 import (
-	// "blog/utils"
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	"github.com/duguying/blog/utils"
 	"github.com/gogather/com"
@@ -14,7 +14,7 @@ import (
 
 // 首页
 type MainController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *MainController) Get() {
@@ -88,7 +88,7 @@ func (this *MainController) Post() {
 
 // 上传
 type UploadController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *UploadController) Get() {
@@ -183,7 +183,7 @@ func (this *UploadController) Post() {
 
 // 按关键词列表
 type TagController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *TagController) Get() {
@@ -238,7 +238,7 @@ func (this *TagController) Post() {
 
 // 统计
 type StatisticsController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *StatisticsController) Get() {
@@ -251,7 +251,7 @@ func (this *StatisticsController) Post() {
 
 // Logo
 type LogoController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *LogoController) Get() {

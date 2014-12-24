@@ -1,14 +1,13 @@
-package controllers
+package article
 
 import (
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
-	// "fmt"
-	"github.com/astaxie/beego"
 )
 
 // 保存草稿
 type SaveDraftController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *SaveDraftController) Get() {
@@ -49,7 +48,7 @@ func (this *SaveDraftController) Post() {
 
 // 获取草稿
 type GetDraftController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *GetDraftController) Get() {

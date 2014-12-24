@@ -1,7 +1,8 @@
-package controllers
+package api
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	"github.com/gogather/com"
 	"time"
@@ -9,7 +10,7 @@ import (
 
 // 获取当前用户名
 type CurrentUserController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *CurrentUserController) Get() {
@@ -32,7 +33,7 @@ func (this *CurrentUserController) Post() {
 
 // 获取当前文章总数
 type TotalArticleNumberController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *TotalArticleNumberController) Get() {
@@ -54,7 +55,7 @@ func (this *TotalArticleNumberController) Post() {
 
 // 获取当前用户总数
 type TotalUserNumberController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *TotalUserNumberController) Get() {
@@ -75,7 +76,7 @@ func (this *TotalUserNumberController) Post() {
 
 // 获取服务器当前时间
 type ServerTimeController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ServerTimeController) Get() {
@@ -100,7 +101,7 @@ func (this *ServerTimeController) Post() {
 
 // map.json 接口
 type MapJsonController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *MapJsonController) Get() {

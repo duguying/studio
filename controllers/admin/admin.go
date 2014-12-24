@@ -1,13 +1,12 @@
-package controllers
+package admin
 
 import (
-	// "fmt"
-	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 )
 
 // 管理面板
 type AdminController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *AdminController) Get() {

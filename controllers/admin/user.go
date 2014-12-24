@@ -1,8 +1,9 @@
-package controllers
+package admin
 
 import (
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	"github.com/duguying/blog/utils"
 	"github.com/gogather/com"
@@ -11,7 +12,7 @@ import (
 
 // 注册
 type RegistorController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *RegistorController) Get() {
@@ -53,7 +54,7 @@ func (this *RegistorController) Post() {
 
 // 登录
 type LoginController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *LoginController) Get() {
@@ -95,7 +96,7 @@ func (this *LoginController) Post() {
 
 // 登出
 type LogoutController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *LogoutController) Get() {
@@ -110,7 +111,7 @@ func (this *LogoutController) Post() {
 
 // 测试暂用页
 type TestController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *TestController) Get() {
@@ -125,7 +126,7 @@ func (this *TestController) Post() {
 
 // 修改用户名
 type ChangeUsernameController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ChangeUsernameController) Get() {
@@ -160,7 +161,7 @@ func (this *ChangeUsernameController) Post() {
 
 // 修改Email
 type SetEmailController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *SetEmailController) Get() {
@@ -198,7 +199,7 @@ func (this *SetEmailController) Post() {
 
 // 找回密码
 type GetBackPasswordController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *GetBackPasswordController) Get() {
@@ -212,7 +213,7 @@ func (this *GetBackPasswordController) Post() {
 
 // 发送找回密码验证邮件
 type SendEmailToGetBackPasswordController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *SendEmailToGetBackPasswordController) Get() {
@@ -257,7 +258,7 @@ func (this *SendEmailToGetBackPasswordController) Post() {
 
 // 设置密码
 type SetPasswordController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *SetPasswordController) Get() {
@@ -320,7 +321,7 @@ func (this *SetPasswordController) Post() {
 
 // 修改密码
 type ChangePasswordController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ChangePasswordController) Get() {

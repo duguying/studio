@@ -2,26 +2,29 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/duguying/blog/controllers"
+	"github.com/duguying/blog/controllers/admin"
+	"github.com/duguying/blog/controllers/article"
+	"github.com/duguying/blog/controllers/index"
+	"github.com/duguying/blog/controllers/project"
 )
 
 func init() {
-	beego.Router("/", &controllers.MainController{})
-	beego.Router("/page/:page", &controllers.MainController{})
-	beego.Router("/tag/:tag/:page", &controllers.TagController{})
-	beego.Router("/article/:uri", &controllers.ArticleController{})
-	beego.Router("/article", &controllers.ArticleController{})
-	beego.Router("/archive/:year/:month/:page", &controllers.ArchiveController{})
-	beego.Router("/list", &controllers.ArticleListPageController{})
-	beego.Router("/list/:page", &controllers.ArticleListPageController{})
-	beego.Router("/project", &controllers.ProjectListController{})
-	beego.Router("/project/:page", &controllers.ProjectListController{})
-	beego.Router("/resume/statistics", &controllers.StatisticsController{})
-	beego.Router("/logo", &controllers.LogoController{})
+	beego.Router("/", &index.MainController{})
+	beego.Router("/page/:page", &index.MainController{})
+	beego.Router("/tag/:tag/:page", &index.TagController{})
+	beego.Router("/article/:uri", &article.ArticleController{})
+	beego.Router("/article", &article.ArticleController{})
+	beego.Router("/archive/:year/:month/:page", &article.ArchiveController{})
+	beego.Router("/list", &article.ArticleListPageController{})
+	beego.Router("/list/:page", &article.ArticleListPageController{})
+	beego.Router("/project", &project.ProjectListController{})
+	beego.Router("/project/:page", &project.ProjectListController{})
+	beego.Router("/resume/statistics", &index.StatisticsController{})
+	beego.Router("/logo", &index.LogoController{})
 
 	model := beego.AppConfig.String("runmode")
 	if "dev" == model {
-		beego.Router("/test", &controllers.TestController{})
+		beego.Router("/test", &admin.TestController{})
 	}
 
 }

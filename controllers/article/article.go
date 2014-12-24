@@ -1,8 +1,9 @@
-package controllers
+package article
 
 import (
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	"log"
 	"strconv"
@@ -10,7 +11,7 @@ import (
 
 // 添加文章
 type AddArticleController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *AddArticleController) Get() {
@@ -51,7 +52,7 @@ func (this *AddArticleController) Post() {
 
 // 获取文章
 type ArticleController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ArticleController) Get() {
@@ -111,7 +112,7 @@ func (this *ArticleController) Post() {
 
 // 修改文章
 type UpdateArticleController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *UpdateArticleController) Get() {
@@ -168,7 +169,7 @@ func (this *UpdateArticleController) Post() {
 
 // 删除文章
 type DeleteArticleController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *DeleteArticleController) Get() {
@@ -209,7 +210,7 @@ func (this *DeleteArticleController) Post() {
 
 // 文章列表页
 type ArticleListPageController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ArticleListPageController) Get() {
@@ -246,7 +247,7 @@ func (this *ArticleListPageController) Post() {
 
 // 管理- 获取文章列表
 type AdminArticleListController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *AdminArticleListController) Get() {
@@ -282,7 +283,7 @@ func (this *AdminArticleListController) Post() {
 
 // 按月归档-按月文章列表
 type ArchiveController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ArchiveController) Get() {

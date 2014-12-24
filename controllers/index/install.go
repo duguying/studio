@@ -1,9 +1,9 @@
-package controllers
+package index
 
 import (
 	"fmt"
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/duguying/blog/controllers"
 	"github.com/duguying/blog/utils"
 	"github.com/gogather/com"
 	"strings"
@@ -11,7 +11,7 @@ import (
 
 // 系统安装
 type InstallController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *InstallController) Get() {

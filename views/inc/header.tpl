@@ -31,7 +31,7 @@
   					<a href="/"><span class="title">独孤影</span></a>
   				</div>
   				<div class="gap">
-            {{if eq .is_admin "admin"}}
+            {{if eq .userIs "admin"}}
   					<a href="/admin" title="管理页面">
               <img class="gravatar" src="/logo" />
             </a>

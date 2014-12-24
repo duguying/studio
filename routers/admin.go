@@ -2,30 +2,34 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/duguying/blog/controllers"
+	"github.com/duguying/blog/controllers/admin"
+	"github.com/duguying/blog/controllers/article"
+	"github.com/duguying/blog/controllers/index"
 )
 
 func init() {
-	beego.Router("/registor", &controllers.RegistorController{})
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/logout", &controllers.LogoutController{})
-	beego.Router("/rename", &controllers.ChangeUsernameController{})
-	beego.Router("/email", &controllers.SetEmailController{})
-	beego.Router("/add", &controllers.AddArticleController{})
-	beego.Router("/draft/get", &controllers.GetDraftController{})
-	beego.Router("/draft/save", &controllers.SaveDraftController{})
-	beego.Router("/update/:uri", &controllers.UpdateArticleController{})
-	beego.Router("/update", &controllers.UpdateArticleController{})
-	beego.Router("/delete/:uri", &controllers.DeleteArticleController{})
-	beego.Router("/delete", &controllers.DeleteArticleController{})
-	beego.Router("/password/getback", &controllers.GetBackPasswordController{})
-	beego.Router("/password/sendemail", &controllers.SendEmailToGetBackPasswordController{})
-	beego.Router("/password/reset", &controllers.SetPasswordController{})
-	beego.Router("/password/change", &controllers.ChangePasswordController{})
-	beego.Router("/password/reset/:varify", &controllers.SetPasswordController{})
-	beego.Router("/upload", &controllers.UploadController{})
-	beego.Router("/admin", &controllers.AdminController{})
-	beego.Router("/admin/article/page/:page", &controllers.AdminArticleListController{}) //TODO
+	beego.Router("/registor", &admin.RegistorController{})
+	beego.Router("/login", &admin.LoginController{})
+	beego.Router("/logout", &admin.LogoutController{})
+	beego.Router("/rename", &admin.ChangeUsernameController{})
+	beego.Router("/email", &admin.SetEmailController{})
+	beego.Router("/password/getback", &admin.GetBackPasswordController{})
+	beego.Router("/password/sendemail", &admin.SendEmailToGetBackPasswordController{})
+	beego.Router("/password/reset", &admin.SetPasswordController{})
+	beego.Router("/password/change", &admin.ChangePasswordController{})
+	beego.Router("/password/reset/:varify", &admin.SetPasswordController{})
+	beego.Router("/admin", &admin.AdminController{})
+	beego.Router("/admin/article/page/:page", &article.AdminArticleListController{}) //TODO
 
-	beego.Router("/install", &controllers.InstallController{})
+	beego.Router("/add", &article.AddArticleController{})
+	beego.Router("/draft/get", &article.GetDraftController{})
+	beego.Router("/draft/save", &article.SaveDraftController{})
+	beego.Router("/update/:uri", &article.UpdateArticleController{})
+	beego.Router("/update", &article.UpdateArticleController{})
+	beego.Router("/delete/:uri", &article.DeleteArticleController{})
+	beego.Router("/delete", &article.DeleteArticleController{})
+
+	beego.Router("/upload", &index.UploadController{})
+
+	beego.Router("/install", &index.InstallController{})
 }

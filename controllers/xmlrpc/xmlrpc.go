@@ -1,8 +1,9 @@
-package controllers
+package xmlrpc
 
 import (
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	"github.com/duguying/blog/utils"
 	"github.com/gogather/com"
@@ -15,7 +16,7 @@ import (
 
 // xmlrpc
 type XmlrpcController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *XmlrpcController) Get() {

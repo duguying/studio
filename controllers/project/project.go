@@ -1,14 +1,14 @@
-package controllers
+package project
 
 import (
 	"fmt"
-	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	"strconv"
 )
 
 type ProjectListController struct {
-	beego.Controller
+	controllers.BaseController
 }
 
 func (this *ProjectListController) Get() {

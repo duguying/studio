@@ -35,6 +35,14 @@ func (this *MainController) Get() {
 		page = 1
 	}
 
+	// login status
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["is_admin"] = ""
+	} else {
+		this.Data["is_admin"] = "admin"
+	}
+
 	maps, err := CountByMonth()
 
 	if nil == err {

@@ -4,7 +4,8 @@
 <link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
         <div class="header">
   				<div class="icons">
-  					<a href="https://github.com/duguying" target="_black"><span title="follow me on Github" class="icon-github icon"></span></a>
+  					<a href="http://my.oschina.net/duguying" target="_black"><span title="follow me on oschina" class="icon-osc icon"></span></a>
+            <a href="https://github.com/duguying" target="_black"><span title="follow me on Github" class="icon-github icon"></span></a>
   					<a href="http://weibo.com/duguying2008" target="_black"><span title="find me on Weibo" class="icon-weibo icon"></span></a>
   					<a href="http://gplus.to/duguying" target="_black"><span title="find me on g+" class="icon-gplus icon"></span></a>
   					<a href="https://twitter.com/duguying" target="_black"><span title="find me on Twitter" class="icon-twitter icon"></span></a>
@@ -30,6 +31,12 @@
   					<a href="/"><span class="title">独孤影</span></a>
   				</div>
   				<div class="gap">
-  					<img class="gravatar" src="/logo" />
+            {{if eq .is_admin "admin"}}
+  					<a href="/admin" title="管理页面">
+              <img class="gravatar" src="/logo" />
+            </a>
+            {{else}}
+            <img class="gravatar" src="/logo" />
+            {{end}}
   				</div>
   			</div>

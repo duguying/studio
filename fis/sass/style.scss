@@ -363,6 +363,9 @@ blockquote:after {
 	background: url($icons) white;
 	border-radius: 4px;
 }
+.icon-osc{
+	background-position: -64px 0px;
+}
 .icon-github{
 	background-position: -32px -32px;
 }
@@ -374,6 +377,10 @@ blockquote:after {
 }
 .icon-twitter{
 	background-position: -32px 0px;
+}
+.icon-osc:hover{
+	background-position: -64px 0px;
+	box-shadow: 0 0 10px green inset;
 }
 .icon-github:hover{
 	background-position: -32px -32px;

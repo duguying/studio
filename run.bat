@@ -1,1 +1,1 @@
-bee run ojsite -main=*.go
+bee run blog -main=*.go

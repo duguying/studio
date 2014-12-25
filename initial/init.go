@@ -4,4 +4,5 @@ func init() {
 	InitSql()
 	InitCache()
 	InitTplFunc()
+	InitCron()
 }

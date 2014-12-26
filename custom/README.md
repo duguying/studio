@@ -33,6 +33,10 @@ oss_bucket = "bucket_name"
 # gravatar
 duoshuo_short_name = "duoshuo_name"
 logo = "http://gravatar.duoshuo.com/avatar/xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+github_token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+github_user = "duguying"
+github_statistics = "./static/upload/data.json"
 ```
 
 关于memcache_host，其为可选选项，若未开启不影响使用。

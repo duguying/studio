@@ -20,7 +20,9 @@ func InitCron() {
 	}
 
 	toolbox.AddTask("statistic", tk)
+
 	toolbox.StartTask()
+	defer toolbox.StopTask()
 }
 
 func githubStat() error {

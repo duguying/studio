@@ -16,6 +16,12 @@
 	</head>
   	<body>
   		<div class="main">
+  			<div class="main-header">
+  				<ul>
+  					<li><a target="_blank" href="/logout">登出</a></li>
+  					<li><a target="_blank" href="/">首页</a></li>
+  				</ul>
+  			</div>
 			<div class="admin-left-banner">
 				<div class="admin-title">独孤影</div>
 				<div class="admin-menu-left">

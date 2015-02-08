@@ -120,4 +120,22 @@
 	height: 21px;
 }
 
+.main{
+	.main-header{
+		ul{
+			overflow: hidden;
+			margin: 0;
+			padding: 0 5px;
 
+			li{
+				list-style: none;
+				float: right;
+				padding: 5px;
+			}
+
+			li:hover{
+				background-color: gray;
+			}
+		}
+	}
+}

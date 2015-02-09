@@ -19,7 +19,9 @@ func init() {
 	beego.Router("/list/:page", &article.ArticleListPageController{})
 	beego.Router("/project", &project.ProjectListController{})
 	beego.Router("/project/:page", &project.ProjectListController{})
-	beego.Router("/resume/statistics", &index.StatisticsController{})
+	beego.Router("/about/statistics", &index.StatisticsController{})
+	beego.Router("/about/blog", &index.AboutBlogController{})
+	beego.Router("/about/resume", &index.ResumeController{})
 	beego.Router("/logo", &index.LogoController{})
 
 	model := beego.AppConfig.String("runmode")

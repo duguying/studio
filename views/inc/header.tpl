@@ -16,8 +16,9 @@
               <div class="drop-menu">
                 <span class="droplist-array-down">◆</span>
                 <ul class="drop-list">
-                  <li>Blog</li>
-                  <li><a href="/resume/statistics">Statistics</a></li>
+                  <li><a target="_blank" href="/about/blog">关于博客</a></li>
+                  <li><a target="_blank" href="/about/resume">个人简历</a></li>
+                  <li><a target="_blank" href="/about/statistics">代码统计</a></li>
                 </ul>
               </div>
             </li>

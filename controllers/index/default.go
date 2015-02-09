@@ -242,11 +242,38 @@ type StatisticsController struct {
 }
 
 func (this *StatisticsController) Get() {
-	this.TplNames = "statistics.tpl"
+	this.TplNames = "about/statistics.tpl"
 }
 
 func (this *StatisticsController) Post() {
-	this.TplNames = "statistics.tpl"
+	this.TplNames = "about/statistics.tpl"
+}
+
+// 关于博客
+type AboutBlogController struct {
+	controllers.BaseController
+}
+
+func (this *AboutBlogController) Get() {
+	this.TplNames = "about/blog.tpl"
+}
+
+func (this *AboutBlogController) Post() {
+	this.TplNames = "about/blog.tpl"
+}
+
+// 简历
+// 关于博客
+type ResumeController struct {
+	controllers.BaseController
+}
+
+func (this *ResumeController) Get() {
+	this.TplNames = "about/resume.tpl"
+}
+
+func (this *ResumeController) Post() {
+	this.TplNames = "about/resume.tpl"
 }
 
 // Logo

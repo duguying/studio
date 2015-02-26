@@ -9,11 +9,15 @@
       {{asset "js/global/ichart.latest.min.js"}}
 	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="bookmark" type="image/x-icon" /> 
 	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="icon" type="image/x-icon" /> 
-	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" /> 
+	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+      {{asset "sass/style.scss"}}
 </head>
 <body>
 	<div class="main">
+            {{template "inc/header.tpl" .}}
 		<div id='ichart-render'></div>
+            <div class="statistics-noti">数据来源于Github，每日更新。</div>
+            {{template "inc/footer.tpl" .}}
 	</div>
 </body>
 </html>
@@ -119,3 +123,4 @@ $(function(){
 	
 });
 </script>
+{{asset "js/article.js"}}

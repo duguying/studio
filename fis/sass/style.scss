@@ -539,3 +539,32 @@ blockquote:after {
 		}
 	}
 }
+
+// resume page
+.main{
+	.resume{
+		margin: 10px 40px;
+
+		h1{
+			font-size: 24px;
+			border-bottom: 1px solid gray;
+		}
+
+		h2{
+			font-size: 18px;
+			color: gray;
+			margin: 0;
+		}
+
+		p{
+			margin: 10px 0;
+		}
+	}
+}
+
+// statistics page
+.main{
+	.statistics-noti{
+		margin: 0 10px;
+	}
+}

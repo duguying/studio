@@ -298,3 +298,20 @@ func (this *LogoController) Get() {
 func (this *LogoController) Post() {
 	this.Ctx.WriteString("get method only")
 }
+
+type SiteIconController struct {
+	controllers.BaseController
+}
+
+func (this *SiteIconController) Get() {
+	localfile := "fis/img/favicon.ico"
+
+	if !com.PathExist(localfile) {
+		utils.GetImage(beego.AppConfig.String("logo"), localfile)
+	}
+
+	data, _ := utils.ReadFileByte(localfile)
+
+	this.Ctx.Output.Body(data)
+	this.Ctx.Output.ContentType("image/x-icon")
+}

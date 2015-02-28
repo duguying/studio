@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-
-<html>
-	<head>
-		<title>独孤影 - 项目</title>
-    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    	<meta content="独孤影,博客,项目" name="keywords" />
-		<meta content="独孤影的项目" name="description" />
-		{{asset "sass/style.scss"}}
-		{{asset "syntaxhighlighter/styles/shCoreDefault.css"}}
-	</head>
-	<body >
-		<div class="main">
-
   			{{template "inc/header.tpl" .}}
 
 			<div class="projects">
@@ -43,9 +29,3 @@
 			{{template "inc/footer.tpl" .}}
 
 			{{asset "js/main.js"}}
-			
-		</div>
-		
-	</body>
-</html>
-

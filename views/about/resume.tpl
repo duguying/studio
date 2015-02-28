@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>独孤影 - 个人简历</title>
-	{{asset "sass/style.scss"}}
-</head>
-<body>
-
-	<div class="main">
 	{{template "inc/header.tpl" .}}
 
 		<div class="resume">
@@ -35,7 +25,3 @@
 
 	{{template "inc/footer.tpl" .}}
 	{{asset "js/article.js"}}
-	</div>
-	
-</body>
-</html>

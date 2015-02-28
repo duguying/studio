@@ -105,6 +105,7 @@ func (this *ArticleController) Get() {
 	this.Data["time"] = art.Time
 	this.Data["count"] = art.Count
 	this.Data["keywords"] = art.Keywords
+	this.Data["description"] = art.Title
 	this.Data["duoshuo"] = beego.AppConfig.String("duoshuo_short_name")
 	this.TplNames = "article.tpl"
 }
@@ -235,6 +236,9 @@ func (this *ArticleListPageController) Get() {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
 		this.ServeJson()
 	} else {
+		this.Data["title"] = "文章列表"
+		this.Data["keywords"] = this.Data["title"]
+		this.Data["description"] = this.Data["title"]
 		this.Data["list"] = maps
 		this.Data["prev_page"] = page - 1
 		this.Data["prev_page_flag"] = prevPageFlag

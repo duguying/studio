@@ -1,26 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>数据统计</title>
-	<meta content="李俊,数据,Statistics" name="keywords" />
-	<meta content="李俊的数据" name="description" />
-	{{asset "js/global/jquery.min.js"}}
-      {{asset "js/global/ichart.latest.min.js"}}
-	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="bookmark" type="image/x-icon" /> 
-	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="icon" type="image/x-icon" /> 
-	<link href="/static/img/favicon.ico" mce_href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-      {{asset "sass/style.scss"}}
-</head>
-<body>
-	<div class="main">
-            {{template "inc/header.tpl" .}}
-		<div id='ichart-render'></div>
-            <div class="statistics-noti">数据来源于Github，每日更新。</div>
-            {{template "inc/footer.tpl" .}}
-	</div>
-</body>
-</html>
+{{template "inc/header.tpl" .}}
+{{asset "js/global/jquery.min.js"}}
+{{asset "js/global/ichart.latest.min.js"}}
+<div id='ichart-render'></div>
+<div class="statistics-noti">数据来源于Github，每日更新。</div>
+{{template "inc/footer.tpl" .}}
+
 <script>
 $(function(){	
 	$.ajax({

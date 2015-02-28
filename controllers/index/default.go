@@ -76,7 +76,9 @@ func (this *MainController) Get() {
 		this.Data["hottest"] = hottest
 	}
 
-	this.Data["title"] = ""
+	this.Data["title"] = "首页"
+	this.Data["keywords"] = "个人网站,IT,技术,编程"
+	this.Data["description"] = "独孤影的博客"
 	this.Data["host"] = beego.AppConfig.String("host")
 
 	this.TplNames = "index.tpl"
@@ -242,10 +244,9 @@ type StatisticsController struct {
 }
 
 func (this *StatisticsController) Get() {
-	this.TplNames = "about/statistics.tpl"
-}
-
-func (this *StatisticsController) Post() {
+	this.Data["title"] = "数据统计"
+	this.Data["keywords"] = "数据统计"
+	this.Data["description"] = "独孤影的代码数据统计，数据来自于Github.com"
 	this.TplNames = "about/statistics.tpl"
 }
 
@@ -269,6 +270,9 @@ type ResumeController struct {
 }
 
 func (this *ResumeController) Get() {
+	this.Data["title"] = "个人简历"
+	this.Data["keywords"] = "个人简历"
+	this.Data["description"] = "我正在求职，如果你对我感兴趣欢迎联系我，这儿可以获取我的个人简历"
 	this.TplNames = "about/resume.tpl"
 }
 

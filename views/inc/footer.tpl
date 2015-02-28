@@ -38,4 +38,6 @@
 				
 				<script type="text/javascript" src="//tajs.qq.com/stats?sId=31946123" charset="UTF-8"></script>
 			</div>
-			
+		</div>
+	</body>
+</html>

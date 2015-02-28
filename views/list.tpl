@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>独孤影 - 文章列表</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta content="独孤影,博客,个人网站,IT,技术,编程" name="keywords" />
-	<meta content="博文列表" name="description" />
-	{{asset "sass/style.scss"}}
-	{{asset "syntaxhighlighter/styles/shCoreDefault.css"}}
-</head>
-<body >
-	<div class="main">
   		{{template "inc/header.tpl" .}}
 
 		<div class="lp-article-list">
@@ -37,7 +24,3 @@
   		{{template "inc/footer.tpl" .}}
 
   		{{asset "js/main.js"}}
-  		
-  	</div>
-</body>
-</html>

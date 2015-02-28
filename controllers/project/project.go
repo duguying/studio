@@ -42,13 +42,16 @@ func (this *ProjectListController) Get() {
 	}
 
 	var prevPageFlag bool
-	if 1 == page {
+	if 1 > page {
 		prevPageFlag = false
 	} else {
 		prevPageFlag = true
 	}
 
 	if nil == err {
+		this.Data["title"] = "项目"
+		this.Data["keywords"] = "项目"
+		this.Data["description"] = "独孤影的项目"
 		this.Data["prev_page"] = fmt.Sprintf("/project/%d", page-1)
 		this.Data["prev_page_flag"] = prevPageFlag
 		this.Data["next_page"] = fmt.Sprintf("/project/%d", page+1)

@@ -30,7 +30,7 @@
 				
 			</p>
 
-			<em>下载详细<a href="#">简历</a></em>
+			<em>下载详细<a href="/static/resume.pdf">简历</a></em>
 		</div>
 
 	{{template "inc/footer.tpl" .}}

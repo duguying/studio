@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
+	"github.com/gogather/com/log"
 	"strconv"
 )
 
@@ -41,8 +42,10 @@ func (this *ProjectListController) Get() {
 		page = int64(totalPages)
 	}
 
+	log.Blueln("[page]", page)
+
 	var prevPageFlag bool
-	if 1 > page {
+	if 1 >= page {
 		prevPageFlag = false
 	} else {
 		prevPageFlag = true

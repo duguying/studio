@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
-	"log"
+	"github.com/gogather/com/log"
 	"strconv"
 )
 
@@ -44,7 +44,7 @@ func (this *AddArticleController) Post() {
 	if nil == err {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "success added, id " + fmt.Sprintf("[%d] ", id), "refer": nil}
 	} else {
-		log.Println(err)
+		log.Warnln(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "added failed", "refer": nil}
 	}
 	this.ServeJson()
@@ -59,8 +59,10 @@ func (this *ArticleController) Get() {
 	id, err := this.GetInt("id")
 	uri := this.Ctx.Input.Param(":uri")
 
+	log.Blueln("[uri]", uri)
+
 	var art Article
-	if nil == err {
+	if nil == err && id != 0 {
 		art, err = GetArticle(int(id))
 	} else if "" != uri {
 		art, err = GetArticleByUri(uri)

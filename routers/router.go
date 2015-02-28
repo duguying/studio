@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/duguying/blog/controllers"
 	"github.com/duguying/blog/controllers/admin"
 	"github.com/duguying/blog/controllers/article"
 	"github.com/duguying/blog/controllers/index"
@@ -23,6 +24,8 @@ func init() {
 	beego.Router("/about/blog", &index.AboutBlogController{})
 	beego.Router("/about/resume", &index.ResumeController{})
 	beego.Router("/logo", &index.LogoController{})
+
+	beego.ErrorController(&controllers.ErrorController{})
 
 	model := beego.AppConfig.String("runmode")
 	if "dev" == model {

@@ -68,11 +68,13 @@ func (this *ArticleController) Get() {
 		art, err = GetArticleByUri(uri)
 	} else {
 		this.Abort("404")
+		this.TplNames = "error/404.tpl"
 		return
 	}
 
 	if 0 == art.Id {
 		this.Abort("404")
+		this.TplNames = "error/404.tpl"
 		return
 	}
 

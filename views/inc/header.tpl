@@ -7,6 +7,7 @@
       <meta content="独孤影,博客,{{.keywords}}" name="keywords" />
       <meta content="{{.description}}" name="description" />
       <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{.host}}/xmlrpc" />
+      <link rel="shortcut icon" href="/favicon" />
       {{asset "sass/style.scss"}}
       {{asset "syntaxhighlighter/styles/shCoreDefault.css"}}
       <meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />

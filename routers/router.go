@@ -24,7 +24,7 @@ func init() {
 	beego.Router("/about/blog", &index.AboutBlogController{})
 	beego.Router("/about/resume", &index.ResumeController{})
 	beego.Router("/logo", &index.LogoController{})
-	beego.Router("/favicon.ico", &index.SiteIconController{})
+	beego.Router("/favicon", &index.SiteIconController{})
 
 	beego.ErrorController(&controllers.ErrorController{})
 

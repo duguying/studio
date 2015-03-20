@@ -32,3 +32,4 @@ install.lock
 
 # log
 output
+*.log

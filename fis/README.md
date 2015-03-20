@@ -1,16 +1,13 @@
 ### pre-install
 
 ```shell
-npm install -g grunt-cli
-npm install grunt --save-dev
-npm install grunt-contrib-uglify --save-dev
-gem install sass
-npm install grunt-contrib-sass --save-dev
-npm install grunt-contrib-coffee --save-dev
+npm install fis-parser-sass -g
 ```
 
 ### compile
 
 ```shell
-grunt
+fis release --dest local -omp
 ```
+
+after compile, map.json will be create automatically.

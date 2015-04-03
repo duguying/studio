@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/cache"
 	_ "github.com/astaxie/beego/cache/memcache"
 	_ "github.com/astaxie/beego/cache/redis"
+	"github.com/gogather/com"
 	"github.com/gogather/com/log"
 )
 
@@ -42,18 +43,22 @@ func initRedis() {
 }
 
 func SetCache(key string, value string, timeout int64) error {
+	key = com.Md5(key)
 	err := cc.Put(key, value, timeout)
 	if err != nil {
+		log.Warnln("Cache失败，key:", key)
 		return err
 	} else {
+		log.Blueln("Cache成功，key:", key)
 		return nil
 	}
 }
 
 func GetCache(key string) interface{} {
+	key = com.Md5(key)
 	content := cc.Get(key)
 	if content != nil {
-		beego.Info("Cache命中, key: " + key)
+		log.Greenln("Cache命中, key:", key)
 	}
-	return cc.Get(key)
+	return content
 }

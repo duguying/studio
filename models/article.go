@@ -74,6 +74,12 @@ func GetArticleByUri(uri string) (Article, error) {
 	cache := utils.GetCache("GetArticleByUri.uri." + uri)
 	if cache != nil {
 		json.Unmarshal([]byte(cache.(string)), &art)
+		// get view count
+		count, err := GetArticleViewCount(art.Id)
+		if err == nil {
+			art.Count = int(count)
+		}
+
 		return art, nil
 	} else {
 		o := orm.NewOrm()
@@ -96,6 +102,12 @@ func GetArticleByTitle(title string) (Article, error) {
 	cache := utils.GetCache("GetArticleByTitle.title." + title)
 	if cache != nil {
 		json.Unmarshal([]byte(cache.(string)), &art)
+		// get view count
+		count, err := GetArticleViewCount(art.Id)
+		if err == nil {
+			art.Count = int(count)
+		}
+
 		return art, nil
 	} else {
 		o := orm.NewOrm()
@@ -108,6 +120,22 @@ func GetArticleByTitle(title string) (Article, error) {
 	}
 
 	return art, err
+}
+
+// 获取文章浏览量
+func GetArticleViewCount(id int) (int, error) {
+	var maps []orm.Params
+
+	sql := `select count from article where id=?`
+	o := orm.NewOrm()
+	num, err := o.Raw(sql, id).Values(&maps)
+	if err == nil && num > 0 {
+		count := maps[0]["count"].(string)
+
+		return strconv.Atoi(count)
+	} else {
+		return 0, err
+	}
 }
 
 // 更新阅览数统计

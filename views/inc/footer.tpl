@@ -14,7 +14,7 @@
 						<li><a href="http://www.lyblog.net/" target="_blank">刘洋</a></li>
 						<li><a href="http://my.oschina.net/xsilen" target="_blank">xsilen</a></li>
 						<li><a href="http://songjians.cn/" target="_blank">宋健</a></li>
-						<li></li>
+						<li><a href="http://finlayliu.com/" target="_blank">Finlay Liu</a></li>
 						<li></li>
 					</ul>
 

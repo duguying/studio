@@ -1,11 +1,13 @@
 package utils
 
 import (
+	"bytes"
+	"encoding/gob"
+	"errors"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	_ "github.com/astaxie/beego/cache/memcache"
 	_ "github.com/astaxie/beego/cache/redis"
-	"github.com/gogather/com"
 	"github.com/gogather/com/log"
 )
 
@@ -42,9 +44,13 @@ func initRedis() {
 	}
 }
 
-func SetCache(key string, value string, timeout int64) error {
-	key = com.Md5(key)
-	err := cc.Put(key, value, timeout)
+func SetCache(key string, value interface{}, timeout int64) error {
+	data, err := Encode(value)
+	if err != nil {
+		return err
+	}
+
+	err = cc.Put(key, data, timeout)
 	if err != nil {
 		log.Warnln("Cache失败，key:", key)
 		return err
@@ -54,11 +60,42 @@ func SetCache(key string, value string, timeout int64) error {
 	}
 }
 
-func GetCache(key string) interface{} {
-	key = com.Md5(key)
-	content := cc.Get(key)
-	if content != nil {
-		log.Greenln("Cache命中, key:", key)
+func GetCache(key string, to interface{}) error {
+	data := cc.Get(key)
+	if data == nil {
+		return errors.New("Cache不存在")
 	}
-	return content
+	// log.Pinkln(data)
+	err := Decode(data.([]byte), to)
+	if err != nil {
+		log.Warnln("获取Cache失败", key, err)
+	} else {
+		log.Greenln("获取Cache成功", key)
+	}
+
+	return err
+}
+
+// --------------------
+// Encode
+// 用gob进行数据编码
+//
+func Encode(data interface{}) ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	enc := gob.NewEncoder(buf)
+	err := enc.Encode(data)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+// -------------------
+// Decode
+// 用gob进行数据解码
+//
+func Decode(data []byte, to interface{}) error {
+	buf := bytes.NewBuffer(data)
+	dec := gob.NewDecoder(buf)
+	return dec.Decode(to)
 }

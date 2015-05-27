@@ -33,3 +33,7 @@ install.lock
 # log
 output
 *.log
+
+# idea
+.idea/
+*.iml

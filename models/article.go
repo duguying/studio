@@ -1,11 +1,10 @@
 package models
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"github.com/duguying/blog/utils"
-	"github.com/gogather/com"
+	// "github.com/gogather/com"
 	"strconv"
 	"strings"
 	"time"
@@ -49,18 +48,13 @@ func GetArticle(id int) (Article, error) {
 	var err error
 	var art Article
 
-	cache := utils.GetCache("GetArticle.id." + fmt.Sprintf("%d", id))
-	if cache != nil { // check cache
-		json.Unmarshal([]byte(cache.(string)), &art)
-		return art, nil
-	} else {
+	err = utils.GetCache("GetArticle.id."+fmt.Sprintf("%d", id), &art)
+	if err != nil {
 		o := orm.NewOrm()
 		o.Using("default")
 		art = Article{Id: id}
 		err = o.Read(&art, "id")
-
-		data, _ := com.JsonEncode(art)
-		utils.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), data, 600)
+		utils.SetCache("GetArticle.id."+fmt.Sprintf("%d", id), art, 600)
 	}
 
 	return art, err
@@ -71,9 +65,8 @@ func GetArticleByUri(uri string) (Article, error) {
 	var err error
 	var art Article
 
-	cache := utils.GetCache("GetArticleByUri.uri." + uri)
-	if cache != nil {
-		json.Unmarshal([]byte(cache.(string)), &art)
+	err = utils.GetCache("GetArticleByUri.uri."+uri, &art)
+	if err == nil {
 		// get view count
 		count, err := GetArticleViewCount(art.Id)
 		if err == nil {
@@ -86,9 +79,7 @@ func GetArticleByUri(uri string) (Article, error) {
 		o.Using("default")
 		art = Article{Uri: uri}
 		err = o.Read(&art, "uri")
-
-		data, _ := com.JsonEncode(art)
-		utils.SetCache("GetArticleByUri.uri."+uri, data, 600)
+		utils.SetCache("GetArticleByUri.uri."+uri, art, 600)
 	}
 
 	return art, err
@@ -99,9 +90,8 @@ func GetArticleByTitle(title string) (Article, error) {
 	var err error
 	var art Article
 
-	cache := utils.GetCache("GetArticleByTitle.title." + title)
-	if cache != nil {
-		json.Unmarshal([]byte(cache.(string)), &art)
+	err = utils.GetCache("GetArticleByTitle.title."+title, &art)
+	if err != nil {
 		// get view count
 		count, err := GetArticleViewCount(art.Id)
 		if err == nil {
@@ -114,9 +104,7 @@ func GetArticleByTitle(title string) (Article, error) {
 		o.Using("default")
 		art = Article{Title: title}
 		err = o.Read(&art, "title")
-
-		data, _ := com.JsonEncode(art)
-		utils.SetCache("GetArticleByTitle.title."+title, data, 600)
+		utils.SetCache("GetArticleByTitle.title."+title, art, 600)
 	}
 
 	return art, err
@@ -192,21 +180,19 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 func CountByMonth() ([]orm.Params, error) {
 	var maps []orm.Params
 
-	cache := utils.GetCache("CountByMonth")
-	if nil != cache {
-		json.Unmarshal([]byte(cache.(string)), &maps)
-		return maps, nil
-	} else {
+	err := utils.GetCache("CountByMonth", &maps)
+	if nil != err {
 		sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by year desc, month desc"
 		o := orm.NewOrm()
 		num, err := o.Raw(sql).Values(&maps)
 		if err == nil && num > 0 {
-			data, _ := com.JsonEncode(maps)
-			utils.SetCache("CountByMonth", data, 3600)
+			utils.SetCache("CountByMonth", maps, 3600)
 			return maps, nil
 		} else {
 			return nil, err
 		}
+	} else {
+		return maps, err
 	}
 
 }
@@ -244,26 +230,18 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 	var err error
 
 	// get data - cached
-	cache1 := utils.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page))
-	if nil != cache1 {
-		json.Unmarshal([]byte(cache1.(string)), &maps)
-	} else {
+	err = utils.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), &maps)
+	if nil != err {
 		sql1 := "select * from article where year(time)=? and month(time)=? order by time desc limit ?,?"
 		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
-
-		data1, _ := com.JsonEncode(maps)
-		utils.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), data1, 3600)
+		utils.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), maps, 3600)
 	}
 
-	cache2 := utils.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month))
-	if nil != cache2 {
-		json.Unmarshal([]byte(cache2.(string)), &maps2)
-	} else {
+	err = utils.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), &maps2)
+	if nil != err {
 		sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
 		o.Raw(sql2, year, month).Values(&maps2)
-
-		data2, _ := com.JsonEncode(maps2)
-		utils.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), data2, 3600)
+		utils.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), maps2, 3600)
 	}
 
 	// calculate pages

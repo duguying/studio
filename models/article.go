@@ -363,12 +363,20 @@ func ListByKeyword(keyword string, page int, numPerPage int) ([]orm.Params, bool
 	}
 }
 
-// 最热文章列表
+// 最热文章列表 - cached
 // select * from article order by count desc limit 10
 func HottestArticleList() ([]orm.Params, error) {
-	sql := "select * from article order by count desc limit 20"
 	var maps []orm.Params
-	o := orm.NewOrm()
-	_, err := o.Raw(sql).Values(&maps)
+
+	// get data - cached
+	err := utils.GetCache("HottestArticleList", &maps)
+	if nil != err {
+		sql := "select id,uri,title,count from article order by count desc limit 20"
+		o := orm.NewOrm()
+		_, err = o.Raw(sql).Values(&maps)
+
+		utils.SetCache("HottestArticleList", maps, 3600)
+	}
+
 	return maps, err
 }

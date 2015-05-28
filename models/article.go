@@ -291,11 +291,15 @@ func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 		return nil, false, 0, err
 	}
 
-	_, err = o.Raw(sql2).Values(&maps2)
-	if err != nil {
-		fmt.Println("execute sql2 error:")
-		fmt.Println(err)
-		return nil, false, 0, err
+	err = utils.GetCache("ArticleNumber", &maps2)
+	if nil != err {
+		_, err = o.Raw(sql2).Values(&maps2)
+		if err != nil {
+			fmt.Println("execute sql2 error:")
+			fmt.Println(err)
+			return nil, false, 0, err
+		}
+		utils.SetCache("ArticleNumber", maps2, 3600)
 	}
 
 	number, err := strconv.Atoi(maps2[0]["number"].(string))

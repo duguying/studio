@@ -240,7 +240,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 	err = utils.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), &maps2)
 	if nil != err {
 		sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
-		o.Raw(sql2, year, month).Values(&maps2)
+		_, err = o.Raw(sql2, year, month).Values(&maps2)
 		utils.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), maps2, 3600)
 	}
 

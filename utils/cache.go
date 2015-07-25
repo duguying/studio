@@ -15,6 +15,7 @@ var cc cache.Cache
 
 func InitCache() {
 	cacheConfig := beego.AppConfig.String("cache")
+	cc = nil
 
 	if "redis" == cacheConfig {
 		initRedis()
@@ -36,11 +37,20 @@ func initMemcache() {
 }
 
 func initRedis() {
+	// cc = &cache.Cache{}
 	var err error
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Redf("initial redis error caught: %v\n", r)
+			cc = nil
+		}
+	}()
+
 	cc, err = cache.NewCache("redis", `{"conn":"`+beego.AppConfig.String("redis_host")+`"}`)
 
 	if err != nil {
-		beego.Info(err)
+		log.Redln(err)
 	}
 }
 
@@ -49,6 +59,16 @@ func SetCache(key string, value interface{}, timeout int64) error {
 	if err != nil {
 		return err
 	}
+	if cc == nil {
+		return errors.New("cc is nil")
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Redf("set cache error caught: %v\n", r)
+			cc = nil
+		}
+	}()
 
 	err = cc.Put(key, data, timeout)
 	if err != nil {
@@ -61,6 +81,17 @@ func SetCache(key string, value interface{}, timeout int64) error {
 }
 
 func GetCache(key string, to interface{}) error {
+	if cc == nil {
+		return errors.New("cc is nil")
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Redf("get cache error caught: %v\n", r)
+			cc = nil
+		}
+	}()
+
 	data := cc.Get(key)
 	if data == nil {
 		return errors.New("Cache不存在")

@@ -47,7 +47,7 @@ fis.config.merge({
 
         remote: {
             receiver: 'http://127.0.0.1:81/fis',
-            to: '/home/work/htdocs'
+            to: '../'
         }
     },
     

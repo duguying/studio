@@ -3,6 +3,7 @@ fis.config.set('roadmap.ext.scss', 'css');
 
 fis.config.set('modules.parser.coffee', 'coffee-script');
 fis.config.set('roadmap.ext.coffee', 'js');
+fis.config.set('settings.optimizer.uglify-js.output.ascii_only', true);
 
 fis.config.set('modules.parser.less', 'less');
 fis.config.set('roadmap.ext.less', 'css');
@@ -43,5 +44,11 @@ fis.config.merge({
 		local : {
             to : '../'
         },
-    }
+
+        remote: {
+            receiver: 'http://127.0.0.1:81/fis',
+            to: '/home/work/htdocs'
+        }
+    },
+    
 });

@@ -15,7 +15,7 @@ func (this *AdminController) Get() {
 	if user == nil {
 		this.Redirect("/login", 302)
 	} else {
-		this.TplNames = "adminpannel.tpl"
+		this.TplNames = "admin/index.tpl"
 	}
 }
 

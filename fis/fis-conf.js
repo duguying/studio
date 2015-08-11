@@ -46,8 +46,8 @@ fis.config.merge({
         },
 
         remote: {
-            receiver: 'http://127.0.0.1:81/fis',
-            to: '../'
+            receiver: 'http://duguying.net/fis?key=xxxxxxxxxxx',
+            to: '/root/gopath/src/github.com/duguying/blog'
         }
     },
     

@@ -16,6 +16,6 @@ func init() {
 
 	beego.Router("/xmlrpc", &xmlrpc.XmlrpcController{})
 
-	beego.Router("/fis", &fis.FisController{}, "post:Receiver")
+	beego.Router("/fis", &fis.FisController{}, "*:Receiver")
 
 }

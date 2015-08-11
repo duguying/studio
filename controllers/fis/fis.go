@@ -1,6 +1,7 @@
 package fis
 
 import (
+	"github.com/astaxie/beego"
 	"github.com/duguying/blog/controllers"
 	"github.com/gogather/com"
 	"regexp"
@@ -28,9 +29,21 @@ func getDir(path string) string {
 }
 
 func (this *FisController) Receiver() {
+	key := beego.AppConfig.String("fis_receiver_key")
+	upKey := this.GetString("key")
+	if key != upKey {
+		this.Ctx.WriteString("1")
+		return
+	}
+
 	to := this.GetString("to")
 	dir := getDir(to)
 	createDirs(dir)
-	this.SaveToFile("file", to)
-	this.Ctx.WriteString("0")
+	err := this.SaveToFile("file", to)
+	if err != nil {
+		this.Ctx.WriteString("1")
+	} else {
+		this.Ctx.WriteString("0")
+	}
+
 }

@@ -1,13 +1,13 @@
-{{template "inc/header.tpl" .}}
+{{{template "inc/header.tpl" .}}}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
 <div class="article-list">
 	<div class="article" itemscope itemtype="http://schema.org/Article">
-		<a class="article-title" title="{{.title}}" href="/article/{{.uri}}" itemprop="name">{{.title}}</a>
+		<a class="article-title" title="{{.title}}" href="/article/{{.uri}}" itemprop="name">{{{.title}}}</a>
 		<div class="article-ps">
-			Tag {{.keywords|tags|str2html}} on <span datetime="{{.time}}" itemprop="datePublished" class="post-time">{{.time}}</span> by <span title="作者: {{.author}}" itemprop="author" class="author-name">{{.author}}</span> view <span title="{{.count}}次阅读" class="view-count">{{.count}}</span>
+			Tag {{{.keywords|tags|str2html}}} on <span datetime="{{.time}}" itemprop="datePublished" class="post-time">{{{.time}}}</span> by <span title="作者: {{.author}}" itemprop="author" class="author-name">{{{.author}}}</span> view <span title="{{.count}}次阅读" class="view-count">{{{.count}}}</span>
 		</div>
 		<div class="article-content" itemprop="articleBody">
-			{{str2html .content}}
+			{{{str2html .content}}}
 		</div>
 
 		<!-- 多说评论框 start -->
@@ -30,8 +30,8 @@
 	</div>
 </div>
 
-{{template "inc/rightbar.tpl" .}}
-{{template "inc/footer.tpl" .}}
-{{asset "js/article.js"}}
+{{{template "inc/rightbar.tpl" .}}}
+{{{template "inc/footer.tpl" .}}}
+{{{asset "js/article.js"}}}
 			
 		

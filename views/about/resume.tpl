@@ -1,4 +1,4 @@
-	{{template "inc/header.tpl" .}}
+	{{{template "inc/header.tpl" .}}}
 
 		<div class="resume">
 			<h1><a href="/about/resume">简历</a></h1>
@@ -23,5 +23,5 @@
 			<em>下载详细<a href="/static/resume.pdf">简历</a></em>
 		</div>
 
-	{{template "inc/footer.tpl" .}}
-	{{asset "js/article.js"}}
+	{{{template "inc/footer.tpl" .}}}
+	{{{asset "js/article.js"}}}

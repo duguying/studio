@@ -9,20 +9,17 @@ import (
 )
 
 func InitCron() {
-	tk := toolbox.NewTask("statistic", "0 0 * * * *", githubStat)
-
-	if beego.AppConfig.String("runmode") == "dev" {
+	if beego.AppConfig.String("runmode") == "prod" {
+		tk := toolbox.NewTask("statistic", "0 0 * * * *", githubStat)
 		err := tk.Run()
 		if err != nil {
 			log.Warnln("[Run Task Failed]")
 			log.Warnln(err)
 		}
+		toolbox.AddTask("statistic", tk)
+		toolbox.StartTask()
+		defer toolbox.StopTask()
 	}
-
-	toolbox.AddTask("statistic", tk)
-
-	toolbox.StartTask()
-	defer toolbox.StopTask()
 }
 
 func githubStat() error {

@@ -32,4 +32,7 @@ func init() {
 	beego.Router("/upload", &index.UploadController{})
 
 	beego.Router("/install", &index.InstallController{})
+
+	// ng api
+	beego.Router("/admin/api/navlist", &admin.AdminApiController{}, "*:NavList")
 }

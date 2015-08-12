@@ -5,10 +5,24 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/gogather/com"
 	"html/template"
+	"strings"
 )
 
 // fis map
 func Fis(key string) template.HTML {
+	runmode := beego.AppConfig.String("runmode")
+	if runmode == "dev" {
+		text := ""
+		uri := "/static/" + key
+		uri = strings.Replace(uri, "scss", "css", -1)
+		if strings.HasSuffix(uri, "css") {
+			text = `<link rel="stylesheet" href="` + uri + `">`
+		} else if strings.HasSuffix(uri, "js") {
+			text = `<script src="` + uri + `"></script>`
+		}
+		return template.HTML(text)
+	}
+
 	var text string
 	content := loadMap()
 	json, _ := com.JsonDecode(content)

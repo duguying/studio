@@ -1,1 +1,46 @@
 @import "common";
+
+.main{
+  .left{
+    width: 14%;
+    float: left;
+    background: #3B4F67;;
+
+    ul{
+      width: 125px;
+      display: inline-block;
+      padding: 5px;
+      margin: 5px;
+
+      li{
+        list-style: none;
+        border: solid 1px #FFF;
+        width: 100px;
+        margin: 5px;
+        text-align: center;
+        padding: 3px;
+        display: inline-block;
+
+        &:hover{
+          background-color: orange;
+        }
+
+        a{
+          color: #FFF;
+        }
+      }
+
+      .active{
+        background-color: #666666;
+      }
+    }
+  }
+
+  .right{
+    display: block;
+    width: 85%;
+    float: right;
+    margin: 5px;
+
+  }
+}

@@ -8,26 +8,46 @@ function NavsController ($scope, $http, $location) {
 	});
 }
 
-function IndexController($scope){
+function IndexController($scope,$rootScope){
 	// $scope.active = true
     console.log("hello index");
+    $rootScope.global = {
+    	title: "首页",
+    	currentPath: ""
+    }
     
 }
 
-function NewArticleController($scope){
+function NewArticleController($scope,$rootScope){
     console.log("hello new article");
+    $rootScope.global = {
+    	title: "添加文章",
+    	currentPath: "new_article"
+    }
 }
 
-function ManageArticleController($scope){
+function ManageArticleController($scope,$rootScope){
     console.log("hello manage article");
+    $rootScope.global = {
+    	title: "管理文章",
+    	currentPath: "manage_article"
+    }
 }
 
-function ManageProjectController($scope){
+function ManageProjectController($scope,$rootScope){
     console.log("hello manage project");
+    $rootScope.global = {
+    	title: "管理项目",
+    	currentPath: "manage_project"
+    }
 }
 
-function ManageOssController($scope){
+function ManageOssController($scope,$rootScope){
     console.log("hello manage oss");
+    $rootScope.global = {
+    	title: "OSS管理",
+    	currentPath: "manage_oss"
+    }
 }
 
 

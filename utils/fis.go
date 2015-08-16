@@ -15,6 +15,10 @@ func Fis(key string) template.HTML {
 		text := ""
 		uri := "/static/" + key
 		uri = strings.Replace(uri, "scss", "css", -1)
+		// uri = strings.Replace(uri, "sass", "css", -1)
+		uri = strings.Replace(uri, "coffee", "js", -1)
+		uri = strings.Replace(uri, "ts", "js", -1)
+
 		if strings.HasSuffix(uri, "css") {
 			text = `<link rel="stylesheet" href="` + uri + `">`
 		} else if strings.HasSuffix(uri, "js") {

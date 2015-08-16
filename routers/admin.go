@@ -19,7 +19,7 @@ func init() {
 	beego.Router("/password/change", &admin.ChangePasswordController{})
 	beego.Router("/password/reset/:varify", &admin.SetPasswordController{})
 	beego.Router("/admin", &admin.AdminController{})
-	beego.Router("/admin/article/page/:page", &article.AdminArticleListController{}) //TODO
+	beego.Router("/admin/*", &admin.AdminController{}) // 全匹配
 
 	beego.Router("/add", &article.AddArticleController{})
 	beego.Router("/draft/get", &article.GetDraftController{})
@@ -34,5 +34,6 @@ func init() {
 	beego.Router("/install", &index.InstallController{})
 
 	// ng api
-	beego.Router("/admin/api/navlist", &admin.AdminApiController{}, "*:NavList")
+	beego.Router("/api/admin/navlist", &admin.AdminApiController{}, "*:NavList")
+	beego.Router("/api/admin/article/page/:page", &article.AdminArticleListController{}) //TODO
 }

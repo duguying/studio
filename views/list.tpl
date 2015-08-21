@@ -6,7 +6,7 @@
 				<li class="a-l-item">
 					<ul>
 						<li class="time">{{{$v.time}}}</li>
-						<li class="title"><a href="/article/{{$v.uri}}">{{{$v.title}}}</a></li>
+						<li class="title"><a href="/article/{{{$v.uri}}}">{{{$v.title}}}</a></li>
 					</ul>
 				</li>
 				{{{end}}}

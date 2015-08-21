@@ -8,9 +8,13 @@
 		{{{asset "sass/admin.scss"}}}
 		{{{asset "js/global/angular.min.js"}}}
 		{{{asset "js/global/angular-route.min.js"}}}
+		{{{asset "ueditor/ueditor.config.js"}}}
+		{{{asset "ueditor/ueditor.all.js"}}}
+		{{{asset "ueditor/angular-ueditor.js"}}}
 		{{{asset "js/admin/admin.js"}}}
 		{{{asset "js/admin/controller.js"}}}
 		{{{asset "js/admin/directive.js"}}}
+		
 	</head>
   	<body>
   		<div class="main">

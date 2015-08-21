@@ -132,6 +132,7 @@ function NewArticleController($scope,$rootScope){
                 'charts', // 图表
             ]
         ],
+        initialFrameHeight: 500,
         autoHeightEnabled: false,
         autoFloatEnabled: false
     };

@@ -1,1 +1,22 @@
-manage_article.html
+<div>
+	<ul>
+		<li>
+			<ul>
+				<li>ID</li>
+				<li>标题</li>
+				<li>发布时间</li>
+				<li>浏览量</li>
+				<li>编辑</li>
+			</ul>
+		</li>
+		<li ng-repeat="article in articles">
+			<ul>
+				<li>{{article.id}}</li>
+				<li>{{article.title}}</li>
+				<li>{{article.post_time}}</li>
+				<li>{{article.view}}</li>
+				<li>删 改</li>
+			</ul>
+		</li>
+	</ul>
+</div>

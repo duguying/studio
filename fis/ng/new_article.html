@@ -1,1 +1,11 @@
-new_article.html
+<div class="new-article">
+	<div class="header">
+		<label for="">标题</label><input type="text" name="title">
+		<label for="">关键词</label><input type="text" name="keyword">
+		<input type="button" value="提交">
+	</div>
+	<hr class="seperator">
+	<div class="editor">
+		<div class="ueditor" config="config" ng-model="content"></div>
+	</div>
+</div>

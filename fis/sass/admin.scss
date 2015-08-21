@@ -44,3 +44,18 @@
 
   }
 }
+
+.main{
+  .right{
+    .new-article{
+      .seperator{
+        margin: 0px;
+        color: white;
+        border: solid 1px white;
+      }
+      .editor{
+        top: 85px;
+      }
+    }
+  }
+}

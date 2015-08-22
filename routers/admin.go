@@ -35,5 +35,6 @@ func init() {
 
 	// ng api
 	beego.Router("/api/admin/navlist", &admin.AdminApiController{}, "*:NavList")
-	beego.Router("/api/admin/article/page/:page", &article.AdminArticleListController{}) //TODO
+	beego.Router("/api/admin/article/page/:page", &article.AdminArticleController{}, "*:ListArticle")
+	beego.Router("/api/admin/article/:id", &article.AdminArticleController{}, "*:GetArticle")
 }

@@ -386,3 +386,52 @@ func HottestArticleList() ([]orm.Params, error) {
 
 	return maps, err
 }
+
+// 列出文章 for admin
+func ArticleListForAdmin(page int, numPerPage int) ([]orm.Params, bool, int, error) {
+	sql1 := "select id,uri,title,count,time from article order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql2 := "select count(*) as number from article"
+	var maps, maps2 []orm.Params
+	o := orm.NewOrm()
+	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
+	if err != nil {
+		fmt.Println("execute sql1 error:")
+		fmt.Println(err)
+		return nil, false, 0, err
+	}
+
+	err = utils.GetCache("ArticleNumber", &maps2)
+	if nil != err {
+		_, err = o.Raw(sql2).Values(&maps2)
+		if err != nil {
+			fmt.Println("execute sql2 error:")
+			fmt.Println(err)
+			return nil, false, 0, err
+		}
+		utils.SetCache("ArticleNumber", maps2, 3600)
+	}
+
+	number, err := strconv.Atoi(maps2[0]["number"].(string))
+
+	var addFlag int
+	if 0 == (number % numPerPage) {
+		addFlag = 0
+	} else {
+		addFlag = 1
+	}
+
+	pages := number/numPerPage + addFlag
+
+	var flagNextPage bool
+	if pages == page {
+		flagNextPage = false
+	} else {
+		flagNextPage = true
+	}
+
+	if err == nil && num > 0 {
+		return maps, flagNextPage, pages, nil
+	} else {
+		return nil, false, pages, err
+	}
+}

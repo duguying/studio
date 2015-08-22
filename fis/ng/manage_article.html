@@ -12,10 +12,10 @@
 		<li ng-repeat="article in articles" class="tab-item">
 			<ul>
 				<li class="item-id">{{article.id}}</li>
-				<li class="item-title">{{article.title}}</li>
+				<li class="item-title"><a href="/article/{{article.uri}}" target="_blank">{{article.title}}</a></li>
 				<li class="item-time">{{article.time}}</li>
 				<li class="item-view">{{article.count}}</li>
-				<li class="item-edit">删 改</li>
+				<li class="item-edit">删 <a href="/admin/edit_article/{{article.id}}">改</a></li>
 			</ul>
 		</li>
 	</ul>

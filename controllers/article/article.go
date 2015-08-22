@@ -254,37 +254,6 @@ func (this *ArticleListPageController) Post() {
 	this.ServeJson()
 }
 
-// 管理- 获取文章列表
-type AdminArticleListController struct {
-	controllers.BaseController
-}
-
-func (this *AdminArticleListController) Get() {
-	s := this.Ctx.Input.Param(":page")
-	page, err := strconv.Atoi(s)
-	if nil != err || page < 0 {
-		page = 1
-	}
-
-	maps, nextPage, pages, err := ListPage(int(page), 10)
-	if nil != err {
-		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
-		this.ServeJson()
-	} else {
-		this.Data["json"] = map[string]interface{}{
-			"result":   true,
-			"msg":      "get list success",
-			"refer":    "/",
-			"pages":    pages,
-			"nextPage": nextPage,
-			"data":     maps,
-			"page":     page,
-		}
-		this.ServeJson()
-	}
-
-}
-
 // 按月归档-按月文章列表
 type ArchiveController struct {
 	controllers.BaseController

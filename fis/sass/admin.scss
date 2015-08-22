@@ -67,6 +67,19 @@
     text-decoration: none;
     transition: background-position 0.1s linear 0s;
   }
+
+  .alert{
+    padding: 5px;
+    //margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+
+  .alert-warning{
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+  }
 }
 
 .main{
@@ -120,7 +133,7 @@
 
 .main{
   .right{
-    .new-article{
+    .new-article,.edit-article{
       .header{
         padding: 5px 0px;
         label{
@@ -183,6 +196,7 @@
         }
 
         .item-id{
+          width: 20px;
           margin: 0 20px;
         }
         .item-title{

@@ -23,6 +23,7 @@ func (this *AddArticleController) Post() {
 	title := this.GetString("title")
 	content := this.GetString("content")
 	keywords := this.GetString("keywords")
+	abstract := this.GetString("abstract")
 
 	// if not login, permission deny
 	user := this.GetSession("username")
@@ -40,7 +41,7 @@ func (this *AddArticleController) Post() {
 
 	username := user.(string)
 
-	id, err := AddArticle(title, content, keywords, username)
+	id, err := AddArticle(title, content, keywords, abstract, username)
 	if nil == err {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "success added, id " + fmt.Sprintf("[%d] ", id), "refer": nil}
 	} else {
@@ -282,11 +283,6 @@ func (this *AdminArticleListController) Get() {
 		this.ServeJson()
 	}
 
-}
-
-func (this *AdminArticleListController) Post() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
-	this.ServeJson()
 }
 
 // 按月归档-按月文章列表

@@ -15,6 +15,9 @@ function adminRouteConfig($routeProvider, $locationProvider){
     }).when("/admin/manage_article", {
         controller: ManageArticleController,
         templateUrl: "/static/ng/manage_article.html"
+    }).when("/admin/manage_article/:page", {
+        controller: ManageArticleController,
+        templateUrl: "/static/ng/manage_article.html"
     }).when("/admin/manage_project", {
         controller: ManageProjectController,
         templateUrl: "/static/ng/manage_project.html"

@@ -105,7 +105,7 @@ func newPost(params interface{}) string {
 			keywords = strings.TrimSuffix(keywords, ",")
 		}
 
-		id, err := AddArticle(title, content, keywords, username)
+		id, err := AddArticle(title, content, keywords, com.SubString(content, 0, 100), username)
 
 		if err == nil {
 			return fmt.Sprintf(str, id)

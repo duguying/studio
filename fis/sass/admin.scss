@@ -164,3 +164,44 @@
     }
   }
 }
+
+.main{
+  .right{
+    .manage-article{
+      ul{
+        padding: 0px;
+      }
+      li{
+        list-style: none;
+      }
+      .tab-header,.tab-item{
+        display: inline-block;
+        width: 100%;
+
+        li{
+          float: left;
+        }
+
+        .item-id{
+          margin: 0 20px;
+        }
+        .item-title{
+          width: 400px;
+          margin: 0 10px;
+        }
+        .item-time{
+          width: 170px;
+        }
+        .item-view{
+          width: 70px;
+        }
+      }
+      .tab-header{
+        background-color: #CCCCCC;
+      }
+      .tab-item:nth-child(odd){
+        background-color: #CCCCCC;
+      }
+    }
+  }
+}

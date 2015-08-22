@@ -15,6 +15,7 @@ type Article struct {
 	Title    string
 	Uri      string
 	Keywords string
+	Abstract string
 	Content  string
 	Author   string
 	Time     time.Time
@@ -30,12 +31,12 @@ func init() {
 }
 
 // 添加文章
-func AddArticle(title string, content string, keywords string, author string) (int64, error) {
+func AddArticle(title string, content string, keywords string, abstract string, author string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	sql := "insert into article(title, uri, keywords, content, author) values(?, ?, ?, ?, ?)"
-	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, content, author).Exec()
+	sql := "insert into article(title, uri, keywords, abstract, content, author) values(?, ?, ?, ?, ?, ?)"
+	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, abstract, content, author).Exec()
 	if nil != err {
 		return 0, err
 	} else {
@@ -154,9 +155,10 @@ func UpdateArticle(id int64, uri string, newArt Article) error {
 
 	art.Title = newArt.Title
 	art.Keywords = newArt.Keywords
+	art.Abstract = newArt.Abstract
 	art.Content = newArt.Content
 
-	_, err := o.Update(&art, "title", "keywords", "content")
+	_, err := o.Update(&art, "title", "keywords", "abstract", "content")
 	return err
 }
 

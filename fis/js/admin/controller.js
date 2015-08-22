@@ -138,12 +138,19 @@ function NewArticleController($scope,$rootScope){
     };
 }
 
-function ManageArticleController($scope,$rootScope){
+function ManageArticleController($http,$scope,$rootScope,$routeParams){
     console.log("hello manage article");
     $rootScope.global = {
     	title: "管理文章",
     	currentPath: "manage_article"
     }
+    
+    var page = $routeParams.page || 1;
+    $http.get("/api/admin/article/page/"+page,null).success(function (data) {
+        $scope.articles = data.data;
+        $scope.has_next = data.nextPage;
+        $scope.page = parseInt(page);
+    });
 }
 
 function ManageProjectController($scope,$rootScope){

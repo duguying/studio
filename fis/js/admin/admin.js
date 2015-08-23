@@ -3,6 +3,7 @@
  */
 
 "use strict";
+
 var adminService = angular.module("Admin", ['ngRoute','ng.ueditor']);
 
 function adminRouteConfig($routeProvider, $locationProvider){

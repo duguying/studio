@@ -80,12 +80,28 @@ function IndexController($scope,$rootScope){
     }
 }
 
-function NewArticleController($scope,$rootScope){
+function NewArticleController($scope,$rootScope,$http){
     $rootScope.global = {
     	title: "添加文章",
     	currentPath: "new_article"
     }
     $scope.config = ueditor_option;
+    $scope.submit = function () {
+        var content = $scope.content;
+        var title = $scope.title;
+        var keywords = $scope.keywords;
+        var abstract = $scope.abstract;
+
+        $http.post("/api/admin/add", {
+                params: {"title":title,"keywords":keywords,"abstract":abstract,"content":content}
+            }).success(function(data){
+                if (data.result) {
+                    console.log("add success.");
+                } else{
+                    console.log("add failed.", data.msg);
+                };
+            });
+    }
 }
 
 function EditArticleController($scope,$rootScope,$routeParams,$http) {
@@ -101,6 +117,22 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
         currentPath: "manage_article"
     }
     $scope.config = ueditor_option;
+    $scope.submit = function () {
+        var content = $scope.article.Content;
+        var title = $scope.article.Title;
+        var keywords = $scope.article.Keywords;
+        var abstract = $scope.article.Abstract;
+
+        $http.post("/api/admin/update", {
+                params: {"id":$scope.id,"title":title,"keywords":keywords,"abstract":abstract,"content":content}
+            }).success(function(data){
+                if (data.result) {
+                    console.log("add success.");
+                } else{
+                    console.log("add failed.", data.msg);
+                };
+            });
+    }
 }
 
 function ManageArticleController($http,$scope,$rootScope,$routeParams){
@@ -115,6 +147,7 @@ function ManageArticleController($http,$scope,$rootScope,$routeParams){
         $scope.has_next = data.nextPage;
         $scope.page = parseInt(page);
     });
+
 }
 
 function ManageProjectController($scope,$rootScope){
@@ -130,5 +163,4 @@ function ManageOssController($scope,$rootScope){
     	currentPath: "manage_oss"
     }
 }
-
 

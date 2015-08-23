@@ -12,8 +12,9 @@
 		{{{asset "ueditor/ueditor.all.js"}}}
 		{{{asset "ueditor/angular-ueditor.js"}}}
 		{{{asset "js/admin/admin.js"}}}
-		{{{asset "js/admin/controller.js"}}}
+		
 		{{{asset "js/admin/directive.js"}}}
+		{{{asset "js/admin/controller.js"}}}
 		
 	</head>
   	<body>

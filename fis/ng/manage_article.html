@@ -15,7 +15,10 @@
 				<li class="item-title"><a href="/article/{{article.uri}}" target="_blank">{{article.title}}</a></li>
 				<li class="item-time">{{article.time}}</li>
 				<li class="item-view">{{article.count}}</li>
-				<li class="item-edit">删 <a href="/admin/edit_article/{{article.id}}">改</a></li>
+				<li class="item-edit">
+					<a href="javascript:void(0);" delete-article ng-model="article">删</a>
+					<a href="/admin/edit_article/{{article.id}}">改</a>
+				</li>
 			</ul>
 		</li>
 	</ul>

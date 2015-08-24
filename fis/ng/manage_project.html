@@ -1,1 +1,11 @@
-project_manage.html
+<div class="project-manage">
+	<ul>
+		<li ng-repeat="project in projects" class="item">
+			<ul>
+				<li><img ng-src="{{project.icon_url}}" alt=""></li>
+				<li>{{project.name}}</li>
+				<li data-ng-bind-html="project.description_html"></li>
+			</ul>
+		</li>
+	</ul>
+</div>

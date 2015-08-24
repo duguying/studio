@@ -28,6 +28,9 @@ function adminRouteConfig($routeProvider, $locationProvider){
     }).when("/admin/manage_project", {
         controller: ManageProjectController,
         templateUrl: "/static/ng/manage_project.html"
+    }).when("/admin/manage_project/:page", {
+        controller: ManageProjectController,
+        templateUrl: "/static/ng/manage_project.html"
     }).when("/admin/manage_oss", {
         controller: ManageOssController,
         templateUrl: "/static/ng/manage_oss.html"

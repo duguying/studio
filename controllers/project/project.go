@@ -30,11 +30,11 @@ func (this *ProjectListController) Get() {
 		page = 1
 	}
 
-	maps, err := CountByMonth()
+	// maps, err := CountByMonth()
 
-	if nil == err {
-		this.Data["count_by_month"] = maps
-	}
+	// if nil == err {
+	// this.Data["count_by_month"] = maps
+	// }
 
 	maps, nextPageFlag, totalPages, err := ListProjects(int(page), 10)
 

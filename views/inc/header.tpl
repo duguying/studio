@@ -4,9 +4,9 @@
     <head>
       <title>独孤影 - {{{.title}}}</title>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-      <meta content="独孤影,博客,{{.keywords}}" name="keywords" />
-      <meta content="{{.description}}" name="description" />
-      <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{.host}}/xmlrpc" />
+      <meta content="独孤影,博客,{{{.keywords}}}" name="keywords" />
+      <meta content="{{{.description}}}" name="description" />
+      <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{{.host}}}/xmlrpc" />
       <link rel="shortcut icon" href="/favicon" />
       {{{asset "sass/style.scss"}}}
       {{{asset "syntaxhighlighter/styles/shCoreDefault.css"}}}

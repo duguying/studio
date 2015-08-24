@@ -73,22 +73,19 @@ function NavsController ($scope, $http, $location) {
 }
 
 function IndexController($scope,$rootScope,$http,$sce){
-    // console.log("hello index");
     $rootScope.global = {
     	title: "首页",
     	currentPath: ""
     }
 
     $http.get("http://duoshuo.com/api/posts/list.json?short_name=duguying&order=desc",null).success(function (data) {
-        // $scope.comments = $sce.trustAsHtml(data.parentPosts);
-
         $scope.comments = angular.forEach(angular.fromJson(data.parentPosts), function (comment) {
             comment.message_html = $sce.trustAsHtml(comment.message);
         });
     });
 }
 
-function NewArticleController($scope,$rootScope,$http){
+function NewArticleController($scope,$rootScope,$http,$location){
     $rootScope.global = {
     	title: "添加文章",
     	currentPath: "new_article"
@@ -104,9 +101,10 @@ function NewArticleController($scope,$rootScope,$http){
                 params: {"title":title,"keywords":keywords,"abstract":abstract,"content":content}
             }).success(function(data){
                 if (data.result) {
-                    console.log("add success.");
+                    alert("add success.");
+                    $location.path("/admin/edit_article/"+data["data"]);
                 } else{
-                    console.log("add failed.", data.msg);
+                    alert("add failed.", data.msg);
                 };
             });
     }
@@ -135,9 +133,9 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
                 params: {"id":$scope.id,"title":title,"keywords":keywords,"abstract":abstract,"content":content}
             }).success(function(data){
                 if (data.result) {
-                    console.log("add success.");
+                    alert("modified success.");
                 } else{
-                    console.log("add failed.", data.msg);
+                    alert("modified failed.", data.msg);
                 };
             });
     }
@@ -158,11 +156,24 @@ function ManageArticleController($http,$scope,$rootScope,$routeParams){
 
 }
 
-function ManageProjectController($scope,$rootScope){
+function ManageProjectController($http,$scope,$rootScope,$routeParams,$sce){
     $rootScope.global = {
     	title: "管理项目",
     	currentPath: "manage_project"
     }
+
+    var page = $routeParams.page || 1;
+    $http.get("/api/admin/project/list/"+page,null).success(function (data) {
+        // $scope.projects = data.data;
+        $scope.total_pages = data.total_pages;
+        $scope.has_next = data.has_next;
+        $scope.page = parseInt(page);
+
+        $scope.projects = angular.forEach(angular.fromJson(data.data), function (project) {
+            project.description_html = $sce.trustAsHtml(project.description);
+        });
+    });
+    
 }
 
 function ManageOssController($scope,$rootScope){

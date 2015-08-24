@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-// 管理- 获取文章列表
+// 管理
 type AdminArticleController struct {
 	controllers.BaseController
 }
@@ -99,7 +99,12 @@ func (this *AdminArticleController) AddArticle() {
 
 	id, err := AddArticle(title, content, keywords, abstract, username)
 	if nil == err {
-		this.Data["json"] = map[string]interface{}{"result": true, "msg": "success added, id " + fmt.Sprintf("[%d] ", id), "refer": nil}
+		this.Data["json"] = map[string]interface{}{
+			"result": true,
+			"msg":    "success added, id " + fmt.Sprintf("[%d] ", id),
+			"data":   id,
+			"refer":  nil,
+		}
 	} else {
 		log.Warnln(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "added failed", "refer": nil}
@@ -202,4 +207,35 @@ func (this *AdminArticleController) UpdateArticle() {
 		this.ServeJson()
 	}
 
+}
+
+// 管理- 项目
+type AdminProjectController struct {
+	controllers.BaseController
+}
+
+func (this *AdminProjectController) ListProject() {
+	s := this.Ctx.Input.Param(":page")
+	page, err := strconv.Atoi(s)
+	if nil != err || page < 0 {
+		page = 1
+	}
+
+	maps, nextPageFlag, totalPages, err := ListProjects(int(page), 10)
+
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{
+			"result": false,
+			"msg":    "get list failed, " + err.Error(),
+		}
+	} else {
+		this.Data["json"] = map[string]interface{}{
+			"has_next":    nextPageFlag,
+			"total_pages": totalPages,
+			"data":        maps,
+			"result":      true,
+			"msg":         "get list success",
+		}
+	}
+	this.ServeJson()
 }

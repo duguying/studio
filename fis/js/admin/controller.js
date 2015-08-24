@@ -72,12 +72,20 @@ function NavsController ($scope, $http, $location) {
 	});
 }
 
-function IndexController($scope,$rootScope){
+function IndexController($scope,$rootScope,$http,$sce){
     // console.log("hello index");
     $rootScope.global = {
     	title: "首页",
     	currentPath: ""
     }
+
+    $http.get("http://duoshuo.com/api/posts/list.json?short_name=duguying&order=desc",null).success(function (data) {
+        // $scope.comments = $sce.trustAsHtml(data.parentPosts);
+
+        $scope.comments = angular.forEach(angular.fromJson(data.parentPosts), function (comment) {
+            comment.message_html = $sce.trustAsHtml(comment.message);
+        });
+    });
 }
 
 function NewArticleController($scope,$rootScope,$http){

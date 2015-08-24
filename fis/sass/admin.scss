@@ -219,3 +219,33 @@
     }
   }
 }
+
+.main{
+  .right{
+    .duoshuo{
+      li{
+        list-style: none;
+        float: left;
+      }
+      ul{
+        padding: 0px;
+      }
+
+      .item{
+        display: inline-block;
+        width: 100%;
+
+        li.avatar{
+          img{
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+          }
+        }
+        li.message{
+          width: 90%;
+        }
+      }
+    }
+  }
+}

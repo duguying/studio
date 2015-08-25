@@ -107,6 +107,27 @@ func GetCache(key string, to interface{}) error {
 	return err
 }
 
+func DelCache(key string) error {
+	if cc == nil {
+		return errors.New("cc is nil")
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Redf("get cache error caught: %v\n", r)
+			cc = nil
+		}
+	}()
+
+	err := cc.Delete(key)
+	if err != nil {
+		return errors.New("Cache删除失败")
+	} else {
+		log.Pinkln("删除Cache成功 " + key)
+		return nil
+	}
+}
+
 // --------------------
 // Encode
 // 用gob进行数据编码

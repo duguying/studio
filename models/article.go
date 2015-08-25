@@ -158,6 +158,10 @@ func UpdateArticle(id int64, uri string, newArt Article) error {
 	art.Abstract = newArt.Abstract
 	art.Content = newArt.Content
 
+	getArt, _ := GetArticle(int(id))
+	utils.DelCache("GetArticleByUri.uri." + getArt.Uri)
+	utils.DelCache("GetArticle.id." + fmt.Sprintf("%d", art.Id))
+
 	_, err := o.Update(&art, "title", "keywords", "abstract", "content")
 	return err
 }
@@ -173,6 +177,10 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 	} else if "" != uri {
 		art.Uri = uri
 	}
+
+	getArt, _ := GetArticle(int(id))
+	utils.DelCache("GetArticleByUri.uri." + getArt.Uri)
+	utils.DelCache("GetArticle.id." + fmt.Sprintf("%d", art.Id))
 
 	return o.Delete(&art)
 }

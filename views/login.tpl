@@ -6,6 +6,7 @@
     	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		{{{asset "sass/style.scss"}}}
 		{{{asset "js/global/jquery.min.js"}}}
+		{{{asset "js/global/global.js"}}}
 		<style>
 		.center{
 			display: block;
@@ -47,7 +48,8 @@
 					console.log(msg);
 					if (msg.result) {
 						alert("登录成功-"+msg.msg);
-						window.location = msg.refer
+						Store.save("username",user_name);
+						window.location = msg.refer;
 					} else{
 						alert("登录失败-"+msg.msg);
 					};

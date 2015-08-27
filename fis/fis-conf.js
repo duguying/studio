@@ -35,8 +35,7 @@ fis.config.set('project.exclude', [
     /^\/(.*)\.md/i,
     /^\/(.*)\.html/i,
     /^\/sass\/_(.*)\.scss/i,
-    /^\/js\/guest\/(.*)/i,
-    /^\/js\/admin\/(.*)/i,
+    /^\/js\/guest\/(.*)/i
 ]);
 
 fis.config.merge({

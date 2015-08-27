@@ -1,43 +1,44 @@
 /**
- * initialize admin models
+ * Created by rex on 2015/8/12.
  */
-var rex = {};
 
-$(document).ready(function (e) {
-	rex.hide_top_menu = function() {
-		$(".admin-top-menu>div").hide();
-	}
+"use strict";
 
-	rex.hide_right_pannel = function () {
-		$(".admin-main-pannel>div").hide();
-	}
+var adminService = angular.module("Admin", ['ngRoute','ng.ueditor']);
 
-	rex.hide_all = function () {
-		rex.hide_top_menu()
-		rex.hide_right_pannel()
-	}
+function adminRouteConfig($routeProvider, $locationProvider){
+    $routeProvider.when("/admin", {
+        controller: IndexController,
+        templateUrl: "/static/ng/default.html"
+    }).when("/admin/new_article", {
+        controller: NewArticleController,
+        templateUrl: "/static/ng/new_article.html"
+    }).when("/admin/edit_article", {
+        controller: EditArticleController,
+        templateUrl: "/static/ng/edit_article.html"
+    }).when("/admin/edit_article/:id", {
+        controller: EditArticleController,
+        templateUrl: "/static/ng/edit_article.html"
+    }).when("/admin/manage_article", {
+        controller: ManageArticleController,
+        templateUrl: "/static/ng/manage_article.html"
+    }).when("/admin/manage_article/:page", {
+        controller: ManageArticleController,
+        templateUrl: "/static/ng/manage_article.html"
+    }).when("/admin/manage_project", {
+        controller: ManageProjectController,
+        templateUrl: "/static/ng/manage_project.html"
+    }).when("/admin/manage_project/:page", {
+        controller: ManageProjectController,
+        templateUrl: "/static/ng/manage_project.html"
+    }).when("/admin/manage_oss", {
+        controller: ManageOssController,
+        templateUrl: "/static/ng/manage_oss.html"
+    }).otherwise({
+        redirectTo: "/admin"
+    });
+    $locationProvider.html5Mode(true);
+}
 
-	rex.clear_editor = function () {
-		if (rex.ue) {
-			rex.ue.setContent('');
-		} else{
-			console.log("ueditor have not initialized")
-		};
-	}
+adminService.config(adminRouteConfig);
 
-	rex.clear_artcle_form = function () {
-		$("#article-title").val("");
-		$("#article-tags").val("");
-	}
-
-	rex.hide_all();
-	rex.ue = UE.getEditor('myEditor');
-
-	$("#default-box").show();
-
-	rex.ajaxdata = {
-		url:"",
-		method:"get",
-		data:"",
-	};
-});

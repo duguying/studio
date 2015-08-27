@@ -2,14 +2,14 @@
 
 <html>
     <head>
-      <title>独孤影 - {{.title}}</title>
+      <title>独孤影 - {{{.title}}}</title>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-      <meta content="独孤影,博客,{{.keywords}}" name="keywords" />
-      <meta content="{{.description}}" name="description" />
-      <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{.host}}/xmlrpc" />
+      <meta content="独孤影,博客,{{{.keywords}}}" name="keywords" />
+      <meta content="{{{.description}}}" name="description" />
+      <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{{.host}}}/xmlrpc" />
       <link rel="shortcut icon" href="/favicon" />
-      {{asset "sass/style.scss"}}
-      {{asset "syntaxhighlighter/styles/shCoreDefault.css"}}
+      {{{asset "sass/style.scss"}}}
+      {{{asset "syntaxhighlighter/styles/shCoreDefault.css"}}}
       <meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
     </head>
     <body >
@@ -45,12 +45,12 @@
         			<a href="/"><span class="title">独孤影</span></a>
         		</div>
         		<div class="gap">
-              {{if eq .userIs "admin"}}
+              {{{if eq .userIs "admin"}}}
         			<a href="/admin" title="管理页面">
                 <img class="gravatar" src="/logo" />
               </a>
-              {{else}}
+              {{{else}}}
               <img class="gravatar" src="/logo" />
-              {{end}}
+              {{{end}}}
         		</div>
         	</div>

@@ -35,7 +35,7 @@
 		</div>
 		<hr>
 		<div>
-			<h3>修改用户名，当前用户[{{.username}}]</h3>
+			<h3>修改用户名，当前用户[{{{.username}}}]</h3>
 			<form action="/rename" method="post">
 				<label for="">新用户名</label><input type="text" name="username" id=""><br>
 				<input type="submit" value="修改">

@@ -15,6 +15,7 @@ type Article struct {
 	Title    string
 	Uri      string
 	Keywords string
+	Abstract string
 	Content  string
 	Author   string
 	Time     time.Time
@@ -30,12 +31,12 @@ func init() {
 }
 
 // 添加文章
-func AddArticle(title string, content string, keywords string, author string) (int64, error) {
+func AddArticle(title string, content string, keywords string, abstract string, author string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	sql := "insert into article(title, uri, keywords, content, author) values(?, ?, ?, ?, ?)"
-	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, content, author).Exec()
+	sql := "insert into article(title, uri, keywords, abstract, content, author) values(?, ?, ?, ?, ?, ?)"
+	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, abstract, content, author).Exec()
 	if nil != err {
 		return 0, err
 	} else {
@@ -154,9 +155,14 @@ func UpdateArticle(id int64, uri string, newArt Article) error {
 
 	art.Title = newArt.Title
 	art.Keywords = newArt.Keywords
+	art.Abstract = newArt.Abstract
 	art.Content = newArt.Content
 
-	_, err := o.Update(&art, "title", "keywords", "content")
+	getArt, _ := GetArticle(int(id))
+	utils.DelCache("GetArticleByUri.uri." + getArt.Uri)
+	utils.DelCache("GetArticle.id." + fmt.Sprintf("%d", art.Id))
+
+	_, err := o.Update(&art, "title", "keywords", "abstract", "content")
 	return err
 }
 
@@ -171,6 +177,10 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 	} else if "" != uri {
 		art.Uri = uri
 	}
+
+	getArt, _ := GetArticle(int(id))
+	utils.DelCache("GetArticleByUri.uri." + getArt.Uri)
+	utils.DelCache("GetArticle.id." + fmt.Sprintf("%d", art.Id))
 
 	return o.Delete(&art)
 }
@@ -383,4 +393,53 @@ func HottestArticleList() ([]orm.Params, error) {
 	}
 
 	return maps, err
+}
+
+// 列出文章 for admin
+func ArticleListForAdmin(page int, numPerPage int) ([]orm.Params, bool, int, error) {
+	sql1 := "select id,uri,title,count,time from article order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql2 := "select count(*) as number from article"
+	var maps, maps2 []orm.Params
+	o := orm.NewOrm()
+	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
+	if err != nil {
+		fmt.Println("execute sql1 error:")
+		fmt.Println(err)
+		return nil, false, 0, err
+	}
+
+	err = utils.GetCache("ArticleNumber", &maps2)
+	if nil != err {
+		_, err = o.Raw(sql2).Values(&maps2)
+		if err != nil {
+			fmt.Println("execute sql2 error:")
+			fmt.Println(err)
+			return nil, false, 0, err
+		}
+		utils.SetCache("ArticleNumber", maps2, 3600)
+	}
+
+	number, err := strconv.Atoi(maps2[0]["number"].(string))
+
+	var addFlag int
+	if 0 == (number % numPerPage) {
+		addFlag = 0
+	} else {
+		addFlag = 1
+	}
+
+	pages := number/numPerPage + addFlag
+
+	var flagNextPage bool
+	if pages == page {
+		flagNextPage = false
+	} else {
+		flagNextPage = true
+	}
+
+	if err == nil && num > 0 {
+		return maps, flagNextPage, pages, nil
+	} else {
+		return nil, false, pages, err
+	}
 }

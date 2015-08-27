@@ -1,0 +1,26 @@
+<div class="manage-article">
+	<ul>
+		<li class="tab-header">
+			<ul>
+				<li class="item-id">ID</li>
+				<li class="item-title">标题</li>
+				<li class="item-time">发布时间</li>
+				<li class="item-view">浏览量</li>
+				<li class="item-edit">编辑</li>
+			</ul>
+		</li>
+		<li ng-repeat="article in articles" class="tab-item">
+			<ul>
+				<li class="item-id">{{article.id}}</li>
+				<li class="item-title"><a href="/article/{{article.uri}}" target="_blank">{{article.title}}</a></li>
+				<li class="item-time">{{article.time}}</li>
+				<li class="item-view">{{article.count}}</li>
+				<li class="item-edit">
+					<a href="javascript:void(0);" delete-article ng-model="article">删</a>
+					<a href="/admin/edit_article/{{article.id}}">改</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<a ng-show="page!=1" href="/admin/manage_article/{{page-1}}">上一页</a> <a ng-show="has_next" href="/admin/manage_article/{{page+1}}">下一页</a>
+</div>

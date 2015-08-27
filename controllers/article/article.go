@@ -23,6 +23,7 @@ func (this *AddArticleController) Post() {
 	title := this.GetString("title")
 	content := this.GetString("content")
 	keywords := this.GetString("keywords")
+	abstract := this.GetString("abstract")
 
 	// if not login, permission deny
 	user := this.GetSession("username")
@@ -40,7 +41,7 @@ func (this *AddArticleController) Post() {
 
 	username := user.(string)
 
-	id, err := AddArticle(title, content, keywords, username)
+	id, err := AddArticle(title, content, keywords, abstract, username)
 	if nil == err {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "success added, id " + fmt.Sprintf("[%d] ", id), "refer": nil}
 	} else {
@@ -249,42 +250,6 @@ func (this *ArticleListPageController) Get() {
 }
 
 func (this *ArticleListPageController) Post() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
-	this.ServeJson()
-}
-
-// 管理- 获取文章列表
-type AdminArticleListController struct {
-	controllers.BaseController
-}
-
-func (this *AdminArticleListController) Get() {
-	s := this.Ctx.Input.Param(":page")
-	page, err := strconv.Atoi(s)
-	if nil != err || page < 0 {
-		page = 1
-	}
-
-	maps, nextPage, pages, err := ListPage(int(page), 10)
-	if nil != err {
-		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
-		this.ServeJson()
-	} else {
-		this.Data["json"] = map[string]interface{}{
-			"result":   true,
-			"msg":      "get list success",
-			"refer":    "/",
-			"pages":    pages,
-			"nextPage": nextPage,
-			"data":     maps,
-			"page":     page,
-		}
-		this.ServeJson()
-	}
-
-}
-
-func (this *AdminArticleListController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
 	this.ServeJson()
 }

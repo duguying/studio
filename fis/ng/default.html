@@ -1,0 +1,14 @@
+<div class="duoshuo">
+	<ul>
+		<li ng-repeat="comment in comments" class="item">
+			<ul>
+				<li class="avatar">
+					<a href="{{comment.author.url}}" target="_blank">
+						<img ng-src="{{comment.author.avatar_url}}" alt="{{comment.author.name}}">
+					</a>
+				</li>
+				<li class="message" data-ng-bind-html="comment.message_html"></li>
+			</ul>
+		</li>
+	</ul>
+</div>

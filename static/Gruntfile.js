@@ -14,8 +14,8 @@ module.exports = function(grunt) {
               ' */\n'
         },
         files: {
-          'build/css/style.css': ['!sass/_common.scss','sass/style.scss'],
-          'build/css/admin.css': ['!sass/_common.scss','sass/admin.scss']
+          'css/style.css': ['!css/_common.scss','css/style.scss'],
+          'css/admin.css': ['!css/_common.scss','css/admin.scss']
         }
       }
     },

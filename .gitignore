@@ -11,7 +11,7 @@ map.json
 install.lock
 
 # deps
-/static/ueditor/
+# /static/ueditor/
 /static/upload/
 
 # debug

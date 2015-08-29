@@ -1,0 +1,96 @@
+/*可以在这里添加你自己的css*/
+.view{
+	font-family: 微软雅黑, Verdana, sans-serif, 宋体;
+	word-wrap: break-word;
+	cursor: text;
+	font-size: 12.5px;
+}
+
+.view p {
+	margin: 5px 0px 10px 0px;
+	line-height: 180%;
+}
+
+.view pre {
+	line-height: 18px;
+	margin: 5px 0 10px 10px;
+	font-size: 12px;
+	font-family: Consolas, 微软雅黑, monospace, Verdana, sans-serif, 宋体;
+	border: 1px solid #ddd;
+	border-left: 5px solid #6CE26C;
+	background: #f6f6f6;
+	padding: 5px;
+	border-radius: 2px;
+}
+
+.view blockquote:before,.view blockquote:after,.view q:before,.view q:after
+	{
+	content: "";
+	font-size: 24px;
+	color: #0F6575;
+	font-family: Helvetica, arial, '宋体';
+	position: absolute;
+}
+
+.view blockquote:before {
+	content: "“";
+	top: 5px;
+	left: 10px;
+}
+
+.view blockquote:after {
+	content: "”";
+	bottom: -5px;
+	right: 15px;
+}
+
+.view q,.view blockquote {
+	position: relative;
+	background: #F4FDFD;
+	text-align: left;
+	margin: 20px 10px;
+	padding: 3px 25px 3px 25px;
+	color: #333;
+	font-size: 12px;
+	line-height: 22px;
+	border-left: 3px solid #A4DAF0;
+}
+
+.view blockquote i,.view q i {
+	font-style: normal;
+	font-size: 12px;
+}
+.view h1,.view h2,.view h3,.view h4,.view h5,.view h6{font-weight:600;}
+.view h1{
+	font-size:30px;
+	margin-top:15px;
+	margin-top:10px;
+}
+.view h2{
+	font-size:24px;
+	margin-top:15px;
+	margin-top:10px;
+}
+.view h3{
+	font-size:18px;
+	margin-top:15px;
+	margin-top:10px;
+}
+.view h4{
+	font-size:16px;
+	margin-top:10px;
+	margin-top:8px;
+}
+.view h5{
+	font-size:13px;
+	margin-top:10px;
+	margin-top:8px;
+}
+.view h6{
+	font-size:13px;
+	margin-top:10px;
+	margin-top:8px;
+}
+.view img{
+	max-width:650px;
+}

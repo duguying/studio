@@ -8,7 +8,7 @@
       <meta content="{{{.description}}}" name="description" />
       <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{{.host}}}/xmlrpc" />
       <link rel="shortcut icon" href="/favicon" />
-      <link rel="stylesheet" href="/static/build/css/style.css">
+      <link rel="stylesheet" href="/static/css/style.css">
       <link rel="stylesheet" href="/static/syntaxhighlighter/styles/shCoreDefault.css">
       <meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
     </head>

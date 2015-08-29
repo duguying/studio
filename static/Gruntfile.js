@@ -24,9 +24,26 @@ module.exports = function(grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
+      jslib: {
+        src: ['js/global/jquery.min.js','js/guest/jquery.fancybox.min.js'],
+        dest: 'js/lib.min.js'
+      },
+      jsarticle: {
+        src: [
+          'syntaxhighlighter/scripts/shCore.js',
+          'syntaxhighlighter/scripts/shAutoloader.js',
+          'js/guest/syntaxhighlighter.config.js',
+          'js/guest/main.js'
+        ],
+        dest: 'js/article.min.js'
+      },
+      jsmain: {
+        src: 'js/guest/main.js',
+        dest: 'js/main.min.js'
+      },
       js: {
         src: 'js/admin/*.js',
-        dest: 'build/admin.min.js'
+        dest: 'js/admin.min.js'
       }
     }
     

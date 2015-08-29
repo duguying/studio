@@ -24,9 +24,6 @@ install.lock
 # config
 /custom/app.conf
 
-# static
-/static/
-
 # gopm
 /.vendor/
 

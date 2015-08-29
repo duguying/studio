@@ -7,6 +7,6 @@ import (
 func InitEnv() {
 	runmode := beego.AppConfig.String("runmode")
 	if runmode == "dev" {
-		beego.SetStaticPath("/static", "fis")
+		beego.SetStaticPath("/static", "static")
 	}
 }

@@ -25,5 +25,6 @@
 
 {{{template "inc/footer.tpl" .}}}
 
-{{{asset "js/article.js"}}}
+<script src="/static/js/lib.min.js"></script>
+<script src="/static/js/article.min.js"></script>
 			

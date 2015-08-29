@@ -28,4 +28,5 @@
 
 			{{{template "inc/footer.tpl" .}}}
 
-			{{{asset "js/main.js"}}}
+			<script src="/static/js/lib.min.js"></script>
+			<script src="/static/js/main.min.js"></script>

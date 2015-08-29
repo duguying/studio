@@ -4,17 +4,18 @@ alloy.path=function(){
       result = []
       ;
 
-  var json = $.ajax({
-    url: "/map.json",
-    async: false
-  }).responseText;
+  // var json = $.ajax({
+  //   url: "/map.json",
+  //   async: false
+  // }).responseText;
 
-  var data = eval('('+json+')');
+  var data = eval('({})');
+  // TODO
 
   for(var i = 0; i < args.length; i++){
-    var item = args[i].replace('@', '!syntaxhighlighter/scripts/')
+    var item = args[i].replace('@', '!/static/syntaxhighlighter/scripts/')
     item = item.split('!');
-    item = item[0] + data.res[item[1]].uri;
+    item = item[0] + item[1];
     result.push(item);
   }
       

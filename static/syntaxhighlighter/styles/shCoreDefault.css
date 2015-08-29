@@ -215,7 +215,7 @@
 
 .syntaxhighlighter {
 	background-color: #F5F2F0 !important;
-	background: url("noise.png"), -webkit-linear-gradient(left, #EDE7E3 1px, transparent 1px) 2.8em 0 no-repeat;
+	background: url("/syntaxhighlighter/styles/noise.png"), -webkit-linear-gradient(left, #EDE7E3 1px, transparent 1px) 2.8em 0 no-repeat;
 	border-radius: 10px;
 	-moz-border-radius: 10px;   
     -webkit-border-radius: 10px;

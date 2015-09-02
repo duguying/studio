@@ -19,6 +19,7 @@
      * 因此，UEditor提供了针对不同页面的编辑器可单独配置的根路径，具体来说，在需要实例化编辑器的页面最顶部写上如下代码即可。当然，需要令此处的URL等于对应的配置。
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
+	// window.UEDITOR_HOME_URL = "/static/ueditor/";
     var URL = window.UEDITOR_HOME_URL || (function(){
 
         function PathStack() {

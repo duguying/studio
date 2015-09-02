@@ -231,7 +231,7 @@ div.edui-box {
     width: 100%;
     height: 12px;
     margin-top: 10px;
-    background: url(/ueditor/themes/default/images/scale.png) no-repeat;
+    background: url(../images/scale.png) no-repeat;
     cursor: se-resize;
 }
 .edui-default .edui-editor-breadcrumb {
@@ -383,7 +383,7 @@ div.edui-box {
 .edui-default .edui-menu-body {
     _width: 150px;
     min-width: 170px;
-    background: url("/ueditor/themes/default/images/sparator_v.png") repeat-y 25px;
+    background: url("../images/sparator_v.png") repeat-y 25px;
 }
 
 .edui-default .edui-menuitem-body {
@@ -398,8 +398,8 @@ div.edui-box {
 .edui-default .edui-menuitem .edui-icon {
     width: 20px !important;
     height: 20px !important;
-    background: url(/ueditor/themes/default/images/icons.png) 0 -4000px;
-    background: url(/ueditor/themes/default/images/icons.gif) 0 -4000px\9;
+    background: url(../images/icons.png) 0 -4000px;
+    background: url(../images/icons.gif) 0 -4000px\9;
 }
 
 .edui-default .edui-menuitem .edui-label {
@@ -410,7 +410,7 @@ div.edui-box {
 }
 
 .edui-default .edui-state-checked .edui-menuitem-body {
-    background: url("/ueditor/themes/default/images/icons-all.gif") no-repeat 6px -205px;
+    background: url("../images/icons-all.gif") no-repeat 6px -205px;
 }
 
 .edui-default .edui-state-disabled .edui-menuitem-label {
@@ -430,8 +430,8 @@ div.edui-box {
 }
 
 .edui-default .edui-toolbar .edui-combox-body .edui-arrow {
-    background: url(/ueditor/themes/default/images/icons.png) -741px 0;
-    _background: url(/ueditor/themes/default/images/icons.gif) -741px 0;
+    background: url(../images/icons.png) -741px 0;
+    _background: url(../images/icons.gif) -741px 0;
     height: 20px;
     width: 9px;
 }
@@ -486,8 +486,8 @@ div.edui-box {
 .edui-default .edui-toolbar .edui-splitbutton .edui-icon {
     height: 20px !important;
     width: 20px !important;
-    background-image: url(/ueditor/themes/default/images/icons.png);
-    background-image: url(/ueditor/themes/default/images/icons.gif) \9;
+    background-image: url(../images/icons.png);
+    background-image: url(../images/icons.gif) \9;
 }
 
 .edui-default .edui-toolbar .edui-button .edui-button-wrap {
@@ -928,7 +928,7 @@ div.edui-box {
 }
 
 .edui-default  .edui-for-charts  .edui-icon {
-    background: url(/ueditor/themes/default/images/charts.png) no-repeat 2px 3px!important;
+    background: url(../images/charts.png) no-repeat 2px 3px!important;
 }
 
 .edui-default  .edui-for-inserttitlecol  .edui-icon {
@@ -945,8 +945,8 @@ div.edui-box {
 /*splitbutton*/
 .edui-default .edui-toolbar .edui-splitbutton-body .edui-arrow,
 .edui-default .edui-toolbar .edui-menubutton-body .edui-arrow {
-    background: url(/ueditor/themes/default/images/icons.png) -741px 0;
-    _background: url(/ueditor/themes/default/images/icons.gif) -741px 0;
+    background: url(../images/icons.png) -741px 0;
+    _background: url(../images/icons.gif) -741px 0;
     height: 20px;
     width: 9px;
 }
@@ -1227,7 +1227,7 @@ div.edui-box {
 .edui-default .edui-dialog-titlebar {
     height: 26px;
     border-bottom: 1px solid #c6c6c6;
-    background: url(/ueditor/themes/default/images/dialog-title-bg.png) repeat-x bottom;
+    background: url(../images/dialog-title-bg.png) repeat-x bottom;
     position: relative;
     cursor: move;
 }
@@ -1252,11 +1252,11 @@ div.edui-box {
     height: 20px;
     width: 20px;
     cursor: pointer;
-    background: url("/ueditor/themes/default/images/icons-all.gif") no-repeat 0 -59px;
+    background: url("../images/icons-all.gif") no-repeat 0 -59px;
 }
 
 .edui-default .edui-dialog-closebutton .edui-state-hover .edui-button-body {
-    background: url("/ueditor/themes/default/images/icons-all.gif") no-repeat 0 -89px;
+    background: url("../images/icons-all.gif") no-repeat 0 -89px;
 }
 
 .edui-default .edui-dialog-foot {
@@ -1273,7 +1273,7 @@ div.edui-box {
 }
 
 .edui-default .edui-dialog-buttons .edui-button .edui-button-body {
-    background: url("/ueditor/themes/default/images/icons-all.gif") no-repeat;
+    background: url("../images/icons-all.gif") no-repeat;
     height: 24px;
     width: 96px;
     font-size: 12px;
@@ -1283,7 +1283,7 @@ div.edui-box {
 }
 
 .edui-default .edui-dialog-buttons .edui-button .edui-state-hover .edui-button-body {
-    background: url("/ueditor/themes/default/images/icons-all.gif") no-repeat 0 -30px;
+    background: url("../images/icons-all.gif") no-repeat 0 -30px;
 }
 
 .edui-default .edui-dialog iframe {
@@ -1538,13 +1538,13 @@ div.edui-box {
 }
 
 .edui-default .edui-tablepicker .edui-pickarea {
-    background: url("/ueditor/themes/default/images/unhighlighted.gif") repeat;
+    background: url("../images/unhighlighted.gif") repeat;
     height: 220px;
     width: 220px;
 }
 
 .edui-default .edui-tablepicker .edui-pickarea .edui-overlay {
-    background: url("/ueditor/themes/default/images/highlighted.gif") repeat;
+    background: url("../images/highlighted.gif") repeat;
 }
 
 /* 颜色弹出菜单 */
@@ -1597,10 +1597,10 @@ div.edui-box {
     height:20px;
 }
 .arrow_down{
-    background: white url('/ueditor/themes/default/images/arrow_down.png') no-repeat center;
+    background: white url('../images/arrow_down.png') no-repeat center;
 }
 .arrow_up{
-    background: white url('/ueditor/themes/default/images/arrow_up.png') no-repeat center;
+    background: white url('../images/arrow_up.png') no-repeat center;
 }
 /*高级的样式*/
 .edui-colorpicker-adv{
@@ -1628,7 +1628,7 @@ div.edui-box {
     left: 0;
     width: 150px;
     height: 150px;
-    background: url("/ueditor/themes/default/images/tangram-colorpicker.png") -160px -200px;
+    background: url("../images/tangram-colorpicker.png") -160px -200px;
 }
 .edui-colorpicker-padDot{
     position: absolute;
@@ -1637,7 +1637,7 @@ div.edui-box {
     width: 11px;
     height: 11px;
     overflow: hidden;
-    background: url(/ueditor/themes/default/images/tangram-colorpicker.png) 0px -200px repeat-x;
+    background: url(../images/tangram-colorpicker.png) 0px -200px repeat-x;
     z-index: 1000;
 
 }
@@ -1647,7 +1647,7 @@ div.edui-box {
     top: 13px;
     width: 19px;
     height: 152px;
-    background: url(/ueditor/themes/default/images/tangram-colorpicker.png) -179px -12px no-repeat;
+    background: url(../images/tangram-colorpicker.png) -179px -12px no-repeat;
 
 }
 .edui-colorpicker-slider {
@@ -1705,7 +1705,7 @@ div.edui-box {
     height: 20px;
     width: 20px;
     padding: 1px;
-    background-image: url(/ueditor/themes/default/images/table-cell-align.png);
+    background-image: url(../images/table-cell-align.png);
 }
 
 .edui-default .edui-cellalignpicker-body .edui-left{
@@ -1748,8 +1748,8 @@ div.edui-box {
     width: 2px;
     height: 20px;
     margin: 2px 4px 2px 3px;
-    background: url(/ueditor/themes/default/images/icons.png) -181px 0;
-    background: url(/ueditor/themes/default/images/icons.gif) -181px 0 \9;
+    background: url(../images/icons.png) -181px 0;
+    background: url(../images/icons.gif) -181px 0 \9;
 }
 
 /*颜色按钮 */
@@ -1795,7 +1795,7 @@ div.edui-box {
     height: 20px;
     width: 20px;
     float: right;
-    background: url("/ueditor/themes/default/images/icons-all.gif") no-repeat 10px -233px;
+    background: url("../images/icons-all.gif") no-repeat 10px -233px;
 }
 
 .edui-default .edui-menu-body .edui-menuitem {
@@ -1839,7 +1839,7 @@ div.edui-box {
 .edui-default  .edui-pasteicon {
     width: 100%;
     height: 100%;
-    background-image: url('/ueditor/themes/default/images/wordpaste.png');
+    background-image: url('../images/wordpaste.png');
     background-position: 0 0;
 }
 
@@ -1877,7 +1877,7 @@ div.edui-box {
     width: 29px;
     height: 29px;
     margin-left: 5px;
-    background-image: url('/ueditor/themes/default/images/wordpaste.png');
+    background-image: url('../images/wordpaste.png');
     background-repeat: no-repeat;
 }
 .edui-default  .edui-pastecontainer .edui-button .edui-richtxticon {

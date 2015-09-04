@@ -214,13 +214,14 @@
 }
 
 .syntaxhighlighter {
-	background-color: #F5F2F0 !important;
-	background: url("/syntaxhighlighter/styles/noise.png"), -webkit-linear-gradient(left, #EDE7E3 1px, transparent 1px) 2.8em 0 no-repeat;
-	border-radius: 10px;
+	/*background-color: #F5F2F0 !important;*/
+	/*background: url("./noise.png"), -webkit-linear-gradient(left, #EDE7E3 1px, transparent 1px) 2.8em 0 no-repeat;*/
+	/*border-radius: 10px;
 	-moz-border-radius: 10px;   
-    -webkit-border-radius: 10px;
-	
-  
+  -webkit-border-radius: 10px;	*/
+}
+.syntaxhighlighter table {
+  border: 1px solid #ddd !important;
 }
 .syntaxhighlighter .line.alt1 {
   
@@ -241,7 +242,7 @@
   color: #afafaf !important;
 }
 .syntaxhighlighter .gutter .line {
-  border-right: 3px solid #76A2FF !important;
+  border-right: 1px solid #eee !important;
 }
 .syntaxhighlighter .gutter .line.highlighted {
   background-color: #6ce26c !important;

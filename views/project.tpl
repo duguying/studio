@@ -7,7 +7,7 @@
 				</div>
 				{{{range $k,$v := .projects_in_page}}}
 					<div class="project-box">
-						<img src="{{$v.icon_url}}" alt="">
+						<img src="{{{$v.icon_url}}}" alt="">
 						<div class="info">
 							<span class="name">{{{$v.name}}}</span><hr>
 							<span class="author">作者: {{{$v.author}}}</span>

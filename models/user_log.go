@@ -46,3 +46,14 @@ func (this *UserLog) GetUserLogByIp(ip string) (UserLog, error) {
 	err := o.Read(&userLog, "ip")
 	return userLog, err
 }
+
+func (this *UserLog) IsValidLocation(data map[string]interface{}) bool {
+	cityName := data["cityName"].(string)
+	countryName := data["countryName"].(string)
+	regionName := data["regionName"].(string)
+	if len(cityName) == 0 && len(countryName) == 0 && len(regionName) == 0 {
+		return false
+	} else {
+		return true
+	}
+}

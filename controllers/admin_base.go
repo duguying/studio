@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/duguying/blog/models"
 	"github.com/duguying/blog/utils"
+	"github.com/gogather/com"
 	"github.com/gogather/com/log"
 	"strings"
 )
@@ -37,7 +38,9 @@ func (this *AdminBaseController) Prepare() {
 			location := ""
 			userLogIp, err := userLog.GetUserLogByIp(ip)
 			if err == nil {
-				if len(location) > 0 {
+				locationData, _ := com.JsonDecode(location)
+				locationJson := locationData.(map[string]interface{})
+				if userLog.IsValidLocation(locationJson) {
 					location = userLogIp.Location
 				} else {
 					location = utils.GetLocation(ip)

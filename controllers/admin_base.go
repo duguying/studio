@@ -29,7 +29,7 @@ func (this *AdminBaseController) Prepare() {
 			userLog := &models.UserLog{}
 
 			// get ip
-			ipPort := this.Ctx.Request.RemoteAddr
+			ipPort := this.Ctx.Request.Header.Get("X-Forwarded-For")
 			ipPortArr := strings.Split(ipPort, ":")
 			ip := ipPortArr[0]
 

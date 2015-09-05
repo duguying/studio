@@ -38,13 +38,18 @@ func (this *AdminBaseController) Prepare() {
 			location := ""
 			userLogIp, err := userLog.GetUserLogByIp(ip)
 			if err == nil {
-				locationData, _ := com.JsonDecode(location)
-				locationJson := locationData.(map[string]interface{})
-				if userLog.IsValidLocation(locationJson) {
-					location = userLogIp.Location
+				locationData, err := com.JsonDecode(userLog.Location)
+				if err == nil {
+					locationJson := locationData.(map[string]interface{})
+					if userLog.IsValidLocation(locationJson) {
+						location = userLogIp.Location
+					} else {
+						location = utils.GetLocation(ip)
+					}
 				} else {
 					location = utils.GetLocation(ip)
 				}
+
 			} else {
 				location = utils.GetLocation(ip)
 			}

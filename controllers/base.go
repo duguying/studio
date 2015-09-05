@@ -23,7 +23,6 @@ func (this *BaseController) Forbbiden(mark string, condition string) {
 			this.Redirect("/", 302)
 		}
 	}
-
 }
 
 // run before get

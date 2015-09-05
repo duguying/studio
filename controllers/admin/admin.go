@@ -6,17 +6,11 @@ import (
 
 // 管理面板
 type AdminController struct {
-	controllers.BaseController
+	controllers.AdminBaseController
 }
 
 func (this *AdminController) Get() {
-	// if not login, permission deny
-	user := this.GetSession("username")
-	if user == nil {
-		this.Redirect("/login", 302)
-	} else {
-		this.TplNames = "admin/index.tpl"
-	}
+	this.TplNames = "admin/index.tpl"
 }
 
 func (this *AdminController) Post() {

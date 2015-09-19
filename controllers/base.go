@@ -34,6 +34,7 @@ func (this *BaseController) Prepare() {
 	} else {
 		this.Data["userIs"] = "admin"
 	}
+	this.Data["inDev"] = beego.AppConfig.String("runmode") == "dev"
 }
 
 // run after finished

@@ -1,5 +1,3 @@
-"use strict";
-
 var ueditor_option = {
     toolbars: [
         [
@@ -78,7 +76,7 @@ function IndexController($scope,$rootScope,$http,$sce){
     	currentPath: ""
     }
 
-    $http.get("http://duoshuo.com/api/posts/list.json?short_name=duguying&order=desc",null).success(function (data) {
+    $http.get("http://duoshuo.com/api/posts/list.json?short_name=duguying&order=asc",null).success(function (data) {
         $scope.comments = angular.forEach(angular.fromJson(data.parentPosts), function (comment) {
             comment.message_html = $sce.trustAsHtml(comment.message);
         });
@@ -117,7 +115,7 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
     $http.get("/api/admin/article/"+id,null).success(function (data) {
         $scope.article = data.data;
     });
-    
+
     $rootScope.global = {
         title: "编辑文章",
         currentPath: "manage_article"
@@ -146,7 +144,7 @@ function ManageArticleController($http,$scope,$rootScope,$routeParams){
     	title: "管理文章",
     	currentPath: "manage_article"
     }
-    
+
     var page = $routeParams.page || 1;
     $http.get("/api/admin/article/page/"+page,null).success(function (data) {
         $scope.articles = data.data;
@@ -173,7 +171,7 @@ function ManageProjectController($http,$scope,$rootScope,$routeParams,$sce){
             project.description_html = $sce.trustAsHtml(project.description);
         });
     });
-    
+
 }
 
 function ManageOssController($scope,$rootScope){
@@ -182,4 +180,3 @@ function ManageOssController($scope,$rootScope){
     	currentPath: "manage_oss"
     }
 }
-

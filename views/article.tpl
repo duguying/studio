@@ -1,5 +1,4 @@
 {{{template "inc/header.tpl" .}}}
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
 <div class="article-list">
 	<div class="article" itemscope itemtype="http://schema.org/Article">
 		<a class="article-title" title="{{{.title}}}" href="/article/{{{.uri}}}" itemprop="name">{{{.title}}}</a>
@@ -21,7 +20,7 @@
 				ds.type = 'text/javascript';ds.async = true;
 				ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
 				ds.charset = 'UTF-8';
-				(document.getElementsByTagName('head')[0] 
+				(document.getElementsByTagName('head')[0]
 				 || document.getElementsByTagName('body')[0]).appendChild(ds);
 			})();
 		</script>
@@ -32,7 +31,3 @@
 
 {{{template "inc/rightbar.tpl" .}}}
 {{{template "inc/footer.tpl" .}}}
-<script src="/static/js/lib.min.js"></script>
-<script src="/static/js/article.min.js"></script>
-			
-		

@@ -1,5 +1,3 @@
-"use strict";
-
 adminService.directive("deleteArticle", function ($document,$http) {
 	return{
 		restrict:'A',
@@ -27,7 +25,7 @@ adminService.directive("deleteArticle", function ($document,$http) {
 		                    console.log("add failed.", data.msg);
 		                };
 		            });
-			})	
+			})
 		}
 	}
 });

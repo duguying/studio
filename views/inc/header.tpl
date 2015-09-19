@@ -8,13 +8,16 @@
       <meta content="{{{.description}}}" name="description" />
       <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{{.host}}}/xmlrpc" />
       <link rel="shortcut icon" href="/favicon.ico" />
-      <link rel="stylesheet" href="/static/css/style.css">
-      <link rel="stylesheet" href="/static/syntaxhighlighter/styles/shCoreDefault.css">
+      {{{if .inDev}}}
+          {{{template "inc/css_dev.tpl" .}}}
+      {{{else}}}
+          {{{template "inc/css_prod.tpl" .}}}
+      {{{end}}}
       <meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
     </head>
     <body >
       <div class="main">
-        
+
           <div class="header">
         		<div class="icons">
         			<a href="http://my.oschina.net/duguying" target="_black"><span title="follow me on oschina" class="icon-osc icon"></span></a>

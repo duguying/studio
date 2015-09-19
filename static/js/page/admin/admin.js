@@ -2,8 +2,6 @@
  * Created by rex on 2015/8/12.
  */
 
-"use strict";
-
 var adminService = angular.module("Admin", ['ngRoute','ng.ueditor']);
 
 function adminRouteConfig($routeProvider, $locationProvider){
@@ -41,4 +39,3 @@ function adminRouteConfig($routeProvider, $locationProvider){
 }
 
 adminService.config(adminRouteConfig);
-

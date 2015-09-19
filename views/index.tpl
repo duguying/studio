@@ -24,7 +24,3 @@
 {{{template "inc/rightbar.tpl" .}}}
 
 {{{template "inc/footer.tpl" .}}}
-
-<script src="/static/js/lib.min.js"></script>
-<script src="/static/js/article.min.js"></script>
-			

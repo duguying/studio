@@ -22,6 +22,3 @@
 		</div>
 
   		{{{template "inc/footer.tpl" .}}}
-
-		<script src="/static/js/lib.min.js"></script>
-		<script src="/static/js/main.min.js"></script>

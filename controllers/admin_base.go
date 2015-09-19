@@ -64,6 +64,9 @@ func (this *AdminBaseController) Prepare() {
 			}
 		}
 	}
+
+	this.Data["isAdmin"] = true
+	this.Data["inDev"] = beego.AppConfig.String("runmode") == "dev"
 }
 
 // run after finished

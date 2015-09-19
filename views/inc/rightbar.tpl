@@ -18,12 +18,12 @@
 					<ul>
 						{{{range $k,$v := .count_by_month}}}
 							<li>
-								<a href="/archive/{{$v.year}}/{{$v.month}}/1">
+								<a href="/archive/{{{$v.year}}}/{{{$v.month}}}/1">
 									<span>{{{$v.date}}} [{{{$v.number}}}]</span>
 								</a>
 							</li>
 						{{{end}}}
 					</ul>
 				</div>
-				
+
 			</div>

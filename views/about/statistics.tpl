@@ -1,12 +1,10 @@
 {{{template "inc/header.tpl" .}}}
-{{{asset "js/global/jquery.min.js"}}}
-{{{asset "js/global/ichart.latest.min.js"}}}
 <div id='ichart-render'></div>
 <div class="statistics-noti">数据来源于Github，每日更新。</div>
 {{{template "inc/footer.tpl" .}}}
 
 <script>
-$(function(){	
+$(function(){
 	$.ajax({
 	   type: "get",
 	   url: "/static/upload/data.json",
@@ -104,7 +102,6 @@ $(function(){
 	     chart.draw();
 	   }
 	});
-	
+
 });
 </script>
-{{{asset "js/article.js"}}}

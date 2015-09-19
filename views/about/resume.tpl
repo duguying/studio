@@ -17,11 +17,10 @@
 					<li>Email: <a href="mailto:root@duguying.net">root@duguying.net</a></li>
 					<li>QQ: 706639632</li>
 				</ul>
-				
+
 			</p>
 
 			<em>下载详细<a href="/static/resume.pdf">简历</a></em>
 		</div>
 
 	{{{template "inc/footer.tpl" .}}}
-	{{{asset "js/article.js"}}}

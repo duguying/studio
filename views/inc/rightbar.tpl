@@ -5,7 +5,7 @@
 					<ul>
 						{{{range $k,$v := .hottest}}}
 							<li>
-								<a href="/article/{{$v.title}}">
+								<a href="/article/{{{$v.title}}}">
 									<span>{{{$v.title}}}</span>
 								</a>
 								<span class="view-count">{{{$v.count}}}</span>

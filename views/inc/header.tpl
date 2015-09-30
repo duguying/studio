@@ -45,7 +45,7 @@
         			<li><a href="/">博文</a></li>
         		</ul>
         		<div class="banner">
-        			<a href="/"><span class="title">独孤影</span></a>
+        			<a href="/" title="独孤影"><span class="title"><img src="/static/img/dgy.svg" alt="独孤影"></span></a>
         		</div>
         		<div class="gap">
               {{{if eq .userIs "admin"}}}

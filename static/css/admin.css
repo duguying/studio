@@ -98,22 +98,18 @@ body {
   border-radius: 3px;
   outline: none;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075); }
-
 .main input[type="radio"], .main input[type="checkbox"] {
   margin: 4px 0 0;
   line-height: normal; }
-
 .main .checkbox, .main .radio {
   min-height: 20px;
   padding-left: 20px;
   line-height: 20px;
   margin: 0 0 0 20px; }
-
 .main input[type="radio"], .main input[type="checkbox"], .main .checkbox, .main .radio {
   float: left;
   margin-left: -20px;
   cursor: pointer; }
-
 .main .btn {
   display: inline-block;
   padding: 4px 12px;
@@ -144,19 +140,16 @@ body {
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); }
-
 .main .btn:hover, .main .btn:focus {
   background-position: 0 -15px;
   color: #333;
   background-color: #e6e6e6;
   text-decoration: none;
   transition: background-position 0.1s linear 0s; }
-
 .main .alert {
   padding: 5px;
   border: 1px solid transparent;
   border-radius: 4px; }
-
 .main .alert-warning {
   color: #8a6d3b;
   background-color: #fcf8e3;
@@ -212,15 +205,12 @@ body {
     line-height: 14px !important;
     float: right;
     font-weight: bold; }
-
 .main .right .new-article .seperator, .main .right .edit-article .seperator {
   margin: 0px;
   color: white;
   border: solid 1px white; }
-
 .main .right .new-article .editor, .main .right .edit-article .editor {
   top: 85px; }
-
 .main .right .new-article .description textarea, .main .right .edit-article .description textarea {
   color: #888;
   width: 100%;
@@ -231,10 +221,8 @@ body {
 
 .main .right .manage-article ul {
   padding: 0px; }
-
 .main .right .manage-article li {
   list-style: none; }
-
 .main .right .manage-article .tab-header, .main .right .manage-article .tab-item {
   display: inline-block;
   width: 100%; }
@@ -250,20 +238,16 @@ body {
     width: 170px; }
   .main .right .manage-article .tab-header .item-view, .main .right .manage-article .tab-item .item-view {
     width: 70px; }
-
 .main .right .manage-article .tab-header {
   background-color: #CCCCCC; }
-
 .main .right .manage-article .tab-item:nth-child(odd) {
   background-color: #CCCCCC; }
 
 .main .right .duoshuo li {
   list-style: none;
   float: left; }
-
 .main .right .duoshuo ul {
   padding: 0px; }
-
 .main .right .duoshuo .item {
   display: inline-block;
   width: 100%; }

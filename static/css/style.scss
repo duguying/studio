@@ -164,7 +164,7 @@ kbd {
 
 .article-list{
 	float: left;
-	width: 720px;
+	width: $left-max-width;;
 	padding: 0 25px 20px;
 }
 
@@ -188,10 +188,10 @@ kbd {
 	.article-content{
 		padding-top: 25px;
 		img {
-			max-width: 720px;
+			max-width: $left-max-width - 2px;
 		}
 		table {
-			max-width: 720px;
+			max-width: $left-max-width - 2px;
 		}
 	}
 }

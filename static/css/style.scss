@@ -140,15 +140,12 @@ kbd {
 	height: 200px;
 	background: url($foreground-img);
 	.title{
-		font-family: $site-title-font-family;
-		font-size: 35px;
+	  img{
 		text-shadow: 0 0 3px;
-		color: white;
+		width: 120px;
+	  }
 	}
-	.title:hover{
-		text-shadow: 0 0 10px;
-		transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms;
-	}
+
 }
 
 .gap{

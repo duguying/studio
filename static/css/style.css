@@ -135,7 +135,6 @@ kbd {
   .article table tr:first-child {
     background-color: #666;
     font-weight: bolder; }
-
 .article blockquote {
   position: relative;
   background: #EEE;
@@ -146,7 +145,6 @@ kbd {
   font-size: 12px;
   line-height: 22px;
   border-left: 3px solid #AAA; }
-
 .article blockquote:before {
   content: "“";
   top: 5px;
@@ -154,7 +152,6 @@ kbd {
   font-family: Helvetica, arial, '宋体';
   position: absolute;
   font-size: 35px; }
-
 .article blockquote:after {
   content: "”";
   bottom: -5px;
@@ -206,14 +203,9 @@ kbd {
   width: 100%;
   height: 200px;
   background: url("../img/foreground.jpg"); }
-  .banner .title {
-    font-family: "Xingkai SC";
-    font-size: 35px;
+  .banner .title img {
     text-shadow: 0 0 3px;
-    color: white; }
-  .banner .title:hover {
-    text-shadow: 0 0 10px;
-    transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms; }
+    width: 120px; }
 
 .gap {
   width: 100%;

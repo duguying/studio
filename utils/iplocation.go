@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"github.com/astaxie/beego"
 	"github.com/gogather/com"
 	"github.com/gogather/iplocation"
@@ -13,8 +14,11 @@ func init() {
 	il = iplocation.NewIpLocation(key)
 }
 
-func GetLocation(ip string) string {
-	json, _ := il.Location(ip)
+func GetLocation(ip string) (string, error) {
+	json, err := il.Location(ip)
+	if json == nil {
+		return "", errors.New("json is nil")
+	}
 	countryName := json["countryName"].(string)
 	regionName := json["regionName"].(string)
 	cityName := json["cityName"].(string)
@@ -23,6 +27,6 @@ func GetLocation(ip string) string {
 		"regionName":  regionName,
 		"cityName":    cityName,
 	}
-	str, _ := com.JsonEncode(data)
-	return str
+	str, err := com.JsonEncode(data)
+	return str, err
 }

@@ -44,14 +44,14 @@ func (this *AdminBaseController) Prepare() {
 					if userLog.IsValidLocation(locationJson) {
 						location = userLogIp.Location
 					} else {
-						location = utils.GetLocation(ip)
+						location, _ = utils.GetLocation(ip)
 					}
 				} else {
-					location = utils.GetLocation(ip)
+					location, _ = utils.GetLocation(ip)
 				}
 
 			} else {
-				location = utils.GetLocation(ip)
+				location, _ = utils.GetLocation(ip)
 			}
 
 			// get user agent

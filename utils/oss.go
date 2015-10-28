@@ -47,9 +47,9 @@ func OssGetURL(opath string) string {
 	}
 
 	if osd {
-		return "//" + beego.AppConfig.String("oss_get_host") + "/" + opath
+		return beego.AppConfig.String("oss_get_host") + "/" + opath
 	} else {
-		return "//" + beego.AppConfig.String("oss_host") + "/" + ossBucket + "/" + opath
+		return beego.AppConfig.String("oss_host") + "/" + ossBucket + "/" + opath
 	}
 
 }

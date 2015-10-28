@@ -94,6 +94,7 @@ function NewArticleController($scope,$rootScope,$http,$location){
         var title = $scope.title;
         var keywords = $scope.keywords;
         var abstract = $scope.abstract;
+        abstract = (!abstract)?"":abstract;
 
         $http.post("/api/admin/add", {
                 params: {"title":title,"keywords":keywords,"abstract":abstract,"content":content}

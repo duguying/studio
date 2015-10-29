@@ -14,6 +14,7 @@
           {{{template "inc/css_prod.tpl" .}}}
       {{{end}}}
       <meta name="google-site-verification" content="ohMjRPHv0sKAahvl1H0GC7Dx0-z-zXbMNnWBfxp2PYY" />
+      <meta name="baidu-site-verification" content="h3Y69jNgBz" />
     </head>
     <body >
       <div class="main">

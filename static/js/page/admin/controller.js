@@ -76,7 +76,7 @@ function IndexController($scope,$rootScope,$http,$sce){
     	currentPath: ""
     }
 
-    $http.get("http://duoshuo.com/api/posts/list.json?short_name=duguying&order=asc",null).success(function (data) {
+    $http.get("//duoshuo.com/api/posts/list.json?short_name=duguying&order=asc",null).success(function (data) {
         $scope.comments = angular.forEach(angular.fromJson(data.parentPosts), function (comment) {
             comment.message_html = $sce.trustAsHtml(comment.message);
         });

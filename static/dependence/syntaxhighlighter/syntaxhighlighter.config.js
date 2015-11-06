@@ -13,7 +13,7 @@ alloy.path=function(){
   // TODO
 
   for(var i = 0; i < args.length; i++){
-    var item = args[i].replace('@', '!/static/syntaxhighlighter/scripts/')
+    var item = args[i].replace('@', '!/static/dependence/syntaxhighlighter/scripts/')
     item = item.split('!');
     item = item[0] + item[1];
     result.push(item);

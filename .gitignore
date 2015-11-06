@@ -1,6 +1,5 @@
 # bin
 *.exe
-blog
 map.json
 
 # swap
@@ -16,10 +15,6 @@ install.lock
 
 # debug
 /debug/
-
-# css build
-/static/src/bin/css/
-!/static/src/bin/css/*.min.css
 
 # config
 /custom/app.conf

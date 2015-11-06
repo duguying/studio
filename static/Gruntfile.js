@@ -3,20 +3,67 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     sass: {
-      compile: {
+      default_theme: {
         options: {
           sourceMap: true,
           banner: '/*!\n' +
               ' * Package Name: <%= pkg.name %>\n' +
               ' * Author: <%= pkg.author.name %>\n' +
+              ' * Theme: Default\n' +
               ' * Version: <%= pkg.version %>\n' +
               ' * Tags:\n' +
               ' */\n'
         },
         files: {
-          'css/style.css': ["css/style.scss","!css/_*.scss"],
-          'css/admin.css': ["css/admin.scss","!css/_*.scss"]
+          'theme/default/css/common.css': ["theme/default/css/common.scss","!theme/default/css/_*.scss"],
+          'theme/default/css/style.css': ["theme/default/css/style.scss","!theme/default/css/_*.scss"],
+          'theme/default/css/admin.css': ["theme/default/css/admin.scss","!theme/default/css/_*.scss"]
         }
+      }
+    },
+
+    concat: {
+      css: {
+        options: {
+          separator: '\n\n',
+          stripBanners: true,
+          banner: '/*! hello - v1.2.3 - 2014-2-4 */'
+        },
+        src: [
+          'theme/default/css/common.css',
+          'theme/default/css/style.css',
+          'theme/default/css/admin.css'
+        ],
+        dest: 'theme/default/dist/blog.css'
+      },
+
+      js: {
+        options: {
+          separator: '\n;\n',
+          stripBanners: true,
+          banner: '/*! hello - v1.2.3 - 2014-2-4 */'
+        },
+        src: [
+            'dependence/jquery/*.js',
+            'dependence/jquery/**/*.js',
+            'dependence/custom/*.js'
+        ],
+        dest: 'dependence/dist/dependence.js'
+      },
+
+      blog_js: {
+        options: {
+          separator: '\n;\n',
+          stripBanners: true,
+          banner: '/*! hello - v1.2.3 - 2014-2-4 */'
+        },
+        src: [
+          'dependence/angular/*.js',
+          'dependence/angular/**/*.js',
+          'dependence/duoshuo/*.js',
+          'theme/default/js/page/**/*.js'
+        ],
+        dest: "theme/default/dist/blog.js"
       }
     },
 
@@ -24,39 +71,24 @@ module.exports = function(grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
         mangle: {
-            except: ['jQuery', 'angular', 'adminService', 'ueditor', 'ngRoute']
+            except: ['jQuery', 'angular', 'ueditor', 'ngRoute']
         },
       },
-      blog: {
-        src: [
-          'js/global/jquery/*.js',
-          'js/global/jquery-plugin/*.js',
-          'syntaxhighlighter/scripts/shCore.js',
-          'syntaxhighlighter/scripts/shAutoloader.js',
-          'syntaxhighlighter/syntaxhighlighter.config.js',
-          'js/global/custom/*.js',
-          'js/page/blog/*.js'
-        ],
-        dest: 'build/blog.min.js'
+
+      deps: {
+        src: ['dependence/dist/dependence.js'],
+        dest: 'dependence/dist/dependence.min.js'
       },
-      admin: {
-        src: [
-          // 'js/global/jquery/*.js',
-          'js/global/angular/angular.min.js',
-          'js/global/angular-module/angular-route.min.js',
-          'js/global/angular-module/angular-ueditor',
-          // 'js/global/angular/angular-route.min.js',
-          // 'js/global/angular/angular-ueditor.js',
-          'js/page/admin/admin.js',
-          'js/page/admin/directive.js',
-          'js/page/admin/controller.js',
-        ],
-        dest: "build/admin.min.js"
-      }
+
+      blog: {
+        src: ['theme/default/dist/blog.js'],
+        dest: 'theme/default/dist/blog.min.js'
+      },
     }
 
   });
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.registerTask('default', ['sass','uglify']);
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.registerTask('default', ['sass','concat','uglify']);
 };

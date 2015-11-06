@@ -15,7 +15,7 @@
 
 	</head>
   	<body>
-  		<div class="main">
+  		<div class="admin">
   			<div class="main-header">
   				<ul>
   					<li><a target="_blank" href="/logout">登出</a></li>

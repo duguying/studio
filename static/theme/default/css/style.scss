@@ -565,3 +565,50 @@ kbd {
 		margin: 0 10px;
 	}
 }
+
+@media screen and (max-width:$mobile-device){
+  body{
+	margin: 0px;
+  }
+
+  .main{
+	width: 100%;
+	background-color: white;
+	margin: 0;
+	//box-shadow: 0 0 20px;
+	overflow: hidden;
+  }
+
+  .article-list{
+	float: left;
+	width: 87%;;
+	padding: 0 25px 20px;
+
+	.article{
+	  .article-content{
+		img {
+		  max-width: 100%;
+		}
+		table {
+		  max-width: 100%;
+		}
+	  }
+
+	  code{
+		width: 87%;
+		word-break: break-all;
+	  }
+	}
+  }
+
+  .box-right{
+	width: 87%;
+	padding: 0 25px 20px
+  }
+
+  .footer{
+	.links{
+	  display: none;
+	}
+  }
+}

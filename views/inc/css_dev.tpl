@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/theme/default/css/style.css">
 {{{if .isAdmin}}}
-<link rel="stylesheet" href="/static/css/admin.css">
+<link rel="stylesheet" href="/static/theme/default/css/admin.css">
 {{{else}}}
-<link rel="stylesheet" href="/static/syntaxhighlighter/styles/shCoreDefault.css">
+<link rel="stylesheet" href="/static/dependence/syntaxhighlighter/styles/shCoreDefault.css">
 {{{end}}}

@@ -3,6 +3,7 @@
 <html>
     <head>
       <title>独孤影 - {{{.title}}}</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta content="独孤影,博客,{{{.keywords}}}" name="keywords" />
       <meta content="{{{.description}}}" name="description" />
@@ -46,7 +47,7 @@
         			<li><a href="/">博文</a></li>
         		</ul>
         		<div class="banner">
-        			<a href="/" title="独孤影"><span class="title"><img src="/static/img/dgy.svg" alt="独孤影"></span></a>
+        			<a href="/" title="独孤影"><span class="title"><img src="/static/theme/default/img/dgy.svg" alt="独孤影"></span></a>
         		</div>
         		<div class="gap">
               {{{if eq .userIs "admin"}}}

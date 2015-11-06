@@ -11,7 +11,7 @@
 		{{{end}}}
 	</head>
   	<body>
-  		<div class="main">
+  		<div class="admin">
   			<div class="left" ng-controller="NavsController">
 	  			<ul>
 	  				<li ng-repeat="nav in navs" ng-class="{active: global.currentPath=='{{nav.uri}}'}">

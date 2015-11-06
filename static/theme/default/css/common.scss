@@ -1,0 +1,96 @@
+@import "params";
+
+*{
+  font-family: $main-font-family;
+}
+
+a {
+  color: #1982d1;
+  cursor: pointer;
+  text-decoration: none;
+}
+a:link, a:visited, a:active {
+  text-decoration: none;
+  transition: text-shadow 500ms ease-in 0ms, color 500ms ease-in 0ms;
+}
+a:hover, a:focus {
+  color: orange;
+  text-decoration: none;
+  transition: text-shadow 250ms ease-in 0ms, color 250ms ease-in 0ms;
+}
+
+body{
+  background: url($bg-img);
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color:#f5f5f5;
+  border-left:1px solid #d2d2d2;
+}
+::-webkit-scrollbar {
+  width:13px;
+  height:13px;
+}
+::-webkit-scrollbar-thumb {
+  background-color:#c2c2c2;
+  background-clip:padding-box;
+  border:1px solid #979797;
+  min-height:28px;
+}
+::-webkit-scrollbar-thumb:hover {
+  border:1px solid #636363;
+  background-color:#929292;
+}
+
+/* syntaxhighlighter patch */
+.syntaxhighlighter {
+  padding-bottom: 5px !important;
+}
+
+/* copy from alloyteam */
+#dynamic-to-top {
+  display: none;
+  overflow: hidden;
+  width: auto;
+  z-index: 90;
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  top: auto;
+  left: auto;
+  font-family: sans-serif;
+  font-size: 1em;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #333;
+  font-weight: bold;
+  padding: 20px 23px;
+  border: 1px solid #aba6a6;
+  background: #3C454F;
+  -webkit-background-origin: border;
+  -moz-background-origin: border;
+  -icab-background-origin: border;
+  -khtml-background-origin: border;
+  -o-background-origin: border;
+  background-origin: border;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  -icab-background-clip: padding-box;
+  -khtml-background-clip: padding-box;
+  -o-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  -ms-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  -moz-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  -o-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  -khtml-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  -icab-box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.4 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.2 ), inset 0 1px 0 rgba( 255, 255, 255, .4 ), inset 0 10px 10px rgba( 255, 255, 255, .1 );
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -icab-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  border-radius: 2px;
+}

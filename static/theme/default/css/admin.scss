@@ -1,6 +1,14 @@
-@import "common";
+@import "params";
 
-.main{
+.admin{
+  width: $main-max-width;
+  background-color: white;
+  margin: 50px auto;
+  box-shadow: 0 0 20px;
+  overflow: hidden;
+}
+
+.admin{
   input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="tel"], input[type="url"], textarea {
     font-size: 13px;
     color: #333;
@@ -82,7 +90,7 @@
   }
 }
 
-.main{
+.admin{
   background: #3B4F67;
 
   .left{
@@ -131,7 +139,7 @@
   }
 }
 
-.main{
+.admin{
   .right{
     .new-article,.edit-article{
       .header{
@@ -178,7 +186,7 @@
   }
 }
 
-.main{
+.admin{
   .right{
     .manage-article{
       ul{
@@ -220,7 +228,7 @@
   }
 }
 
-.main{
+.admin{
   .right{
     .duoshuo{
       li{
@@ -250,7 +258,7 @@
   }
 }
 
-.main{
+.admin{
   .right{
     .project-manage{
       .item{

@@ -90,6 +90,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  //grunt.registerTask("default_theme", ['sass']);
-  //grunt.registerTask('default', ['uglify']);
+  grunt.registerTask('default', ['sass','concat','uglify']);
 };

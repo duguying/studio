@@ -84,11 +84,20 @@ module.exports = function(grunt) {
         src: ['theme/default/dist/blog.js'],
         dest: 'theme/default/dist/blog.min.js'
       },
-    }
+    },
+
+    clean: [
+      "dependence/dist",
+      "theme/default/dist",
+      "theme/default/css/*.css",
+      "theme/default/css/*.map"
+    ]
 
   });
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+
   grunt.registerTask('default', ['sass','concat','uglify']);
 };

@@ -611,4 +611,52 @@ kbd {
 	  display: none;
 	}
   }
+
+  .main {
+	.lp-article-list {
+	  width: 100%;
+
+	  ul {
+		padding: 0px;
+
+		li {
+		  width: 100%;
+		  ul {
+			width: 100%;
+			margin: 0 2px;
+		  }
+		}
+	  }
+
+	  .a-l-item {
+		.time {
+		  display: none;
+		}
+		.title {
+		  width: 100%;
+		}
+	  }
+	}
+
+	.lp-nav{
+	  padding: 20px 2px;
+	}
+  }
+
+  .main{
+	.projects{
+	  width: 100%;
+	  margin: 0px;
+
+	  .project-box{
+		img{
+		  max-width: 40px;
+		  max-height: 40px;
+		}
+		.info{
+		  width: 80%;
+		}
+	  }
+	}
+  }
 }

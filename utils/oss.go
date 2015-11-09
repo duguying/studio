@@ -15,9 +15,9 @@ var c *oss.Client
 func ossInit() {
 	ossInternal, _ = beego.AppConfig.Bool("oss_internal")
 	if ossInternal {
-		ossHost = beego.AppConfig.String("oss_host_internal")
+		ossHost = beego.AppConfig.String("oss_put_host_internal")
 	} else {
-		ossHost = beego.AppConfig.String("oss_host")
+		ossHost = beego.AppConfig.String("oss_put_host")
 	}
 
 	ossId = beego.AppConfig.String("oss_id")
@@ -40,16 +40,5 @@ func OssDelete(opath string) error {
 }
 
 func OssGetURL(opath string) string {
-	osd, err := beego.AppConfig.Bool("oss_self_domain")
-
-	if err != nil {
-		osd = false
-	}
-
-	if osd {
-		return beego.AppConfig.String("oss_get_host") + "/" + opath
-	} else {
-		return beego.AppConfig.String("oss_host") + "/" + ossBucket + "/" + opath
-	}
-
+	return beego.AppConfig.String("oss_get_host") + "/" + opath
 }

@@ -5,14 +5,7 @@ module.exports = function(grunt) {
     sass: {
       default_theme: {
         options: {
-          sourceMap: true,
-          banner: '/*!\n' +
-              ' * Package Name: <%= pkg.name %>\n' +
-              ' * Author: <%= pkg.author.name %>\n' +
-              ' * Theme: Default\n' +
-              ' * Version: <%= pkg.version %>\n' +
-              ' * Tags:\n' +
-              ' */\n'
+          sourcemap: 'auto'
         },
         files: {
           'theme/default/css/common.css': ["theme/default/css/common.scss","!theme/default/css/_*.scss"],
@@ -94,7 +87,7 @@ module.exports = function(grunt) {
     ]
 
   });
-  grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-clean');

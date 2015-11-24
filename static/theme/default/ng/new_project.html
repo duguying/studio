@@ -1,1 +1,11 @@
-new_project.html
+<div class="new-article">
+	<div class="header">
+		<label for="">Logo</label><input type="file" class="title" name="logo" ng-model="title">
+		<label for="">项目名</label><input type="text" class="keyword" name="name" ng-model="keywords">
+		<input type="button" class="btn" value="提交" ng-click="submit()">
+	</div>
+	<hr class="seperator">
+	<div class="editor">
+		<div class="ueditor" config="config" ng-model="content"></div>
+	</div>
+</div>

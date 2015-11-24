@@ -63,6 +63,33 @@ var ueditor_option = {
     autoFloatEnabled: false
 };
 
+var simple_ueditor_option = {
+    toolbars: [
+        [
+            'insertorderedlist', //有序列表
+            'insertunorderedlist', //无序列表
+            '|',
+            'justifyleft', //居左对齐
+            'justifyright', //居右对齐
+            'justifycenter', //居中对齐
+            'justifyjustify', //两端对齐
+            '|',
+            'bold', //加粗
+            'italic', //斜体
+            'underline', //下划线
+            'strikethrough', //删除线
+            '|',
+            'undo', //撤销
+            'redo', //重做
+            'unlink', //取消链接
+            'link', //超链接
+        ]
+    ],
+    initialFrameHeight: 500,
+    autoHeightEnabled: false,
+    autoFloatEnabled: false
+};
+
 function NavsController ($scope, $http, $location) {
 	$http.get("/api/admin/navlist",null).success(function (data) {
 		$scope.navs = data;
@@ -180,6 +207,7 @@ function AddProjectController ($scope,$rootScope) {
         title: "项目管理",
         currentPath: "manage_project"
     }
+    $scope.config = simple_ueditor_option;
 }
 
 function EditProjectController ($scope,$rootScope) {

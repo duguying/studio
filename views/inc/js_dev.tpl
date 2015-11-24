@@ -15,5 +15,5 @@
 <script src="/static/dependence/syntaxhighlighter/syntaxhighlighter.config.js" charset="utf-8"></script>
 <script src="/static/dependence/custom/global.js" charset="utf-8"></script>
 <script src="/static/dependence/custom/ichart.latest.min.js" charset="utf-8"></script>
-<script src="/static/theme/default/js/page/blog/main.js" charset="utf-8"></script>
+<script src="/static/theme/default/js/page/article/main.js" charset="utf-8"></script>
 {{{end}}}

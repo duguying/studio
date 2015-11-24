@@ -108,3 +108,11 @@ func AddProject(name string, icon string, author string, description string, cre
 	pro.Time = createTime
 	return o.Insert(pro)
 }
+
+// delete project
+func DeleteProject(id int64) error {
+	o := orm.NewOrm()
+	o.Using("default")
+	_, err := o.Delete(&Project{Id: int(id)})
+	return err
+}

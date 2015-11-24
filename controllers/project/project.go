@@ -3,16 +3,17 @@ package project
 import (
 	"fmt"
 	"github.com/duguying/blog/controllers"
-	. "github.com/duguying/blog/models"
+	"github.com/duguying/blog/models"
 	"github.com/gogather/com/log"
 	"strconv"
+	"time"
 )
 
 type ProjectListController struct {
 	controllers.BaseController
 }
 
-func (this *ProjectListController) Get() {
+func (this *ProjectListController) PageProjects() {
 	page, err := this.GetInt64("page")
 	if nil != err || page < 0 {
 		page = 0
@@ -30,13 +31,7 @@ func (this *ProjectListController) Get() {
 		page = 1
 	}
 
-	// maps, err := CountByMonth()
-
-	// if nil == err {
-	// this.Data["count_by_month"] = maps
-	// }
-
-	maps, nextPageFlag, totalPages, err := ListProjects(int(page), 10)
+	maps, nextPageFlag, totalPages, err := models.ListProjects(int(page), 10)
 
 	if totalPages < int(page) {
 		page = int64(totalPages)
@@ -66,7 +61,38 @@ func (this *ProjectListController) Get() {
 
 }
 
-func (this *ProjectListController) Post() {
-	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
+func (this *ProjectListController) AddProject() {
+	name := this.GetString("name", "")
+	icon := this.GetString("icon", "")
+	author := this.GetString("author", "")
+	description := this.GetString("description", "")
+	createTime := time.Now()
+
+	id, err := models.AddProject(name, icon, author, description, createTime)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "添加失败", "error": err}
+	} else {
+		if id <= 0 {
+			this.Data["json"] = map[string]interface{}{"result": false, "msg": "添加失败"}
+		}
+	}
+
+	this.Data["json"] = map[string]interface{}{"result": true, "msg": "添加成功", "id": id}
+	this.ServeJson()
+}
+
+func (this *ProjectListController) DeleteProject() {
+	id, err := this.GetInt64("id", 0)
+	if err != nil {
+		id = 0
+	}
+
+	err = models.DeleteProject(id)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "删除失败", "error": err}
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "删除成功"}
+	}
+
 	this.ServeJson()
 }

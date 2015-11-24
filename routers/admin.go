@@ -5,6 +5,7 @@ import (
 	"github.com/duguying/blog/controllers/admin"
 	"github.com/duguying/blog/controllers/article"
 	"github.com/duguying/blog/controllers/index"
+	"github.com/duguying/blog/controllers/project"
 )
 
 func init() {
@@ -41,4 +42,6 @@ func init() {
 	beego.Router("/api/admin/delete", &article.AdminArticleController{}, "*:DelArticle")
 	beego.Router("/api/admin/update", &article.AdminArticleController{}, "*:UpdateArticle")
 	beego.Router("/api/admin/project/list/:page", &article.AdminProjectController{}, "*:ListProject")
+	beego.Router("/api/admin/project/delete", &project.ProjectListController{}, "*:DeleteProject")
+	beego.Router("/api/admin/project/add", &project.ProjectListController{}, "*:AddProject")
 }

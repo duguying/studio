@@ -175,6 +175,20 @@ function ManageProjectController($http,$scope,$rootScope,$routeParams,$sce){
 
 }
 
+function AddProjectController ($scope,$rootScope) {
+    $rootScope.global = {
+        title: "项目管理",
+        currentPath: "manage_project"
+    }
+}
+
+function EditProjectController ($scope,$rootScope) {
+    $rootScope.global = {
+        title: "项目管理",
+        currentPath: "manage_project"
+    }
+}
+
 function ManageOssController($scope,$rootScope){
     $rootScope.global = {
     	title: "OSS管理",

@@ -261,10 +261,50 @@
 .admin{
   .right{
     .project-manage{
+      ul{
+        padding-left: 10px;
+      }
+      
       .item{
+        $proj-icon-width: 50px;
+
+        overflow: hidden;
+        list-style: none;
+        background-color: #CCCCCC;
+
         img{
-          width: 30px;
-          height: 30px;
+          width: $proj-icon-width;
+          height: $proj-icon-width;
+          border: 2px solid #CCCCCC;
+        }
+
+        .proj-icon{
+          width: $proj-icon-width;
+          height: $proj-icon-width;
+          float: left;
+        }
+
+        .proj-warpper{
+          float: left;
+          width: 80%;
+          margin: 0 5px;
+
+          .proj-name{}
+          .proj-warpper{}
+        }
+
+        .proj-operate{
+          float: left;
+          width: 50px;
+          padding-left: 5px;
+        }
+      }
+
+      .item:nth-child(odd){
+        background-color: #FFFFFF;
+
+        img{
+          border: 2px solid #FFFFFF;
         }
       }
     }

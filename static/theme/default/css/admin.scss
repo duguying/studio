@@ -264,13 +264,14 @@
       ul{
         padding-left: 10px;
       }
-      
+
       .item{
         $proj-icon-width: 50px;
 
         overflow: hidden;
         list-style: none;
         background-color: #CCCCCC;
+        margin: 5px 0;
 
         img{
           width: $proj-icon-width;

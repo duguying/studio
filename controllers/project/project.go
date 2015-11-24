@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/duguying/blog/controllers"
 	"github.com/duguying/blog/models"
+	"github.com/gogather/com"
 	"github.com/gogather/com/log"
 	"strconv"
 	"time"
@@ -82,10 +83,26 @@ func (this *ProjectListController) AddProject() {
 }
 
 func (this *ProjectListController) DeleteProject() {
-	id, err := this.GetInt64("id", 0)
-	if err != nil {
-		id = 0
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
 	}
+
+	paramsBody := string(this.Ctx.Input.RequestBody)
+	var params map[string]interface{}
+	p, err := com.JsonDecode(paramsBody)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
+		this.ServeJson()
+		return
+	} else {
+		params = p.(map[string]interface{})["params"].(map[string]interface{})
+	}
+
+	id := int64(params["id"].(float64))
 
 	err = models.DeleteProject(id)
 	if err != nil {

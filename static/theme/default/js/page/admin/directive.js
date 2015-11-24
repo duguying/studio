@@ -38,7 +38,9 @@ adminService.directive("deleteProject", function ($document,$http) {
 			element.bind("click",function(){
 				var id = ngModel.$modelValue.id;
 
-				if (!window.confirm("Sure to Delete ["+ngModel.$modelValue.title+"]?")) {
+				console.log(id)
+
+				if (!window.confirm("Sure to Delete ["+ngModel.$modelValue.name+"]?")) {
             		return;
             	}
 

@@ -2,7 +2,7 @@
  * Created by rex on 2015/8/12.
  */
 
-var adminService = angular.module("Admin", ['ngRoute','ng.ueditor']);
+var adminService = angular.module("Admin", ['ngRoute','simditor']);
 
 function adminRouteConfig($routeProvider, $locationProvider){
     $routeProvider.when("/admin", {

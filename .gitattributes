@@ -1,1 +1,3 @@
 /static/deps/* linguist-vendored
+*.tpl linguist-vendored
+

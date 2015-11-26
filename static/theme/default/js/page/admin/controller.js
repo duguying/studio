@@ -18,8 +18,7 @@ var ueditor_option = {
             'fontsize', //字号
             'paragraph', //段落格式
             'insertcode', //代码语言
-        ],
-        [
+            '|',
             'bold', //加粗
             'italic', //斜体
             'underline', //下划线
@@ -36,25 +35,12 @@ var ueditor_option = {
             'blockquote', //引用
             'pasteplain', //纯文本粘贴模式
             'selectall', //全选
-            'preview', //预览
             'horizontal', //分隔线
-            'removeformat', //清除格式
-            'time', //时间
-            'date', //日期
             'unlink', //取消链接
             'link', //超链接
             'emotion', //表情
-            'spechars', //特殊字符
             'searchreplace', //查询替换
-            'map', //Baidu地图
-            'insertvideo', //视频
-            'help', //帮助
             'fullscreen', //全屏
-            'edittip ', //编辑提示
-            'touppercase', //字母大写
-            'tolowercase', //字母小写
-            'music', //音乐
-            'drafts', // 从草稿箱加载
             'charts', // 图表
         ]
     ],

@@ -139,8 +139,10 @@
     width: $amin-max-width - $admin-left-width;
     min-height: 500px;
     float: right;
-    // margin: 0px;
-    // padding: 5px;
+    
+    .ng-scope{
+      padding: 5px;
+    }
   }
 }
 

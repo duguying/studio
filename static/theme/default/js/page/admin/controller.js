@@ -1,8 +1,97 @@
+var ueditor_option = {
+    toolbars: [
+        [
+            'source', //源代码
+            'forecolor', //字体颜色
+            'backcolor', //背景色
+            'insertorderedlist', //有序列表
+            'insertunorderedlist', //无序列表
+            'simpleupload', //单图上传
+            '|',
+            'justifyleft', //居左对齐
+            'justifyright', //居右对齐
+            'justifycenter', //居中对齐
+            'justifyjustify', //两端对齐
+            '|',
+            'inserttable', //插入表格
+            'fontfamily', //字体
+            'fontsize', //字号
+            'paragraph', //段落格式
+            'insertcode', //代码语言
+        ],
+        [
+            'bold', //加粗
+            'italic', //斜体
+            'underline', //下划线
+            'strikethrough', //删除线
+            '|',
+            'subscript', //下标
+            'fontborder', //字符边框
+            'superscript', //上标
+            '|',
+            'undo', //撤销
+            'redo', //重做
+            'indent', //首行缩进
+            'snapscreen', //截图
+            'blockquote', //引用
+            'pasteplain', //纯文本粘贴模式
+            'selectall', //全选
+            'preview', //预览
+            'horizontal', //分隔线
+            'removeformat', //清除格式
+            'time', //时间
+            'date', //日期
+            'unlink', //取消链接
+            'link', //超链接
+            'emotion', //表情
+            'spechars', //特殊字符
+            'searchreplace', //查询替换
+            'map', //Baidu地图
+            'insertvideo', //视频
+            'help', //帮助
+            'fullscreen', //全屏
+            'edittip ', //编辑提示
+            'touppercase', //字母大写
+            'tolowercase', //字母小写
+            'music', //音乐
+            'drafts', // 从草稿箱加载
+            'charts', // 图表
+        ]
+    ],
+    initialFrameHeight: 500,
+    autoHeightEnabled: false,
+    autoFloatEnabled: false
+};
+
+var simple_ueditor_option = {
+    toolbars: [
+        [
+            'insertorderedlist', //有序列表
+            'insertunorderedlist', //无序列表
+            '|',
+            'justifyleft', //居左对齐
+            'justifyright', //居右对齐
+            'justifycenter', //居中对齐
+            'justifyjustify', //两端对齐
+            '|',
+            'bold', //加粗
+            'italic', //斜体
+            'underline', //下划线
+            'strikethrough', //删除线
+            '|',
+            'undo', //撤销
+            'redo', //重做
+            'unlink', //取消链接
+            'link', //超链接
+        ]
+    ],
+    initialFrameHeight: 500,
+    autoHeightEnabled: false,
+    autoFloatEnabled: false
+};
+
 function NavsController ($scope, $http, $location) {
-	// $http.get("/api/admin/navlist",null).success(function (data) {
-		// $scope.navs = data;
-		$scope.currentPath = $location.path().replace("/admin","").replace("/","");
-	// });
+	$scope.currentPath = $location.path().replace("/admin","").replace("/","");
 }
 
 function IndexController($scope,$rootScope,$http,$sce){
@@ -23,7 +112,7 @@ function NewArticleController($scope,$rootScope,$http,$location){
     	title: "添加文章",
     	currentPath: "new_article"
     }
-    // $scope.config = ueditor_option;
+    $scope.config = ueditor_option;
     $scope.submit = function () {
         var content = $scope.content;
         var title = $scope.title;
@@ -56,7 +145,7 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
         title: "编辑文章",
         currentPath: "manage_article"
     }
-    // $scope.config = ueditor_option;
+    $scope.config = ueditor_option;
     $scope.submit = function () {
         var content = $scope.article.Content;
         var title = $scope.article.Title;
@@ -115,7 +204,7 @@ function AddProjectController ($scope,$rootScope) {
         title: "项目管理",
         currentPath: "manage_project"
     }
-    // $scope.config = simple_ueditor_option;
+    $scope.config = simple_ueditor_option;
 }
 
 function EditProjectController ($http,$scope,$rootScope,$routeParams) {
@@ -126,6 +215,8 @@ function EditProjectController ($http,$scope,$rootScope,$routeParams) {
         title: "项目管理",
         currentPath: "manage_project"
     }
+
+    $scope.config = simple_ueditor_option;
 
     $http.get("/api/admin/project/"+id,null).success(function (data) {
         $scope.project = data.data;

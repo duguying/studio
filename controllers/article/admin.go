@@ -214,6 +214,22 @@ type AdminProjectController struct {
 	controllers.BaseController
 }
 
+func (this *AdminProjectController) GetProject() {
+	s := this.Ctx.Input.Param(":id")
+	id, err := strconv.Atoi(s)
+	if nil != err || id < 0 {
+		id = 1
+	}
+
+	project, err := GetProject(id, "")
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get failed", "error": err}
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "get success", "data": project}
+	}
+	this.ServeJson()
+}
+
 func (this *AdminProjectController) ListProject() {
 	s := this.Ctx.Input.Param(":page")
 	page, err := strconv.Atoi(s)

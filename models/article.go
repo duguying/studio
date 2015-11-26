@@ -83,8 +83,6 @@ func GetArticleByUri(uri string) (Article, error) {
 		utils.SetCache("GetArticleByUri.uri."+uri, art, 600)
 	}
 
-	fmt.Println(art)
-
 	return art, err
 }
 

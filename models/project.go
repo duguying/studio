@@ -21,25 +21,30 @@ func init() {
 	orm.RegisterModel(new(Project))
 }
 
+func (this *Project) TableName() string {
+	return "project"
+}
+
 // get project by id or name
 func GetProject(id int, name string) (*Project, error) {
 	var err error
 
 	o := orm.NewOrm()
 	o.Using("default")
-	pro := new(Project)
+
+	pro := Project{}
 
 	if id > 0 {
-		pro.Id = id
+		pro = Project{Id: id}
 		err = o.Read(&pro, "Id")
 	} else if len(name) > 0 {
-		pro.Name = name
+		pro = Project{Name: name}
 		err = o.Read(&pro, "Name")
 	} else {
 		err = errors.New("至少有一个条件")
 	}
 
-	return pro, err
+	return &pro, err
 }
 
 // 项目分页列表

@@ -41,6 +41,7 @@ func init() {
 	beego.Router("/api/admin/add", &article.AdminArticleController{}, "*:AddArticle")
 	beego.Router("/api/admin/delete", &article.AdminArticleController{}, "*:DelArticle")
 	beego.Router("/api/admin/update", &article.AdminArticleController{}, "*:UpdateArticle")
+	beego.Router("/api/admin/project/:id", &article.AdminProjectController{}, "*:GetProject")
 	beego.Router("/api/admin/project/list/:page", &article.AdminProjectController{}, "*:ListProject")
 	beego.Router("/api/admin/project/delete", &project.ProjectListController{}, "*:DeleteProject")
 	beego.Router("/api/admin/project/add", &project.ProjectListController{}, "*:AddProject")

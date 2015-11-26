@@ -118,11 +118,18 @@ function AddProjectController ($scope,$rootScope) {
     // $scope.config = simple_ueditor_option;
 }
 
-function EditProjectController ($scope,$rootScope) {
+function EditProjectController ($http,$scope,$rootScope,$routeParams) {
+    var id = $routeParams.id || 0;
+    $scope.id = parseInt(id);
+
     $rootScope.global = {
         title: "项目管理",
         currentPath: "manage_project"
     }
+
+    $http.get("/api/admin/project/"+id,null).success(function (data) {
+        $scope.project = data.data;
+    });
 }
 
 function ManageOssController($scope,$rootScope){

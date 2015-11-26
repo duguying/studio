@@ -1,8 +1,8 @@
 function NavsController ($scope, $http, $location) {
-	$http.get("/api/admin/navlist",null).success(function (data) {
-		$scope.navs = data;
+	// $http.get("/api/admin/navlist",null).success(function (data) {
+		// $scope.navs = data;
 		$scope.currentPath = $location.path().replace("/admin","").replace("/","");
-	});
+	// });
 }
 
 function IndexController($scope,$rootScope,$http,$sce){

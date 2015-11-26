@@ -1,7 +1,7 @@
 @import "params";
 
 .admin{
-  width: $main-max-width;
+  width: $amin-max-width;
   background-color: white;
   margin: 50px auto;
   box-shadow: 0 0 20px;
@@ -92,25 +92,24 @@
 
 .admin{
   background: #3B4F67;
+  $admin-left-width: 50px;
 
   .left{
-    width: 14%;
+    width: $admin-left-width;
     float: left;
     background: #3B4F67;
 
     ul{
-      width: 125px;
+      width: 100%;
       display: inline-block;
-      padding: 5px;
-      margin: 5px;
+      padding: 0px;
+      margin: 0px;
 
       li{
         list-style: none;
-        border: solid 1px #FFF;
-        width: 100px;
-        margin: 5px;
+        width: 100%;
+        height: $admin-left-width;
         text-align: center;
-        padding: 3px;
         display: inline-block;
 
         &:hover{
@@ -119,6 +118,12 @@
 
         a{
           color: #FFF;
+          display: block;
+          margin: 8px 0;
+
+          i{
+            font-size: 30px;
+          }
         }
       }
 
@@ -131,11 +136,11 @@
   .right{
     background-color: #FFFFFF;
     display: block;
-    width: 85%;
+    width: $amin-max-width - $admin-left-width;
     min-height: 500px;
     float: right;
-    margin: 0px;
-    padding: 5px;
+    // margin: 0px;
+    // padding: 5px;
   }
 }
 

@@ -18,8 +18,7 @@ var ueditor_option = {
             'fontsize', //字号
             'paragraph', //段落格式
             'insertcode', //代码语言
-        ],
-        [
+            '|',
             'bold', //加粗
             'italic', //斜体
             'underline', //下划线
@@ -36,25 +35,12 @@ var ueditor_option = {
             'blockquote', //引用
             'pasteplain', //纯文本粘贴模式
             'selectall', //全选
-            'preview', //预览
             'horizontal', //分隔线
-            'removeformat', //清除格式
-            'time', //时间
-            'date', //日期
             'unlink', //取消链接
             'link', //超链接
             'emotion', //表情
-            'spechars', //特殊字符
             'searchreplace', //查询替换
-            'map', //Baidu地图
-            'insertvideo', //视频
-            'help', //帮助
             'fullscreen', //全屏
-            'edittip ', //编辑提示
-            'touppercase', //字母大写
-            'tolowercase', //字母小写
-            'music', //音乐
-            'drafts', // 从草稿箱加载
             'charts', // 图表
         ]
     ],
@@ -63,11 +49,35 @@ var ueditor_option = {
     autoFloatEnabled: false
 };
 
+var simple_ueditor_option = {
+    toolbars: [
+        [
+            'insertorderedlist', //有序列表
+            'insertunorderedlist', //无序列表
+            '|',
+            'justifyleft', //居左对齐
+            'justifyright', //居右对齐
+            'justifycenter', //居中对齐
+            'justifyjustify', //两端对齐
+            '|',
+            'bold', //加粗
+            'italic', //斜体
+            'underline', //下划线
+            'strikethrough', //删除线
+            '|',
+            'undo', //撤销
+            'redo', //重做
+            'unlink', //取消链接
+            'link', //超链接
+        ]
+    ],
+    initialFrameHeight: 500,
+    autoHeightEnabled: false,
+    autoFloatEnabled: false
+};
+
 function NavsController ($scope, $http, $location) {
-	$http.get("/api/admin/navlist",null).success(function (data) {
-		$scope.navs = data;
-		$scope.currentPath = $location.path().replace("/admin","").replace("/","");
-	});
+	$scope.currentPath = $location.path().replace("/admin","").replace("/","");
 }
 
 function IndexController($scope,$rootScope,$http,$sce){
@@ -173,6 +183,65 @@ function ManageProjectController($http,$scope,$rootScope,$routeParams,$sce){
         });
     });
 
+}
+
+function AddProjectController ($http,$scope,$rootScope) {
+    $rootScope.global = {
+        title: "项目管理",
+        currentPath: "manage_project"
+    }
+    $scope.config = simple_ueditor_option;
+    $scope.submit = function () {
+        var icon = $scope.icon;
+        var name = $scope.name;
+        var description = $scope.description;
+
+        $http.post("/api/admin/project/add", {
+                params: {"icon":icon,"name":name,"description":description}
+            }).success(function(data){
+                if (data.result) {
+                    alert("add success.");
+                } else{
+                    alert("add failed.", data.msg);
+                };
+            });
+    }
+}
+
+function EditProjectController ($http,$scope,$rootScope,$routeParams) {
+    var id = $routeParams.id || 0;
+    $scope.id = parseInt(id);
+
+    $rootScope.global = {
+        title: "项目管理",
+        currentPath: "manage_project"
+    }
+
+    $scope.config = simple_ueditor_option;
+
+    $http.get("/api/admin/project/"+id,null).success(function (data) {
+        $scope.project = data.data;
+    });
+
+    $scope.submit = function () {
+        var icon = $scope.project.IconUrl;
+        var name = $scope.project.Name;
+        var description = $scope.project.Description;
+
+        console.log({
+                params: {"id":$scope.id,"icon":icon,"name":name,"description":description}
+            });
+
+        $http.post("/api/admin/project/update", {
+                params: {"id":$scope.id,"icon":icon,"name":name,"description":description}
+            }).success(function(data){
+                if (data.result) {
+                    alert("modified success.");
+                } else{
+                    alert("modified failed.", data.msg);
+                };
+            });
+    }
 }
 
 function ManageOssController($scope,$rootScope){

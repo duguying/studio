@@ -1,6 +1,6 @@
 # bin
 *.exe
-map.json
+blog
 
 # swap
 *~
@@ -29,3 +29,6 @@ output
 # idea
 .idea/
 *.iml
+
+# mac
+.DS_Store

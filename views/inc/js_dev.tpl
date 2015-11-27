@@ -15,5 +15,5 @@
 <script src="/static/deps/syntaxhighlighter/syntaxhighlighter.config.js" charset="utf-8"></script>
 <script src="/static/deps/custom/global.js" charset="utf-8"></script>
 <script src="/static/deps/custom/ichart.latest.min.js" charset="utf-8"></script>
-<script src="/static/theme/default/js/page/blog/main.js" charset="utf-8"></script>
+<script src="/static/theme/default/js/page/article/main.js" charset="utf-8"></script>
 {{{end}}}

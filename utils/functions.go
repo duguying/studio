@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 )
 
 // 检查用户名
@@ -59,4 +60,22 @@ func TagSplit(keywords string) string {
 func WriteFile(fullpath string, str string) error {
 	data := []byte(str)
 	return ioutil.WriteFile(fullpath, data, 0644)
+}
+
+func GetDate(dateStr string) string {
+	date, err := time.Parse("2006-01-02 15:04:05", dateStr)
+	if err != nil {
+		return dateStr
+	} else {
+		return date.Format("2006-01-02")
+	}
+}
+
+func GetDateCN(dateStr string) string {
+	date, err := time.Parse("2006-01-02 15:04:05", dateStr)
+	if err != nil {
+		return dateStr
+	} else {
+		return date.Format("2006年01月02日")
+	}
 }

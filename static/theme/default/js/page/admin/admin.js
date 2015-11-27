@@ -29,6 +29,12 @@ function adminRouteConfig($routeProvider, $locationProvider){
     }).when("/admin/manage_project/:page", {
         controller: ManageProjectController,
         templateUrl: "/static/theme/default/ng/manage_project.html"
+    }).when("/admin/new_project", {
+        controller: AddProjectController,
+        templateUrl: "/static/theme/default/ng/new_project.html"
+    }).when("/admin/edit_project/:id", {
+        controller: EditProjectController,
+        templateUrl: "/static/theme/default/ng/edit_project.html"
     }).when("/admin/manage_oss", {
         controller: ManageOssController,
         templateUrl: "/static/theme/default/ng/manage_oss.html"

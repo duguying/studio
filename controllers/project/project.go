@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/duguying/blog/controllers"
 	"github.com/duguying/blog/models"
+	"github.com/gogather/com"
 	"github.com/gogather/com/log"
 	"strconv"
 	"time"
@@ -62,11 +63,31 @@ func (this *ProjectListController) PageProjects() {
 }
 
 func (this *ProjectListController) AddProject() {
-	name := this.GetString("name", "")
-	icon := this.GetString("icon", "")
-	author := this.GetString("author", "")
-	description := this.GetString("description", "")
+
+	paramsBody := string(this.Ctx.Input.RequestBody)
+	var params map[string]interface{}
+	p, err := com.JsonDecode(paramsBody)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
+		this.ServeJson()
+		return
+	} else {
+		params = p.(map[string]interface{})["params"].(map[string]interface{})
+	}
+
+	name := params["name"].(string)
+	icon := params["icon"].(string)
+	description := params["description"].(string)
 	createTime := time.Now()
+
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+	author := user.(string)
 
 	id, err := models.AddProject(name, icon, author, description, createTime)
 	if err != nil {
@@ -82,16 +103,73 @@ func (this *ProjectListController) AddProject() {
 }
 
 func (this *ProjectListController) DeleteProject() {
-	id, err := this.GetInt64("id", 0)
-	if err != nil {
-		id = 0
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
 	}
+
+	paramsBody := string(this.Ctx.Input.RequestBody)
+	var params map[string]interface{}
+	p, err := com.JsonDecode(paramsBody)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
+		this.ServeJson()
+		return
+	} else {
+		params = p.(map[string]interface{})["params"].(map[string]interface{})
+	}
+
+	id := int64(params["id"].(float64))
 
 	err = models.DeleteProject(id)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "删除失败", "error": err}
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "删除成功"}
+	}
+
+	this.ServeJson()
+}
+
+func (this *ProjectListController) UpdateProject() {
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJson()
+		return
+	}
+
+//	log.Pinkln(user)
+
+	paramsBody := string(this.Ctx.Input.RequestBody)
+	var params map[string]interface{}
+	p, err := com.JsonDecode(paramsBody)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
+		this.ServeJson()
+		return
+	} else {
+		params = p.(map[string]interface{})["params"].(map[string]interface{})
+	}
+
+	log.Pinkln(params)
+
+	id := int64(params["id"].(float64))
+	name := params["name"].(string)
+	icon := params["icon"].(string)
+	description := params["description"].(string)
+
+	log.Pinkln(id)
+
+	err = models.UpdateProject(id, name, icon, description)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "修改失败", "error": err}
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "修改成功"}
 	}
 
 	this.ServeJson()

@@ -14,8 +14,20 @@
   		<div class="admin">
   			<div class="left" ng-controller="NavsController">
 	  			<ul>
-	  				<li ng-repeat="nav in navs" ng-class="{active: global.currentPath=='{{nav.uri}}'}">
-	  					<a href="/admin/{{nav.uri}}">{{nav.title}}</a>
+	  				<li ng-class="{active: global.currentPath==''}">
+	  					<a href="/admin/" title="首页"><i class="icon iconfont">&#xe616;</i></a>
+	  				</li>
+	  				<li ng-class="{active: global.currentPath=='new_article'}">
+	  					<a href="/admin/new_article" title="新建文章"><i class="icon iconfont">&#xe6cf;</i></a>
+	  				</li>
+	  				<li ng-class="{active: global.currentPath=='manage_article'}">
+	  					<a href="/admin/manage_article" title="文章管理"><i class="icon iconfont">&#xe701;</i></a>
+	  				</li>
+	  				<li ng-class="{active: global.currentPath=='manage_project'}">
+	  					<a href="/admin/manage_project" title="项目管理"><i class="icon iconfont">&#xe604;</i></a>
+	  				</li>
+	  				<li ng-class="{active: global.currentPath=='manage_oss'}">
+	  					<a href="/admin/manage_oss" title="OSS管理"><i class="icon iconfont">&#xe78e;</i></a>
 	  				</li>
 	  			</ul>
   			</div>

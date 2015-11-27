@@ -5,6 +5,7 @@ import (
 	"github.com/duguying/blog/controllers/admin"
 	"github.com/duguying/blog/controllers/article"
 	"github.com/duguying/blog/controllers/index"
+	"github.com/duguying/blog/controllers/project"
 )
 
 func init() {
@@ -22,8 +23,6 @@ func init() {
 	beego.Router("/admin/*", &admin.AdminController{}) // 全匹配
 
 	beego.Router("/add", &article.AddArticleController{})
-	beego.Router("/draft/get", &article.GetDraftController{})
-	beego.Router("/draft/save", &article.SaveDraftController{})
 	beego.Router("/update/:uri", &article.UpdateArticleController{})
 	beego.Router("/update", &article.UpdateArticleController{})
 	beego.Router("/delete/:uri", &article.DeleteArticleController{})
@@ -40,5 +39,9 @@ func init() {
 	beego.Router("/api/admin/add", &article.AdminArticleController{}, "*:AddArticle")
 	beego.Router("/api/admin/delete", &article.AdminArticleController{}, "*:DelArticle")
 	beego.Router("/api/admin/update", &article.AdminArticleController{}, "*:UpdateArticle")
+	beego.Router("/api/admin/project/:id", &article.AdminProjectController{}, "*:GetProject")
 	beego.Router("/api/admin/project/list/:page", &article.AdminProjectController{}, "*:ListProject")
+	beego.Router("/api/admin/project/delete", &project.ProjectListController{}, "*:DeleteProject")
+	beego.Router("/api/admin/project/add", &project.ProjectListController{}, "*:AddProject")
+	beego.Router("/api/admin/project/update", &project.ProjectListController{}, "*:UpdateProject")
 }

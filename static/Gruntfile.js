@@ -37,11 +37,11 @@ module.exports = function(grunt) {
           banner: '/*! hello - v1.2.3 - 2014-2-4 */'
         },
         src: [
-            'dependence/jquery/*.js',
-            'dependence/jquery/**/*.js',
-            'dependence/custom/*.js'
+            'deps/jquery/*.js',
+            'deps/jquery/**/*.js',
+            'deps/custom/*.js'
         ],
-        dest: 'dependence/dist/dependence.js'
+        dest: 'deps/dist/dependence.js'
       },
 
       blog_js: {
@@ -51,9 +51,9 @@ module.exports = function(grunt) {
           banner: '/*! hello - v1.2.3 - 2014-2-4 */'
         },
         src: [
-          'dependence/angular/*.js',
-          'dependence/angular/**/*.js',
-          'dependence/duoshuo/*.js',
+          'deps/angular/*.js',
+          'deps/angular/**/*.js',
+          'deps/duoshuo/*.js',
           'theme/default/js/page/**/*.js'
         ],
         dest: "theme/default/dist/blog.js"
@@ -69,8 +69,8 @@ module.exports = function(grunt) {
       },
 
       deps: {
-        src: ['dependence/dist/dependence.js'],
-        dest: 'dependence/dist/dependence.min.js'
+        src: ['deps/dist/dependence.js'],
+        dest: 'deps/dist/dependence.min.js'
       },
 
       blog: {
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
     },
 
     clean: [
-      "dependence/dist",
+      "deps/dist",
       "theme/default/dist",
       "theme/default/css/*.css",
       "theme/default/css/*.map"

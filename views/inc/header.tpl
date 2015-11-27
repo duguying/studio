@@ -22,11 +22,11 @@
 
           <div class="header">
         		<div class="icons">
-        			<a href="http://my.oschina.net/duguying" target="_black"><span title="follow me on oschina" class="icon-osc icon"></span></a>
-              <a href="https://github.com/duguying" target="_black"><span title="follow me on Github" class="icon-github icon"></span></a>
-        			<a href="http://weibo.com/duguying2008" target="_black"><span title="find me on Weibo" class="icon-weibo icon"></span></a>
-        			<a href="http://gplus.to/duguying" target="_black"><span title="find me on g+" class="icon-gplus icon"></span></a>
-        			<a href="https://twitter.com/duguying" target="_black"><span title="find me on Twitter" class="icon-twitter icon"></span></a>
+        			<a href="http://my.oschina.net/duguying" target="_black"><span title="follow me on oschina" class="icon-osc imgicon"></span></a>
+              <a href="https://github.com/duguying" target="_black"><span title="follow me on Github" class="icon-github imgicon"></span></a>
+        			<a href="http://weibo.com/duguying2008" target="_black"><span title="find me on Weibo" class="icon-weibo imgicon"></span></a>
+        			<a href="http://gplus.to/duguying" target="_black"><span title="find me on g+" class="icon-gplus imgicon"></span></a>
+        			<a href="https://twitter.com/duguying" target="_black"><span title="find me on Twitter" class="icon-twitter imgicon"></span></a>
         		</div>
         		<ul class="menu">
         			<li id="about">

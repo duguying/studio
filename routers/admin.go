@@ -23,8 +23,6 @@ func init() {
 	beego.Router("/admin/*", &admin.AdminController{}) // 全匹配
 
 	beego.Router("/add", &article.AddArticleController{})
-	beego.Router("/draft/get", &article.GetDraftController{})
-	beego.Router("/draft/save", &article.SaveDraftController{})
 	beego.Router("/update/:uri", &article.UpdateArticleController{})
 	beego.Router("/update", &article.UpdateArticleController{})
 	beego.Router("/delete/:uri", &article.DeleteArticleController{})

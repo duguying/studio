@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `author` varchar(255) NOT NULL DEFAULT '' COMMENT '作者',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
   `count` int(11) NOT NULL DEFAULT '0' COMMENT '阅读次数',
+  `status` int(4) NOT NULL DEFAULT '0' COMMENT '状态: 0草稿，1已发布',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uri` (`uri`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章';
@@ -41,20 +42,6 @@ CREATE TABLE IF NOT EXISTS `config` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置';
-
--- 数据导出被取消选择。
-
-
--- 导出  表 blog.draft 结构
-CREATE TABLE IF NOT EXISTS `draft` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL DEFAULT '0' COMMENT '文章id',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
-  `keywords` varchar(2550) DEFAULT NULL COMMENT '关键词',
-  `content` LONGTEXT COMMENT '正文',
-  `last_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='草稿箱';
 
 -- 数据导出被取消选择。
 

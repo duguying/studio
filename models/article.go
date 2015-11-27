@@ -20,6 +20,7 @@ type Article struct {
 	Author   string
 	Time     time.Time
 	Count    int
+	Status   int
 }
 
 func (this *Article) TableName() string {

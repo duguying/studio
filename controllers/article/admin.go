@@ -7,6 +7,7 @@ import (
 	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
 	// "github.com/duguying/blog/utils"
+	"github.com/duguying/blog/utils"
 	"github.com/gogather/com"
 	"github.com/gogather/com/log"
 	"strconv"
@@ -29,6 +30,9 @@ func (this *AdminArticleController) ListArticle() {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
 		this.ServeJson()
 	} else {
+		for _, art := range maps {
+			art["time"] = utils.GetDate(art["time"].(string))
+		}
 		this.Data["json"] = map[string]interface{}{
 			"result":   true,
 			"msg":      "get list success",

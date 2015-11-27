@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"github.com/gogather/com/log"
 	"strconv"
 	"time"
 )
@@ -119,5 +120,32 @@ func DeleteProject(id int64) error {
 	o := orm.NewOrm()
 	o.Using("default")
 	_, err := o.Delete(&Project{Id: int(id)})
+	return err
+}
+
+// update project
+func UpdateProject(id int64, name string, icon string, description string) error {
+	o := orm.NewOrm()
+	o.Using("default")
+
+	var pro *Project
+	var err error
+
+	if 0 != id {
+		pro, err = GetProject(int(id), "")
+		if err != nil {
+			return err
+		}
+	} else {
+		return errors.New("id should not 0")
+	}
+
+	log.Pinkln(pro)
+
+	pro.Name = name
+	pro.IconUrl = icon
+	pro.Description = description
+
+	_, err = o.Update(pro, "name", "icon_url", "description")
 	return err
 }

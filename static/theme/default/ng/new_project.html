@@ -1,11 +1,11 @@
 <div class="new-article">
 	<div class="header">
-		<label for="">Logo</label><input type="file" class="title" name="logo" ng-model="title">
-		<label for="">项目名</label><input type="text" class="keyword" name="name" ng-model="keywords">
+		<label for="">Logo URL</label><input type="text" class="icon" name="logo" ng-model="icon">
+		<label for="">项目名</label><input type="text" class="keyword" name="name" ng-model="name">
 		<input type="button" class="btn" value="提交" ng-click="submit()">
 	</div>
 	<hr class="seperator">
 	<div class="editor">
-		<div class="ueditor" config="config" ng-model="content"></div>
+		<div class="ueditor" config="config" ng-model="description"></div>
 	</div>
 </div>

@@ -185,12 +185,27 @@ function ManageProjectController($http,$scope,$rootScope,$routeParams,$sce){
 
 }
 
-function AddProjectController ($scope,$rootScope) {
+function AddProjectController ($http,$scope,$rootScope) {
     $rootScope.global = {
         title: "项目管理",
         currentPath: "manage_project"
     }
     $scope.config = simple_ueditor_option;
+    $scope.submit = function () {
+        var icon = $scope.icon;
+        var name = $scope.name;
+        var description = $scope.description;
+
+        $http.post("/api/admin/project/add", {
+                params: {"icon":icon,"name":name,"description":description}
+            }).success(function(data){
+                if (data.result) {
+                    alert("add success.");
+                } else{
+                    alert("add failed.", data.msg);
+                };
+            });
+    }
 }
 
 function EditProjectController ($http,$scope,$rootScope,$routeParams) {
@@ -207,6 +222,26 @@ function EditProjectController ($http,$scope,$rootScope,$routeParams) {
     $http.get("/api/admin/project/"+id,null).success(function (data) {
         $scope.project = data.data;
     });
+
+    $scope.submit = function () {
+        var icon = $scope.project.IconUrl;
+        var name = $scope.project.Name;
+        var description = $scope.project.Description;
+
+        console.log({
+                params: {"id":$scope.id,"icon":icon,"name":name,"description":description}
+            });
+
+        $http.post("/api/admin/project/update", {
+                params: {"id":$scope.id,"icon":icon,"name":name,"description":description}
+            }).success(function(data){
+                if (data.result) {
+                    alert("modified success.");
+                } else{
+                    alert("modified failed.", data.msg);
+                };
+            });
+    }
 }
 
 function ManageOssController($scope,$rootScope){

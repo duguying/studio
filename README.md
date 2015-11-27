@@ -11,10 +11,6 @@ go get
 go build
 ```
 
-## Attachment ##
-
-配置好的ueditor[下载](http://duguying.oss-cn-qingdao.aliyuncs.com/attach/ueditor.zip "下载")，请下载后解压到`static`目录下。
-
 ## Install ##
 
 你可以直接导入`blog.sql`文件到你的mysql数据库，也可以访问`/install`页面自动导入数据库。

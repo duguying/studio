@@ -93,7 +93,7 @@ func GetArticleByTitle(title string) (Article, error) {
 	var art Article
 
 	err = utils.GetCache("GetArticleByTitle.title."+title, &art)
-	if err != nil {
+	if err == nil {
 		// get view count
 		count, err := GetArticleViewCount(art.Id)
 		if err == nil {

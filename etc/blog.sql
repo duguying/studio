@@ -88,6 +88,23 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
 
+CREATE TABLE IF NOT EXISTS `user_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user` int(11) unsigned NOT NULL,
+  `ip` varchar(50) DEFAULT NULL,
+  `ua` varchar(128) DEFAULT NULL,
+  `location` varchar(128) DEFAULT NULL,
+  `action` int(8) DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_log_user_idx` (`user`),
+  KEY `user_log_ip_idx` (`ip`),
+  KEY `user_log_ua_idx` (`ua`),
+  KEY `user_log_location_idx` (`location`),
+  KEY `user_log_action_idx` (`action`)
+) ENGINE=InnoDB AUTO_INCREMENT=292 DEFAULT CHARSET=utf8;
+
+
 -- 数据导出被取消选择。
 
 

@@ -4,7 +4,7 @@
 
 ## Build ##
 
-go version 1.3+
+由于 beego 以及 go 的不断更新,部分内容已不再兼容低版本beego和go, 因此仅维护最新版 go
 
 ```shell
 go get

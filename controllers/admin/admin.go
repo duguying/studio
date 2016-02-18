@@ -10,10 +10,10 @@ type AdminController struct {
 }
 
 func (this *AdminController) Get() {
-	this.TplNames = "admin/index.tpl"
+	this.TplName = "admin/index.tpl"
 }
 
 func (this *AdminController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }

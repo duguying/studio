@@ -16,7 +16,7 @@ type AddArticleController struct {
 
 func (this *AddArticleController) Get() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *AddArticleController) Post() {
@@ -29,13 +29,13 @@ func (this *AddArticleController) Post() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
 	if "" == title {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -48,7 +48,7 @@ func (this *AddArticleController) Post() {
 		log.Warnln(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "added failed", "refer": nil}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 获取文章
@@ -69,13 +69,13 @@ func (this *ArticleController) Get() {
 		art, err = GetArticleByUri(uri)
 	} else {
 		this.Abort("404")
-		this.TplNames = "error/404.tpl"
+		this.TplName = "error/404.tpl"
 		return
 	}
 
 	if 0 == art.Id {
 		this.Abort("404")
-		this.TplNames = "error/404.tpl"
+		this.TplName = "error/404.tpl"
 		return
 	}
 
@@ -91,7 +91,7 @@ func (this *ArticleController) Get() {
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 	if 0 != art.Id {
@@ -108,12 +108,12 @@ func (this *ArticleController) Get() {
 	this.Data["keywords"] = art.Keywords
 	this.Data["description"] = art.Title
 	this.Data["duoshuo"] = beego.AppConfig.String("duoshuo_short_name")
-	this.TplNames = "article.tpl"
+	this.TplName = "article.tpl"
 }
 
 func (this *ArticleController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 修改文章
@@ -123,7 +123,7 @@ type UpdateArticleController struct {
 
 func (this *UpdateArticleController) Get() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *UpdateArticleController) Post() {
@@ -131,7 +131,7 @@ func (this *UpdateArticleController) Post() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -144,7 +144,7 @@ func (this *UpdateArticleController) Post() {
 
 	if "" == newTitle {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 	var art Article
@@ -165,10 +165,10 @@ func (this *UpdateArticleController) Post() {
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "update failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "update success", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 }
@@ -180,7 +180,7 @@ type DeleteArticleController struct {
 
 func (this *DeleteArticleController) Get() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *DeleteArticleController) Post() {
@@ -188,7 +188,7 @@ func (this *DeleteArticleController) Post() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -204,13 +204,13 @@ func (this *DeleteArticleController) Post() {
 	if nil != err {
 		log.Fatal(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "delete faild", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	} else if 0 == num {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "articles dose not exist", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": fmt.Sprintf("[%d]", num) + " articles deleted", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 }
 
@@ -235,7 +235,7 @@ func (this *ArticleListPageController) Get() {
 	}
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["title"] = "文章列表"
 		this.Data["keywords"] = this.Data["title"]
@@ -245,13 +245,13 @@ func (this *ArticleListPageController) Get() {
 		this.Data["prev_page_flag"] = prevPageFlag
 		this.Data["next_page"] = page + 1
 		this.Data["next_page_flag"] = nextPageFlag
-		this.TplNames = "list.tpl"
+		this.TplName = "list.tpl"
 	}
 }
 
 func (this *ArticleListPageController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 按月归档-按月文章列表
@@ -312,10 +312,10 @@ func (this *ArchiveController) Get() {
 
 	this.Data["title"] = fmt.Sprintf("- %d年%d月", year, month)
 
-	this.TplNames = "index.tpl"
+	this.TplName = "index.tpl"
 }
 
 func (this *ArchiveController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request, only get is avalible", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }

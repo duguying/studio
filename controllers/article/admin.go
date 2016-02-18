@@ -28,7 +28,7 @@ func (this *AdminArticleController) ListArticle() {
 	maps, nextPage, pages, err := ArticleListForAdmin(int(page), 10)
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "get list failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		for _, art := range maps {
 			art["time"] = utils.GetDate(art["time"].(string))
@@ -42,7 +42,7 @@ func (this *AdminArticleController) ListArticle() {
 			"data":     maps,
 			"page":     page,
 		}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 }
@@ -63,7 +63,7 @@ func (this *AdminArticleController) GetArticle() {
 			"data":   art,
 		}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *AdminArticleController) AddArticle() {
@@ -72,7 +72,7 @@ func (this *AdminArticleController) AddArticle() {
 	p, err := com.JsonDecode(paramsBody)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		params = p.(map[string]interface{})["params"].(map[string]interface{})
@@ -89,13 +89,13 @@ func (this *AdminArticleController) AddArticle() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
 	if "" == title {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -113,7 +113,7 @@ func (this *AdminArticleController) AddArticle() {
 		log.Warnln(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "added failed", "refer": nil}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *AdminArticleController) DelArticle() {
@@ -121,7 +121,7 @@ func (this *AdminArticleController) DelArticle() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -130,7 +130,7 @@ func (this *AdminArticleController) DelArticle() {
 	p, err := com.JsonDecode(paramsBody)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		params = p.(map[string]interface{})["params"].(map[string]interface{})
@@ -148,13 +148,13 @@ func (this *AdminArticleController) DelArticle() {
 	if nil != err {
 		log.Fatal(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "delete faild", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	} else if 0 == num {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "articles dose not exist", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": fmt.Sprintf("[%d]", num) + " articles deleted", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 }
 
@@ -163,7 +163,7 @@ func (this *AdminArticleController) UpdateArticle() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -172,7 +172,7 @@ func (this *AdminArticleController) UpdateArticle() {
 	p, err := com.JsonDecode(paramsBody)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		params = p.(map[string]interface{})["params"].(map[string]interface{})
@@ -185,7 +185,7 @@ func (this *AdminArticleController) UpdateArticle() {
 
 	if "" == newTitle {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 	var art Article
@@ -205,10 +205,10 @@ func (this *AdminArticleController) UpdateArticle() {
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "update failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "update success", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 }
@@ -231,7 +231,7 @@ func (this *AdminProjectController) GetProject() {
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "get success", "data": project}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *AdminProjectController) ListProject() {
@@ -257,5 +257,5 @@ func (this *AdminProjectController) ListProject() {
 			"msg":         "get list success",
 		}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }

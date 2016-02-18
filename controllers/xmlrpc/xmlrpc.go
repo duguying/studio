@@ -24,7 +24,7 @@ func (this *XmlrpcController) Get() {
 	host := beego.AppConfig.String("host")
 	result := fmt.Sprintf(str, host, host)
 	this.Ctx.WriteString(result)
-	this.ServeXml()
+	this.ServeXML()
 }
 
 func (this *XmlrpcController) Post() {
@@ -51,7 +51,7 @@ func (this *XmlrpcController) Post() {
 	}
 
 	this.Ctx.WriteString(result)
-	this.ServeXml()
+	this.ServeXML()
 }
 
 /////////////////////////////////////////////////////////////////

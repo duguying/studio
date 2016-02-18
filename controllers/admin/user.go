@@ -18,7 +18,7 @@ type RegistorController struct {
 func (this *RegistorController) Get() {
 	registorable, err := beego.AppConfig.Bool("registorable")
 	if registorable || nil != err {
-		this.TplNames = "registor.tpl"
+		this.TplName = "registor.tpl"
 	} else {
 		this.Ctx.WriteString("registor closed")
 	}
@@ -30,7 +30,7 @@ func (this *RegistorController) Post() {
 		// default registorable is true, do nothing
 	} else if !registorable {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "registorable is false", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -39,7 +39,7 @@ func (this *RegistorController) Post() {
 
 	if !utils.CheckUsername(username) {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "illegal username", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -49,7 +49,7 @@ func (this *RegistorController) Post() {
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": fmt.Sprintf("[%d] ", id) + "registor success", "refer": "/"}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 登录
@@ -63,7 +63,7 @@ func (this *LoginController) Get() {
 	if user != nil {
 		this.Redirect("/admin", 302)
 	} else {
-		this.TplNames = "login.tpl"
+		this.TplName = "login.tpl"
 	}
 }
 
@@ -91,7 +91,7 @@ func (this *LoginController) Post() {
 			this.Data["json"] = map[string]interface{}{"result": false, "msg": "login failed ", "refer": "/"}
 		}
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 登出
@@ -106,7 +106,7 @@ func (this *LogoutController) Get() {
 
 func (this *LogoutController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 测试暂用页
@@ -116,12 +116,12 @@ type TestController struct {
 
 func (this *TestController) Get() {
 	this.Data["username"] = this.GetSession("username")
-	this.TplNames = "test.tpl"
+	this.TplName = "test.tpl"
 }
 
 func (this *TestController) Post() {
 	this.Data["username"] = this.GetSession("username")
-	this.TplNames = "test.tpl"
+	this.TplName = "test.tpl"
 }
 
 // 修改用户名
@@ -131,7 +131,7 @@ type ChangeUsernameController struct {
 
 func (this *ChangeUsernameController) Get() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *ChangeUsernameController) Post() {
@@ -139,7 +139,7 @@ func (this *ChangeUsernameController) Post() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -151,11 +151,11 @@ func (this *ChangeUsernameController) Post() {
 	if nil != err {
 		// log.Println(err)
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "change username failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.SetSession("username", newUsername)
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "change username success", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 }
 
@@ -166,14 +166,14 @@ type SetEmailController struct {
 
 func (this *SetEmailController) Get() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *SetEmailController) Post() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 	username := user.(string)
@@ -181,7 +181,7 @@ func (this *SetEmailController) Post() {
 	email := this.GetString("email")
 	if "" == email {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "email is needed", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -189,11 +189,11 @@ func (this *SetEmailController) Post() {
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "set email failed", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "set email success", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 }
 
@@ -203,12 +203,12 @@ type GetBackPasswordController struct {
 }
 
 func (this *GetBackPasswordController) Get() {
-	this.TplNames = "getbackpasswd.tpl"
+	this.TplName = "getbackpasswd.tpl"
 }
 
 func (this *GetBackPasswordController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 发送找回密码验证邮件
@@ -220,7 +220,7 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 	username := this.GetString("username")
 	if "" == username {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "username could not be empty", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -231,7 +231,7 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "create varify failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		host := beego.AppConfig.String("host")
 		subject := "blog system get your password back"
@@ -242,10 +242,10 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 		err := utils.SendMail(email, subject, body)
 		if nil != err {
 			this.Data["json"] = map[string]interface{}{"result": false, "msg": "send mail failed", "refer": "/"}
-			this.ServeJson()
+			this.ServeJSON()
 		} else {
 			this.Data["json"] = map[string]interface{}{"result": true, "msg": "create varify success", "refer": "/"}
-			this.ServeJson()
+			this.ServeJSON()
 		}
 	}
 
@@ -253,7 +253,7 @@ func (this *SendEmailToGetBackPasswordController) Get() {
 
 func (this *SendEmailToGetBackPasswordController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 设置密码
@@ -266,7 +266,7 @@ func (this *SetPasswordController) Get() {
 
 	if "" == varify {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 	result, username, err := CheckVarify(varify)
@@ -279,7 +279,7 @@ func (this *SetPasswordController) Get() {
 		this.Data["username"] = username
 		this.SetSession("username", username)
 		this.SetSession("reset", true)
-		this.TplNames = "resetpasswd.tpl"
+		this.TplName = "resetpasswd.tpl"
 	}
 }
 
@@ -289,12 +289,12 @@ func (this *SetPasswordController) Post() {
 	resetable := reset.(bool)
 	if !resetable {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "resetable is false", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "session failed", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 	username := user.(string)
@@ -302,19 +302,19 @@ func (this *SetPasswordController) Post() {
 	// fmt.Println(username)
 	if "" == newPassword {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "password is needed", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
 	err := SetPassword(username, newPassword)
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "set password failed", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		this.DelSession("reset")
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "set password success", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 }
@@ -326,7 +326,7 @@ type ChangePasswordController struct {
 
 func (this *ChangePasswordController) Get() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "invalid request ", "refer": "/"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *ChangePasswordController) Post() {
@@ -334,7 +334,7 @@ func (this *ChangePasswordController) Post() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -346,9 +346,9 @@ func (this *ChangePasswordController) Post() {
 
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "change password faild", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "change password success", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 }

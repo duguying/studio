@@ -32,5 +32,5 @@ func (this *AdminApiController) NavList() {
 		},
 	}
 
-	this.ServeJson()
+	this.ServeJSON()
 }

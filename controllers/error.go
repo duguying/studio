@@ -10,10 +10,10 @@ type ErrorController struct {
 
 func (c *ErrorController) Error404() {
 
-	c.TplNames = "error/404.tpl"
+	c.TplName = "error/404.tpl"
 }
 
 func (c *ErrorController) Error501() {
 
-	c.TplNames = "error/501.tpl"
+	c.TplName = "error/501.tpl"
 }

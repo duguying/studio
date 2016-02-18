@@ -17,18 +17,18 @@ func (this *CurrentUserController) Get() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "username": nil, "msg": "user not login"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		username := user.(string)
 		this.Data["json"] = map[string]interface{}{"result": true, "username": username, "msg": "user have login"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 }
 
 func (this *CurrentUserController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "username": nil, "msg": "only get request is avalible"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 获取当前文章总数
@@ -40,17 +40,17 @@ func (this *TotalArticleNumberController) Get() {
 	num, err := CountArticle()
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "number": nil, "msg": "get number failed"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "number": num, "msg": "get number success"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 
 }
 
 func (this *TotalArticleNumberController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "only get request avalible"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 获取当前用户总数
@@ -62,16 +62,16 @@ func (this *TotalUserNumberController) Get() {
 	num, err := CountUser()
 	if nil != err {
 		this.Data["json"] = map[string]interface{}{"result": false, "number": nil, "msg": "get number failed"}
-		this.ServeJson()
+		this.ServeJSON()
 	} else {
 		this.Data["json"] = map[string]interface{}{"result": true, "number": num, "msg": "get number success"}
-		this.ServeJson()
+		this.ServeJSON()
 	}
 }
 
 func (this *TotalUserNumberController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "only get request avalible"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // 获取服务器当前时间
@@ -91,12 +91,12 @@ func (this *ServerTimeController) Get() {
 		"m":      now.Minute(),
 		"s":      now.Second(),
 	}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *ServerTimeController) Post() {
 	this.Data["json"] = map[string]interface{}{"result": false, "msg": "only get request is avalible"}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // map.json 接口
@@ -114,5 +114,5 @@ func (this *MapJsonController) Get() {
 		this.Data["json"] = data
 	}
 
-	this.ServeJson()
+	this.ServeJSON()
 }

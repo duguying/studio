@@ -58,7 +58,7 @@ func (this *ProjectListController) PageProjects() {
 		this.Data["projects_in_page"] = maps
 	}
 
-	this.TplNames = "project.tpl"
+	this.TplName = "project.tpl"
 
 }
 
@@ -69,7 +69,7 @@ func (this *ProjectListController) AddProject() {
 	p, err := com.JsonDecode(paramsBody)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		params = p.(map[string]interface{})["params"].(map[string]interface{})
@@ -83,7 +83,7 @@ func (this *ProjectListController) AddProject() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -99,7 +99,7 @@ func (this *ProjectListController) AddProject() {
 	}
 
 	this.Data["json"] = map[string]interface{}{"result": true, "msg": "添加成功", "id": id}
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *ProjectListController) DeleteProject() {
@@ -107,7 +107,7 @@ func (this *ProjectListController) DeleteProject() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -116,7 +116,7 @@ func (this *ProjectListController) DeleteProject() {
 	p, err := com.JsonDecode(paramsBody)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		params = p.(map[string]interface{})["params"].(map[string]interface{})
@@ -131,7 +131,7 @@ func (this *ProjectListController) DeleteProject() {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "删除成功"}
 	}
 
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func (this *ProjectListController) UpdateProject() {
@@ -139,7 +139,7 @@ func (this *ProjectListController) UpdateProject() {
 	user := this.GetSession("username")
 	if user == nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -150,7 +150,7 @@ func (this *ProjectListController) UpdateProject() {
 	p, err := com.JsonDecode(paramsBody)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	} else {
 		params = p.(map[string]interface{})["params"].(map[string]interface{})
@@ -172,5 +172,5 @@ func (this *ProjectListController) UpdateProject() {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "修改成功"}
 	}
 
-	this.ServeJson()
+	this.ServeJSON()
 }

@@ -9,6 +9,7 @@ import (
 	_ "github.com/astaxie/beego/cache/memcache"
 	_ "github.com/astaxie/beego/cache/redis"
 	"github.com/gogather/com/log"
+	"time"
 )
 
 var cc cache.Cache
@@ -54,7 +55,7 @@ func initRedis() {
 	}
 }
 
-func SetCache(key string, value interface{}, timeout int64) error {
+func SetCache(key string, value interface{}, timeout time.Duration) error {
 	data, err := Encode(value)
 	if err != nil {
 		return err

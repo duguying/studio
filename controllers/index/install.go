@@ -20,7 +20,7 @@ func (this *InstallController) Get() {
 	if com.FileExist("install.lock") {
 		this.Abort("404")
 	} else {
-		sqls := com.ReadFile("etc/blog.sql")
+		sqls, _ := com.ReadFile("etc/blog.sql")
 		sqlArr := strings.Split(sqls, ";")
 		for index, element := range sqlArr {
 			this.Ctx.WriteString(fmt.Sprintf("[%d] ", index) + element)

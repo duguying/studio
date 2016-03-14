@@ -94,7 +94,7 @@ type UploadController struct {
 }
 
 func (this *UploadController) Get() {
-	conf := com.ReadFile("conf/ueditor.json")
+	conf, _ := com.ReadFile("conf/ueditor.json")
 	this.Ctx.WriteString(conf)
 }
 

@@ -106,7 +106,7 @@ type MapJsonController struct {
 
 func (this *MapJsonController) Get() {
 	staticMap := beego.AppConfig.String("static_map")
-	content := com.ReadFile(staticMap)
+	content, _ := com.ReadFile(staticMap)
 	data, err := com.JsonDecode(content)
 	if err != nil {
 		this.Data["json"] = map[string]interface{}{"result": false, "msg": "can not get map.json"}

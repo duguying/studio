@@ -61,6 +61,6 @@ func Fis(key string) template.HTML {
 // load map.json
 func loadMap() string {
 	mapPath := beego.AppConfig.String("static_map")
-	mapContent := com.ReadFile(mapPath)
+	mapContent, _ := com.ReadFile(mapPath)
 	return mapContent
 }

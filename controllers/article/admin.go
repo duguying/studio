@@ -85,6 +85,8 @@ func (this *AdminArticleController) AddArticle() {
 	keywords := params["keywords"].(string)
 	abstract := params["abstract"].(string)
 
+	keywords = utils.TagSplitBeforeStore(keywords)
+
 	// if not login, permission deny
 	user := this.GetSession("username")
 	if user == nil {
@@ -135,6 +137,8 @@ func (this *AdminArticleController) SaveArticleAsDraft() {
 	keywords := params["keywords"].(string)
 	abstract := params["abstract"].(string)
 	status := ART_STATUS_DRAFT
+
+	keywords = utils.TagSplitBeforeStore(keywords)
 
 	// if not login, permission deny
 	user := this.GetSession("username")
@@ -250,7 +254,7 @@ func (this *AdminArticleController) UpdateArticle() {
 
 	art.Title = newTitle
 	art.Content = newContent
-	art.Keywords = newKeywords
+	art.Keywords = utils.TagSplitBeforeStore(newKeywords)
 
 	err = UpdateArticle(id, "", art)
 
@@ -305,7 +309,7 @@ func (this *AdminArticleController) DraftPublish() {
 
 	art.Title = newTitle
 	art.Content = newContent
-	art.Keywords = newKeywords
+	art.Keywords = utils.TagSplitBeforeStore(newKeywords)
 	art.Status = ART_STATUS_PUBLISH
 
 	err = UpdateArticle(id, "", art)

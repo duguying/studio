@@ -5,6 +5,7 @@ import (
 	"github.com/gogather/com"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -40,6 +41,15 @@ func ReadFileByte(path string) ([]byte, error) {
 	}
 	defer fi.Close()
 	return ioutil.ReadAll(fi)
+}
+
+// 重整 tag 字符串
+func TagSplitBeforeStore(keywords string) string {
+	if "" == keywords {
+		return ""
+	}
+	re := regexp.MustCompile("，[ \t\n]*")
+	return re.ReplaceAllString(keywords, ",")
 }
 
 // 切割关键词为html片段

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"github.com/duguying/blog/utils"
-	// "github.com/gogather/com"
+	// "github.com/gogather/com/log"
 	"strconv"
 	"strings"
 	"time"
@@ -163,12 +163,13 @@ func UpdateArticle(id int64, uri string, newArt Article) error {
 	art.Keywords = newArt.Keywords
 	art.Abstract = newArt.Abstract
 	art.Content = newArt.Content
+	art.Status = newArt.Status
 
 	getArt, _ := GetArticle(int(id))
 	utils.DelCache("GetArticleByUri.uri." + getArt.Uri)
 	utils.DelCache("GetArticle.id." + fmt.Sprintf("%d", art.Id))
 
-	_, err := o.Update(&art, "title", "keywords", "abstract", "content")
+	_, err := o.Update(&art, "title", "keywords", "abstract", "content", "status")
 	return err
 }
 

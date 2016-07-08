@@ -157,7 +157,7 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
         var keywords = $scope.article.Keywords;
         var abstract = $scope.article.Abstract;
 
-        $http.post("/api/admin/save", {
+        $http.post("/api/admin/update", {
                 params: {"id":$scope.id,"title":title,"keywords":keywords,"abstract":abstract,"content":content}
             }).success(function(data){
                 if (data.result) {
@@ -174,13 +174,13 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
         var keywords = $scope.article.Keywords;
         var abstract = $scope.article.Abstract;
 
-        $http.post("/api/admin/update", {
+        $http.post("/api/admin/draft_publish", {
                 params: {"id":$scope.id,"title":title,"keywords":keywords,"abstract":abstract,"content":content}
             }).success(function(data){
                 if (data.result) {
-                    alert("modified success.");
+                    alert("publish success.");
                 } else{
-                    alert("modified failed.", data.msg);
+                    alert("publish failed.", data.msg);
                 };
             });
     }

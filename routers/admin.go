@@ -40,6 +40,7 @@ func init() {
 	beego.Router("/api/admin/save", &article.AdminArticleController{}, "*:SaveArticleAsDraft")
 	beego.Router("/api/admin/delete", &article.AdminArticleController{}, "*:DelArticle")
 	beego.Router("/api/admin/update", &article.AdminArticleController{}, "*:UpdateArticle")
+	beego.Router("/api/admin/draft_publish", &article.AdminArticleController{}, "*:DraftPublish")
 	beego.Router("/api/admin/project/:id", &article.AdminProjectController{}, "*:GetProject")
 	beego.Router("/api/admin/project/list/:page", &article.AdminProjectController{}, "*:ListProject")
 	beego.Router("/api/admin/project/delete", &project.ProjectListController{}, "*:DeleteProject")

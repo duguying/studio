@@ -264,6 +264,62 @@ func (this *AdminArticleController) UpdateArticle() {
 
 }
 
+func (this *AdminArticleController) DraftPublish() {
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJSON()
+		return
+	}
+
+	paramsBody := string(this.Ctx.Input.RequestBody)
+	var params map[string]interface{}
+	p, err := com.JsonDecode(paramsBody)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
+		this.ServeJSON()
+		return
+	} else {
+		params = p.(map[string]interface{})["params"].(map[string]interface{})
+	}
+
+	id := int64(params["id"].(float64))
+	newTitle := params["title"].(string)
+	newContent := params["content"].(string)
+	newKeywords := params["keywords"].(string)
+
+	if "" == newTitle {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
+		this.ServeJSON()
+	}
+
+	var art Article
+
+	if nil == err {
+		art, err = GetArticle(int(id))
+	} else {
+		this.Ctx.WriteString("not found")
+		return
+	}
+
+	art.Title = newTitle
+	art.Content = newContent
+	art.Keywords = newKeywords
+	art.Status = ART_STATUS_PUBLISH
+
+	err = UpdateArticle(id, "", art)
+
+	if nil != err {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "update failed", "refer": "/"}
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = map[string]interface{}{"result": true, "msg": "update success", "refer": "/"}
+		this.ServeJSON()
+	}
+
+}
+
 // 管理- 项目
 type AdminProjectController struct {
 	controllers.BaseController

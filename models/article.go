@@ -23,6 +23,11 @@ type Article struct {
 	Status   int
 }
 
+const (
+	ART_STATUS_DRAFT   = 0
+	ART_STATUS_PUBLISH = 1
+)
+
 func (this *Article) TableName() string {
 	return "article"
 }
@@ -32,12 +37,12 @@ func init() {
 }
 
 // 添加文章
-func AddArticle(title string, content string, keywords string, abstract string, author string) (int64, error) {
+func AddArticle(title string, content string, keywords string, abstract string, status int, author string) (int64, error) {
 	o := orm.NewOrm()
 	o.Using("default")
 
-	sql := "insert into article(title, uri, keywords, abstract, content, author) values(?, ?, ?, ?, ?, ?)"
-	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, abstract, content, author).Exec()
+	sql := "insert into article(title, uri, keywords, abstract, content, author, status) values(?, ?, ?, ?, ?, ?, ?)"
+	res, err := o.Raw(sql, title, strings.Replace(title, "/", "-", -1), keywords, abstract, content, author, status).Exec()
 	if nil != err {
 		return 0, err
 	} else {
@@ -291,11 +296,11 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 // error 错误
 func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// pagePerNum := 6
-	sql1 := "select * from article order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
-	sql2 := "select count(*) as number from article"
+	sql1 := "select * from article where status = ? order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql2 := "select count(*) as number from article where status = ?"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
-	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)
+	num, err := o.Raw(sql1, ART_STATUS_PUBLISH, numPerPage*(page-1)).Values(&maps)
 	if err != nil {
 		fmt.Println("execute sql1 error:")
 		fmt.Println(err)
@@ -304,7 +309,7 @@ func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 
 	err = utils.GetCache("ArticleNumber", &maps2)
 	if nil != err {
-		_, err = o.Raw(sql2).Values(&maps2)
+		_, err = o.Raw(sql2, ART_STATUS_PUBLISH).Values(&maps2)
 		if err != nil {
 			fmt.Println("execute sql2 error:")
 			fmt.Println(err)
@@ -398,7 +403,7 @@ func HottestArticleList() ([]orm.Params, error) {
 
 // 列出文章 for admin
 func ArticleListForAdmin(page int, numPerPage int) ([]orm.Params, bool, int, error) {
-	sql1 := "select id,uri,title,count,time from article order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql1 := "select id,uri,title,count,status,time from article order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
 	sql2 := "select count(*) as number from article"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()

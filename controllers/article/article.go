@@ -41,7 +41,7 @@ func (this *AddArticleController) Post() {
 
 	username := user.(string)
 
-	id, err := AddArticle(title, content, keywords, abstract, username)
+	id, err := AddArticle(title, content, keywords, abstract, ART_STATUS_PUBLISH, username)
 	if nil == err {
 		this.Data["json"] = map[string]interface{}{"result": true, "msg": "success added, id " + fmt.Sprintf("[%d] ", id), "refer": nil}
 	} else {
@@ -74,6 +74,18 @@ func (this *ArticleController) Get() {
 	}
 
 	if 0 == art.Id {
+		this.Abort("404")
+		this.TplName = "error/404.tpl"
+		return
+	}
+
+	// if not author, could not read draft
+	user := this.GetSession("username")
+	username := ""
+	if user != nil {
+		username = user.(string)
+	}
+	if art.Status == ART_STATUS_DRAFT && art.Author != username {
 		this.Abort("404")
 		this.TplName = "error/404.tpl"
 		return

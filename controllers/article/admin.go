@@ -101,7 +101,58 @@ func (this *AdminArticleController) AddArticle() {
 
 	username := user.(string)
 
-	id, err := AddArticle(title, content, keywords, abstract, username)
+	id, err := AddArticle(title, content, keywords, abstract, ART_STATUS_PUBLISH, username)
+	if nil == err {
+		this.Data["json"] = map[string]interface{}{
+			"result": true,
+			"msg":    "success added, id " + fmt.Sprintf("[%d] ", id),
+			"data":   id,
+			"refer":  nil,
+		}
+	} else {
+		log.Warnln(err)
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "added failed", "refer": nil}
+	}
+	this.ServeJSON()
+}
+
+func (this *AdminArticleController) SaveArticleAsDraft() {
+	paramsBody := string(this.Ctx.Input.RequestBody)
+	var params map[string]interface{}
+	p, err := com.JsonDecode(paramsBody)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "parse params failed", "refer": "/"}
+		this.ServeJSON()
+		return
+	} else {
+		params = p.(map[string]interface{})["params"].(map[string]interface{})
+	}
+
+	// log.Pinkln(params)
+
+	title := params["title"].(string)
+	content := params["content"].(string)
+	keywords := params["keywords"].(string)
+	abstract := params["abstract"].(string)
+	status := ART_STATUS_DRAFT
+
+	// if not login, permission deny
+	user := this.GetSession("username")
+	if user == nil {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "login first please", "refer": nil}
+		this.ServeJSON()
+		return
+	}
+
+	if "" == title {
+		this.Data["json"] = map[string]interface{}{"result": false, "msg": "title can not be empty", "refer": "/"}
+		this.ServeJSON()
+		return
+	}
+
+	username := user.(string)
+
+	id, err := AddArticle(title, content, keywords, abstract, status, username)
 	if nil == err {
 		this.Data["json"] = map[string]interface{}{
 			"result": true,

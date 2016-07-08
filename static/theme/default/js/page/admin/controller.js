@@ -117,6 +117,25 @@ function NewArticleController($scope,$rootScope,$http,$location){
                 };
             });
     }
+
+    $scope.save = function () {
+        var content = $scope.content;
+        var title = $scope.title;
+        var keywords = $scope.keywords;
+        var abstract = $scope.abstract;
+        abstract = (!abstract)?"":abstract;
+
+        $http.post("/api/admin/save", {
+                params: {"title":title,"keywords":keywords,"abstract":abstract,"content":content}
+            }).success(function(data){
+                if (data.result) {
+                    alert("add success.");
+                    $location.path("/admin/edit_article/"+data["data"]);
+                } else{
+                    alert("add failed.", data.msg);
+                };
+            });
+    }
 }
 
 function EditArticleController($scope,$rootScope,$routeParams,$http) {
@@ -132,6 +151,23 @@ function EditArticleController($scope,$rootScope,$routeParams,$http) {
         currentPath: "manage_article"
     }
     $scope.config = ueditor_option;
+    $scope.save = function () {
+        var content = $scope.article.Content;
+        var title = $scope.article.Title;
+        var keywords = $scope.article.Keywords;
+        var abstract = $scope.article.Abstract;
+
+        $http.post("/api/admin/save", {
+                params: {"id":$scope.id,"title":title,"keywords":keywords,"abstract":abstract,"content":content}
+            }).success(function(data){
+                if (data.result) {
+                    alert("modified success.");
+                } else{
+                    alert("modified failed.", data.msg);
+                };
+            });
+    }
+
     $scope.submit = function () {
         var content = $scope.article.Content;
         var title = $scope.article.Title;

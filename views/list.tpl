@@ -14,10 +14,10 @@
 		</div>
 		<div class="lp-nav">
 			{{{if .prev_page_flag}}}
-			<a href="/list/{{.prev_page}}" class="page-nav">上一页</a>
+			<a href="/list/{{{.prev_page}}}" class="page-nav">上一页</a>
 			{{{end}}}
 			{{{if .next_page_flag}}}
-			<a href="/list/{{.next_page}}" class="page-nav">下一页</a>
+			<a href="/list/{{{.next_page}}}" class="page-nav">下一页</a>
 			{{{end}}}
 		</div>
 

@@ -6,5 +6,5 @@
       return $(".drop-menu").hide();
     });
   });
-
+  SyntaxHighlighter.defaults['gutter'] = false;
 }).call(this);

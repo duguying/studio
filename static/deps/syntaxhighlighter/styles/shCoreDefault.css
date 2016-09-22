@@ -221,7 +221,7 @@
   -webkit-border-radius: 10px;	*/
 }
 .syntaxhighlighter table {
-  border: 1px solid #ddd !important;
+  /*border: 1px solid #ddd !important;*/
 }
 .syntaxhighlighter .line.alt1 {
   

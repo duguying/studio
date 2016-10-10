@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
   `uri` varchar(255) NOT NULL DEFAULT '' COMMENT 'URL中的文章标题',
   `keywords` varchar(2550) DEFAULT '' COMMENT '关键词',
+  `abstract` varchar(2550) COMMENT '概要',
   `content` LONGTEXT COMMENT '正文',
   `author` varchar(255) NOT NULL DEFAULT '' COMMENT '作者',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',

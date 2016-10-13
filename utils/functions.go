@@ -96,5 +96,5 @@ func GetFirstParagraph(content string) string {
 	if err != nil {
 		return ""
 	}
-	return doc.Find(".article-content p").First().Text()
+	return doc.Find("p").First().Text()
 }

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gogather/com"
 	"io/ioutil"
 	"os"
@@ -88,4 +89,12 @@ func GetDateCN(dateStr string) string {
 	} else {
 		return date.Format("2006年01月02日")
 	}
+}
+
+func GetFirstParagraph(content string) string {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	if err != nil {
+		return ""
+	}
+	return doc.Find(".article-content p").First().Text()
 }

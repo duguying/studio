@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
+	"github.com/duguying/blog/utils"
 	"github.com/gogather/com/log"
 	"strconv"
 )
@@ -110,6 +111,8 @@ func (this *ArticleController) Get() {
 		UpdateCount(art.Id)
 	}
 
+	description := utils.GetFirstParagraph(art.Content)
+
 	this.Data["id"] = art.Id
 	this.Data["title"] = art.Title
 	this.Data["articleTitle"] = art.Title
@@ -119,7 +122,7 @@ func (this *ArticleController) Get() {
 	this.Data["time"] = art.Time
 	this.Data["count"] = art.Count
 	this.Data["keywords"] = art.Keywords
-	this.Data["description"] = art.Title
+	this.Data["description"] = description
 	this.Data["duoshuo"] = beego.AppConfig.String("duoshuo_short_name")
 	this.TplName = "article.tpl"
 }

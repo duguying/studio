@@ -6,7 +6,9 @@
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta content="独孤影,博客,{{{.keywords}}}" name="keywords" />
-      <meta content="{{{.description}}}" name="description" />
+      <meta content="{{{.description}}}" name="description" itemprop="description" />
+      <meta itemprop="name" content="{{{.articleTitle}}}" />
+      <meta itemprop="image" content="{{{.articleImage}}}" />
       <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{{{.host}}}/xmlrpc" />
       <link rel="shortcut icon" href="/favicon.ico" />
       {{{if .inDev}}}

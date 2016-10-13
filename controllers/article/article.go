@@ -112,6 +112,7 @@ func (this *ArticleController) Get() {
 
 	this.Data["id"] = art.Id
 	this.Data["title"] = art.Title
+	this.Data["articleTitle"] = art.Title
 	this.Data["uri"] = art.Uri
 	this.Data["content"] = art.Content
 	this.Data["author"] = art.Author

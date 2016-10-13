@@ -35,6 +35,8 @@ func (this *BaseController) Prepare() {
 		this.Data["userIs"] = "admin"
 	}
 	this.Data["inDev"] = beego.AppConfig.String("runmode") == "dev"
+	this.Data["articleImage"] = "/logo"
+	this.Data["articleTitle"] = "独孤影的博客"
 }
 
 // run after finished

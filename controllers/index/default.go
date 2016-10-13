@@ -77,8 +77,9 @@ func (this *MainController) Get() {
 	}
 
 	this.Data["title"] = "首页"
+	this.Data["articleTitle"] = "独孤影的博客"
 	this.Data["keywords"] = "个人网站,IT,技术,编程"
-	this.Data["description"] = "独孤影的博客"
+	this.Data["description"] = "独孤影的博客，记录我的编程学习之路"
 	this.Data["host"] = beego.AppConfig.String("host")
 
 	this.TplName = "index.tpl"

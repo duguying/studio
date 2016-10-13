@@ -98,3 +98,26 @@ func GetFirstParagraph(content string) string {
 	}
 	return doc.Find("p").First().Text()
 }
+
+func GetFirstPictureDefault(content string, img string) string {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	if err != nil {
+		return ""
+	}
+
+	imgElement := doc.Find("img").First()
+	if imgElement == nil {
+		return img
+	}
+
+	firstImage, exist := imgElement.Attr("src")
+	if !exist {
+		return img
+	}
+
+	if com.Strim(firstImage) != "" {
+		return firstImage
+	} else {
+		return img
+	}
+}

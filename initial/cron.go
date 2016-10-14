@@ -23,14 +23,6 @@ func InitCron() {
 }
 
 func githubStat() error {
-	if !com.FileExist("static") {
-		com.Mkdir("static")
-	} else {
-		if com.FileExist("static/upload") {
-			com.Mkdir("static/upload")
-		}
-	}
-
 	token := beego.AppConfig.String("github_token")
 	user := beego.AppConfig.String("github_user")
 
@@ -42,7 +34,7 @@ func githubStat() error {
 
 	stat := beego.AppConfig.String("github_statistics")
 
-	err = com.WriteFile(stat, json)
+	err = com.WriteFileWithCreatePath(stat, json)
 
 	return err
 }

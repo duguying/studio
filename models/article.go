@@ -199,9 +199,9 @@ func CountByMonth() ([]orm.Params, error) {
 
 	err := utils.GetCache("CountByMonth", &maps)
 	if nil != err {
-		sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by year desc, month desc"
+		sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article where status=? group by date order by year desc, month desc"
 		o := orm.NewOrm()
-		num, err := o.Raw(sql).Values(&maps)
+		num, err := o.Raw(sql, ART_STATUS_PUBLISH).Values(&maps)
 		if err == nil && num > 0 {
 			utils.SetCache("CountByMonth", maps, 3600)
 			return maps, nil
@@ -249,15 +249,15 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 	// get data - cached
 	err = utils.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), &maps)
 	if nil != err {
-		sql1 := "select * from article where year(time)=? and month(time)=? order by time desc limit ?,?"
-		_, err = o.Raw(sql1, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
+		sql1 := "select * from article where status=? and year(time)=? and month(time)=? order by time desc limit ?,?"
+		_, err = o.Raw(sql1, ART_STATUS_PUBLISH, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
 		utils.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), maps, 3600)
 	}
 
 	err = utils.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), &maps2)
 	if nil != err {
-		sql2 := "select count(*)as number from article where year(time)=? and month(time)=?"
-		_, err = o.Raw(sql2, year, month).Values(&maps2)
+		sql2 := "select count(*)as number from article where status=? and year(time)=? and month(time)=?"
+		_, err = o.Raw(sql2, ART_STATUS_PUBLISH, year, month).Values(&maps2)
 		utils.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), maps2, 3600)
 	}
 

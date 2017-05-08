@@ -10,15 +10,18 @@ import (
 
 func InitCron() {
 	if beego.AppConfig.String("runmode") == "prod" {
-		tk := toolbox.NewTask("statistic", "0 0 * * * *", githubStat)
-		err := tk.Run()
-		if err != nil {
-			log.Warnln("[Run Task Failed]")
-			log.Warnln(err)
-		}
-		toolbox.AddTask("statistic", tk)
-		toolbox.StartTask()
-		defer toolbox.StopTask()
+		go func() {
+			defer toolbox.StopTask()
+
+			tk := toolbox.NewTask("statistic", "0 0 * * * *", githubStat)
+			err := tk.Run()
+			if err != nil {
+				log.Warnln("[Run Task Failed]")
+				log.Warnln(err)
+			}
+			toolbox.AddTask("statistic", tk)
+			toolbox.StartTask()
+		}()
 	}
 }
 

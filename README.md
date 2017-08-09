@@ -14,7 +14,7 @@ go build
 ## Install ##
 
 你可以直接导入`blog.sql`文件到你的mysql数据库，也可以访问`/install`页面自动导入数据库。
-之后按照`Attachment`部分安装ueditor。
+前端部分在`static`中
 最后，将`conf/app.conf`配置为可注册(`registorable = true`)，然后访问`/registor`注册你的第一个帐号，记得注册完成后再配置文件中关闭可注册状态(`registorable = false`)。
 
 ## Config ##

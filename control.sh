@@ -23,12 +23,14 @@ function check_pid() {
 function build() {
     CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o $app .
     rm -rf release
+    rm release.zip
     mkdir release
     cp blog release/
     cp -r static release/
     cp -r conf release/
     cp -r custom release/
     cp -r etc release/
+    zip -r release.zip release/
 }
 
 function start() {

@@ -7,8 +7,7 @@ deploy:
   provider: releases
   api_key:
     secure: EnG9EYcN7kOLUszyd5risNMMz9kmTCbpw1faoPfJ07FpTR1vgtekTCfoZaz6OuQc2457sd+KtY0veRBaaaRsXs81yqr4FNfo1y6i3TtHF3K8XCpDvvPNUkCtuDAuWyidaOt1m8jxwZIjJs3NK3G8kiTOW2Tk4isv7RGpcq5yhxM=
-  file_glob: true
-  file: release/*
+  file: release.zip
   on:
     repo: duguying/blog
     tags: true

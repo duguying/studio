@@ -1,7 +1,4 @@
 language: go
-branches:
-  only:
-  - master
 go:
 - tip
 script:

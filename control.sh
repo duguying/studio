@@ -25,7 +25,7 @@ function build() {
     CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o $app .
     rm -rf release
     rm -rf dist
-    rm release-${version}.zip
+    rm -f release-${version}.zip
     mkdir release
     cp blog release/
     cp -r static release/

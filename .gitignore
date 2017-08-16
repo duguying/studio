@@ -38,3 +38,6 @@ release/
 
 # nohup
 nohup.out
+
+# var
+var/

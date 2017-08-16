@@ -5,4 +5,15 @@ branches:
 go:
   - tip
 script:
-  - ./control build
+  - ./control.sh build
+deploy:
+  provider: releases
+  api_key:
+    secure: ...
+  file:
+    - ruready
+    - ruready.sha1
+  skip_cleanup: true
+  on:
+    repo: duguying/blog
+    tags: true

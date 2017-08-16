@@ -27,6 +27,7 @@ function build() {
     rm -rf dist
     rm -f release-${version}.zip
     mkdir release
+    mkdir dist
     cp blog release/
     cp -r static release/
     cp -r conf release/

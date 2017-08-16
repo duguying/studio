@@ -21,6 +21,7 @@ function check_pid() {
 }
 
 function build() {
+    version=`git tag | head -1`
     CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o $app .
     rm -rf release
     rm release.zip
@@ -30,7 +31,7 @@ function build() {
     cp -r conf release/
     cp -r custom release/
     cp -r etc release/
-    zip -r release.zip release/
+    zip -r release-${version}.zip release/
 }
 
 function start() {

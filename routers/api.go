@@ -3,7 +3,6 @@ package routers
 import (
 	"github.com/astaxie/beego"
 	"github.com/duguying/blog/controllers/api"
-	"github.com/duguying/blog/controllers/fis"
 	"github.com/duguying/blog/controllers/xmlrpc"
 )
 
@@ -15,7 +14,5 @@ func init() {
 	beego.Router("/map.json", &api.MapJsonController{})
 
 	beego.Router("/xmlrpc", &xmlrpc.XmlrpcController{})
-
-	beego.Router("/fis", &fis.FisController{}, "*:Receiver")
 
 }

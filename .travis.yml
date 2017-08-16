@@ -5,4 +5,4 @@ branches:
 go:
   - tip
 script:
-  - go build
+  - ./control build

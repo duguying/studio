@@ -32,3 +32,9 @@ output
 
 # mac
 .DS_Store
+
+# release
+release/
+
+# nohup
+nohup.out

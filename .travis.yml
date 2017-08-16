@@ -3,17 +3,14 @@ branches:
   only:
   - master
 go:
-  - tip
+- tip
 script:
-  - ./control.sh build
+- "./control.sh build"
 deploy:
   provider: releases
   api_key:
-    secure: ...
-  file:
-    - ruready
-    - ruready.sha1
-  skip_cleanup: true
+    secure: EnG9EYcN7kOLUszyd5risNMMz9kmTCbpw1faoPfJ07FpTR1vgtekTCfoZaz6OuQc2457sd+KtY0veRBaaaRsXs81yqr4FNfo1y6i3TtHF3K8XCpDvvPNUkCtuDAuWyidaOt1m8jxwZIjJs3NK3G8kiTOW2Tk4isv7RGpcq5yhxM=
+  file: release/*
   on:
     repo: duguying/blog
     tags: true

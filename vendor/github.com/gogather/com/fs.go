@@ -12,8 +12,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	"github.com/toolkits/file"
 )
 
 // PathExist 检查文件或目录是否存在
@@ -181,5 +179,5 @@ func homeWindows() (string, error) {
 // Dir 获取路径所在目录
 func Dir(fullpath string) string {
 	unixPath := strings.Replace(fullpath, fmt.Sprintf("%c", filepath.Separator), "/", -1)
-	return strings.Replace(file.Dir(unixPath), "/", fmt.Sprintf("%c", filepath.Separator), -1)
+	return strings.Replace(filepath.Dir(unixPath), "/", fmt.Sprintf("%c", filepath.Separator), -1)
 }

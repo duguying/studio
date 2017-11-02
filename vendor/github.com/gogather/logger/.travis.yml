@@ -1,0 +1,10 @@
+language: go
+
+go:
+  - tips
+
+# let us have speedy Docker-based Travis workers
+sudo: false
+
+script:
+  - go vet ./...

@@ -1,136 +1,79 @@
 {
-	"ImportPath": "github.com/duguying/blog",
-	"GoVersion": "go1.8",
+	"ImportPath": "duguying/blog",
+	"GoVersion": "go1.9",
 	"GodepVersion": "v79",
 	"Deps": [
 		{
-			"ImportPath": "github.com/PuerkitoBio/goquery",
-			"Comment": "v1.0.2",
-			"Rev": "3cb3b8656883c2cc3deb9c643d93ea6e5157e425"
+			"ImportPath": "github.com/gin-contrib/sse",
+			"Rev": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae"
 		},
 		{
-			"ImportPath": "github.com/andybalholm/cascadia",
-			"Rev": "349dd0209470eabd9514242c688c403c0926d266"
+			"ImportPath": "github.com/gin-gonic/gin",
+			"Comment": "v1.2-117-gb8b6831",
+			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
 		},
 		{
-			"ImportPath": "github.com/astaxie/beego",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
+			"ImportPath": "github.com/gin-gonic/gin/binding",
+			"Comment": "v1.2-117-gb8b6831",
+			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
 		},
 		{
-			"ImportPath": "github.com/astaxie/beego/cache",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
+			"ImportPath": "github.com/gin-gonic/gin/json",
+			"Comment": "v1.2-117-gb8b6831",
+			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
 		},
 		{
-			"ImportPath": "github.com/astaxie/beego/cache/memcache",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
+			"ImportPath": "github.com/gin-gonic/gin/render",
+			"Comment": "v1.2-117-gb8b6831",
+			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
 		},
 		{
-			"ImportPath": "github.com/astaxie/beego/cache/redis",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/config",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/context",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/grace",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/logs",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/orm",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/session",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/toolbox",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/astaxie/beego/utils",
-			"Comment": "v1.7.2",
-			"Rev": "90999717dda6193c6f970eec52e289b0a9e74998"
-		},
-		{
-			"ImportPath": "github.com/bradfitz/gomemcache/memcache",
-			"Comment": "release.r60-43-g2fafb84",
-			"Rev": "2fafb84a66c4911e11a8f50955b01e74fe3ab9c5"
-		},
-		{
-			"ImportPath": "github.com/garyburd/redigo/internal",
-			"Comment": "v1.0.0-11-gd7de57c",
-			"Rev": "d7de57ceb51b029d5c5a61e26587f672e2834178"
-		},
-		{
-			"ImportPath": "github.com/garyburd/redigo/redis",
-			"Comment": "v1.0.0-11-gd7de57c",
-			"Rev": "d7de57ceb51b029d5c5a61e26587f672e2834178"
-		},
-		{
-			"ImportPath": "github.com/go-sql-driver/mysql",
-			"Comment": "v1.2-214-gabfd04d",
-			"Rev": "abfd04d323c28c5c5683c2beb877fae36491d5a8"
+			"ImportPath": "github.com/gogather/cleaner",
+			"Rev": "6a8e3cd411dcc32c17a019c1bea25a272d332adf"
 		},
 		{
 			"ImportPath": "github.com/gogather/com",
-			"Rev": "9441848bc815c4c978d5f48b68e8a718e5fdbc17"
+			"Rev": "4423ca58844cc7256a7ad433d478813659187861"
 		},
 		{
-			"ImportPath": "github.com/gogather/com/http",
-			"Rev": "9441848bc815c4c978d5f48b68e8a718e5fdbc17"
+			"ImportPath": "github.com/gogather/logger",
+			"Rev": "a1395aa4f7f1d97503aea4a3387db1ee40f10c70"
 		},
 		{
-			"ImportPath": "github.com/gogather/com/log",
-			"Rev": "9441848bc815c4c978d5f48b68e8a718e5fdbc17"
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "130e6b02ab059e7b717a096f397c5b60111cae74"
 		},
 		{
-			"ImportPath": "github.com/gogather/iplocation",
-			"Rev": "e8439d3c857025b1d0cd05af4bfde4069da8bffa"
+			"ImportPath": "github.com/json-iterator/go",
+			"Comment": "1.0.0-1-gd80309a",
+			"Rev": "d80309af3bfd0b084e88c732056a4118f94e49f8"
 		},
 		{
-			"ImportPath": "github.com/gogather/statistics",
-			"Rev": "ea98034a4a0e075e585bc9f1561491cd54f4cc84"
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Comment": "v0.0.3-1-ga5cdd64",
+			"Rev": "a5cdd64afdee435007ee3e9f6ed4684af949d568"
 		},
 		{
-			"ImportPath": "github.com/toolkits/file",
-			"Rev": "a5b3c5147e07f934d9f9d00b901a20b2529f1a57"
+			"ImportPath": "github.com/ugorji/go/codec",
+			"Rev": "f76f59a92f8224c695c0e2c401b9ad17e820a8f5"
 		},
 		{
-			"ImportPath": "github.com/yanunon/oss-go-api/oss",
-			"Rev": "dcb3c6379f5b4dc3687d9f02c0c54ce754e3359d"
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "f64b50fbea64174967a8882830d621a18ee1548e"
 		},
 		{
-			"ImportPath": "golang.org/x/net/html",
-			"Rev": "b7fd658658fbea9d2fcc0f4f98807eb61571ba75"
+			"ImportPath": "gopkg.in/go-playground/validator.v8",
+			"Comment": "v8.18.2",
+			"Rev": "5f1438d3fca68893a817e4a66806cea46a9e4ebf"
 		},
 		{
-			"ImportPath": "golang.org/x/net/html/atom",
-			"Rev": "b7fd658658fbea9d2fcc0f4f98807eb61571ba75"
+			"ImportPath": "gopkg.in/ini.v1",
+			"Comment": "v1.10.1",
+			"Rev": "776aa739ce9373377cd16f526cdf06cb4c89b40f"
 		},
 		{
-			"ImportPath": "golang.org/x/net/proxy",
-			"Rev": "b7fd658658fbea9d2fcc0f4f98807eb61571ba75"
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
 		}
 	]
 }

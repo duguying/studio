@@ -1,9 +1,0 @@
-{
-    "imageUrl": "",
-	"imageActionName": "uploadimage",
-	"imageUrlPrefix": "",
-    "imagePath": "/static/upload",
-    "imageFieldName": "upfile",
-    "imageMaxSize": 2048,
-    "imageAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"]
-}

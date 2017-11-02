@@ -2,6 +2,7 @@ language: go
 go:
 - tip
 script:
+- "ln -s `pwd` ${GOPATH}/src/"
 - "./control.sh build"
 deploy:
   provider: releases

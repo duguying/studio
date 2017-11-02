@@ -4,10 +4,17 @@
 
 package models
 
+import "encoding/json"
+
 type Users struct {
-	Id       int
-	Username string
-	Password string
-	Salt     string
-	Email    string
+	Id       int64  `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Salt     string `json:"salt"`
+	Email    string `json:"email"`
+}
+
+func (u *Users) String() string {
+	c, _ := json.Marshal(u)
+	return string(c)
 }

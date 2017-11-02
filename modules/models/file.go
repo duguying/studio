@@ -4,13 +4,21 @@
 
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type File struct {
-	Id       int
-	Filename string
-	Path     string
-	Time     time.Time
-	Store    string
-	Mime     string
+	Id       int64     `json:"id"`
+	Filename string    `json:"filename"`
+	Path     string    `json:"path"`
+	Time     time.Time `json:"time"`
+	Store    string    `json:"store"`
+	Mime     string    `json:"mime"`
+}
+
+func (f *File) String() string {
+	c, _ := json.Marshal(f)
+	return string(c)
 }

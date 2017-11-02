@@ -3,6 +3,7 @@ package main
 import (
 	"duguying/blog/g"
 	"duguying/blog/modules/configuration"
+	"duguying/blog/modules/db"
 	"duguying/blog/modules/logger"
 	"duguying/blog/service"
 	"flag"
@@ -12,7 +13,7 @@ import (
 )
 
 var (
-	configPath string = "ims.ini"
+	configPath string = "blog.ini"
 	logDir     string = "log"
 )
 
@@ -25,13 +26,16 @@ func main() {
 	// 初始化 logger
 	initLogger()
 
+	// 初始化 database
+	db.InitDatabase()
+
 	// 初始化 gin
 	service.Run()
 }
 
 func versionFlag() {
 	version := flag.Bool("v", false, "version")
-	config := flag.String("c", "ims.ini", "configuration file")
+	config := flag.String("c", "blog.ini", "configuration file")
 	logDirectory := flag.String("l", "log", "log directory")
 	flag.Parse()
 	if *version {

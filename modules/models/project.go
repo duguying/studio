@@ -4,13 +4,21 @@
 
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Project struct {
-	Id          int
-	Name        string
-	IconUrl     string
-	Author      string
-	Description string
-	Time        time.Time
+	Id          int64     `json:"id"`
+	Name        string    `json:"name"`
+	IconUrl     string    `json:"icon_url"`
+	Author      string    `json:"author"`
+	Description string    `json:"description"`
+	Time        time.Time `json:"time"`
+}
+
+func (p *Project) String() string {
+	c, _ := json.Marshal(p)
+	return string(c)
 }

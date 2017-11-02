@@ -21,7 +21,7 @@ func Run() {
 
 	router.Any("/version", action.Version)
 
-	router.Static("/static/avatar",g.Config.Get("avatar","dir", "avatar"))
+	router.Static("/static/upload",g.Config.Get("upload","dir", "upload"))
 
 	// print http port
 	port := g.Config.GetInt64("system", "port", 9080)

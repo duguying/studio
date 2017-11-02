@@ -4,11 +4,19 @@
 
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Varify struct {
-	Id       int
-	Username string
-	Code     string
-	Overdue  time.Time
+	Id       int       `json:"id"`
+	Username string    `json:"username"`
+	Code     string    `json:"code"`
+	Overdue  time.Time `json:"overdue"`
+}
+
+func (v *Varify) String() string {
+	c, _ := json.Marshal(v)
+	return string(c)
 }

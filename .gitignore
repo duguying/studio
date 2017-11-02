@@ -43,3 +43,6 @@ nohup.out
 var/
 
 release.zip
+
+# ini config file
+*.ini

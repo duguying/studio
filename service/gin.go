@@ -19,7 +19,10 @@ func Run() {
 
 	router := gin.Default()
 
+	initTemplates(router)
+
 	router.Any("/version", action.Version)
+	router.GET("/test", action.PageTest)
 
 	router.Static("/static/upload",g.Config.Get("upload","dir", "upload"))
 
@@ -30,3 +33,8 @@ func Run() {
 	router.Run(fmt.Sprintf(":%d", port))
 }
 
+// 初始化模版
+func initTemplates(engine *gin.Engine) {
+	engine.Delims("{{{","}}}")
+	engine.LoadHTMLGlob("tpls/**/*")
+}

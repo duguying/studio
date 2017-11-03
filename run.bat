@@ -1,1 +1,0 @@
-bee run blog -main=*.go

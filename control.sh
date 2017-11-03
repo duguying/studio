@@ -22,7 +22,9 @@ function check_pid() {
 
 function build() {
     version=`git tag | head -1`
-    CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o $app .
+    gitversion=`git log --format='%h' | head -1`
+    buildtime=`date +%Y-%m-%d_%H:%M:%S`
+    CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime" -o $app .
     rm -rf release
     rm -rf dist
     rm -f release-${version}.zip
@@ -30,9 +32,6 @@ function build() {
     mkdir dist
     cp blog release/
     cp -r static release/
-    cp -r conf release/
-    cp -r custom release/
-    cp -r etc release/
     zip -r dist/release-${version}.zip release/
 }
 
@@ -46,7 +45,7 @@ function start() {
     fi
 
 
-    nohup ./$app  &>> $logfile &
+    nohup ./$app  & >> $logfile &
     echo $! > $pidfile
     echo "$app started..., pid=$!"
 }

@@ -46,3 +46,5 @@ release.zip
 
 # ini config file
 *.ini
+
+dist/

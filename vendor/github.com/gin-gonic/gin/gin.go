@@ -14,8 +14,8 @@ import (
 	"github.com/gin-gonic/gin/render"
 )
 
-// Version is Framework's version.
 const (
+	// Version is Framework's version.
 	Version                = "v1.2"
 	defaultMultipartMemory = 32 << 20 // 32 MB
 )
@@ -49,16 +49,6 @@ type RoutesInfo []RouteInfo
 // Create an instance of Engine, by using New() or Default()
 type Engine struct {
 	RouterGroup
-	delims           render.Delims
-	secureJsonPrefix string
-	HTMLRender       render.HTMLRender
-	FuncMap          template.FuncMap
-	allNoRoute       HandlersChain
-	allNoMethod      HandlersChain
-	noRoute          HandlersChain
-	noMethod         HandlersChain
-	pool             sync.Pool
-	trees            methodTrees
 
 	// Enables automatic redirection if the current route can't be matched but a
 	// handler for the path with (without) the trailing slash exists.
@@ -102,6 +92,17 @@ type Engine struct {
 	// Value of 'maxMemory' param that is given to http.Request's ParseMultipartForm
 	// method call.
 	MaxMultipartMemory int64
+
+	delims           render.Delims
+	secureJsonPrefix string
+	HTMLRender       render.HTMLRender
+	FuncMap          template.FuncMap
+	allNoRoute       HandlersChain
+	allNoMethod      HandlersChain
+	noRoute          HandlersChain
+	noMethod         HandlersChain
+	pool             sync.Pool
+	trees            methodTrees
 }
 
 var _ IRouter = &Engine{}
@@ -403,8 +404,8 @@ func redirectTrailingSlash(c *Context) {
 		code = 307
 	}
 
-	if len(path) > 1 && path[len(path)-1] == '/' {
-		req.URL.Path = path[:len(path)-1]
+	if length := len(path); length > 1 && path[length-1] == '/' {
+		req.URL.Path = path[:length-1]
 	} else {
 		req.URL.Path = path + "/"
 	}

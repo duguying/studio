@@ -2,8 +2,9 @@
 // Use of this source code is governed by a MIT license found in the LICENSE file.
 
 /*
-High Performance, Feature-Rich Idiomatic Go 1.4+ codec/encoding library for
-binc, msgpack, cbor, json
+Package codec provides a
+High Performance, Feature-Rich Idiomatic Go 1.4+ codec/encoding library
+for binc, msgpack, cbor, json.
 
 Supported Serialization formats are:
 
@@ -92,6 +93,27 @@ As an illustration, MyStructWithUnexportedFields would normally be
 encoded as an empty map because it has no exported fields, while UUID
 would be encoded as a string. However, with extension support, you can
 encode any of these however you like.
+
+Custom Encoding and Decoding
+
+This package maintains symmetry in the encoding and decoding halfs.
+We determine how to encode or decode by walking this decision tree
+
+  - is type a codec.Selfer?
+  - is there an extension registered for the type?
+  - is format binary, and is type a encoding.BinaryMarshaler and BinaryUnmarshaler?
+  - is format specifically json, and is type a encoding/json.Marshaler and Unmarshaler?
+  - is format text-based, and type an encoding.TextMarshaler?
+  - else we use a pair of functions based on the "kind" of the type e.g. map, slice, int64, etc
+
+This symmetry is important to reduce chances of issues happening because the
+encoding and decoding sides are out of sync e.g. decoded via very specific
+encoding.TextUnmarshaler but encoded via kind-specific generalized mode.
+
+Consequently, if a type only defines one-half of the symmetry
+(e.g. it implements UnmarshalJSON() but not MarshalJSON() ),
+then that type doesn't satisfy the check and we will continue walking down the
+decision tree.
 
 RPC
 
@@ -182,4 +204,3 @@ Please see http://github.com/ugorji/go-codec-bench .
 
 */
 package codec
-

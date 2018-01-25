@@ -3,7 +3,7 @@ package main
 import (
 	"duguying/blog/g"
 	"duguying/blog/modules/configuration"
-	"duguying/blog/modules/db"
+	"duguying/blog/modules/orm"
 	"duguying/blog/modules/logger"
 	"duguying/blog/service"
 	"flag"
@@ -27,7 +27,7 @@ func main() {
 	initLogger()
 
 	// 初始化 database
-	db.InitDatabase()
+	orm.InitDatabase()
 
 	// 初始化 gin
 	service.Run()

@@ -38,7 +38,8 @@ Extend the struct tag. See representative example:
   }
 
 Based on this, we encode
-  - fields as elements, BUT encode as attributes if struct tag contains ",attr".
+  - fields as elements, BUT
+    encode as attributes if struct tag contains ",attr" and is a scalar (bool, number or string)
   - text as entity-escaped text, BUT encode as CDATA if struct tag contains ",cdata".
 
 In this mode, we only encode as attribute if ",attr" is found, and only encode as CDATA
@@ -63,12 +64,13 @@ To handle namespaces:
           switch {
             case !nsAware: panic(...)
             case strings.endsWith("nsabc"): x.abc()
+            case strings.endsWith("nsdef"): x.def()
             default: panic(...)
           }
         }
      }
 
-The structure below accomodates this:
+The structure below accommodates this:
 
   type typeInfo struct {
     sfi []*structFieldInfo // sorted by encName
@@ -132,7 +134,7 @@ At decode time, a structure containing the following is kept
   - all internal entities (<>&"' and others written in the document)
 
 When decode starts, it parses XML namespace declarations and creates a map in the
-xmlDecDriver. While parsing, that map continously gets updated.
+xmlDecDriver. While parsing, that map continuously gets updated.
 The only problem happens when a namespace declaration happens on the node that it defines.
 e.g. <hn:name xmlns:hn="http://www.ugorji.net" >
 To handle this, each Element must be fully parsed at a time,
@@ -144,7 +146,7 @@ xmlns is a special attribute name.
   *We may decide later to allow user to use it e.g. you want to parse the xmlns mappings into a field.*
 
 Number, bool, null, mapKey, etc can all be decoded from any xmlToken.
-This accomodates map[int]string for example.
+This accommodates map[int]string for example.
 
 It should be possible to create a schema from the types,
 or vice versa (generate types from schema with appropriate tags).
@@ -178,8 +180,8 @@ An XML document is a name, a map of attributes and a list of children.
 Consequently, we cannot "DecodeNaked" into a map[string]interface{} (for example).
 We have to "DecodeNaked" into something that resembles XML data.
 
-To support DecodeNaked (decode into nil interface{}) we have to define some "supporting" types:
-    type Name struct { // Prefered. Less allocations due to conversions.
+To support DecodeNaked (decode into nil interface{}), we have to define some "supporting" types:
+    type Name struct { // Preferred. Less allocations due to conversions.
       Local string
       Space string
     }
@@ -189,6 +191,8 @@ To support DecodeNaked (decode into nil interface{}) we have to define some "sup
       Children []interface{} // each child is either *Element or string
     }
 Only two "supporting" types are exposed for XML: Name and Element.
+
+// ------------------
 
 We considered 'type Name string' where Name is like "Space Local" (space-separated).
 We decided against it, because each creation of a name would lead to
@@ -215,8 +219,10 @@ intelligent accessor methods to extract information and for performance.
     }
     func (x *Element) child(i) interface{} // returns string or *Element
 
+// ------------------
+
 Per XML spec and our default handling, white space is insignificant between elements,
-specifically between parent-child or siblings. White space occuring alone between start
+specifically between parent-child or siblings. White space occurring alone between start
 and end element IS significant. However, if xml:space='preserve', then we 'preserve'
 all whitespace. This is more critical when doing a DecodeNaked, but MAY not be as critical
 when decoding into a typed value.

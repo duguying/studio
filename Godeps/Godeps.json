@@ -9,23 +9,28 @@
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v1.2-117-gb8b6831",
-			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
+			"Comment": "v1.2-134-gb70b8ab",
+			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/binding",
-			"Comment": "v1.2-117-gb8b6831",
-			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
+			"Comment": "v1.2-134-gb70b8ab",
+			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/json",
-			"Comment": "v1.2-117-gb8b6831",
-			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
+			"Comment": "v1.2-134-gb70b8ab",
+			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/render",
-			"Comment": "v1.2-117-gb8b6831",
-			"Rev": "b8b68314faa067acae5b17c828127b04af51ebe2"
+			"Comment": "v1.2-134-gb70b8ab",
+			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
+		},
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.3-2-g2e00b5c",
+			"Rev": "2e00b5cd70399450106cec6431c2e2ce3cae5034"
 		},
 		{
 			"ImportPath": "github.com/gogather/cleaner",
@@ -37,11 +42,30 @@
 		},
 		{
 			"ImportPath": "github.com/gogather/logger",
-			"Rev": "a1395aa4f7f1d97503aea4a3387db1ee40f10c70"
+			"Rev": "9dca2ea5f77b1c3a25dc634025fd505107d35ccd"
 		},
 		{
 			"ImportPath": "github.com/golang/protobuf/proto",
-			"Rev": "130e6b02ab059e7b717a096f397c5b60111cae74"
+			"Rev": "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Comment": "v1.0-97-geb06255",
+			"Rev": "eb06255b667da417d982c6412c4602e932cc5283"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm/dialects/mysql",
+			"Comment": "v1.0-97-geb06255",
+			"Rev": "eb06255b667da417d982c6412c4602e932cc5283"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm/dialects/sqlite",
+			"Comment": "v1.0-97-geb06255",
+			"Rev": "eb06255b667da417d982c6412c4602e932cc5283"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/inflection",
+			"Rev": "74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff"
 		},
 		{
 			"ImportPath": "github.com/json-iterator/go",
@@ -54,8 +78,13 @@
 			"Rev": "a5cdd64afdee435007ee3e9f6ed4684af949d568"
 		},
 		{
+			"ImportPath": "github.com/mattn/go-sqlite3",
+			"Comment": "v1.1.0-102-g86681de",
+			"Rev": "86681de00adef4f8040947b7d35f97000fc5a230"
+		},
+		{
 			"ImportPath": "github.com/ugorji/go/codec",
-			"Rev": "f76f59a92f8224c695c0e2c401b9ad17e820a8f5"
+			"Rev": "dd3aa7221b0c7a61c3ea1a0a252d06efa5161e3f"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",

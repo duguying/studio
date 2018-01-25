@@ -14,10 +14,11 @@ type PeriodLogger struct {
 	Ls          *log.Logger
 	tag         string
 	isDefault   bool
+	flag        int
 }
 
 // NewPeriodLogger new a period logger
-func NewPeriodLogger(appName, tag, dir string, isDefault bool) *PeriodLogger {
+func NewPeriodLogger(appName, tag, dir string, isDefault bool, flag int) *PeriodLogger {
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		log.Println("mkdir", dir, "err:", err)
@@ -28,6 +29,7 @@ func NewPeriodLogger(appName, tag, dir string, isDefault bool) *PeriodLogger {
 		nextLogTime: getTonight(),
 		tag:         tag,
 		isDefault:   isDefault,
+		flag:        flag,
 	}
 
 	l.setLog(dir, appName)
@@ -53,10 +55,10 @@ func (l *PeriodLogger) setLog(logDir string, appName string) error {
 
 	if l.isDefault {
 		log.SetOutput(l.gFile)
-		log.SetFlags(log.Ldate | log.Ltime)
+		log.SetFlags(l.flag)
 	}
 
-	l.Ls = log.New(l.gFile, "", log.Ldate|log.Ltime)
+	l.Ls = log.New(l.gFile, "", l.flag)
 
 	return nil
 }

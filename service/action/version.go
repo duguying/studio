@@ -15,5 +15,10 @@ func Version(c *gin.Context) {
 
 func PageTest(c *gin.Context) {
 	fmt.Println("hi")
-	c.HTML(http.StatusOK, "test.tmpl", gin.H{})
+	c.HTML(http.StatusOK, "test", gin.H{})
+}
+
+func PageTest1(c *gin.Context) {
+	fmt.Println("hi")
+	c.HTML(http.StatusOK, "about/index", gin.H{})
 }

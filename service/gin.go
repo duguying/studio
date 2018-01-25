@@ -5,12 +5,12 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"duguying/blog/g"
 	"duguying/blog/modules/logger"
 	"duguying/blog/service/action"
-	"path/filepath"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"path/filepath"
 )
 
 func Run() {
@@ -19,22 +19,16 @@ func Run() {
 
 	router := gin.Default()
 
-	initTemplates(router)
-
 	router.Any("/version", action.Version)
 	router.GET("/test", action.PageTest)
+	router.GET("/test1", action.PageTest1)
+	router.GET("/list", action.ListArticleWithContent)
 
-	router.Static("/static/upload",g.Config.Get("upload","dir", "upload"))
+	router.Static("/static/upload", g.Config.Get("upload", "dir", "upload"))
 
 	// print http port
 	port := g.Config.GetInt64("system", "port", 9080)
 	fmt.Printf("port: %d\n", port)
 
 	router.Run(fmt.Sprintf(":%d", port))
-}
-
-// 初始化模版
-func initTemplates(engine *gin.Engine) {
-	engine.Delims("{{{","}}}")
-	engine.LoadHTMLGlob("tpls/**/*")
 }

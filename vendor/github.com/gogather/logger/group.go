@@ -12,14 +12,16 @@ type GroupLogger struct {
 	loggerMap     map[string]*PeriodLogger
 	defaultLogger *PeriodLogger
 	expire        time.Duration
+	flag          int
 }
 
 // NewGroupLogger new a group logger manager
-func NewGroupLogger(dir string, appName string, expire time.Duration, logSlice []string) *GroupLogger {
+func NewGroupLogger(dir string, appName string, expire time.Duration, logSlice []string, flag int) *GroupLogger {
 	gl := &GroupLogger{
 		loggerMap:     map[string]*PeriodLogger{},
-		defaultLogger: NewPeriodLogger(appName, "", dir, true),
+		defaultLogger: NewPeriodLogger(appName, "", dir, true, flag),
 		expire:        expire,
+		flag:          flag,
 	}
 
 	for i := 0; i < len(logSlice); i++ {
@@ -27,7 +29,7 @@ func NewGroupLogger(dir string, appName string, expire time.Duration, logSlice [
 		if len(sliceName) <= 0 {
 			continue
 		}
-		downloadLogger := NewPeriodLogger(appName, sliceName, filepath.Join(dir, sliceName), false)
+		downloadLogger := NewPeriodLogger(appName, sliceName, filepath.Join(dir, sliceName), false, flag)
 		gl.loggerMap[sliceName] = downloadLogger
 	}
 

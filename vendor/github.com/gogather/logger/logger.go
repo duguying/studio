@@ -1,6 +1,9 @@
 package logger
 
-import "log"
+import (
+	"log"
+	"fmt"
+)
 
 // GROUP option for enable group log
 var GROUP = true
@@ -21,16 +24,16 @@ func NewLogger(defaultLogger *log.Logger, v *log.Logger) *Logger {
 
 // Println print line like log.Println
 func (l *Logger) Println(v ...interface{}) {
-	l.d.Println(v...)
+	l.d.Output(2, fmt.Sprintln(v...))
 	if GROUP {
-		l.v.Println(v...)
+		l.v.Output(2, fmt.Sprintln(v...))
 	}
 }
 
 // Printf print format like log.Printf
 func (l *Logger) Printf(format string, v ...interface{}) {
-	l.d.Printf(format, v...)
+	l.d.Output(2, fmt.Sprintf(format, v...))
 	if GROUP && l.v != nil {
-		l.v.Printf(format, v...)
+		l.v.Output(2, fmt.Sprintf(format, v...))
 	}
 }

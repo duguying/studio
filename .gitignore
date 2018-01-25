@@ -48,3 +48,5 @@ release.zip
 *.ini
 
 dist/
+
+*.db

@@ -3,10 +3,7 @@
 // Copyright (c) 2012-2015 Ugorji Nwoke. All rights reserved.
 // Use of this source code is governed by a MIT license found in the LICENSE file.
 
-// ************************************************************
-// DO NOT EDIT.
-// THIS FILE IS AUTO-GENERATED from gen-helper.go.tmpl
-// ************************************************************
+// Code generated from gen-helper.go.tmpl - DO NOT EDIT.
 
 package codec
 
@@ -16,7 +13,7 @@ import (
 )
 
 // GenVersion is the current version of codecgen.
-const GenVersion = 6
+const GenVersion = 8
 
 // This file is used to generate helper code for codecgen.
 // The values here i.e. genHelper(En|De)coder are not to be used directly by
@@ -74,19 +71,19 @@ func (f genHelperEncoder) EncFallback(iv interface{}) {
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperEncoder) EncTextMarshal(iv encoding.TextMarshaler) {
 	bs, fnerr := iv.MarshalText()
-	f.e.marshal(bs, fnerr, false, c_UTF8)
+	f.e.marshal(bs, fnerr, false, cUTF8)
 }
 
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperEncoder) EncJSONMarshal(iv jsonMarshaler) {
 	bs, fnerr := iv.MarshalJSON()
-	f.e.marshal(bs, fnerr, true, c_UTF8)
+	f.e.marshal(bs, fnerr, true, cUTF8)
 }
 
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperEncoder) EncBinaryMarshal(iv encoding.BinaryMarshaler) {
 	bs, fnerr := iv.MarshalBinary()
-	f.e.marshal(bs, fnerr, false, c_RAW)
+	f.e.marshal(bs, fnerr, false, cRAW)
 }
 
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
@@ -96,9 +93,10 @@ func (f genHelperEncoder) EncRaw(iv Raw) {
 
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperEncoder) TimeRtidIfBinc() uintptr {
-	if _, ok := f.e.hh.(*BincHandle); ok {
-		return timeTypId
-	}
+	// // Note: builtin is no longer supported - so make this a no-op
+	// if _, ok := f.e.hh.(*BincHandle); ok {
+	// 	return timeTypId
+	// }
 	return 0
 }
 
@@ -124,13 +122,6 @@ func (f genHelperEncoder) EncExt(v interface{}) (r bool) {
 		return true
 	}
 	return false
-}
-
-// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
-func (f genHelperEncoder) EncSendContainerState(c containerState) {
-	if f.e.cr != nil {
-		f.e.cr.sendContainerState(c)
-	}
 }
 
 // ---------------- DECODER FOLLOWS -----------------
@@ -162,7 +153,7 @@ func (f genHelperDecoder) DecFallback(iv interface{}, chkPtr bool) {
 	if chkPtr {
 		rv = f.d.ensureDecodeable(rv)
 	}
-	f.d.decodeValue(rv, nil, false, false)
+	f.d.decodeValue(rv, nil, false)
 	// f.d.decodeValueFallback(rv)
 }
 
@@ -214,9 +205,10 @@ func (f genHelperDecoder) DecRaw() []byte {
 
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperDecoder) TimeRtidIfBinc() uintptr {
-	if _, ok := f.d.hh.(*BincHandle); ok {
-		return timeTypId
-	}
+	// // Note: builtin is no longer supported - so make this a no-op
+	// if _, ok := f.d.hh.(*BincHandle); ok {
+	// 	return timeTypId
+	// }
 	return 0
 }
 
@@ -249,11 +241,4 @@ func (f genHelperDecoder) DecInferLen(clen, maxlen, unit int) (rvlen int) {
 // FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
 func (f genHelperDecoder) StringView(v []byte) string {
 	return stringView(v)
-}
-
-// FOR USE BY CODECGEN ONLY. IT *WILL* CHANGE WITHOUT NOTICE. *DO NOT USE*
-func (f genHelperDecoder) DecSendContainerState(c containerState) {
-	if f.d.cr != nil {
-		f.d.cr.sendContainerState(c)
-	}
 }

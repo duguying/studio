@@ -11,7 +11,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"log"
-	"duguying/blog/service/model"
+	"duguying/blog/modules/models"
 )
 
 func InitDatabase() {
@@ -52,5 +52,5 @@ func initSqlite() {
 }
 
 func initOrm() {
-	g.Db.AutoMigrate(&model.Article{},&model.User{},&model.File{})
+	g.Db.AutoMigrate(&models.Article{},&models.User{},&models.File{})
 }

@@ -5,50 +5,62 @@
 package action
 
 import (
-	"github.com/gin-gonic/gin"
 	"duguying/blog/service/db"
-	"strconv"
-	"net/http"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
+	"strconv"
 )
 
 func ListArticleWithContent(c *gin.Context) {
-	pageStr:=c.Query("page")
-	page,err:=strconv.ParseUint(pageStr,10,64)
+	pageStr := c.Query("page")
+	page, err := strconv.ParseUint(pageStr, 10, 64)
 	if err != nil {
 		log.Println("page 解析错误, err:", err)
 		c.JSON(http.StatusOK, gin.H{
-			"ok":false,
+			"ok":  false,
 			"err": err.Error(),
 		})
 		return
 	}
 
-	pageSizeStr:=c.Query("page_size")
-	pageSize,err:=strconv.ParseUint(pageSizeStr,10,64)
+	pageSizeStr := c.Query("page_size")
+	pageSize, err := strconv.ParseUint(pageSizeStr, 10, 64)
 	if err != nil {
 		log.Println("page_size 解析错误, err:", err)
 		c.JSON(http.StatusOK, gin.H{
-			"ok":false,
+			"ok":  false,
 			"err": err.Error(),
 		})
 		return
 	}
 
-	total,list,err:= db.PageArticle(uint(page), uint(pageSize))
+	total, list, err := db.PageArticle(uint(page), uint(pageSize))
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, gin.H{
-			"ok":false,
+			"ok":  false,
 			"err": err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"ok":true,
+		"ok":    true,
 		"total": total,
-		"list": list,
+		"list":  db.ArticleToContent(list),
 	})
 	return
+}
+
+func ListArticleTitle(c *gin.Context) {
+
+}
+
+func HotArticleTitle(c *gin.Context) {
+
+}
+
+func MonthArchive(c *gin.Context) {
+
 }

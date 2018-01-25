@@ -20,9 +20,11 @@ func Run() {
 	router := gin.Default()
 
 	router.Any("/version", action.Version)
-	router.GET("/test", action.PageTest)
-	router.GET("/test1", action.PageTest1)
 	router.GET("/list", action.ListArticleWithContent)
+	router.GET("/list_title", action.ListArticleTitle)
+	router.GET("/hot_article", action.HotArticleTitle)
+	router.GET("/month_archive", action.MonthArchive)
+	router.GET("/user_info", action.UserInfo)
 
 	router.Static("/static/upload", g.Config.Get("upload", "dir", "upload"))
 

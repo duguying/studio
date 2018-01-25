@@ -6,6 +6,7 @@ package models
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 )
 
@@ -15,19 +16,44 @@ const (
 )
 
 type Article struct {
-	Id       int64     `json:"id"`
+	Id       uint      `json:"id"`
 	Title    string    `json:"title"`
 	Uri      string    `json:"uri"`
 	Keywords string    `json:"keywords"`
 	Abstract string    `json:"abstract"`
 	Content  string    `json:"content"`
 	Author   string    `json:"author"`
+	AuthorId uint      `json:"author_id"`
 	Time     time.Time `json:"time"`
-	Count    int       `json:"count"`
+	Count    uint      `json:"count"`
 	Status   int       `json:"status"`
 }
 
 func (a *Article) String() string {
 	c, _ := json.Marshal(a)
 	return string(c)
+}
+
+func (a *Article) ToArticleContent() *WrapperArticleContent {
+	return &WrapperArticleContent{
+		Id:        a.Id,
+		Title:     a.Title,
+		Uri:       a.Uri,
+		Author:    a.Author,
+		Tags:      strings.Split(strings.Replace(a.Keywords, "，", ",", -1), ","),
+		CreatedAt: a.Time,
+		ViewCount: a.Count,
+		Content:   a.Content,
+	}
+}
+
+func (a *Article) ToArticleTitle() *WrapperArticleTitle {
+	return &WrapperArticleTitle{
+		Id:        a.Id,
+		Title:     a.Title,
+		Uri:       a.Uri,
+		Author:    a.Author,
+		CreatedAt: a.Time,
+		ViewCount: a.Count,
+	}
 }

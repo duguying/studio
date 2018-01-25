@@ -10,7 +10,7 @@ import (
 )
 
 type Varify struct {
-	Id       int       `json:"id"`
+	Id       uint       `json:"id"`
 	Username string    `json:"username"`
 	Code     string    `json:"code"`
 	Overdue  time.Time `json:"overdue"`

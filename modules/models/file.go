@@ -10,7 +10,7 @@ import (
 )
 
 type File struct {
-	Id       int64     `json:"id"`
+	Id       uint     `json:"id"`
 	Filename string    `json:"filename"`
 	Path     string    `json:"path"`
 	Time     time.Time `json:"time"`

@@ -6,15 +6,15 @@ package models
 
 import "encoding/json"
 
-type Users struct {
-	Id       int64  `json:"id"`
+type User struct {
+	Id       uint  `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Salt     string `json:"salt"`
 	Email    string `json:"email"`
 }
 
-func (u *Users) String() string {
+func (u *User) String() string {
 	c, _ := json.Marshal(u)
 	return string(c)
 }

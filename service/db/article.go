@@ -40,3 +40,32 @@ func ArticleToTitle(articles []*models.Article) (articleTitle []*models.WrapperA
 	}
 	return articleTitle
 }
+
+func HotArticleTitle(num uint) (articleTitle []*models.WrapperArticleTitle, err error) {
+	list := []*models.Article{}
+	errs := g.Db.Table("articles").Order("count desc").Limit(num).Find(&list).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	articleTitle = []*models.WrapperArticleTitle{}
+	for _, article := range list {
+		articleTitle = append(articleTitle, article.ToArticleTitle())
+	}
+	return articleTitle, nil
+}
+
+type ArchInfo struct {
+	Date   string `json:"date"`
+	Number uint   `json:"number"`
+	Year   uint   `json:"year"`
+	Month  uint   `json:"month"`
+}
+
+func MonthArch() (archInfos []*ArchInfo, err error) {
+	archInfos = []*ArchInfo{}
+	errs := g.Db.Table("articles").Select("DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month").Where("status=?", 1).Group("date").Order("year desc, month desc").Find(&archInfos).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return archInfos, nil
+}

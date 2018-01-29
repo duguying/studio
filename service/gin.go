@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
+	"duguying/blog/modules/middleware"
 )
 
 func Run() {
@@ -18,6 +19,8 @@ func Run() {
 	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join("log", "gin.log"))
 
 	router := gin.Default()
+
+	router.Use(middleware.CrossSite())
 
 	router.Any("/version", action.Version)
 	router.GET("/list", action.ListArticleWithContent)

@@ -95,7 +95,7 @@ func ListArticleTitle(c *gin.Context) {
 }
 
 func HotArticleTitle(c *gin.Context) {
-	topStr := c.Query("top")
+	topStr := c.DefaultQuery("top","10")
 	top, err := strconv.ParseUint(topStr, 10, 64)
 	if err != nil {
 		log.Printf("解析错误, err: %s\n", err.Error())

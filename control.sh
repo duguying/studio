@@ -25,6 +25,10 @@ function build() {
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
     CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime" -o $app .
+}
+
+function pack() {
+    version=`git tag | head -1`
     rm -rf release
     rm -rf dist
     rm -f release-${version}.zip
@@ -74,15 +78,6 @@ function status() {
 
 function tailf() {
     tail -f $logfile
-}
-
-function pack() {
-    build
-    git log -1 --pretty=%h > gitversion
-    version=`./$app -v`
-    file_list="public control cfg.example.json $app"
-    echo "...tar $app-$version.tar.gz <= $file_list"
-    tar zcf $app-$version.tar.gz gitversion $file_list
 }
 
 function help() {

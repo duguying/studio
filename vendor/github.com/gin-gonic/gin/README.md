@@ -7,11 +7,55 @@
  [![Go Report Card](https://goreportcard.com/badge/github.com/gin-gonic/gin)](https://goreportcard.com/report/github.com/gin-gonic/gin)
  [![GoDoc](https://godoc.org/github.com/gin-gonic/gin?status.svg)](https://godoc.org/github.com/gin-gonic/gin)
  [![Join the chat at https://gitter.im/gin-gonic/gin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gin-gonic/gin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Open Source Helpers](https://www.codetriage.com/gin-gonic/gin/badges/users.svg)](https://www.codetriage.com/gin-gonic/gin)
 
 Gin is a web framework written in Go (Golang). It features a martini-like API with much better performance, up to 40 times faster thanks to [httprouter](https://github.com/julienschmidt/httprouter). If you need performance and good productivity, you will love Gin.
 
 ![Gin console logger](https://gin-gonic.github.io/gin/other/console.png)
 
+## Contents
+
+- [Quick start](#quick-start)
+- [Benchmarks](#benchmarks)
+- [Gin v1.stable](#gin-v1-stable)
+- [Start using it](#start-using-it)
+- [Build with jsoniter](#build-with-jsoniter)
+- [API Examples](#api-examples)
+    - [Using GET,POST,PUT,PATCH,DELETE and OPTIONS](#using-get-post-put-patch-delete-and-options)
+    - [Parameters in path](#parameters-in-path)
+    - [Querystring parameters](#querystring-parameters)
+    - [Multipart/Urlencoded Form](#multiparturlencoded-form)
+    - [Another example: query + post form](#another-example-query--post-form)
+    - [Upload files](#upload-files)
+    - [Grouping routes](#grouping-routes)
+    - [Blank Gin without middleware by default](#blank-gin-without-middleware-by-default)
+    - [Using middleware](#using-middleware)
+    - [How to write log file](#how-to-write-log-file)
+    - [Model binding and validation](#model-binding-and-validation)
+    - [Custom Validators](#custom-validators)
+    - [Only Bind Query String](#only-bind-query-string)
+    - [Bind Query String or Post Data](#bind-query-string-or-post-data)
+    - [Bind HTML checkboxes](#bind-html-checkboxes)
+    - [Multipart/Urlencoded binding](#multiparturlencoded-binding)
+    - [XML, JSON and YAML rendering](#xml-json-and-yaml-rendering)
+    - [JSONP rendering](#jsonp)
+    - [Serving static files](#serving-static-files)
+    - [HTML rendering](#html-rendering)
+    - [Multitemplate](#multitemplate)
+    - [Redirects](#redirects)
+    - [Custom Middleware](#custom-middleware)
+    - [Using BasicAuth() middleware](#using-basicauth-middleware)
+    - [Goroutines inside a middleware](#goroutines-inside-a-middleware)
+    - [Custom HTTP configuration](#custom-http-configuration)
+    - [Support Let's Encrypt](#support-lets-encrypt)
+    - [Run multiple service using Gin](#run-multiple-service-using-gin)
+    - [Graceful restart or stop](#graceful-restart-or-stop)
+    - [Build a single binary with templates](#build-a-single-binary-with-templates)
+- [Testing](#testing)
+- [Users](#users--)
+
+## Quick start
+ 
 ```sh
 # assume the following codes in example.go file
 $ cat example.go
@@ -385,7 +429,7 @@ func main() {
 	r := gin.New()
 
 	// Global middleware
-	// Logger middleware will write the logs to gin.DefaultWriter even you set with GIN_MODE=release.
+	// Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
 	// By default gin.DefaultWriter = os.Stdout
 	r.Use(gin.Logger())
 
@@ -435,7 +479,7 @@ func main() {
         c.String(200, "pong")
     })
 
-    r.Run(":8080")
+    router.Run(":8080")
 }
 ```
 
@@ -563,7 +607,11 @@ func bookableDate(
 
 func main() {
 	route := gin.Default()
-	binding.Validator.RegisterValidation("bookabledate", bookableDate)
+
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("bookabledate", bookableDate)
+	}
+
 	route.GET("/bookable", getBookable)
 	route.Run(":8085")
 }
@@ -579,12 +627,15 @@ func getBookable(c *gin.Context) {
 ```
 
 ```console
-$ curl "localhost:8085/bookable?check_in=2017-08-16&check_out=2017-08-17"
+$ curl "localhost:8085/bookable?check_in=2018-04-16&check_out=2018-04-17"
 {"message":"Booking dates are valid!"}
 
-$ curl "localhost:8085/bookable?check_in=2017-08-15&check_out=2017-08-16"
+$ curl "localhost:8085/bookable?check_in=2018-03-08&check_out=2018-03-09"
 {"error":"Key: 'Booking.CheckIn' Error:Field validation for 'CheckIn' failed on the 'bookabledate' tag"}
 ```
+
+[Struct level validations](https://github.com/go-playground/validator/releases/tag/v8.7) can also be registed this way.
+See the [struct-lvl-validation example](examples/struct-lvl-validations) to learn more.
 
 ### Only Bind Query String
 
@@ -805,6 +856,28 @@ func main() {
 
 		// Will output  :   while(1);["lena","austin","foo"]
 		c.SecureJSON(http.StatusOK, names)
+	})
+
+	// Listen and serve on 0.0.0.0:8080
+	r.Run(":8080")
+}
+```
+#### JSONP
+
+Using JSONP to request data from a server  in a different domain. Add callback to response body if the query parameter callback exists.
+
+```go
+func main() {
+	r := gin.Default()
+
+	r.GET("/JSONP?callback=x", func(c *gin.Context) {
+		data := map[string]interface{}{
+			"foo": "bar",
+		}
+		
+		//callback is x
+		// Will output  :   x({\"foo\":\"bar\"})
+		c.JSONP(http.StatusOK, data)
 	})
 
 	// Listen and serve on 0.0.0.0:8080
@@ -1190,7 +1263,7 @@ func main() {
 
 ### Run multiple service using Gin
 
-See the [question](https://github.com/gin-gonic/gin/issues/346) and try the folling example:
+See the [question](https://github.com/gin-gonic/gin/issues/346) and try the following example:
 
 [embedmd]:# (examples/multiple-service/main.go go)
 ```go
@@ -1323,8 +1396,8 @@ func main() {
 
 	go func() {
 		// service connections
-		if err := srv.ListenAndServe(); err != nil {
-			log.Printf("listen: %s\n", err)
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
 		}
 	}()
 
@@ -1343,6 +1416,50 @@ func main() {
 	log.Println("Server exiting")
 }
 ```
+
+### Build a single binary with templates
+
+You can build a server into a single binary containing templates by using [go-assets][].
+
+[go-assets]: https://github.com/jessevdk/go-assets
+
+```go
+func main() {
+	r := gin.New()
+
+	t, err := loadTemplate()
+	if err != nil {
+		panic(err)
+	}
+	r.SetHTMLTemplate(t)
+
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "/html/index.tmpl",nil)
+	})
+	r.Run(":8080")
+}
+
+// loadTemplate loads templates embedded by go-assets-builder
+func loadTemplate() (*template.Template, error) {
+	t := template.New("")
+	for name, file := range Assets.Files {
+		if file.IsDir() || !strings.HasSuffix(name, ".tmpl") {
+			continue
+		}
+		h, err := ioutil.ReadAll(file)
+		if err != nil {
+			return nil, err
+		}
+		t, err = t.New(name).Parse(string(h))
+		if err != nil {
+			return nil, err
+		}
+	}
+	return t, nil
+}
+```
+
+See a complete example in the `examples/assets-in-binary` directory.
 
 ## Testing
 

@@ -1,7 +1,7 @@
 {
 	"ImportPath": "duguying/blog",
-	"GoVersion": "go1.9",
-	"GodepVersion": "v79",
+	"GoVersion": "go1.10",
+	"GodepVersion": "v80",
 	"Deps": [
 		{
 			"ImportPath": "github.com/gin-contrib/sse",
@@ -9,36 +9,36 @@
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v1.2-134-gb70b8ab",
-			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
+			"Comment": "v1.2-157-g2282be0",
+			"Rev": "2282be059be78f9f7f70a72ca4dd3bcfe5f972ee"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/binding",
-			"Comment": "v1.2-134-gb70b8ab",
-			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
+			"Comment": "v1.2-157-g2282be0",
+			"Rev": "2282be059be78f9f7f70a72ca4dd3bcfe5f972ee"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/json",
-			"Comment": "v1.2-134-gb70b8ab",
-			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
+			"Comment": "v1.2-157-g2282be0",
+			"Rev": "2282be059be78f9f7f70a72ca4dd3bcfe5f972ee"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/render",
-			"Comment": "v1.2-134-gb70b8ab",
-			"Rev": "b70b8ab20c6f15732226fbd536e28f138629a046"
+			"Comment": "v1.2-157-g2282be0",
+			"Rev": "2282be059be78f9f7f70a72ca4dd3bcfe5f972ee"
 		},
 		{
 			"ImportPath": "github.com/go-sql-driver/mysql",
-			"Comment": "v1.3-2-g2e00b5c",
-			"Rev": "2e00b5cd70399450106cec6431c2e2ce3cae5034"
+			"Comment": "v1.3-60-g3287d94",
+			"Rev": "3287d94d4c6a48a63e16fffaabf27ab20203af2a"
 		},
 		{
 			"ImportPath": "github.com/gogather/cleaner",
-			"Rev": "6a8e3cd411dcc32c17a019c1bea25a272d332adf"
+			"Rev": "1d577a231d34f0d7174a3dc51612d3b953ed2427"
 		},
 		{
 			"ImportPath": "github.com/gogather/com",
-			"Rev": "4423ca58844cc7256a7ad433d478813659187861"
+			"Rev": "e94c6d7e9167d280f5d7adc1f5017281d040113b"
 		},
 		{
 			"ImportPath": "github.com/gogather/logger",
@@ -46,49 +46,61 @@
 		},
 		{
 			"ImportPath": "github.com/golang/protobuf/proto",
-			"Rev": "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
+			"Comment": "v1.0.0-2-ge09c5db",
+			"Rev": "e09c5db296004fbe3f74490e84dcd62c3c5ddb1b"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/gorm",
-			"Comment": "v1.0-97-geb06255",
-			"Rev": "eb06255b667da417d982c6412c4602e932cc5283"
+			"Comment": "v1.9.1-3-g6842b49",
+			"Rev": "6842b49a1ad0feb6b93be830fe63a682cf853ada"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/gorm/dialects/mysql",
-			"Comment": "v1.0-97-geb06255",
-			"Rev": "eb06255b667da417d982c6412c4602e932cc5283"
+			"Comment": "v1.9.1-3-g6842b49",
+			"Rev": "6842b49a1ad0feb6b93be830fe63a682cf853ada"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/gorm/dialects/sqlite",
-			"Comment": "v1.0-97-geb06255",
-			"Rev": "eb06255b667da417d982c6412c4602e932cc5283"
+			"Comment": "v1.9.1-3-g6842b49",
+			"Rev": "6842b49a1ad0feb6b93be830fe63a682cf853ada"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/inflection",
-			"Rev": "74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff"
+			"Rev": "04140366298a54a039076d798123ffa108fff46c"
 		},
 		{
 			"ImportPath": "github.com/json-iterator/go",
-			"Comment": "1.0.0-1-gd80309a",
-			"Rev": "d80309af3bfd0b084e88c732056a4118f94e49f8"
+			"Comment": "1.1.3-16-g2ddf6d7",
+			"Rev": "2ddf6d758266fcb080a4f9e054b9f292c85e6798"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-isatty",
-			"Comment": "v0.0.3-1-ga5cdd64",
-			"Rev": "a5cdd64afdee435007ee3e9f6ed4684af949d568"
+			"Comment": "v0.0.3-7-g6ca4dbf",
+			"Rev": "6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-sqlite3",
-			"Comment": "v1.1.0-102-g86681de",
-			"Rev": "86681de00adef4f8040947b7d35f97000fc5a230"
+			"Comment": "v1.6.0-33-ga72efd6",
+			"Rev": "a72efd674f654961a11ac41aae72c0e43963fe6c"
+		},
+		{
+			"ImportPath": "github.com/modern-go/concurrent",
+			"Comment": "1.0.3",
+			"Rev": "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
+		},
+		{
+			"ImportPath": "github.com/modern-go/reflect2",
+			"Comment": "1.0.0-9-g05fbef0",
+			"Rev": "05fbef0ca5da472bbf96c9322b84a53edc03c9fd"
 		},
 		{
 			"ImportPath": "github.com/ugorji/go/codec",
-			"Rev": "dd3aa7221b0c7a61c3ea1a0a252d06efa5161e3f"
+			"Comment": "v1.1.1-1-gf3cacc1",
+			"Rev": "f3cacc17c85ecb7f1b6a9e373ee85d1480919868"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
-			"Rev": "f64b50fbea64174967a8882830d621a18ee1548e"
+			"Rev": "cbbc999da32df943dac6cd71eb3ee39e1d7838b9"
 		},
 		{
 			"ImportPath": "gopkg.in/go-playground/validator.v8",
@@ -97,12 +109,13 @@
 		},
 		{
 			"ImportPath": "gopkg.in/ini.v1",
-			"Comment": "v1.10.1",
-			"Rev": "776aa739ce9373377cd16f526cdf06cb4c89b40f"
+			"Comment": "v1.36.0",
+			"Rev": "6529cf7c58879c08d927016dde4477f18a0634cb"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
-			"Rev": "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+			"Comment": "v2.2.1",
+			"Rev": "5420a8b6744d3b0345ab293f6fcba19c978f1183"
 		}
 	]
 }

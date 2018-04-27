@@ -5,7 +5,6 @@
 package cleaner
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -58,6 +57,12 @@ func (fc *FCleaner) StartCleanTask() {
 }
 
 func (fc *FCleaner) clean(root string) error {
+	defer func() {
+		if re := recover(); re != nil {
+			log.Println("clean log recover panic : ", re)
+		}
+	}()
+
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if path == root {
 			return nil
@@ -92,7 +97,7 @@ func (fc *FCleaner) clean(root string) error {
 
 func (fc *FCleaner) removePath(path string) error {
 	fc.count++
-	fmt.Println(path)
+	log.Println("[cleaner]", path)
 	return os.Remove(path)
 }
 

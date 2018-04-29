@@ -2,6 +2,7 @@ package com
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
@@ -68,6 +69,13 @@ func Md5(value string) string {
 	h := md5.New()
 	h.Write([]byte(value))
 	return fmt.Sprintf("%s", hex.EncodeToString(h.Sum(nil)))
+}
+
+// 对字符串进行sha1 计算
+func Sha1(data string) string {
+	t := sha1.New()
+	io.WriteString(t, data)
+	return fmt.Sprintf("%x", t.Sum(nil))
 }
 
 func Strim(str string) string {

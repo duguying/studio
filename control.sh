@@ -49,7 +49,7 @@ function start() {
     fi
 
 
-    nohup ./$app  & >> $logfile &
+    nohup ./$app >> $logfile &
     echo $! > $pidfile
     echo "$app started..., pid=$!"
 }

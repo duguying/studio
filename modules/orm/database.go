@@ -39,6 +39,10 @@ func initMysql() {
 	g.Db, err = gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname))
 	if err != nil {
 		log.Printf("数据库连接失败 err:%v\n", err)
+	}else {
+		if g.Config.Get("database", "log", "enable") == "enable" {
+			g.Db.LogMode(true)
+		}
 	}
 }
 

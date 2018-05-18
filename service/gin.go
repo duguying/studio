@@ -19,15 +19,23 @@ func Run() {
 	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join("log", "gin.log"))
 
 	router := gin.Default()
-
 	router.Use(middleware.CrossSite())
 
 	router.Any("/version", action.Version)
-	router.GET("/list", action.ListArticleWithContent)
-	router.GET("/list_title", action.ListArticleTitle)
-	router.GET("/hot_article", action.HotArticleTitle)
-	router.GET("/month_archive", action.MonthArchive)
-	router.GET("/user_info", action.UserInfo)
+
+	api:=router.Group("/api")
+	{
+		api.GET("/list", action.ListArticleWithContent)
+		api.GET("/list_title", action.ListArticleTitle)
+		api.GET("/hot_article", action.HotArticleTitle)
+		api.GET("/month_archive", action.MonthArchive)
+		api.GET("/user_info", action.UserInfo)
+
+		rpi:=api.Group("/rpi")
+		{
+			rpi.POST("/agent", )
+		}
+	}
 
 	router.Static("/static/upload", g.Config.Get("upload", "dir", "upload"))
 

@@ -7,11 +7,13 @@ package g
 import (
 	"duguying/blog/modules/configuration"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/redis.v5"
 )
 
 var (
 	Config *configuration.Config
 	Db *gorm.DB
+	Redis *redis.Client
 
 	InstallMode bool = false
 

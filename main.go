@@ -3,8 +3,9 @@ package main
 import (
 	"duguying/blog/g"
 	"duguying/blog/modules/configuration"
-	"duguying/blog/modules/orm"
 	"duguying/blog/modules/logger"
+	"duguying/blog/modules/orm"
+	"duguying/blog/modules/redis"
 	"duguying/blog/service"
 	"flag"
 	"fmt"
@@ -25,6 +26,9 @@ func main() {
 
 	// 初始化 logger
 	initLogger()
+
+	// 初始化 redis
+	redis.InitRedisConn()
 
 	// 初始化 database
 	orm.InitDatabase()

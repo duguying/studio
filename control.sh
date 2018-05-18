@@ -24,7 +24,7 @@ function build() {
     version=`git tag | head -1`
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
-    CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime" -o $app .
+    CGO_ENABLED=1 GOOS=linux go build -v -a -installsuffix cgo -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime" -o $app .
 }
 
 function pack() {

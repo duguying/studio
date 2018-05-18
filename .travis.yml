@@ -4,6 +4,7 @@ go:
 go_import_path: duguying/blog
 script:
 - "./control.sh build"
+- "./control.sh pack"
 deploy:
   provider: releases
   api_key:

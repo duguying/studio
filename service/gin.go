@@ -30,11 +30,17 @@ func Run() {
 		api.GET("/hot_article", action.HotArticleTitle)
 		api.GET("/month_archive", action.MonthArchive)
 		api.GET("/user_info", action.UserInfo)
+		api.POST("/user_login", action.UserLogin)
 
 		rpi:=api.Group("/rpi")
 		{
 			rpi.POST("/agent", )
 		}
+	}
+
+	auth:=router.Group("/api/admin", action.SessionValidate)
+	{
+		auth.POST("/user_logout", action.UserLogout)
 	}
 
 	router.Static("/static/upload", g.Config.Get("upload", "dir", "upload"))

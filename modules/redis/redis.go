@@ -28,6 +28,7 @@ func InitRedisConn() {
 }
 
 const PREFIX = "blog:"
+const SESS = "session:"
 
 func Set(key, value string) error {
 	return SetTTL(key, value, 0)

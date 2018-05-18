@@ -5,25 +5,11 @@
 package alidns
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestAddDomainRecord(t *testing.T) {
-	base := NewAliArgsBase()
-	arg := AliAddRecord{}
-
-	arg.AliArgsBase = base
-
-	fmt.Println(arg.String())
-
-	//arg.Format = "json"
-	//arg.Version = "2015-01-09"
-	//arg.SignatureMethod = "HMAC-SHA1"
-	//arg.SignatureNonce = guid
-	//arg.SignatureVersion = "1.0"
-	//arg.AccessKeyId = ak
-	//arg.Timestamp = time.Now().UTC().Format("2006-01-02T15:04:05Z")
-
-
+	rcd := NewAliAddRecord("", "ak", "sk", "duguying.net", "rpi", "A", 60, "default", "127.0.0.1")
+	fmt.Println(rcd.ToURL())
 }

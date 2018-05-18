@@ -5,7 +5,6 @@
 package alidns
 
 import (
-	"duguying/blog/g"
 	"duguying/blog/utils"
 	"encoding/json"
 	"fmt"
@@ -24,11 +23,12 @@ type AliArgsBase struct {
 	SignatureNonce   string `json:"SignatureNonce"`
 	SignatureVersion string `json:"SignatureVersion"`
 	AccessKeyId      string `json:"AccessKeyId"`
+	Sk               string `json:"-"`
+	RootAddr         string `json:"-"`
 	Timestamp        string `json:"Timestamp"`
 }
 
-func NewAliArgsBase() AliArgsBase {
-	ak := g.Config.Get("dns", "ak", "")
+func NewAliArgsBase(host string, ak, sk string) AliArgsBase {
 	guid, _ := utils.GenUUID()
 	return AliArgsBase{
 		Format:           "json",
@@ -37,6 +37,8 @@ func NewAliArgsBase() AliArgsBase {
 		SignatureNonce:   guid,
 		SignatureVersion: "1.0",
 		AccessKeyId:      ak,
+		Sk:               sk,
+		RootAddr:         host,
 		Timestamp:        time.Now().UTC().Format("2006-01-02T15:04:05Z"),
 	}
 }
@@ -59,9 +61,6 @@ func (aar *AliAddRecord) String() string {
 }
 
 func (arr *AliAddRecord) ToURL() string {
-	rootAddr := g.Config.Get("dns", "addr", "http://alidns.aliyuncs.com")
-	sk := g.Config.Get("dns", "sk", "")
-
 	args := map[string]string{}
 	json.Unmarshal([]byte(arr.String()), &args)
 
@@ -78,13 +77,13 @@ func (arr *AliAddRecord) ToURL() string {
 
 	stringToSign := fmt.Sprintf("GET&/%s", argsLine)
 	stringToSign = com.UrlEncode(stringToSign)
-	signature := utils.HmacSha1(stringToSign, fmt.Sprintf("%s&", sk))
+	signature := utils.HmacSha1(stringToSign, fmt.Sprintf("%s&", arr.Sk))
 
-	addr := fmt.Sprintf("%s/?%s", rootAddr, fmt.Sprintf("%s%s", fmt.Sprintf("Signature=%s", signature), argsLine))
+	addr := fmt.Sprintf("%s/?%s", arr.RootAddr, fmt.Sprintf("%s%s", fmt.Sprintf("Signature=%s", signature), argsLine))
 	return addr
 }
 
-func NewAliAddRecord(rootDomain string, RR string, recordType string, ttl int, line string, value string) AliAddRecord {
+func NewAliAddRecord(host, ak, sk string, rootDomain string, RR string, recordType string, ttl int, line string, value string) AliAddRecord {
 	return AliAddRecord{
 		Action:     "AddDomainRecord",
 		DomainName: rootDomain,
@@ -93,12 +92,12 @@ func NewAliAddRecord(rootDomain string, RR string, recordType string, ttl int, l
 		TTL:        fmt.Sprintf("%d", ttl),
 		Line:       value,
 
-		AliArgsBase: NewAliArgsBase(),
+		AliArgsBase: NewAliArgsBase(host, ak, sk),
 	}
 }
 
-func AddDomainRecord(rootDomain string, RR string, recordType string, ttl int, line string, value string) (err error) {
-	entity := NewAliAddRecord(rootDomain, RR, recordType, 60, line, value)
+func AddDomainRecord(host, ak, sk string, rootDomain string, RR string, recordType string, ttl int, line string, value string) (err error) {
+	entity := NewAliAddRecord(host, ak, sk, rootDomain, RR, recordType, 60, line, value)
 	link := entity.ToURL()
 	log.Println("add domain request:", link)
 	resp, content, errs := gorequest.New().Get(link).End()

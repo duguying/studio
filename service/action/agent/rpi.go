@@ -36,9 +36,12 @@ func Report(c *gin.Context) {
 		return
 	}
 
+	rootAddr := g.Config.Get("dns", "addr", "http://alidns.aliyuncs.com")
+	ak := g.Config.Get("dns", "ak", "")
+	sk := g.Config.Get("dns", "sk", "")
 	rootDomain := g.Config.Get("dns", "root", "duguying.net")
 	rpiRecord := g.Config.Get("dns", "rr", "rpi")
-	err = alidns.AddDomainRecord(rootDomain, rpiRecord, "A", 60, "default", c.ClientIP())
+	err = alidns.AddDomainRecord(rootAddr, ak, sk, rootDomain, rpiRecord, "A", 60, "default", c.ClientIP())
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

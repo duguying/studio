@@ -491,8 +491,7 @@ func (s *DB) Begin() *DB {
 
 // Commit commit a transaction
 func (s *DB) Commit() *DB {
-	var emptySQLTx *sql.Tx
-	if db, ok := s.db.(sqlTx); ok && db != nil && db != emptySQLTx {
+	if db, ok := s.db.(sqlTx); ok && db != nil {
 		s.AddError(db.Commit())
 	} else {
 		s.AddError(ErrInvalidTransaction)

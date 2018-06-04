@@ -81,7 +81,7 @@ function tailf() {
 }
 
 function help() {
-    echo "$0 build|start|stop|restart|status|tail"
+    echo "$0 build|pack|start|stop|restart|status|tail"
 }
 
 if [ "$1" == "" ]; then
@@ -98,6 +98,8 @@ elif [ "$1" == "status" ];then
     status
 elif [ "$1" == "tail" ];then
     tailf
+elif [ "$1" == "pack" ];then
+    pack
 else
     help
 fi

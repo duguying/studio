@@ -7,7 +7,7 @@ import (
 
 // 统计文章数目
 func CountArticle() (int, error) {
-	sql := "select count(*) as number from article"
+	sql := "select count(*) as number from articles"
 	var maps []orm.Params
 	o := orm.NewOrm()
 	o.Raw(sql).Values(&maps)

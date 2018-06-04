@@ -18,7 +18,7 @@ type File struct {
 }
 
 func (this *File) TableName() string {
-	return "file"
+	return "files"
 }
 
 func init() {
@@ -44,7 +44,7 @@ func AddFile(filename string, path string, store string, mime string) (int64, er
 	file.Mime = mime
 
 	// select count(*) from file where path=path
-	sql := "select count(*) as number from file where path=?"
+	sql := "select count(*) as number from files where path=?"
 	var maps []orm.Params
 	o.Raw(sql, path).Values(&maps)
 	num, _ := strconv.Atoi(maps[0]["number"].(string))
@@ -87,8 +87,8 @@ func RemoveFile(id int) error {
 // error 错误
 func GetFileList(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// numPerPage := 6
-	sql1 := "select * from file order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
-	sql2 := "select count(*) as number from file"
+	sql1 := "select * from files order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql2 := "select count(*) as number from files"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
 	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)

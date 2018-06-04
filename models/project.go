@@ -23,7 +23,7 @@ func init() {
 }
 
 func (this *Project) TableName() string {
-	return "project"
+	return "projects"
 }
 
 // get project by id or name
@@ -59,8 +59,8 @@ func GetProject(id int, name string) (*Project, error) {
 // error 错误
 func ListProjects(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// pagePerNum := 6
-	sql1 := "select * from project order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
-	sql2 := "select count(*) as number from project"
+	sql1 := "select * from projects order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql2 := "select count(*) as number from projects"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
 	num, err := o.Raw(sql1, numPerPage*(page-1)).Values(&maps)

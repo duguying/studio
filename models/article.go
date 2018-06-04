@@ -18,7 +18,7 @@ type Article struct {
 	Abstract string
 	Content  string
 	Author   string
-	Time     time.Time
+	Time     time.Time `sql:"created_at"`
 	Count    int
 	Status   int
 }
@@ -193,13 +193,13 @@ func DeleteArticle(id int64, uri string) (int64, error) {
 }
 
 // 按月份统计文章数-cached
-// select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from article group by date order by year desc, month desc
+// select DATE_FORMAT(created_at,'%Y年%m月') as date,count(*) as number ,year(created_at) as year, month(created_at) as month from article group by date order by year desc, month desc
 func CountByMonth() ([]orm.Params, error) {
 	var maps []orm.Params
 
 	err := utils.GetCache("CountByMonth", &maps)
 	if nil != err {
-		sql := "select DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month from articles where status=? group by date order by year desc, month desc"
+		sql := "select DATE_FORMAT(created_at,'%Y年%m月') as date,count(*) as number ,year(created_at) as year, month(created_at) as month from articles where status=? group by date order by year desc, month desc"
 		o := orm.NewOrm()
 		num, err := o.Raw(sql, ART_STATUS_PUBLISH).Values(&maps)
 		if err == nil && num > 0 {
@@ -215,7 +215,7 @@ func CountByMonth() ([]orm.Params, error) {
 }
 
 // 获取某月的文章列表-cached
-// select * from article where year(time)=2014 and month(time)=8
+// select * from article where year(created_at)=2014 and month(created_at)=8
 // year 年
 // month 月
 // page 页码
@@ -249,14 +249,14 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 	// get data - cached
 	err = utils.GetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), &maps)
 	if nil != err {
-		sql1 := "select * from articles where status=? and year(time)=? and month(time)=? order by time desc limit ?,?"
+		sql1 := "select * from articles where status=? and year(created_at)=? and month(created_at)=? order by created_at desc limit ?,?"
 		_, err = o.Raw(sql1, ART_STATUS_PUBLISH, year, month, numPerPage*(page-1), numPerPage).Values(&maps)
 		utils.SetCache(fmt.Sprintf("ListByMonth.list.%d.%d.%d", year, month, page), maps, 3600)
 	}
 
 	err = utils.GetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), &maps2)
 	if nil != err {
-		sql2 := "select count(*)as number from articles where status=? and year(time)=? and month(time)=?"
+		sql2 := "select count(*)as number from articles where status=? and year(created_at)=? and month(created_at)=?"
 		_, err = o.Raw(sql2, ART_STATUS_PUBLISH, year, month).Values(&maps2)
 		utils.SetCache(fmt.Sprintf("ListByMonth.count.%d.%d", year, month), maps2, 3600)
 	}
@@ -287,7 +287,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 }
 
 // 文章分页列表
-// select * from article order by time desc limit 0,6
+// select * from article order by created_at desc limit 0,6
 // page 页码
 // numPerPage 每页条数
 // 返回值:
@@ -297,7 +297,7 @@ func ListByMonth(year int, month int, page int, numPerPage int) ([]orm.Params, b
 // error 错误
 func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// pagePerNum := 6
-	sql1 := "select * from articles where status = ? order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql1 := "select * from articles where status = ? order by created_at desc limit ?," + fmt.Sprintf("%d", numPerPage)
 	sql2 := "select count(*) as number from articles where status = ?"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
@@ -352,7 +352,7 @@ func ListPage(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 // error 错误
 func ListByKeyword(keyword string, page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// numPerPage := 6
-	sql1 := "select * from articles where keywords like ? order by time desc limit ?,?"
+	sql1 := "select * from articles where keywords like ? order by created_at desc limit ?,?"
 	sql2 := "select count(*) as number from articles where keywords like ?"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()
@@ -404,7 +404,7 @@ func HottestArticleList() ([]orm.Params, error) {
 
 // 列出文章 for admin
 func ArticleListForAdmin(page int, numPerPage int) ([]orm.Params, bool, int, error) {
-	sql1 := "select id,uri,title,count,status,time from articles order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql1 := "select id,uri,title,count,status,created_at from articles order by created_at desc limit ?," + fmt.Sprintf("%d", numPerPage)
 	sql2 := "select count(*) as number from articles"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()

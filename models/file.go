@@ -12,7 +12,7 @@ type File struct {
 	Id       int
 	Filename string
 	Path     string
-	Time     time.Time
+	Time     time.Time `sql:"created_at"`
 	Store    string
 	Mime     string
 }
@@ -87,7 +87,7 @@ func RemoveFile(id int) error {
 // error 错误
 func GetFileList(page int, numPerPage int) ([]orm.Params, bool, int, error) {
 	// numPerPage := 6
-	sql1 := "select * from files order by time desc limit ?," + fmt.Sprintf("%d", numPerPage)
+	sql1 := "select * from files order by created_at desc limit ?," + fmt.Sprintf("%d", numPerPage)
 	sql2 := "select count(*) as number from files"
 	var maps, maps2 []orm.Params
 	o := orm.NewOrm()

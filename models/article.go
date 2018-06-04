@@ -18,7 +18,7 @@ type Article struct {
 	Abstract string
 	Content  string
 	Author   string
-	Time     time.Time `sql:"created_at"`
+	Time     time.Time `orm:"column(created_at)"`
 	Count    int
 	Status   int
 }

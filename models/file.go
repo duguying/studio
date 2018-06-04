@@ -12,7 +12,7 @@ type File struct {
 	Id       int
 	Filename string
 	Path     string
-	Time     time.Time `sql:"created_at"`
+	Time     time.Time `orm:"column(created_at)"`
 	Store    string
 	Mime     string
 }

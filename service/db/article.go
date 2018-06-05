@@ -7,6 +7,7 @@ package db
 import (
 	"duguying/blog/g"
 	"duguying/blog/modules/models"
+	"encoding/json"
 )
 
 func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, err error) {
@@ -59,6 +60,11 @@ type ArchInfo struct {
 	Number uint   `json:"number"`
 	Year   uint   `json:"year"`
 	Month  uint   `json:"month"`
+}
+
+func (ai *ArchInfo) String() string {
+	c, _ := json.Marshal(ai)
+	return string(c)
 }
 
 func MonthArch() (archInfos []*ArchInfo, err error) {

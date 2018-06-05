@@ -129,6 +129,7 @@ func MonthArchive(c *gin.Context) {
 		})
 		return
 	}
+	log.Println("按月归档 list:", list)
 	c.JSON(http.StatusOK, gin.H{
 		"ok":   true,
 		"list": list,

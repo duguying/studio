@@ -17,7 +17,7 @@ func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, 
 	}
 
 	list = []*models.Article{}
-	errs = g.Db.Table("articles").Where("status=?", 1).Order("time desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
+	errs = g.Db.Table("articles").Where("status=?", 1).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return 0, nil, errs[0]
 	}
@@ -63,7 +63,7 @@ type ArchInfo struct {
 
 func MonthArch() (archInfos []*ArchInfo, err error) {
 	archInfos = []*ArchInfo{}
-	errs := g.Db.Table("articles").Select("DATE_FORMAT(time,'%Y年%m月') as date,count(*) as number ,year(time) as year, month(time) as month").Where("status=?", 1).Group("date").Order("year desc, month desc").Find(&archInfos).GetErrors()
+	errs := g.Db.Table("articles").Select("DATE_FORMAT(created_at,'%Y年%m月') as date,count(*) as number ,year(created_at) as year, month(created_at) as month").Where("status=?", 1).Group("date").Order("year desc, month desc").Find(&archInfos).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
 	}

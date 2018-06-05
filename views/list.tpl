@@ -5,7 +5,7 @@
 				{{{range $k,$v := .list}}}
 				<li class="a-l-item">
 					<ul>
-						<li class="time">{{{date_cn $v.time}}}</li>
+						<li class="time">{{{date_cn $v.created_at}}}</li>
 						<li class="title"><a href="/article/{{{$v.uri}}}">{{{$v.title}}}</a></li>
 					</ul>
 				</li>

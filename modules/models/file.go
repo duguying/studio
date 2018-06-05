@@ -10,12 +10,12 @@ import (
 )
 
 type File struct {
-	Id       uint     `json:"id"`
-	Filename string    `json:"filename"`
-	Path     string    `json:"path"`
-	Time     time.Time `json:"time"`
-	Store    string    `json:"store"`
-	Mime     string    `json:"mime"`
+	Id        uint      `json:"id"`
+	Filename  string    `json:"filename"`
+	Path      string    `json:"path"`
+	Store     string    `json:"store"`
+	Mime      string    `json:"mime"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 func (f *File) String() string {

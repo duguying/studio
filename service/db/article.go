@@ -9,7 +9,7 @@ import (
 	"duguying/blog/modules/models"
 	"encoding/json"
 	"strings"
-)
+	)
 
 func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, err error) {
 	total = 0
@@ -78,4 +78,13 @@ func MonthArch() (archInfos []*ArchInfo, err error) {
 		arch.Date = strings.Replace(arch.Date, "-", "年", -1) + "月"
 	}
 	return archInfos, nil
+}
+
+func GetArticle(uri string) (art *models.Article, err error) {
+	art = &models.Article{}
+	errs := g.Db.Table("articles").Where("uri=?", uri).First(art).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return art, nil
 }

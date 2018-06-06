@@ -25,6 +25,7 @@ func Run() {
 
 	api:=router.Group("/api")
 	{
+		api.GET("/get_article", action.GetArticle)
 		api.GET("/list", action.ListArticleWithContent)
 		api.GET("/list_title", action.ListArticleTitle)
 		api.GET("/hot_article", action.HotArticleTitle)

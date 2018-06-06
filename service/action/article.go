@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"fmt"
 )
 
 func ListArticleWithContent(c *gin.Context) {
@@ -95,7 +96,7 @@ func ListArticleTitle(c *gin.Context) {
 }
 
 func HotArticleTitle(c *gin.Context) {
-	topStr := c.DefaultQuery("top","10")
+	topStr := c.DefaultQuery("top", "10")
 	top, err := strconv.ParseUint(topStr, 10, 64)
 	if err != nil {
 		log.Printf("解析错误, err: %s\n", err.Error())
@@ -135,4 +136,23 @@ func MonthArchive(c *gin.Context) {
 		"list": list,
 	})
 	return
+}
+
+func GetArticle(c *gin.Context) {
+	uri := c.Query("uri")
+	fmt.Println("[URL]", c.Request.URL.Query())
+	art, err := db.GetArticle(uri)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":   true,
+			"data": art,
+		})
+		return
+	}
 }

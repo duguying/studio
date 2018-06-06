@@ -8,6 +8,7 @@ import (
 	"duguying/blog/g"
 	"duguying/blog/modules/models"
 	"encoding/json"
+	"strings"
 )
 
 func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, err error) {
@@ -69,9 +70,12 @@ func (ai *ArchInfo) String() string {
 
 func MonthArch() (archInfos []*ArchInfo, err error) {
 	archInfos = []*ArchInfo{}
-	errs := g.Db.Table("articles").Select("DATE_FORMAT(created_at,'%Y年%m月') as date,count(*) as number ,year(created_at) as year, month(created_at) as month").Where("status=?", 1).Group("date").Order("year desc, month desc").Find(&archInfos).GetErrors()
+	errs := g.Db.Table("articles").Select("DATE_FORMAT(created_at,'%Y-%m') as date,count(*) as number ,year(created_at) as year, month(created_at) as month").Where("status=?", 1).Group("date").Order("year desc, month desc").Find(&archInfos).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
+	}
+	for _, arch := range archInfos {
+		arch.Date = strings.Replace(arch.Date, "-", "年", -1) + "月"
 	}
 	return archInfos, nil
 }

@@ -76,6 +76,12 @@ function status() {
     fi
 }
 
+function proto(){
+    echo "compile protobuf..."
+    protoc -I=./service/message/model --go_out=./service/message/model ./service/message/model/*.proto
+    echo "compile finished."
+}
+
 function tailf() {
     tail -f $logfile
 }
@@ -100,6 +106,8 @@ elif [ "$1" == "tail" ];then
     tailf
 elif [ "$1" == "pack" ];then
     pack
+elif [ "$1" == "proto" ];then
+    proto
 else
     help
 fi

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package model;
 
+// cmd 2
 message SetAuthorizeKeyRequest {
     int32 command = 1;
     string public_key = 2;

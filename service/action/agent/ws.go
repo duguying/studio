@@ -5,6 +5,7 @@
 package agent
 
 import (
+	"duguying/blog/service/message/model"
 	"duguying/blog/service/message/pipe"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
@@ -43,36 +44,42 @@ func Ws(c *gin.Context) {
 	pipe.AddConnect(connId, conn)
 
 	defer conn.Close()
-	out := make(chan string, 10)
+	out := make(chan model.Msg, 100)
 
 	// register in and out channel
 	pipe.AddUserPipe(clientId, out, connId)
 
-	var mt int = 1
 	// read from client, put into in channel
 	go func(con *websocket.Conn) {
 		for {
 			var err error
-			var msg []byte
 
-			mt, msg, err = con.ReadMessage()
+			mt, msgData, err := con.ReadMessage()
 			if err != nil {
 				log.Println("read:", err)
 				break
 			}
-			pipe.In <- string(msg)
-			log.Printf("recv: %s\n", msg)
+
+			msg := model.Msg{
+				Type: mt,
+				Cmd:  int(msgData[0]),
+				Data: msgData[1:],
+			}
+
+			pipe.In <- msg
+			log.Printf("recv: %s\n", msg.String())
 		}
 	}(conn)
 
 	// write into client, get from out channel
 	for {
 		var err error
-		var msg string
+		var msg model.Msg
 
 		msg = <-out
+		log.Println("send message:", msg.String())
 
-		err = conn.WriteMessage(mt, []byte(msg))
+		err = conn.WriteMessage(msg.Type, append([]byte{byte(msg.Cmd)}, msg.Data...))
 		if err != nil {
 			log.Println("即时消息发送到客户端:", err)
 			break

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package model;
 
+// cmd 1
 message PerformanceMonitor {
     message Memory {
         uint64 total_mem = 1;

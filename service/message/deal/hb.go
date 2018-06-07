@@ -5,7 +5,11 @@
 package deal
 
 import (
+	"duguying/blog/service/message/model"
 	"duguying/blog/service/message/pipe"
+	"github.com/gogo/protobuf/proto"
+	"github.com/gorilla/websocket"
+	"log"
 	"time"
 )
 
@@ -24,7 +28,20 @@ func sendHb() {
 		return
 	}
 
+	hbp := &model.HeartBeat{
+		Timestamp: uint64(time.Now().Unix()),
+	}
+	packet, err := proto.Marshal(hbp)
+	if err != nil {
+		log.Println("marshal proto failed, err:", err.Error())
+		return
+	}
+
 	for clientId, _ := range cm.M {
-		pipe.SendMsg(clientId, "")
+		pipe.SendMsg(clientId, model.Msg{
+			Type: websocket.BinaryMessage,
+			Cmd:  model.CMD_HB,
+			Data: packet,
+		})
 	}
 }

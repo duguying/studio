@@ -4,6 +4,10 @@
 	"GodepVersion": "v79",
 	"Deps": [
 		{
+			"ImportPath": "github.com/Unknwon/com",
+			"Rev": "28b053d5a2923b87ce8c5a08f3af779894a72758"
+		},
+		{
 			"ImportPath": "github.com/gin-contrib/sse",
 			"Rev": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae"
 		},
@@ -45,8 +49,18 @@
 			"Rev": "9dca2ea5f77b1c3a25dc634025fd505107d35ccd"
 		},
 		{
+			"ImportPath": "github.com/gogather/safemap",
+			"Rev": "e4dc79c94fb6b3816b0d16251854e1a12505c890"
+		},
+		{
 			"ImportPath": "github.com/golang/protobuf/proto",
-			"Rev": "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
+			"Comment": "v1.1.0-10-g05f48f4",
+			"Rev": "05f48f4eaf0e05663b562bab533cdd472238ce29"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Comment": "v1.2.0-6-ga69d9f6",
+			"Rev": "a69d9f6de432e2c6b296a947d8a5ee88f68522cf"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/gorm",
@@ -83,8 +97,31 @@
 			"Rev": "86681de00adef4f8040947b7d35f97000fc5a230"
 		},
 		{
+			"ImportPath": "github.com/moul/http2curl",
+			"Rev": "4e24498b31dba4683efb9d35c1c8a91e2eda28c8"
+		},
+		{
+			"ImportPath": "github.com/parnurzeal/gorequest",
+			"Comment": "v0.2.14-33-gea77900",
+			"Rev": "ea779001e09326d30d455dbf37bc0d08c49941a2"
+		},
+		{
+			"ImportPath": "github.com/pkg/errors",
+			"Comment": "v0.8.0-3-gbfd5150",
+			"Rev": "bfd5150e4e41705ded2129ec33379de1cb90b513"
+		},
+		{
+			"ImportPath": "github.com/satori/go.uuid",
+			"Comment": "v1.2.0-4-g36e9d2e",
+			"Rev": "36e9d2ebbde5e3f13ab2e25625fd453271d6522e"
+		},
+		{
 			"ImportPath": "github.com/ugorji/go/codec",
 			"Rev": "dd3aa7221b0c7a61c3ea1a0a252d06efa5161e3f"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
+			"Rev": "a337091b0525af65de94df2eb7e98bd9962dcbe2"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",

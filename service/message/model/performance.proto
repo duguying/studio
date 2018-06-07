@@ -1,0 +1,29 @@
+syntax = "proto3";
+package model;
+
+message PerformanceMonitor {
+    message Memory {
+        uint64 total_mem = 1;
+        uint64 used_mem = 2;
+        uint64 free_mem = 3;
+        uint64 actual_used = 4;
+        uint64 actual_free = 5;
+        uint64 used_swap = 6;
+        uint64 free_swap = 7;
+        uint64 total_swap = 8;
+    }
+
+    message Cpu {
+        uint64 user = 1;
+        uint64 nice = 2;
+        uint64 Sys = 3;
+        uint64 Idle = 4;
+        uint64 Wait = 5;
+        uint64 Irq = 6;
+        uint64 SoftIrq = 7;
+        uint64 Stolen = 8;
+    }
+
+    Memory mem = 1;
+    Cpu cpu = 2;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+package model;
+
+message SetAuthorizeKeyRequest {
+    int32 command = 1;
+    string public_key = 2;
+}
+
+message ListAllAuthorizeKeyRequest {
+}

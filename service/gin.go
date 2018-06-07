@@ -7,23 +7,28 @@ package service
 import (
 	"duguying/blog/g"
 	"duguying/blog/modules/logger"
+	"duguying/blog/modules/middleware"
 	"duguying/blog/service/action"
+	"duguying/blog/service/action/agent"
+	"duguying/blog/service/message/deal"
+	"duguying/blog/service/message/pipe"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
-	"duguying/blog/modules/middleware"
 )
 
 func Run() {
 	gin.SetMode(g.Config.Get("system", "mode", gin.ReleaseMode))
 	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join("log", "gin.log"))
 
+	initWsMessage()
+
 	router := gin.Default()
 	router.Use(middleware.CrossSite())
 
 	router.Any("/version", action.Version)
 
-	api:=router.Group("/api")
+	api := router.Group("/api")
 	{
 		api.GET("/get_article", action.GetArticle)
 		api.GET("/list", action.ListArticleWithContent)
@@ -33,13 +38,13 @@ func Run() {
 		api.GET("/user_info", action.UserInfo)
 		api.POST("/user_login", action.UserLogin)
 
-		rpi:=api.Group("/rpi")
+		rpi := api.Group("/agent")
 		{
-			rpi.POST("/agent", )
+			rpi.Any("/ws", agent.Ws)
 		}
 	}
 
-	auth:=router.Group("/api/admin", action.SessionValidate)
+	auth := router.Group("/api/admin", action.SessionValidate)
 	{
 		auth.POST("/user_logout", action.UserLogout)
 	}
@@ -51,4 +56,10 @@ func Run() {
 	fmt.Printf("port: %d\n", port)
 
 	router.Run(fmt.Sprintf(":%d", port))
+}
+
+func initWsMessage() {
+	pipe.InitPipeline()
+	deal.Start()
+	deal.InitHb()
 }

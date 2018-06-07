@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"fmt"
 )
 
 func ListArticleWithContent(c *gin.Context) {
@@ -140,7 +139,6 @@ func MonthArchive(c *gin.Context) {
 
 func GetArticle(c *gin.Context) {
 	uri := c.Query("uri")
-	fmt.Println("[URL]", c.Request.URL.Query())
 	art, err := db.GetArticle(uri)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{

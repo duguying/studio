@@ -18,6 +18,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+// cmd 2
 type SetAuthorizeKeyRequest struct {
 	Command              int32    `protobuf:"varint,1,opt,name=command,proto3" json:"command,omitempty"`
 	PublicKey            string   `protobuf:"bytes,2,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
@@ -30,7 +31,7 @@ func (m *SetAuthorizeKeyRequest) Reset()         { *m = SetAuthorizeKeyRequest{}
 func (m *SetAuthorizeKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*SetAuthorizeKeyRequest) ProtoMessage()    {}
 func (*SetAuthorizeKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_authorize_key_d8625d4c25881a9a, []int{0}
+	return fileDescriptor_authorize_key_6f8e64cb7ad9369d, []int{0}
 }
 func (m *SetAuthorizeKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetAuthorizeKeyRequest.Unmarshal(m, b)
@@ -74,7 +75,7 @@ func (m *ListAllAuthorizeKeyRequest) Reset()         { *m = ListAllAuthorizeKeyR
 func (m *ListAllAuthorizeKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*ListAllAuthorizeKeyRequest) ProtoMessage()    {}
 func (*ListAllAuthorizeKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_authorize_key_d8625d4c25881a9a, []int{1}
+	return fileDescriptor_authorize_key_6f8e64cb7ad9369d, []int{1}
 }
 func (m *ListAllAuthorizeKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListAllAuthorizeKeyRequest.Unmarshal(m, b)
@@ -99,9 +100,9 @@ func init() {
 	proto.RegisterType((*ListAllAuthorizeKeyRequest)(nil), "model.ListAllAuthorizeKeyRequest")
 }
 
-func init() { proto.RegisterFile("authorize_key.proto", fileDescriptor_authorize_key_d8625d4c25881a9a) }
+func init() { proto.RegisterFile("authorize_key.proto", fileDescriptor_authorize_key_6f8e64cb7ad9369d) }
 
-var fileDescriptor_authorize_key_d8625d4c25881a9a = []byte{
+var fileDescriptor_authorize_key_6f8e64cb7ad9369d = []byte{
 	// 135 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4e, 0x2c, 0x2d, 0xc9,
 	0xc8, 0x2f, 0xca, 0xac, 0x4a, 0x8d, 0xcf, 0x4e, 0xad, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,

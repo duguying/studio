@@ -27,4 +27,5 @@ message PerformanceMonitor {
 
     Memory mem = 1;
     Cpu cpu = 2;
+    uint64 Timestamp = 3;
 }

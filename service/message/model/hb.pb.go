@@ -18,6 +18,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+// cmd 0
 type HeartBeat struct {
 	Timestamp            uint64   `protobuf:"varint,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -29,7 +30,7 @@ func (m *HeartBeat) Reset()         { *m = HeartBeat{} }
 func (m *HeartBeat) String() string { return proto.CompactTextString(m) }
 func (*HeartBeat) ProtoMessage()    {}
 func (*HeartBeat) Descriptor() ([]byte, []int) {
-	return fileDescriptor_hb_9e2105b34d2159c9, []int{0}
+	return fileDescriptor_hb_62d18a6c15c2aaa7, []int{0}
 }
 func (m *HeartBeat) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HeartBeat.Unmarshal(m, b)
@@ -60,9 +61,9 @@ func init() {
 	proto.RegisterType((*HeartBeat)(nil), "model.HeartBeat")
 }
 
-func init() { proto.RegisterFile("hb.proto", fileDescriptor_hb_9e2105b34d2159c9) }
+func init() { proto.RegisterFile("hb.proto", fileDescriptor_hb_62d18a6c15c2aaa7) }
 
-var fileDescriptor_hb_9e2105b34d2159c9 = []byte{
+var fileDescriptor_hb_62d18a6c15c2aaa7 = []byte{
 	// 81 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xc8, 0x48, 0xd2, 0x2b,
 	0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0xcd, 0xcd, 0x4f, 0x49, 0xcd, 0x51, 0xd2, 0xe4, 0xe2, 0xf4,

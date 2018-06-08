@@ -149,7 +149,7 @@ func GetArticle(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":   true,
-			"data": art,
+			"data": art.ToArticleContent(),
 		})
 		return
 	}

@@ -17,15 +17,76 @@ message PerformanceMonitor {
     message Cpu {
         uint64 user = 1;
         uint64 nice = 2;
-        uint64 Sys = 3;
-        uint64 Idle = 4;
-        uint64 Wait = 5;
-        uint64 Irq = 6;
-        uint64 SoftIrq = 7;
-        uint64 Stolen = 8;
+        uint64 sys = 3;
+        uint64 idle = 4;
+        uint64 wait = 5;
+        uint64 irq = 6;
+        uint64 soft_irq = 7;
+        uint64 stolen = 8;
     }
 
+    message Load {
+        double one = 1;
+        double five = 2;
+        double fifteen = 3;
+    }
+
+    message FileSystem {
+        string dir_name = 1;
+        string dev_name = 2;
+        string type_name = 3;
+        string sys_type_name = 4;
+        string options = 5;
+        uint32 flags = 6;
+
+        uint64 total = 7;
+        uint64 used = 8;
+        uint64 free = 9;
+        uint64 avail = 10;
+        uint64 files = 11;
+        uint64 free_files = 12;
+    }
+
+    message ProcTime {
+        uint64 start_time = 1;
+        uint64 user = 2;
+        uint64 sys = 3;
+        uint64 total = 4;
+    }
+
+    message Process {
+        int32 pid = 1;
+        repeated string args = 2;
+        string exe_name = 3;
+        string exe_cwd = 4;
+        string exe_root = 5;
+
+        ProcTime cpu_proc_time = 6;
+        uint64 cpu_last_time = 7;
+        double cpu_percent = 8;
+
+        uint64 mem_size = 9;
+        uint64 mem_resident = 10;
+        uint64 mem_share = 11;
+        uint64 mem_minor_faults = 12;
+        uint64 mem_major_faults = 13;
+        uint64 mem_page_faults = 14;
+
+        string stat_name = 15;
+        int32 stat_state = 16;
+        int32 stat_ppid = 17;
+        int32 stat_tty = 18;
+        int32 stat_priority = 19;
+        int32 stat_nice = 20;
+        int32 stat_processor = 21;
+    }
+
+    uint64 timestamp = 3;
     Memory mem = 1;
     Cpu cpu = 2;
-    uint64 Timestamp = 3;
+    Load load = 4;
+    double uptime = 5;
+    repeated Cpu cpulist = 6;
+    repeated FileSystem file_system_list = 7;
+    repeated Process process_list = 8;
 }

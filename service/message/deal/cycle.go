@@ -11,7 +11,6 @@ func Start() {
 		for {
 			select {
 			case msg := <-pipe.In:
-				logger.L("ws").Println("[ws] 收到原始消息:", msg)
 				err := DealWithMessage(msg)
 				if err != nil {
 					log.Println("[ws] pipe deal with message error:", err)

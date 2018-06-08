@@ -41,6 +41,7 @@ func Run() {
 		rpi := api.Group("/agent")
 		{
 			rpi.Any("/ws", agent.Ws)
+			rpi.GET("/list_perf", agent.PerfList)
 		}
 	}
 

@@ -20,19 +20,24 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 // cmd 1
 type PerformanceMonitor struct {
-	Mem                  *PerformanceMonitor_Memory `protobuf:"bytes,1,opt,name=mem,proto3" json:"mem,omitempty"`
-	Cpu                  *PerformanceMonitor_Cpu    `protobuf:"bytes,2,opt,name=cpu,proto3" json:"cpu,omitempty"`
-	Timestamp            uint64                     `protobuf:"varint,3,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                   `json:"-"`
-	XXX_unrecognized     []byte                     `json:"-"`
-	XXX_sizecache        int32                      `json:"-"`
+	Timestamp            uint64                           `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Mem                  *PerformanceMonitor_Memory       `protobuf:"bytes,1,opt,name=mem,proto3" json:"mem,omitempty"`
+	Cpu                  *PerformanceMonitor_Cpu          `protobuf:"bytes,2,opt,name=cpu,proto3" json:"cpu,omitempty"`
+	Load                 *PerformanceMonitor_Load         `protobuf:"bytes,4,opt,name=load,proto3" json:"load,omitempty"`
+	Uptime               float64                          `protobuf:"fixed64,5,opt,name=uptime,proto3" json:"uptime,omitempty"`
+	Cpulist              []*PerformanceMonitor_Cpu        `protobuf:"bytes,6,rep,name=cpulist,proto3" json:"cpulist,omitempty"`
+	FileSystemList       []*PerformanceMonitor_FileSystem `protobuf:"bytes,7,rep,name=file_system_list,json=fileSystemList,proto3" json:"file_system_list,omitempty"`
+	ProcessList          []*PerformanceMonitor_Process    `protobuf:"bytes,8,rep,name=process_list,json=processList,proto3" json:"process_list,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
+	XXX_unrecognized     []byte                           `json:"-"`
+	XXX_sizecache        int32                            `json:"-"`
 }
 
 func (m *PerformanceMonitor) Reset()         { *m = PerformanceMonitor{} }
 func (m *PerformanceMonitor) String() string { return proto.CompactTextString(m) }
 func (*PerformanceMonitor) ProtoMessage()    {}
 func (*PerformanceMonitor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_performance_6f759f56bf0906ae, []int{0}
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0}
 }
 func (m *PerformanceMonitor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PerformanceMonitor.Unmarshal(m, b)
@@ -52,6 +57,13 @@ func (m *PerformanceMonitor) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PerformanceMonitor proto.InternalMessageInfo
 
+func (m *PerformanceMonitor) GetTimestamp() uint64 {
+	if m != nil {
+		return m.Timestamp
+	}
+	return 0
+}
+
 func (m *PerformanceMonitor) GetMem() *PerformanceMonitor_Memory {
 	if m != nil {
 		return m.Mem
@@ -66,11 +78,39 @@ func (m *PerformanceMonitor) GetCpu() *PerformanceMonitor_Cpu {
 	return nil
 }
 
-func (m *PerformanceMonitor) GetTimestamp() uint64 {
+func (m *PerformanceMonitor) GetLoad() *PerformanceMonitor_Load {
 	if m != nil {
-		return m.Timestamp
+		return m.Load
+	}
+	return nil
+}
+
+func (m *PerformanceMonitor) GetUptime() float64 {
+	if m != nil {
+		return m.Uptime
 	}
 	return 0
+}
+
+func (m *PerformanceMonitor) GetCpulist() []*PerformanceMonitor_Cpu {
+	if m != nil {
+		return m.Cpulist
+	}
+	return nil
+}
+
+func (m *PerformanceMonitor) GetFileSystemList() []*PerformanceMonitor_FileSystem {
+	if m != nil {
+		return m.FileSystemList
+	}
+	return nil
+}
+
+func (m *PerformanceMonitor) GetProcessList() []*PerformanceMonitor_Process {
+	if m != nil {
+		return m.ProcessList
+	}
+	return nil
 }
 
 type PerformanceMonitor_Memory struct {
@@ -91,7 +131,7 @@ func (m *PerformanceMonitor_Memory) Reset()         { *m = PerformanceMonitor_Me
 func (m *PerformanceMonitor_Memory) String() string { return proto.CompactTextString(m) }
 func (*PerformanceMonitor_Memory) ProtoMessage()    {}
 func (*PerformanceMonitor_Memory) Descriptor() ([]byte, []int) {
-	return fileDescriptor_performance_6f759f56bf0906ae, []int{0, 0}
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0, 0}
 }
 func (m *PerformanceMonitor_Memory) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PerformanceMonitor_Memory.Unmarshal(m, b)
@@ -170,12 +210,12 @@ func (m *PerformanceMonitor_Memory) GetTotalSwap() uint64 {
 type PerformanceMonitor_Cpu struct {
 	User                 uint64   `protobuf:"varint,1,opt,name=user,proto3" json:"user,omitempty"`
 	Nice                 uint64   `protobuf:"varint,2,opt,name=nice,proto3" json:"nice,omitempty"`
-	Sys                  uint64   `protobuf:"varint,3,opt,name=Sys,proto3" json:"Sys,omitempty"`
-	Idle                 uint64   `protobuf:"varint,4,opt,name=Idle,proto3" json:"Idle,omitempty"`
-	Wait                 uint64   `protobuf:"varint,5,opt,name=Wait,proto3" json:"Wait,omitempty"`
-	Irq                  uint64   `protobuf:"varint,6,opt,name=Irq,proto3" json:"Irq,omitempty"`
-	SoftIrq              uint64   `protobuf:"varint,7,opt,name=SoftIrq,proto3" json:"SoftIrq,omitempty"`
-	Stolen               uint64   `protobuf:"varint,8,opt,name=Stolen,proto3" json:"Stolen,omitempty"`
+	Sys                  uint64   `protobuf:"varint,3,opt,name=sys,proto3" json:"sys,omitempty"`
+	Idle                 uint64   `protobuf:"varint,4,opt,name=idle,proto3" json:"idle,omitempty"`
+	Wait                 uint64   `protobuf:"varint,5,opt,name=wait,proto3" json:"wait,omitempty"`
+	Irq                  uint64   `protobuf:"varint,6,opt,name=irq,proto3" json:"irq,omitempty"`
+	SoftIrq              uint64   `protobuf:"varint,7,opt,name=soft_irq,json=softIrq,proto3" json:"soft_irq,omitempty"`
+	Stolen               uint64   `protobuf:"varint,8,opt,name=stolen,proto3" json:"stolen,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -185,7 +225,7 @@ func (m *PerformanceMonitor_Cpu) Reset()         { *m = PerformanceMonitor_Cpu{}
 func (m *PerformanceMonitor_Cpu) String() string { return proto.CompactTextString(m) }
 func (*PerformanceMonitor_Cpu) ProtoMessage()    {}
 func (*PerformanceMonitor_Cpu) Descriptor() ([]byte, []int) {
-	return fileDescriptor_performance_6f759f56bf0906ae, []int{0, 1}
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0, 1}
 }
 func (m *PerformanceMonitor_Cpu) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PerformanceMonitor_Cpu.Unmarshal(m, b)
@@ -261,36 +301,519 @@ func (m *PerformanceMonitor_Cpu) GetStolen() uint64 {
 	return 0
 }
 
+type PerformanceMonitor_Load struct {
+	One                  float64  `protobuf:"fixed64,1,opt,name=one,proto3" json:"one,omitempty"`
+	Five                 float64  `protobuf:"fixed64,2,opt,name=five,proto3" json:"five,omitempty"`
+	Fifteen              float64  `protobuf:"fixed64,3,opt,name=fifteen,proto3" json:"fifteen,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PerformanceMonitor_Load) Reset()         { *m = PerformanceMonitor_Load{} }
+func (m *PerformanceMonitor_Load) String() string { return proto.CompactTextString(m) }
+func (*PerformanceMonitor_Load) ProtoMessage()    {}
+func (*PerformanceMonitor_Load) Descriptor() ([]byte, []int) {
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0, 2}
+}
+func (m *PerformanceMonitor_Load) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PerformanceMonitor_Load.Unmarshal(m, b)
+}
+func (m *PerformanceMonitor_Load) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PerformanceMonitor_Load.Marshal(b, m, deterministic)
+}
+func (dst *PerformanceMonitor_Load) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerformanceMonitor_Load.Merge(dst, src)
+}
+func (m *PerformanceMonitor_Load) XXX_Size() int {
+	return xxx_messageInfo_PerformanceMonitor_Load.Size(m)
+}
+func (m *PerformanceMonitor_Load) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerformanceMonitor_Load.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerformanceMonitor_Load proto.InternalMessageInfo
+
+func (m *PerformanceMonitor_Load) GetOne() float64 {
+	if m != nil {
+		return m.One
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Load) GetFive() float64 {
+	if m != nil {
+		return m.Five
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Load) GetFifteen() float64 {
+	if m != nil {
+		return m.Fifteen
+	}
+	return 0
+}
+
+type PerformanceMonitor_FileSystem struct {
+	DirName              string   `protobuf:"bytes,1,opt,name=dir_name,json=dirName,proto3" json:"dir_name,omitempty"`
+	DevName              string   `protobuf:"bytes,2,opt,name=dev_name,json=devName,proto3" json:"dev_name,omitempty"`
+	TypeName             string   `protobuf:"bytes,3,opt,name=type_name,json=typeName,proto3" json:"type_name,omitempty"`
+	SysTypeName          string   `protobuf:"bytes,4,opt,name=sys_type_name,json=sysTypeName,proto3" json:"sys_type_name,omitempty"`
+	Options              string   `protobuf:"bytes,5,opt,name=options,proto3" json:"options,omitempty"`
+	Flags                uint32   `protobuf:"varint,6,opt,name=flags,proto3" json:"flags,omitempty"`
+	Total                uint64   `protobuf:"varint,7,opt,name=total,proto3" json:"total,omitempty"`
+	Used                 uint64   `protobuf:"varint,8,opt,name=used,proto3" json:"used,omitempty"`
+	Free                 uint64   `protobuf:"varint,9,opt,name=free,proto3" json:"free,omitempty"`
+	Avail                uint64   `protobuf:"varint,10,opt,name=avail,proto3" json:"avail,omitempty"`
+	Files                uint64   `protobuf:"varint,11,opt,name=files,proto3" json:"files,omitempty"`
+	FreeFiles            uint64   `protobuf:"varint,12,opt,name=free_files,json=freeFiles,proto3" json:"free_files,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PerformanceMonitor_FileSystem) Reset()         { *m = PerformanceMonitor_FileSystem{} }
+func (m *PerformanceMonitor_FileSystem) String() string { return proto.CompactTextString(m) }
+func (*PerformanceMonitor_FileSystem) ProtoMessage()    {}
+func (*PerformanceMonitor_FileSystem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0, 3}
+}
+func (m *PerformanceMonitor_FileSystem) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PerformanceMonitor_FileSystem.Unmarshal(m, b)
+}
+func (m *PerformanceMonitor_FileSystem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PerformanceMonitor_FileSystem.Marshal(b, m, deterministic)
+}
+func (dst *PerformanceMonitor_FileSystem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerformanceMonitor_FileSystem.Merge(dst, src)
+}
+func (m *PerformanceMonitor_FileSystem) XXX_Size() int {
+	return xxx_messageInfo_PerformanceMonitor_FileSystem.Size(m)
+}
+func (m *PerformanceMonitor_FileSystem) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerformanceMonitor_FileSystem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerformanceMonitor_FileSystem proto.InternalMessageInfo
+
+func (m *PerformanceMonitor_FileSystem) GetDirName() string {
+	if m != nil {
+		return m.DirName
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_FileSystem) GetDevName() string {
+	if m != nil {
+		return m.DevName
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_FileSystem) GetTypeName() string {
+	if m != nil {
+		return m.TypeName
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_FileSystem) GetSysTypeName() string {
+	if m != nil {
+		return m.SysTypeName
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_FileSystem) GetOptions() string {
+	if m != nil {
+		return m.Options
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_FileSystem) GetFlags() uint32 {
+	if m != nil {
+		return m.Flags
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_FileSystem) GetTotal() uint64 {
+	if m != nil {
+		return m.Total
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_FileSystem) GetUsed() uint64 {
+	if m != nil {
+		return m.Used
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_FileSystem) GetFree() uint64 {
+	if m != nil {
+		return m.Free
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_FileSystem) GetAvail() uint64 {
+	if m != nil {
+		return m.Avail
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_FileSystem) GetFiles() uint64 {
+	if m != nil {
+		return m.Files
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_FileSystem) GetFreeFiles() uint64 {
+	if m != nil {
+		return m.FreeFiles
+	}
+	return 0
+}
+
+type PerformanceMonitor_ProcTime struct {
+	StartTime            uint64   `protobuf:"varint,1,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	User                 uint64   `protobuf:"varint,2,opt,name=user,proto3" json:"user,omitempty"`
+	Sys                  uint64   `protobuf:"varint,3,opt,name=sys,proto3" json:"sys,omitempty"`
+	Total                uint64   `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PerformanceMonitor_ProcTime) Reset()         { *m = PerformanceMonitor_ProcTime{} }
+func (m *PerformanceMonitor_ProcTime) String() string { return proto.CompactTextString(m) }
+func (*PerformanceMonitor_ProcTime) ProtoMessage()    {}
+func (*PerformanceMonitor_ProcTime) Descriptor() ([]byte, []int) {
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0, 4}
+}
+func (m *PerformanceMonitor_ProcTime) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PerformanceMonitor_ProcTime.Unmarshal(m, b)
+}
+func (m *PerformanceMonitor_ProcTime) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PerformanceMonitor_ProcTime.Marshal(b, m, deterministic)
+}
+func (dst *PerformanceMonitor_ProcTime) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerformanceMonitor_ProcTime.Merge(dst, src)
+}
+func (m *PerformanceMonitor_ProcTime) XXX_Size() int {
+	return xxx_messageInfo_PerformanceMonitor_ProcTime.Size(m)
+}
+func (m *PerformanceMonitor_ProcTime) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerformanceMonitor_ProcTime.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerformanceMonitor_ProcTime proto.InternalMessageInfo
+
+func (m *PerformanceMonitor_ProcTime) GetStartTime() uint64 {
+	if m != nil {
+		return m.StartTime
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_ProcTime) GetUser() uint64 {
+	if m != nil {
+		return m.User
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_ProcTime) GetSys() uint64 {
+	if m != nil {
+		return m.Sys
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_ProcTime) GetTotal() uint64 {
+	if m != nil {
+		return m.Total
+	}
+	return 0
+}
+
+type PerformanceMonitor_Process struct {
+	Pid                  int32                        `protobuf:"varint,1,opt,name=pid,proto3" json:"pid,omitempty"`
+	Args                 []string                     `protobuf:"bytes,2,rep,name=args,proto3" json:"args,omitempty"`
+	ExeName              string                       `protobuf:"bytes,3,opt,name=exe_name,json=exeName,proto3" json:"exe_name,omitempty"`
+	ExeCwd               string                       `protobuf:"bytes,4,opt,name=exe_cwd,json=exeCwd,proto3" json:"exe_cwd,omitempty"`
+	ExeRoot              string                       `protobuf:"bytes,5,opt,name=exe_root,json=exeRoot,proto3" json:"exe_root,omitempty"`
+	CpuProcTime          *PerformanceMonitor_ProcTime `protobuf:"bytes,6,opt,name=cpu_proc_time,json=cpuProcTime,proto3" json:"cpu_proc_time,omitempty"`
+	CpuLastTime          uint64                       `protobuf:"varint,7,opt,name=cpu_last_time,json=cpuLastTime,proto3" json:"cpu_last_time,omitempty"`
+	CpuPercent           float64                      `protobuf:"fixed64,8,opt,name=cpu_percent,json=cpuPercent,proto3" json:"cpu_percent,omitempty"`
+	MemSize              uint64                       `protobuf:"varint,9,opt,name=mem_size,json=memSize,proto3" json:"mem_size,omitempty"`
+	MemResident          uint64                       `protobuf:"varint,10,opt,name=mem_resident,json=memResident,proto3" json:"mem_resident,omitempty"`
+	MemShare             uint64                       `protobuf:"varint,11,opt,name=mem_share,json=memShare,proto3" json:"mem_share,omitempty"`
+	MemMinorFaults       uint64                       `protobuf:"varint,12,opt,name=mem_minor_faults,json=memMinorFaults,proto3" json:"mem_minor_faults,omitempty"`
+	MemMajorFaults       uint64                       `protobuf:"varint,13,opt,name=mem_major_faults,json=memMajorFaults,proto3" json:"mem_major_faults,omitempty"`
+	MemPageFaults        uint64                       `protobuf:"varint,14,opt,name=mem_page_faults,json=memPageFaults,proto3" json:"mem_page_faults,omitempty"`
+	StatName             string                       `protobuf:"bytes,15,opt,name=stat_name,json=statName,proto3" json:"stat_name,omitempty"`
+	StatState            int32                        `protobuf:"varint,16,opt,name=stat_state,json=statState,proto3" json:"stat_state,omitempty"`
+	StatPpid             int32                        `protobuf:"varint,17,opt,name=stat_ppid,json=statPpid,proto3" json:"stat_ppid,omitempty"`
+	StatTty              int32                        `protobuf:"varint,18,opt,name=stat_tty,json=statTty,proto3" json:"stat_tty,omitempty"`
+	StatPriority         int32                        `protobuf:"varint,19,opt,name=stat_priority,json=statPriority,proto3" json:"stat_priority,omitempty"`
+	StatNice             int32                        `protobuf:"varint,20,opt,name=stat_nice,json=statNice,proto3" json:"stat_nice,omitempty"`
+	StatProcessor        int32                        `protobuf:"varint,21,opt,name=stat_processor,json=statProcessor,proto3" json:"stat_processor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
+}
+
+func (m *PerformanceMonitor_Process) Reset()         { *m = PerformanceMonitor_Process{} }
+func (m *PerformanceMonitor_Process) String() string { return proto.CompactTextString(m) }
+func (*PerformanceMonitor_Process) ProtoMessage()    {}
+func (*PerformanceMonitor_Process) Descriptor() ([]byte, []int) {
+	return fileDescriptor_performance_d2ada34d8191f318, []int{0, 5}
+}
+func (m *PerformanceMonitor_Process) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PerformanceMonitor_Process.Unmarshal(m, b)
+}
+func (m *PerformanceMonitor_Process) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PerformanceMonitor_Process.Marshal(b, m, deterministic)
+}
+func (dst *PerformanceMonitor_Process) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerformanceMonitor_Process.Merge(dst, src)
+}
+func (m *PerformanceMonitor_Process) XXX_Size() int {
+	return xxx_messageInfo_PerformanceMonitor_Process.Size(m)
+}
+func (m *PerformanceMonitor_Process) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerformanceMonitor_Process.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerformanceMonitor_Process proto.InternalMessageInfo
+
+func (m *PerformanceMonitor_Process) GetPid() int32 {
+	if m != nil {
+		return m.Pid
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetArgs() []string {
+	if m != nil {
+		return m.Args
+	}
+	return nil
+}
+
+func (m *PerformanceMonitor_Process) GetExeName() string {
+	if m != nil {
+		return m.ExeName
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_Process) GetExeCwd() string {
+	if m != nil {
+		return m.ExeCwd
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_Process) GetExeRoot() string {
+	if m != nil {
+		return m.ExeRoot
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_Process) GetCpuProcTime() *PerformanceMonitor_ProcTime {
+	if m != nil {
+		return m.CpuProcTime
+	}
+	return nil
+}
+
+func (m *PerformanceMonitor_Process) GetCpuLastTime() uint64 {
+	if m != nil {
+		return m.CpuLastTime
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetCpuPercent() float64 {
+	if m != nil {
+		return m.CpuPercent
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetMemSize() uint64 {
+	if m != nil {
+		return m.MemSize
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetMemResident() uint64 {
+	if m != nil {
+		return m.MemResident
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetMemShare() uint64 {
+	if m != nil {
+		return m.MemShare
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetMemMinorFaults() uint64 {
+	if m != nil {
+		return m.MemMinorFaults
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetMemMajorFaults() uint64 {
+	if m != nil {
+		return m.MemMajorFaults
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetMemPageFaults() uint64 {
+	if m != nil {
+		return m.MemPageFaults
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetStatName() string {
+	if m != nil {
+		return m.StatName
+	}
+	return ""
+}
+
+func (m *PerformanceMonitor_Process) GetStatState() int32 {
+	if m != nil {
+		return m.StatState
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetStatPpid() int32 {
+	if m != nil {
+		return m.StatPpid
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetStatTty() int32 {
+	if m != nil {
+		return m.StatTty
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetStatPriority() int32 {
+	if m != nil {
+		return m.StatPriority
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetStatNice() int32 {
+	if m != nil {
+		return m.StatNice
+	}
+	return 0
+}
+
+func (m *PerformanceMonitor_Process) GetStatProcessor() int32 {
+	if m != nil {
+		return m.StatProcessor
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*PerformanceMonitor)(nil), "model.PerformanceMonitor")
 	proto.RegisterType((*PerformanceMonitor_Memory)(nil), "model.PerformanceMonitor.Memory")
 	proto.RegisterType((*PerformanceMonitor_Cpu)(nil), "model.PerformanceMonitor.Cpu")
+	proto.RegisterType((*PerformanceMonitor_Load)(nil), "model.PerformanceMonitor.Load")
+	proto.RegisterType((*PerformanceMonitor_FileSystem)(nil), "model.PerformanceMonitor.FileSystem")
+	proto.RegisterType((*PerformanceMonitor_ProcTime)(nil), "model.PerformanceMonitor.ProcTime")
+	proto.RegisterType((*PerformanceMonitor_Process)(nil), "model.PerformanceMonitor.Process")
 }
 
-func init() { proto.RegisterFile("performance.proto", fileDescriptor_performance_6f759f56bf0906ae) }
+func init() { proto.RegisterFile("performance.proto", fileDescriptor_performance_d2ada34d8191f318) }
 
-var fileDescriptor_performance_6f759f56bf0906ae = []byte{
-	// 347 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0xc1, 0x8a, 0xdb, 0x30,
-	0x10, 0x86, 0x71, 0xec, 0xd8, 0xc9, 0xe4, 0xd2, 0xea, 0x50, 0xdc, 0xb4, 0xa1, 0xa1, 0xa7, 0x9c,
-	0x5c, 0x48, 0x1f, 0x21, 0x50, 0xc8, 0x21, 0x50, 0xec, 0x96, 0x3d, 0x06, 0xad, 0x3d, 0x01, 0x83,
-	0x65, 0x69, 0x65, 0x99, 0x90, 0x67, 0xda, 0x77, 0xd8, 0xc7, 0xda, 0xf3, 0x32, 0x23, 0x85, 0x04,
-	0x96, 0xbd, 0xcd, 0xfc, 0xdf, 0x3f, 0xd6, 0xff, 0x83, 0xe1, 0xb3, 0x41, 0x7b, 0xd2, 0x56, 0xc9,
-	0xbe, 0xc6, 0xc2, 0x58, 0xed, 0xb4, 0x98, 0x2a, 0xdd, 0x60, 0xf7, 0xf3, 0x25, 0x01, 0xf1, 0xf7,
-	0x06, 0x0f, 0xba, 0x6f, 0x9d, 0xb6, 0x62, 0x0b, 0xb1, 0x42, 0x95, 0x47, 0xeb, 0x68, 0xb3, 0xd8,
-	0xae, 0x0b, 0xf6, 0x16, 0xef, 0x7d, 0xc5, 0x01, 0x95, 0xb6, 0x97, 0x92, 0xcc, 0xe2, 0x17, 0xc4,
-	0xb5, 0x19, 0xf3, 0x09, 0xdf, 0xac, 0x3e, 0xbe, 0xd9, 0x99, 0xb1, 0x24, 0xa7, 0xf8, 0x0e, 0xf3,
-	0x7f, 0xad, 0xc2, 0xc1, 0x49, 0x65, 0xf2, 0x78, 0x1d, 0x6d, 0x92, 0xf2, 0x26, 0x2c, 0x5f, 0x23,
-	0x48, 0xfd, 0xe7, 0xc5, 0x37, 0x98, 0x3b, 0xed, 0x64, 0x77, 0xbc, 0x66, 0x4a, 0xca, 0x19, 0x0b,
-	0x07, 0x54, 0xe2, 0x2b, 0xcc, 0xc6, 0x01, 0x1b, 0x66, 0x13, 0x66, 0x19, 0xed, 0x01, 0x9d, 0x2c,
-	0x22, 0x23, 0xff, 0xfd, 0x8c, 0x76, 0x42, 0x3f, 0x60, 0x21, 0x6b, 0x37, 0xca, 0xee, 0x48, 0xe6,
-	0x3c, 0x61, 0x0a, 0x5e, 0xfa, 0x3f, 0x60, 0x73, 0x67, 0xa0, 0x93, 0x7c, 0x7a, 0x6f, 0xf8, 0x63,
-	0x11, 0x29, 0x14, 0xbf, 0x3b, 0x9c, 0xa5, 0xc9, 0x53, 0x1f, 0x8a, 0x84, 0xea, 0x2c, 0x0d, 0x41,
-	0x7e, 0x99, 0x61, 0xe6, 0x21, 0x09, 0x0c, 0x57, 0x00, 0xbe, 0x0e, 0xd3, 0x99, 0x2f, 0xce, 0x0a,
-	0xe1, 0xe5, 0x73, 0x04, 0xf1, 0xce, 0x8c, 0x42, 0x40, 0x32, 0x0e, 0x68, 0x43, 0x61, 0x9e, 0x49,
-	0xeb, 0xdb, 0x1a, 0x43, 0x51, 0x9e, 0xc5, 0x27, 0x88, 0xab, 0xcb, 0x10, 0x0a, 0xd2, 0x48, 0xae,
-	0x7d, 0xd3, 0x61, 0x68, 0xc5, 0x33, 0x69, 0x0f, 0xb2, 0x75, 0xa1, 0x08, 0xcf, 0x74, 0xb9, 0xb7,
-	0x4f, 0x21, 0x3c, 0x8d, 0x22, 0x87, 0xac, 0xd2, 0x27, 0x47, 0xaa, 0x4f, 0x7d, 0x5d, 0xc5, 0x17,
-	0x48, 0x2b, 0xa7, 0x3b, 0xec, 0x43, 0xe0, 0xb0, 0x3d, 0xa6, 0xfc, 0x3b, 0xfd, 0x7e, 0x0b, 0x00,
-	0x00, 0xff, 0xff, 0x2c, 0x5a, 0xc8, 0x37, 0x63, 0x02, 0x00, 0x00,
+var fileDescriptor_performance_d2ada34d8191f318 = []byte{
+	// 973 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x56, 0x5d, 0x6e, 0x23, 0x45,
+	0x10, 0xd6, 0xd8, 0x8e, 0xc7, 0x2e, 0xc7, 0xd9, 0x6c, 0xb3, 0xc0, 0xe0, 0x25, 0xac, 0x37, 0xfc,
+	0x28, 0x4f, 0x41, 0x0a, 0x0f, 0x1c, 0x20, 0x28, 0x12, 0x52, 0x12, 0x45, 0x9d, 0xf0, 0x3c, 0x6a,
+	0x3c, 0xe5, 0xd0, 0x68, 0xda, 0x3d, 0xdb, 0xdd, 0x13, 0xc7, 0x7b, 0x04, 0xce, 0xc2, 0x11, 0x90,
+	0xb8, 0x15, 0xcf, 0xa8, 0xaa, 0x7b, 0xec, 0xa0, 0x55, 0xd8, 0x97, 0xa8, 0xea, 0xfb, 0xbe, 0xaa,
+	0xa9, 0x3f, 0xb7, 0x02, 0x2f, 0x1b, 0x74, 0x4b, 0xeb, 0x8c, 0x5a, 0x2d, 0xf0, 0xb4, 0x71, 0x36,
+	0x58, 0xb1, 0x67, 0x6c, 0x85, 0xf5, 0xf1, 0x1f, 0x87, 0x20, 0x6e, 0x76, 0xe4, 0x95, 0x5d, 0xe9,
+	0x60, 0x9d, 0xf8, 0x12, 0xc6, 0x41, 0x1b, 0xf4, 0x41, 0x99, 0xa6, 0xe8, 0xcf, 0xb3, 0x93, 0x81,
+	0xdc, 0x01, 0xe2, 0x0c, 0xfa, 0x06, 0x4d, 0x91, 0xcd, 0xb3, 0x93, 0xc9, 0xd9, 0xfc, 0x94, 0x33,
+	0x9d, 0x7e, 0x98, 0xe5, 0xf4, 0x0a, 0x8d, 0x75, 0x1b, 0x49, 0x62, 0xf1, 0x3d, 0xf4, 0x17, 0x4d,
+	0x5b, 0xf4, 0x38, 0xe6, 0xe8, 0xf9, 0x98, 0xf3, 0xa6, 0x95, 0xa4, 0x14, 0x67, 0x30, 0xa8, 0xad,
+	0xaa, 0x8a, 0x01, 0x47, 0x7c, 0xf5, 0x7c, 0xc4, 0xa5, 0x55, 0x95, 0x64, 0xad, 0xf8, 0x0c, 0x86,
+	0x6d, 0x43, 0x75, 0x16, 0x7b, 0xf3, 0xec, 0x24, 0x93, 0xc9, 0x13, 0x3f, 0x42, 0xbe, 0x68, 0xda,
+	0x5a, 0xfb, 0x50, 0x0c, 0xe7, 0xfd, 0x8f, 0x17, 0xd0, 0xa9, 0xc5, 0x35, 0x1c, 0x2e, 0x75, 0x8d,
+	0xa5, 0xdf, 0xf8, 0x80, 0xa6, 0xe4, 0x0c, 0x39, 0x67, 0xf8, 0xe6, 0xf9, 0x0c, 0x17, 0xba, 0xc6,
+	0x5b, 0x0e, 0x90, 0x07, 0xcb, 0xad, 0x7d, 0x49, 0xf9, 0x7e, 0x82, 0xfd, 0xc6, 0xd9, 0x05, 0x7a,
+	0x1f, 0x73, 0x8d, 0x38, 0xd7, 0xdb, 0xe7, 0x73, 0xdd, 0x44, 0xb5, 0x9c, 0xa4, 0x30, 0xca, 0x32,
+	0xfb, 0x27, 0x83, 0x61, 0x9c, 0xad, 0x78, 0x0d, 0xe3, 0x60, 0x83, 0xaa, 0xcb, 0x6e, 0x21, 0x03,
+	0x39, 0x62, 0xe0, 0x0a, 0x8d, 0xf8, 0x02, 0x46, 0xad, 0xc7, 0x8a, 0xb9, 0x1e, 0x73, 0x39, 0xf9,
+	0x89, 0x5a, 0x3a, 0x44, 0xa6, 0xe2, 0x7e, 0x73, 0xf2, 0x89, 0x7a, 0x03, 0x13, 0xb5, 0x08, 0xad,
+	0xaa, 0x4b, 0x12, 0xf3, 0xfc, 0x07, 0x12, 0x22, 0xf4, 0x8b, 0xc7, 0xea, 0x89, 0x80, 0x42, 0x78,
+	0xd4, 0x5b, 0xc1, 0x85, 0x43, 0xa4, 0xa2, 0xf8, 0xbb, 0x7e, 0xad, 0x9a, 0x62, 0x18, 0x8b, 0x22,
+	0xe0, 0x76, 0xad, 0x1a, 0x22, 0xf9, 0xcb, 0x4c, 0xe6, 0x91, 0x24, 0x80, 0xc9, 0x23, 0x80, 0xd8,
+	0x0e, 0xb3, 0xa3, 0x74, 0x78, 0x84, 0x10, 0x3d, 0xfb, 0x33, 0x83, 0xfe, 0x79, 0xd3, 0x0a, 0x01,
+	0x83, 0xd6, 0xa3, 0x4b, 0x0d, 0xb3, 0x4d, 0xd8, 0x4a, 0x2f, 0x30, 0x35, 0xca, 0xb6, 0x38, 0x84,
+	0xbe, 0xdf, 0xf8, 0xd4, 0x20, 0x99, 0xa4, 0xd2, 0x55, 0x8d, 0xa9, 0x2b, 0xb6, 0x09, 0x5b, 0x2b,
+	0x1d, 0x52, 0x23, 0x6c, 0x53, 0xa4, 0x76, 0xef, 0x52, 0xf1, 0x64, 0xd2, 0xc4, 0xbc, 0x5d, 0x86,
+	0x92, 0xe0, 0x58, 0x76, 0x4e, 0xfe, 0xcf, 0xee, 0x1d, 0x9d, 0x9d, 0x0f, 0xb6, 0xc6, 0x55, 0xaa,
+	0x38, 0x79, 0xb3, 0x0b, 0x18, 0xd0, 0x71, 0x52, 0x32, 0xbb, 0x42, 0xae, 0x36, 0x93, 0x64, 0xd2,
+	0x27, 0x97, 0xfa, 0x21, 0x16, 0x9b, 0x49, 0xb6, 0x45, 0x01, 0xf9, 0x52, 0x2f, 0x03, 0xe2, 0x8a,
+	0x0b, 0xce, 0x64, 0xe7, 0xce, 0xfe, 0xea, 0x01, 0xec, 0x8e, 0x8a, 0x2a, 0xa9, 0xb4, 0x2b, 0x57,
+	0xca, 0xc4, 0x9c, 0x63, 0x99, 0x57, 0xda, 0x5d, 0x2b, 0x83, 0x4c, 0xe1, 0x43, 0xa4, 0x7a, 0x89,
+	0xc2, 0x07, 0xa6, 0xe8, 0x52, 0x36, 0x0d, 0x46, 0xae, 0xcf, 0xdc, 0x88, 0x00, 0x26, 0x8f, 0x61,
+	0xea, 0x37, 0xbe, 0xdc, 0x09, 0x06, 0x2c, 0x98, 0xf8, 0x8d, 0xbf, 0xeb, 0x34, 0x05, 0xe4, 0xb6,
+	0x09, 0xda, 0xae, 0x3c, 0x4f, 0x6a, 0x2c, 0x3b, 0x57, 0xbc, 0x82, 0xbd, 0x65, 0xad, 0xee, 0x3d,
+	0x8f, 0x6b, 0x2a, 0xa3, 0x43, 0x28, 0x6f, 0x2e, 0x4d, 0x2b, 0x3a, 0x69, 0x75, 0x55, 0x9a, 0x14,
+	0xdb, 0x3c, 0x0d, 0xba, 0xa4, 0x71, 0xc4, 0xc8, 0xa6, 0x68, 0xf5, 0xa0, 0x74, 0x5d, 0x40, 0x8c,
+	0x66, 0x87, 0xbf, 0xa4, 0x6b, 0xf4, 0xc5, 0x24, 0xa2, 0xec, 0xd0, 0xd5, 0xf0, 0x49, 0x45, 0x6a,
+	0x3f, 0x5e, 0x0d, 0x21, 0x34, 0x34, 0x3f, 0x43, 0x18, 0xd1, 0xcf, 0xe8, 0x8e, 0x5e, 0x82, 0x23,
+	0x00, 0x1f, 0x94, 0x0b, 0x25, 0xbf, 0x12, 0xf1, 0x7e, 0xc6, 0x8c, 0x30, 0xdd, 0x1d, 0x56, 0xef,
+	0xc9, 0x61, 0x7d, 0x78, 0x44, 0xdb, 0xce, 0x06, 0x4f, 0x3a, 0x9b, 0xfd, 0xbd, 0x07, 0x79, 0xfa,
+	0xb9, 0x52, 0x4c, 0xa3, 0x2b, 0xce, 0xbf, 0x27, 0xc9, 0xa4, 0xcc, 0xca, 0xdd, 0xfb, 0xa2, 0x37,
+	0xef, 0x9f, 0x8c, 0x25, 0xdb, 0xb4, 0x2d, 0x7c, 0xfc, 0xcf, 0x46, 0x72, 0x7c, 0x8c, 0xc3, 0xfe,
+	0x1c, 0xc8, 0x2c, 0x17, 0xeb, 0x2a, 0xad, 0x62, 0x88, 0x8f, 0x78, 0xbe, 0xae, 0xba, 0x18, 0x67,
+	0x6d, 0xe8, 0xd6, 0x80, 0x8f, 0x28, 0xad, 0x0d, 0xe2, 0x02, 0xa6, 0x8b, 0xa6, 0x2d, 0xe9, 0xa5,
+	0x88, 0xed, 0x0d, 0xf9, 0xe9, 0x3c, 0xfe, 0xff, 0xd7, 0x85, 0xfa, 0x96, 0x93, 0x45, 0xd3, 0x6e,
+	0x67, 0x74, 0x1c, 0xf3, 0xd4, 0xca, 0xa7, 0x31, 0xc5, 0x05, 0x92, 0xe6, 0x52, 0xf9, 0x38, 0xa8,
+	0x37, 0x30, 0xe1, 0x6f, 0xa1, 0x5b, 0xe0, 0x2a, 0xf0, 0x36, 0x33, 0x09, 0x94, 0x25, 0x22, 0x54,
+	0xa7, 0x41, 0x53, 0x7a, 0xfd, 0xbe, 0xdb, 0x6b, 0x6e, 0xd0, 0xdc, 0xea, 0xf7, 0x28, 0xde, 0xc2,
+	0x3e, 0x51, 0x0e, 0xbd, 0xae, 0x28, 0x38, 0x6e, 0x78, 0x62, 0xd0, 0xc8, 0x04, 0xd1, 0xb1, 0x72,
+	0xf4, 0x6f, 0xca, 0x61, 0xda, 0x35, 0xa5, 0xbb, 0x25, 0x5f, 0x9c, 0xc0, 0x21, 0x91, 0x46, 0xaf,
+	0xac, 0x2b, 0x97, 0xaa, 0xad, 0x43, 0xb7, 0xf4, 0x03, 0x83, 0xe6, 0x8a, 0xe0, 0x0b, 0x46, 0xb7,
+	0x4a, 0xf5, 0xfb, 0x4e, 0x39, 0xdd, 0x29, 0x09, 0x4e, 0xca, 0xef, 0xe0, 0x05, 0x29, 0x1b, 0x75,
+	0x8f, 0x9d, 0xf0, 0x80, 0x85, 0x53, 0x83, 0xe6, 0x46, 0xdd, 0x63, 0xd2, 0xbd, 0x06, 0xba, 0x96,
+	0x10, 0x77, 0xf6, 0x22, 0xfe, 0x8a, 0x08, 0xe0, 0xa5, 0xc5, 0xe3, 0x0a, 0x25, 0xfd, 0xc1, 0xe2,
+	0x90, 0x97, 0xcf, 0xf2, 0x5b, 0x02, 0xb6, 0xb1, 0x0d, 0x9d, 0xc6, 0x4b, 0x66, 0x39, 0xf6, 0x86,
+	0xee, 0x83, 0x9e, 0x17, 0x22, 0x43, 0xd8, 0x14, 0x82, 0xb9, 0x9c, 0xfc, 0xbb, 0xb0, 0x11, 0x5f,
+	0xc3, 0x34, 0xc6, 0x39, 0x6d, 0x9d, 0x0e, 0x9b, 0xe2, 0x13, 0xe6, 0xf7, 0x39, 0x36, 0x61, 0xbb,
+	0xc2, 0xe8, 0x0d, 0x7c, 0xb5, 0x4b, 0x7e, 0x4d, 0xef, 0xe0, 0xb7, 0x70, 0x90, 0x32, 0xf0, 0x79,
+	0x5a, 0x57, 0x7c, 0xca, 0x8a, 0x69, 0x4c, 0x91, 0xc0, 0x5f, 0x87, 0xfc, 0xaf, 0xc1, 0x0f, 0xff,
+	0x06, 0x00, 0x00, 0xff, 0xff, 0x42, 0xc8, 0xca, 0xe2, 0x2f, 0x08, 0x00, 0x00,
 }

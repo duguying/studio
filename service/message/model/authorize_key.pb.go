@@ -18,99 +18,97 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+type AuthorizeKey_KeyCmd int32
+
+const (
+	AuthorizeKey_LIST   AuthorizeKey_KeyCmd = 0
+	AuthorizeKey_SET    AuthorizeKey_KeyCmd = 1
+	AuthorizeKey_DELETE AuthorizeKey_KeyCmd = 2
+)
+
+var AuthorizeKey_KeyCmd_name = map[int32]string{
+	0: "LIST",
+	1: "SET",
+	2: "DELETE",
+}
+var AuthorizeKey_KeyCmd_value = map[string]int32{
+	"LIST":   0,
+	"SET":    1,
+	"DELETE": 2,
+}
+
+func (x AuthorizeKey_KeyCmd) String() string {
+	return proto.EnumName(AuthorizeKey_KeyCmd_name, int32(x))
+}
+func (AuthorizeKey_KeyCmd) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_authorize_key_9192526cb06110b9, []int{0, 0}
+}
+
 // cmd 2
-type SetAuthorizeKeyRequest struct {
-	Command              int32    `protobuf:"varint,1,opt,name=command,proto3" json:"command,omitempty"`
-	PublicKey            string   `protobuf:"bytes,2,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+type AuthorizeKey struct {
+	Command              AuthorizeKey_KeyCmd `protobuf:"varint,1,opt,name=command,proto3,enum=model.AuthorizeKey_KeyCmd" json:"command,omitempty"`
+	PublicKeys           []string            `protobuf:"bytes,2,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *SetAuthorizeKeyRequest) Reset()         { *m = SetAuthorizeKeyRequest{} }
-func (m *SetAuthorizeKeyRequest) String() string { return proto.CompactTextString(m) }
-func (*SetAuthorizeKeyRequest) ProtoMessage()    {}
-func (*SetAuthorizeKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_authorize_key_6f8e64cb7ad9369d, []int{0}
+func (m *AuthorizeKey) Reset()         { *m = AuthorizeKey{} }
+func (m *AuthorizeKey) String() string { return proto.CompactTextString(m) }
+func (*AuthorizeKey) ProtoMessage()    {}
+func (*AuthorizeKey) Descriptor() ([]byte, []int) {
+	return fileDescriptor_authorize_key_9192526cb06110b9, []int{0}
 }
-func (m *SetAuthorizeKeyRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_SetAuthorizeKeyRequest.Unmarshal(m, b)
+func (m *AuthorizeKey) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AuthorizeKey.Unmarshal(m, b)
 }
-func (m *SetAuthorizeKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_SetAuthorizeKeyRequest.Marshal(b, m, deterministic)
+func (m *AuthorizeKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AuthorizeKey.Marshal(b, m, deterministic)
 }
-func (dst *SetAuthorizeKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetAuthorizeKeyRequest.Merge(dst, src)
+func (dst *AuthorizeKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthorizeKey.Merge(dst, src)
 }
-func (m *SetAuthorizeKeyRequest) XXX_Size() int {
-	return xxx_messageInfo_SetAuthorizeKeyRequest.Size(m)
+func (m *AuthorizeKey) XXX_Size() int {
+	return xxx_messageInfo_AuthorizeKey.Size(m)
 }
-func (m *SetAuthorizeKeyRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_SetAuthorizeKeyRequest.DiscardUnknown(m)
+func (m *AuthorizeKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthorizeKey.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SetAuthorizeKeyRequest proto.InternalMessageInfo
+var xxx_messageInfo_AuthorizeKey proto.InternalMessageInfo
 
-func (m *SetAuthorizeKeyRequest) GetCommand() int32 {
+func (m *AuthorizeKey) GetCommand() AuthorizeKey_KeyCmd {
 	if m != nil {
 		return m.Command
 	}
-	return 0
+	return AuthorizeKey_LIST
 }
 
-func (m *SetAuthorizeKeyRequest) GetPublicKey() string {
+func (m *AuthorizeKey) GetPublicKeys() []string {
 	if m != nil {
-		return m.PublicKey
+		return m.PublicKeys
 	}
-	return ""
+	return nil
 }
-
-type ListAllAuthorizeKeyRequest struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListAllAuthorizeKeyRequest) Reset()         { *m = ListAllAuthorizeKeyRequest{} }
-func (m *ListAllAuthorizeKeyRequest) String() string { return proto.CompactTextString(m) }
-func (*ListAllAuthorizeKeyRequest) ProtoMessage()    {}
-func (*ListAllAuthorizeKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_authorize_key_6f8e64cb7ad9369d, []int{1}
-}
-func (m *ListAllAuthorizeKeyRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListAllAuthorizeKeyRequest.Unmarshal(m, b)
-}
-func (m *ListAllAuthorizeKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListAllAuthorizeKeyRequest.Marshal(b, m, deterministic)
-}
-func (dst *ListAllAuthorizeKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAllAuthorizeKeyRequest.Merge(dst, src)
-}
-func (m *ListAllAuthorizeKeyRequest) XXX_Size() int {
-	return xxx_messageInfo_ListAllAuthorizeKeyRequest.Size(m)
-}
-func (m *ListAllAuthorizeKeyRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListAllAuthorizeKeyRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListAllAuthorizeKeyRequest proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*SetAuthorizeKeyRequest)(nil), "model.SetAuthorizeKeyRequest")
-	proto.RegisterType((*ListAllAuthorizeKeyRequest)(nil), "model.ListAllAuthorizeKeyRequest")
+	proto.RegisterType((*AuthorizeKey)(nil), "model.AuthorizeKey")
+	proto.RegisterEnum("model.AuthorizeKey_KeyCmd", AuthorizeKey_KeyCmd_name, AuthorizeKey_KeyCmd_value)
 }
 
-func init() { proto.RegisterFile("authorize_key.proto", fileDescriptor_authorize_key_6f8e64cb7ad9369d) }
+func init() { proto.RegisterFile("authorize_key.proto", fileDescriptor_authorize_key_9192526cb06110b9) }
 
-var fileDescriptor_authorize_key_6f8e64cb7ad9369d = []byte{
-	// 135 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_authorize_key_9192526cb06110b9 = []byte{
+	// 167 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4e, 0x2c, 0x2d, 0xc9,
 	0xc8, 0x2f, 0xca, 0xac, 0x4a, 0x8d, 0xcf, 0x4e, 0xad, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17,
-	0x62, 0xcd, 0xcd, 0x4f, 0x49, 0xcd, 0x51, 0x0a, 0xe4, 0x12, 0x0b, 0x4e, 0x2d, 0x71, 0x84, 0x29,
-	0xf0, 0x4e, 0xad, 0x0c, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x92, 0xe0, 0x62, 0x4f, 0xce,
-	0xcf, 0xcd, 0x4d, 0xcc, 0x4b, 0x91, 0x60, 0x54, 0x60, 0xd4, 0x60, 0x0d, 0x82, 0x71, 0x85, 0x64,
-	0xb9, 0xb8, 0x0a, 0x4a, 0x93, 0x72, 0x32, 0x93, 0x41, 0xc6, 0x49, 0x30, 0x29, 0x30, 0x6a, 0x70,
-	0x06, 0x71, 0x42, 0x44, 0xbc, 0x53, 0x2b, 0x95, 0x64, 0xb8, 0xa4, 0x7c, 0x32, 0x8b, 0x4b, 0x1c,
-	0x73, 0x72, 0xb0, 0x18, 0x9b, 0xc4, 0x06, 0xb6, 0xde, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x43,
-	0x28, 0xa6, 0x32, 0x95, 0x00, 0x00, 0x00,
+	0x62, 0xcd, 0xcd, 0x4f, 0x49, 0xcd, 0x51, 0xea, 0x63, 0xe4, 0xe2, 0x71, 0x84, 0x49, 0x7b, 0xa7,
+	0x56, 0x0a, 0x99, 0x70, 0xb1, 0x27, 0xe7, 0xe7, 0xe6, 0x26, 0xe6, 0xa5, 0x48, 0x30, 0x2a, 0x30,
+	0x6a, 0xf0, 0x19, 0x49, 0xe9, 0x81, 0x55, 0xea, 0x21, 0xab, 0xd2, 0xf3, 0x4e, 0xad, 0x74, 0xce,
+	0x4d, 0x09, 0x82, 0x29, 0x15, 0x92, 0xe7, 0xe2, 0x2e, 0x28, 0x4d, 0xca, 0xc9, 0x4c, 0x06, 0xd9,
+	0x50, 0x2c, 0xc1, 0xa4, 0xc0, 0xac, 0xc1, 0x19, 0xc4, 0x05, 0x11, 0xf2, 0x4e, 0xad, 0x2c, 0x56,
+	0x52, 0xe7, 0x62, 0x83, 0xe8, 0x11, 0xe2, 0xe0, 0x62, 0xf1, 0xf1, 0x0c, 0x0e, 0x11, 0x60, 0x10,
+	0x62, 0xe7, 0x62, 0x0e, 0x76, 0x0d, 0x11, 0x60, 0x14, 0xe2, 0xe2, 0x62, 0x73, 0x71, 0xf5, 0x71,
+	0x0d, 0x71, 0x15, 0x60, 0x4a, 0x62, 0x03, 0x3b, 0xcf, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x8d,
+	0xb2, 0x19, 0xe1, 0xb5, 0x00, 0x00, 0x00,
 }

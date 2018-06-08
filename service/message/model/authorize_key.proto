@@ -2,10 +2,12 @@ syntax = "proto3";
 package model;
 
 // cmd 2
-message SetAuthorizeKeyRequest {
-    int32 command = 1;
-    string public_key = 2;
-}
-
-message ListAllAuthorizeKeyRequest {
+message AuthorizeKey {
+    enum KeyCmd {
+        LIST   = 0;
+        SET    = 1;
+        DELETE = 2;
+    }
+    KeyCmd command = 1;
+    repeated string public_keys = 2;
 }

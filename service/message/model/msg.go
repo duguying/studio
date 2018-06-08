@@ -17,15 +17,17 @@ const (
 )
 
 type Msg struct {
-	Type int    `json:"type"`
-	Cmd  int    `json:"cmd"`
-	Data []byte `json:"data"`
+	Type     int    `json:"type"`
+	Cmd      int    `json:"cmd"`
+	ClientId string `json:"client_id"`
+	Data     []byte `json:"data"`
 }
 
 func (m Msg) String() string {
 	ds := map[string]interface{}{
-		"type": m.Type,
-		"cmd":  m.Cmd,
+		"type":      m.Type,
+		"cmd":       m.Cmd,
+		"client_id": m.ClientId,
 	}
 	if m.Type == websocket.TextMessage {
 		ds["data"] = fmt.Sprintf("%s", string(m.Data))

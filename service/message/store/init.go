@@ -7,6 +7,7 @@ package store
 import (
 	"bytes"
 	"duguying/blog/g"
+	"fmt"
 	"github.com/boltdb/bolt"
 	"log"
 	"time"
@@ -25,20 +26,34 @@ func InitBoltDB() {
 	} else {
 		boltDB = db
 	}
+
+	initBucket()
 }
 
-func Put(timestamp uint64, value []byte) error {
+func initBucket() error {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
 		return err
 	}
 
-	b, err := tx.CreateBucketIfNotExists([]byte("performance"))
+	_, err = tx.CreateBucketIfNotExists([]byte("performance"))
 	if err != nil {
 		return err
 	}
 
-	err = b.Put([]byte(time.Unix(int64(timestamp), 0).Format(time.RFC3339)), value)
+	return tx.Commit()
+}
+
+func Put(clientId string, timestamp uint64, value []byte) error {
+	tx, err := boltDB.Begin(true)
+	if err != nil {
+		return err
+	}
+
+	bkt := tx.Bucket([]byte("performance"))
+
+	key := fmt.Sprintf("%s/%s", clientId, time.Unix(int64(timestamp), 0).Format(time.RFC3339))
+	err = bkt.Put([]byte(key), value)
 	if err != nil {
 		return tx.Rollback()
 	}

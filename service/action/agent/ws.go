@@ -61,9 +61,10 @@ func Ws(c *gin.Context) {
 			}
 
 			msg := model.Msg{
-				Type: mt,
-				Cmd:  int(msgData[0]),
-				Data: msgData[1:],
+				Type:     mt,
+				Cmd:      int(msgData[0]),
+				ClientId: clientId,
+				Data:     msgData[1:],
 			}
 
 			pipe.In <- msg

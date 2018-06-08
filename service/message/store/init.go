@@ -60,7 +60,7 @@ func Put(clientId string, timestamp uint64, value []byte) error {
 	return tx.Commit()
 }
 
-func List() (list [][]byte, err error) {
+func List(clientId string) (list [][]byte, err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
 		return nil, err
@@ -70,8 +70,8 @@ func List() (list [][]byte, err error) {
 
 	c := bkt.Cursor()
 	now := time.Now()
-	min := []byte(now.Add(-time.Hour * 24).Format(time.RFC3339))
-	max := []byte(now.Format(time.RFC3339))
+	min := []byte(fmt.Sprintf("%s/%s", clientId, now.Add(-time.Hour*24).Format(time.RFC3339)))
+	max := []byte(fmt.Sprintf("%s/%s", clientId, now.Format(time.RFC3339)))
 
 	list = [][]byte{}
 	for k, v := c.Seek(min); k != nil && bytes.Compare(k, max) <= 0; k, v = c.Next() {

@@ -1,6 +1,7 @@
 # bin
 *.exe
 blog
+studio
 
 # swap
 *~

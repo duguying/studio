@@ -1,9 +1,9 @@
 package pipe
 
 import (
+	"duguying/studio/service/message/model"
 	"github.com/gogather/safemap"
 	"log"
-	"duguying/blog/service/message/model"
 )
 
 type ClientPipe struct {

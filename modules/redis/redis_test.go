@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"gopkg.in/redis.v5"
 	"log"
-	"duguying/blog/g"
+	"duguying/studio/g"
 	"testing"
 	"time"
 	"sort"

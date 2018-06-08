@@ -5,7 +5,7 @@
 package g
 
 import (
-	"duguying/blog/modules/configuration"
+	"duguying/studio/modules/configuration"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/redis.v5"
 )

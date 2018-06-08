@@ -1,21 +1,21 @@
 package main
 
 import (
-	"duguying/blog/g"
-	"duguying/blog/modules/configuration"
-	"duguying/blog/modules/logger"
-	"duguying/blog/modules/orm"
-	"duguying/blog/modules/redis"
-	"duguying/blog/service"
+	"duguying/studio/g"
+	"duguying/studio/modules/configuration"
+	"duguying/studio/modules/logger"
+	"duguying/studio/modules/orm"
+	"duguying/studio/modules/redis"
+	"duguying/studio/service"
 	"flag"
 	"fmt"
 	"os"
 	"time"
-	"duguying/blog/service/message/store"
+	"duguying/studio/service/message/store"
 )
 
 var (
-	configPath string = "blog.ini"
+	configPath string = "studio.ini"
 	logDir     string = "log"
 )
 
@@ -43,7 +43,7 @@ func main() {
 
 func versionFlag() {
 	version := flag.Bool("v", false, "version")
-	config := flag.String("c", "blog.ini", "configuration file")
+	config := flag.String("c", "studio.ini", "configuration file")
 	logDirectory := flag.String("l", "log", "log directory")
 	flag.Parse()
 	if *version {

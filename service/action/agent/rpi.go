@@ -5,8 +5,8 @@
 package agent
 
 import (
-	"duguying/blog/g"
-	"duguying/blog/modules/alidns"
+	"duguying/studio/g"
+	"duguying/studio/modules/alidns"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

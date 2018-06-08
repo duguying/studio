@@ -5,8 +5,8 @@
 package db
 
 import (
-	"duguying/blog/g"
-	"duguying/blog/modules/models"
+	"duguying/studio/g"
+	"duguying/studio/modules/models"
 	"encoding/json"
 	"strings"
 	)

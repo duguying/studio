@@ -1,8 +1,8 @@
 package deal
 
 import (
-	"duguying/blog/service/message/model"
-	"duguying/blog/service/message/store"
+	"duguying/studio/service/message/model"
+	"duguying/studio/service/message/store"
 	"log"
 	"time"
 )

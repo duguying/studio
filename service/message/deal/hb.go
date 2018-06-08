@@ -5,8 +5,8 @@
 package deal
 
 import (
-	"duguying/blog/service/message/model"
-	"duguying/blog/service/message/pipe"
+	"duguying/studio/service/message/model"
+	"duguying/studio/service/message/pipe"
 	"github.com/gogo/protobuf/proto"
 	"github.com/gorilla/websocket"
 	"log"

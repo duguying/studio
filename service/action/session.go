@@ -5,8 +5,8 @@
 package action
 
 import (
-	"duguying/blog/g"
-	"duguying/blog/modules/session"
+	"duguying/studio/g"
+	"duguying/studio/modules/session"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

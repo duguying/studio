@@ -5,7 +5,7 @@ cd $WORKSPACE
 
 mkdir -p var
 
-app=blog
+app=studio
 pidfile=var/app.pid
 logfile=var/app.log
 

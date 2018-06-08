@@ -5,9 +5,9 @@
 package action
 
 import (
-	"duguying/blog/g"
-	"duguying/blog/modules/session"
-	"duguying/blog/service/db"
+	"duguying/studio/g"
+	"duguying/studio/modules/session"
+	"duguying/studio/service/db"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"net/http"

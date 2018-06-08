@@ -5,7 +5,7 @@
 package alidns
 
 import (
-	"duguying/blog/utils"
+	"duguying/studio/utils"
 	"encoding/json"
 	"fmt"
 	"github.com/Unknwon/com"

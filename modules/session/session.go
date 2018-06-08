@@ -5,8 +5,8 @@
 package session
 
 import (
-	"duguying/blog/modules/redis"
-	"duguying/blog/utils"
+	"duguying/studio/modules/redis"
+	"duguying/studio/utils"
 	"encoding/json"
 	"time"
 )

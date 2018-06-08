@@ -1,8 +1,8 @@
 package deal
 
 import (
-	"duguying/blog/modules/logger"
-	"duguying/blog/service/message/pipe"
+	"duguying/studio/modules/logger"
+	"duguying/studio/service/message/pipe"
 	"log"
 )
 

@@ -5,13 +5,13 @@
 package service
 
 import (
-	"duguying/blog/g"
-	"duguying/blog/modules/logger"
-	"duguying/blog/modules/middleware"
-	"duguying/blog/service/action"
-	"duguying/blog/service/action/agent"
-	"duguying/blog/service/message/deal"
-	"duguying/blog/service/message/pipe"
+	"duguying/studio/g"
+	"duguying/studio/modules/logger"
+	"duguying/studio/modules/middleware"
+	"duguying/studio/service/action"
+	"duguying/studio/service/action/agent"
+	"duguying/studio/service/message/deal"
+	"duguying/studio/service/message/pipe"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"path/filepath"

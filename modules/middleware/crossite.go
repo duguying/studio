@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"duguying/blog/g"
+	"duguying/studio/g"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )

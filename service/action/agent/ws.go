@@ -5,8 +5,8 @@
 package agent
 
 import (
-	"duguying/blog/service/message/model"
-	"duguying/blog/service/message/pipe"
+	"duguying/studio/service/message/model"
+	"duguying/studio/service/message/pipe"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"github.com/gorilla/websocket"

@@ -5,7 +5,7 @@
 package action
 
 import (
-	"duguying/blog/service/db"
+	"duguying/studio/service/db"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

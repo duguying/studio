@@ -12,7 +12,7 @@ var gl *logger.GroupLogger
 
 func InitLogger(dir string, expire time.Duration) {
 	logSlice := []string{"blog", "orm", "ws"}
-	gl = logger.NewGroupLogger(dir, "blog", expire, logSlice, log.Ldate|log.Ltime|log.Lshortfile)
+	gl = logger.NewGroupLogger(dir, "studio", expire, logSlice, log.Ldate|log.Ltime|log.Lshortfile)
 }
 
 func L(group string) *logger.Logger {

@@ -6,7 +6,7 @@ package store
 
 import (
 	"bytes"
-	"duguying/blog/g"
+	"duguying/studio/g"
 	"fmt"
 	"github.com/boltdb/bolt"
 	"log"

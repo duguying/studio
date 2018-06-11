@@ -7,11 +7,11 @@ import (
 	"duguying/studio/modules/orm"
 	"duguying/studio/modules/redis"
 	"duguying/studio/service"
+	"duguying/studio/service/message/store"
 	"flag"
 	"fmt"
 	"os"
 	"time"
-	"duguying/studio/service/message/store"
 )
 
 var (

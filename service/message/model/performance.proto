@@ -82,24 +82,24 @@ message PerformanceMonitor {
     }
 
     message NetWork {
-        string Name = 1;
-        string Ip = 2;
-        double Speed = 3;
-        double OutRecvPkgErrRate = 4; //外网收包错误率
-        double OutSendPkgErrRate = 5; //外网发包错误率
-        uint64 RecvByte = 6;          //接收的字节数
-        uint64 RecvPkg = 7;           //接收正确的包数
-        uint64 RecvErr = 8;           //接收错误的包数
-        uint64 SendByte = 9;          //发送的字节数
-        uint64 SendPkg = 10;          //发送正确的包数
-        uint64 SendErr = 11;          //发送错误的包数
+        string name = 1;
+        string ip = 2;
+        double speed = 3;
+        double out_recv_pkg_err_rate = 4; //外网收包错误率
+        double out_send_pkg_err_rate = 5; //外网发包错误率
+        uint64 recv_byte = 6;          //接收的字节数
+        uint64 recv_pkg = 7;           //接收正确的包数
+        uint64 recv_err = 8;           //接收错误的包数
+        uint64 send_byte = 9;          //发送的字节数
+        uint64 send_pkg = 10;          //发送正确的包数
+        uint64 send_err = 11;          //发送错误的包数
 
-        double RecvByteAvg = 12; //一个周期平均每秒接收字节数
-        double SendByteAvg = 13; //一个周期平均每秒发送字节数
-        double RecvErrRate = 14; //一个周期收包错误率
-        double SendErrRate = 15; //一个周期发包错误率
-        double RecvPkgAvg = 16;  //一个周期平均每秒收包数
-        double SendPkgAvg = 17;  //一个周期平均每秒发包数
+        double recv_byte_avg = 12; //一个周期平均每秒接收字节数
+        double send_byte_avg = 13; //一个周期平均每秒发送字节数
+        double recv_err_rate = 14; //一个周期收包错误率
+        double send_err_rate = 15; //一个周期发包错误率
+        double recv_pkg_avg = 16;  //一个周期平均每秒收包数
+        double send_pkg_avg = 17;  //一个周期平均每秒发包数
     }
 
     uint64 timestamp = 3;

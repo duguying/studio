@@ -38,10 +38,10 @@ func (x CliCmd_Cmd) String() string {
 	return proto.EnumName(CliCmd_Cmd_name, int32(x))
 }
 func (CliCmd_Cmd) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_cli_4269c20d3c93b829, []int{0, 0}
+	return fileDescriptor_cli_44a0d3f55ee240a8, []int{0, 0}
 }
 
-// cmd 0
+// cmd 4
 type CliCmd struct {
 	Cmd                  CliCmd_Cmd `protobuf:"varint,1,opt,name=cmd,proto3,enum=model.CliCmd_Cmd" json:"cmd,omitempty"`
 	Session              string     `protobuf:"bytes,2,opt,name=session,proto3" json:"session,omitempty"`
@@ -54,7 +54,7 @@ func (m *CliCmd) Reset()         { *m = CliCmd{} }
 func (m *CliCmd) String() string { return proto.CompactTextString(m) }
 func (*CliCmd) ProtoMessage()    {}
 func (*CliCmd) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cli_4269c20d3c93b829, []int{0}
+	return fileDescriptor_cli_44a0d3f55ee240a8, []int{0}
 }
 func (m *CliCmd) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CliCmd.Unmarshal(m, b)
@@ -93,9 +93,9 @@ func init() {
 	proto.RegisterEnum("model.CliCmd_Cmd", CliCmd_Cmd_name, CliCmd_Cmd_value)
 }
 
-func init() { proto.RegisterFile("cli.proto", fileDescriptor_cli_4269c20d3c93b829) }
+func init() { proto.RegisterFile("cli.proto", fileDescriptor_cli_44a0d3f55ee240a8) }
 
-var fileDescriptor_cli_4269c20d3c93b829 = []byte{
+var fileDescriptor_cli_44a0d3f55ee240a8 = []byte{
 	// 131 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0xce, 0xc9, 0xd4,
 	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0xcd, 0xcd, 0x4f, 0x49, 0xcd, 0x51, 0x4a, 0xe6, 0x62,

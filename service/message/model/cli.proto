@@ -1,0 +1,13 @@
+syntax = "proto3";
+package model;
+
+// cmd 4
+message CliCmd {
+    enum Cmd {
+        OPEN  = 0;
+        CLOSE = 1;
+    }
+
+    Cmd    cmd     = 1;
+    string session = 2;
+}

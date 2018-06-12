@@ -11,9 +11,11 @@ import (
 )
 
 const (
-	CMD_HB   = 0
-	CMD_PERF = 1
-	CMD_KEY  = 2
+	CMD_HB       = 0
+	CMD_PERF     = 1
+	CMD_KEY      = 2
+	CMD_CLI_PIPE = 3
+	CMD_CLI_CMD  = 4
 )
 
 type Msg struct {

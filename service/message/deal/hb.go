@@ -7,7 +7,7 @@ package deal
 import (
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
-	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
 	"log"
 	"time"

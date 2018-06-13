@@ -62,11 +62,6 @@
 			"Rev": "e4dc79c94fb6b3816b0d16251854e1a12505c890"
 		},
 		{
-			"ImportPath": "github.com/gogo/protobuf/proto",
-			"Comment": "v0.2-9-g4365f75",
-			"Rev": "4365f750fe246471f2a03ef5da5231c3565c5628"
-		},
-		{
 			"ImportPath": "github.com/golang/protobuf/proto",
 			"Comment": "v1.1.0-10-g05f48f4",
 			"Rev": "05f48f4eaf0e05663b562bab533cdd472238ce29"

@@ -4,7 +4,7 @@ import (
 	"duguying/studio/service/message/model"
 	"github.com/gogather/safemap"
 	"log"
-)
+	)
 
 type ClientPipe struct {
 	clientId string
@@ -36,14 +36,14 @@ func RemoveUserPipe(clientId string) {
 	cm.Remove(clientId)
 }
 
-func SendMsg(clientId string, msg model.Msg) (success bool, err error) {
+func SendMsg(clientId string, msg model.Msg) (success bool) {
 	iCli, exist := pm.Get(clientId)
 	if !exist {
-		return false, nil
+		return false
 	}
 	cli := iCli.(*ClientPipe)
 	cli.out <- msg
-	return true, nil
+	return true
 }
 
 func GetConMap() *safemap.SafeMap {

@@ -37,6 +37,7 @@ func Run() {
 		api.GET("/month_archive", action.MonthArchive)
 		api.GET("/user_info", action.UserInfo)
 		api.POST("/user_login", action.UserLogin)
+		api.Any("/xterm", action.ConnectXTerm)
 
 		rpi := api.Group("/agent")
 		{

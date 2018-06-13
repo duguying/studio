@@ -10,4 +10,6 @@ message CliCmd {
 
     Cmd    cmd     = 1;
     string session = 2;
+    string request_id = 3;
+    uint32 pid = 4;
 }

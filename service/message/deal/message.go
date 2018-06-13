@@ -7,7 +7,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"log"
 	"time"
-	)
+)
 
 func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 	data := rcvMsgPack.Data
@@ -32,8 +32,10 @@ func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 			pid := pipeData.Pid
 			pair, exist := pipe.GetCliChanPair(session, pid)
 			if exist {
+				log.Println("cli ---> xterm:", pipeData.Data)
 				pair.ChanIn <- pipeData.Data
 			}
+			return nil
 		}
 	case model.CMD_CLI_CMD:
 		{
@@ -44,6 +46,7 @@ func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 				return err
 			}
 			pipe.SetCliPid(pcmd.Session, pcmd.RequestId, pcmd.Pid)
+			return nil
 		}
 	}
 	return nil

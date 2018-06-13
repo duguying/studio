@@ -68,7 +68,7 @@ func Ws(c *gin.Context) {
 			}
 
 			pipe.In <- msg
-			log.Printf("recv: %s\n", msg.String())
+			//log.Printf("recv: %s\n", msg.String())
 		}
 	}(conn)
 

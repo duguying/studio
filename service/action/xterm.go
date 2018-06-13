@@ -101,6 +101,37 @@ func ConnectXTerm(c *gin.Context) {
 
 	defer conn.Close()
 
+	pair := pipe.NewCliChanPair()
+	pipe.SetCliChanPair(clientId, pid, pair)
+
+	// send xterm data into cli
+	go func() {
+		for {
+			select {
+			case data := <-pair.ChanOut:
+				{
+					pipeStruct := model.CliPipe{
+						Session: clientId,
+						Pid:     pid,
+						Data:    data,
+					}
+					pipeData, err := proto.Marshal(&pipeStruct)
+					if err != nil {
+						log.Println("proto marshal failed, err:", err.Error())
+						continue
+					}
+					msg := model.Msg{
+						Type:     websocket.BinaryMessage,
+						Cmd:      model.CMD_CLI_PIPE,
+						ClientId: clientId,
+						Data:     pipeData,
+					}
+					pipe.SendMsg(clientId, msg)
+				}
+			}
+		}
+	}()
+
 	// read from client, put into in channel
 	go func(con *websocket.Conn) {
 		for {
@@ -110,26 +141,20 @@ func ConnectXTerm(c *gin.Context) {
 				break
 			}
 
-			pair, exist := pipe.GetCliChanPair(clientId, pid)
-			if !exist {
-				log.Println("pair 不存在")
-			} else {
-				pair.ChanOut <- data
-			}
+			pair.ChanOut <- data
 		}
 	}(conn)
 
 	// write into client, get from out channel
 	for {
-		pair, exist := pipe.GetCliChanPair(clientId, pid)
-		if !exist {
-			log.Println("pair 不存在")
-		} else {
-			data := <-pair.ChanIn
-			err = conn.WriteMessage(websocket.TextMessage, data)
-			if err != nil {
-				log.Println("即时消息发送到客户端:", err)
-				break
+		select {
+		case data := <-pair.ChanIn:
+			{
+				err = conn.WriteMessage(websocket.TextMessage, data)
+				if err != nil {
+					log.Println("即时消息发送到客户端:", err)
+					break
+				}
 			}
 		}
 	}

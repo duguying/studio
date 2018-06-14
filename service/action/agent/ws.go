@@ -78,7 +78,7 @@ func Ws(c *gin.Context) {
 		var msg model.Msg
 
 		msg = <-out
-		log.Println("send message:", msg.String())
+		//log.Println("send message:", msg.String())
 
 		err = conn.WriteMessage(msg.Type, append([]byte{byte(msg.Cmd)}, msg.Data...))
 		if err != nil {

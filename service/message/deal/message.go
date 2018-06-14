@@ -32,7 +32,7 @@ func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 			pid := pipeData.Pid
 			pair, exist := pipe.GetCliChanPair(session, pid)
 			if exist {
-				log.Println("cli ---> xterm:", pipeData.Data)
+				//log.Println("cli ---> xterm:", pipeData.Data)
 				pair.ChanIn <- pipeData.Data
 			}
 			return nil

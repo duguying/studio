@@ -150,7 +150,7 @@ func ConnectXTerm(c *gin.Context) {
 		select {
 		case data := <-pair.ChanIn:
 			{
-				err = conn.WriteMessage(websocket.TextMessage, data)
+				err = conn.WriteMessage(websocket.BinaryMessage, data)
 				if err != nil {
 					log.Println("即时消息发送到客户端:", err)
 					break

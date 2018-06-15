@@ -138,7 +138,31 @@ func ConnectXTerm(c *gin.Context) {
 		for {
 			_, data, err := con.ReadMessage()
 			if err != nil {
+				// ws has closed
 				log.Println("read:", err)
+
+				// try to send close cmd to agent cli
+				_, exist := pipe.GetPidCon(clientId, pid)
+				if exist {
+					cliCmdStruct := model.CliCmd{
+						Cmd:       model.CliCmd_CLOSE,
+						Session:   clientId,
+						RequestId: reqId,
+						Pid:       pid,
+					}
+					cliCmdData, err := proto.Marshal(&cliCmdStruct)
+					if err != nil {
+						log.Println("marshal cmd data failed, err:", err.Error())
+					} else {
+						cmdCloseMsg := model.Msg{
+							Type:     websocket.BinaryMessage,
+							Cmd:      model.CMD_CLI_CMD,
+							ClientId: clientId,
+							Data:     cliCmdData,
+						}
+						pipe.SendMsg(clientId, cmdCloseMsg)
+					}
+				}
 				break
 			}
 

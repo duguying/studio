@@ -20,8 +20,8 @@ type ChanPair struct {
 
 func NewCliChanPair() (pair *ChanPair) {
 	return &ChanPair{
-		ChanIn:  make(chan []byte, 100),
-		ChanOut: make(chan []byte, 100),
+		ChanIn:  make(chan []byte, 10000),
+		ChanOut: make(chan []byte, 10000),
 	}
 }
 

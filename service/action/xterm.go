@@ -103,6 +103,7 @@ func ConnectXTerm(c *gin.Context) {
 
 	pair := pipe.NewCliChanPair()
 	pipe.SetCliChanPair(clientId, pid, pair)
+	pipe.SetPidCon(clientId, pid, conn) // store connection
 
 	// send xterm data into cli
 	go func() {

@@ -45,7 +45,19 @@ func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 				log.Println("parse pipe cmd data failed, err:", err.Error())
 				return err
 			}
-			pipe.SetCliPid(pcmd.Session, pcmd.RequestId, pcmd.Pid)
+			if pcmd.Cmd == model.CliCmd_OPEN {
+				pipe.SetCliPid(pcmd.Session, pcmd.RequestId, pcmd.Pid)
+			} else if pcmd.Cmd == model.CliCmd_CLOSE {
+				// 1. close ws
+				ws, exist := pipe.GetPidCon(pcmd.Session, pcmd.Pid)
+				if exist {
+					ws.Close()
+					pipe.DelPidCon(pcmd.Session, pcmd.Pid)
+				}
+
+				// 2. clear key
+				pipe.DelCliPid(pcmd.Session, pcmd.RequestId)
+			}
 			return nil
 		}
 	}

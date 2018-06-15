@@ -5,6 +5,7 @@
 package action
 
 import (
+	"duguying/studio/g"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/utils"
@@ -99,7 +100,9 @@ func ConnectXTerm(c *gin.Context) {
 		return
 	}
 
+	wsExit := false
 	defer conn.Close()
+	defer func() { wsExit = true }()
 
 	pair := pipe.NewCliChanPair()
 	pipe.SetCliChanPair(clientId, pid, pair)
@@ -111,6 +114,9 @@ func ConnectXTerm(c *gin.Context) {
 			select {
 			case data := <-pair.ChanOut:
 				{
+					if wsExit {
+						return
+					}
 					pipeStruct := model.CliPipe{
 						Session: clientId,
 						Pid:     pid,
@@ -166,9 +172,27 @@ func ConnectXTerm(c *gin.Context) {
 				break
 			}
 
-			pair.ChanOut <- data
+			if data[0] == model.TERM_PONG {
+				log.Println("pong")
+			} else {
+				log.Printf("what's header: %d\n", data[0])
+				pair.ChanOut <- data[1:]
+			}
+
 		}
 	}(conn)
+
+	// send hb to xterm
+	go func() {
+		xtermHbPeriod := g.Config.GetInt64("xterm", "hb", 10)
+		for {
+			if wsExit {
+				return
+			}
+			pair.ChanIn <- []byte{model.TERM_PING}
+			time.Sleep(time.Second * time.Duration(xtermHbPeriod))
+		}
+	}()
 
 	// write into client, get from out channel
 	for {
@@ -178,10 +202,12 @@ func ConnectXTerm(c *gin.Context) {
 				err = conn.WriteMessage(websocket.BinaryMessage, data)
 				if err != nil {
 					log.Println("即时消息发送到客户端:", err)
-					break
+					return
 				}
 			}
 		}
 	}
+
+	log.Println("一个 xterm 连接顺利退出")
 
 }

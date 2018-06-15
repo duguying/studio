@@ -16,6 +16,10 @@ const (
 	CMD_KEY      = 2
 	CMD_CLI_PIPE = 3
 	CMD_CLI_CMD  = 4
+
+	TERM_PIPE = 0x0
+	TERM_PING = 0x2
+	TERM_PONG = 0x3
 )
 
 type Msg struct {

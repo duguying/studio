@@ -15,6 +15,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"sync"
 )
 
 func ConnectXTerm(c *gin.Context) {
@@ -194,16 +195,19 @@ func ConnectXTerm(c *gin.Context) {
 		}
 	}()
 
+	var wsLock sync.Mutex
 	// write into client, get from out channel
 	for {
 		select {
 		case data := <-pair.ChanIn:
 			{
+				wsLock.Lock()
 				err = conn.WriteMessage(websocket.BinaryMessage, data)
 				if err != nil {
 					log.Println("即时消息发送到客户端:", err)
 					return
 				}
+				wsLock.Unlock()
 			}
 		}
 	}

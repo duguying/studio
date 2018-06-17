@@ -4,12 +4,15 @@ package model;
 // cmd 4
 message CliCmd {
     enum Cmd {
-        OPEN  = 0;
-        CLOSE = 1;
+        OPEN   = 0;
+        CLOSE  = 1;
+        RESIZE = 2;
     }
 
     Cmd    cmd     = 1;
     string session = 2;
     string request_id = 3;
     uint32 pid = 4;
+    uint32 width = 5;
+    uint32 height = 6;
 }

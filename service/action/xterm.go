@@ -9,14 +9,25 @@ import (
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/utils"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"time"
 	"sync"
+	"time"
 )
+
+type TermLayout struct {
+	Width  uint32 `json:"cols"`
+	Height uint32 `json:"rows"`
+}
+
+func (tl *TermLayout) String() string {
+	c, _ := json.Marshal(tl)
+	return string(c)
+}
 
 func ConnectXTerm(c *gin.Context) {
 	clientId := c.Query("client_id")
@@ -175,7 +186,35 @@ func ConnectXTerm(c *gin.Context) {
 
 			if data[0] == model.TERM_PONG {
 				log.Println("pong")
-			} else {
+			} else if data[0] == model.TERM_SIZE {
+				layout := TermLayout{}
+				err = json.Unmarshal(data[1:], &layout)
+				if err != nil {
+					log.Printf("parse layout failed, err: %s, raw content is: %s\n", err.Error(), string(data[1:]))
+					continue
+				}
+				log.Println("resize...", layout)
+				cliCmdStruct := model.CliCmd{
+					Cmd:       model.CliCmd_RESIZE,
+					Session:   clientId,
+					RequestId: reqId,
+					Pid:       pid,
+					Width:     layout.Width,
+					Height:    layout.Height,
+				}
+				cliCmdData, err := proto.Marshal(&cliCmdStruct)
+				if err != nil {
+					log.Println("marshal cmd data failed, err:", err.Error())
+				} else {
+					cmdCloseMsg := model.Msg{
+						Type:     websocket.BinaryMessage,
+						Cmd:      model.CMD_CLI_CMD,
+						ClientId: clientId,
+						Data:     cliCmdData,
+					}
+					pipe.SendMsg(clientId, cmdCloseMsg)
+				}
+			} else if data[0] == model.TERM_PIPE {
 				log.Printf("what's header: %d\n", data[0])
 				pair.ChanOut <- data[1:]
 			}

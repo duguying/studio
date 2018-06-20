@@ -1,14 +1,17 @@
 package action
 
 import (
+	"duguying/studio/g"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"fmt"
 )
 
 func Version(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"version": "1.0",
+		"version":     g.Version,
+		"git_version": g.GitVersion,
+		"build_time":  g.BuildTime,
 	})
 	return
 }

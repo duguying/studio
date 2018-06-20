@@ -17,6 +17,7 @@ var (
 
 	InstallMode bool = false
 
+	Version = "0.0"
 	GitVersion = "00000000"
 	BuildTime  = "2000-01-01T00:00:00+0800"
 )

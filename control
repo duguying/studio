@@ -24,19 +24,20 @@ function build() {
     version=`git tag | head -1`
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
-    CGO_ENABLED=1 GOOS=linux go build -v -a -installsuffix cgo -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime" -o $app .
+    GOOS=$1 GOARCH=$2 go build -a -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
 }
 
 function pack() {
     version=`git tag | head -1`
-    rm -rf release
-    rm -rf dist
-    rm -f release-${version}.zip
-    mkdir release
-    mkdir dist
-    cp blog release/
-    cp -r static release/
-    zip -r dist/release-${version}.zip release/
+    rm -rf dist/
+    mkdir -p dist/${app}/bin
+    mkdir -p dist/${app}/etc
+    cp studio dist/${app}/bin
+    cp control dist/${app}
+    cp etc/17monipdb.datx dist/${app}/etc
+    cd dist
+    zip -r release-${version}.zip ${app}/*
+    cd ..
 }
 
 function start() {
@@ -93,7 +94,7 @@ function help() {
 if [ "$1" == "" ]; then
     help
 elif [ "$1" == "build" ];then
-    build
+    build `go env GOOS` `go env GOARCH`
 elif [ "$1" == "stop" ];then
     stop
 elif [ "$1" == "start" ];then

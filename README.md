@@ -1,6 +1,10 @@
-# blog [![Build Status](https://travis-ci.org/duguying/blog.svg)](https://travis-ci.org/duguying/blog)
+# Studio [![Build Status](https://travis-ci.org/duguying/studio.svg?branch=refactor)](https://travis-ci.org/duguying/studio)
 
-Go语言实现的博客系统
+my studio service, blog, album, ops, etc.
+
+## About frontend
+
+this project does not contain ui, to installing ui please refer to [feblog](https://github.com/duguying/feblog).
 
 ## Build ##
 

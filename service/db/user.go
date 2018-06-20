@@ -17,3 +17,13 @@ func GetUser(username string) (user *models.User, err error) {
 	}
 	return user, nil
 }
+
+func CheckUsername(username string) (valid bool, err error) {
+	count := 0
+	errs := g.Db.Table("users").Where("username=?", username).Count(&count).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return false, errs[0]
+	} else {
+		return count <= 0, nil
+	}
+}

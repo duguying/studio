@@ -38,6 +38,7 @@ func Run() {
 		api.GET("/user_info", action.UserInfo)
 		api.POST("/user_login", action.UserLogin)
 		api.Any("/xterm", action.ConnectXTerm)
+		api.GET("/username_check", action.UsernameCheck)
 
 		rpi := api.Group("/agent")
 		{

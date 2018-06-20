@@ -98,3 +98,29 @@ func UserLogout(c *gin.Context) {
 		"user_id": userId,
 	})
 }
+
+func UsernameCheck(c *gin.Context) {
+	username := c.DefaultQuery("username", "")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": "username could not be empty",
+		})
+		return
+	} else {
+		valid, err := db.CheckUsername(username)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"ok":  false,
+				"err": err.Error(),
+			})
+			return
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"ok":    true,
+				"valid": valid,
+			})
+			return
+		}
+	}
+}

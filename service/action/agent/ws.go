@@ -57,6 +57,7 @@ func Ws(c *gin.Context) {
 	// store agent info
 	info := &store.AgentStatusInfo{
 		Online:     true,
+		Ip:         ip,
 		ClientID:   clientId,
 		OnlineTime: time.Now(),
 	}

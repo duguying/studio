@@ -41,6 +41,9 @@ func Ws(c *gin.Context) {
 		return
 	}
 
+	// client ip
+	ip := c.ClientIP()
+
 	// store connects
 	connId := com.CreateGUID()
 	pipe.AddConnect(connId, conn)
@@ -105,6 +108,7 @@ func Ws(c *gin.Context) {
 	info = &store.AgentStatusInfo{
 		Online:      false,
 		ClientID:    clientId,
+		Ip:          ip,
 		OfflineTime: time.Now(),
 	}
 	store.PutAgent(clientId, info)

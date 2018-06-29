@@ -31,7 +31,10 @@ func InitBoltDB() {
 
 func clearPerf() {
 	go func() {
-		clearAllAgentPerf()
+		err := clearAllAgentPerf()
+		if err != nil {
+			log.Println("clear agent performance err:", err.Error())
+		}
 		time.Sleep(time.Minute * 10)
 	}()
 }

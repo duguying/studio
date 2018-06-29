@@ -9,6 +9,7 @@ import (
 	"duguying/studio/service/message/model"
 	"fmt"
 	"github.com/golang/protobuf/proto"
+	"log"
 	"time"
 )
 
@@ -53,10 +54,15 @@ func ClearRange(clientId string) (err error) {
 
 	c := bkt.Cursor()
 	now := time.Now()
-	min:=[]byte(fmt.Sprintf("%s/", clientId))
+	min := []byte(fmt.Sprintf("%s/", clientId))
 	max := []byte(fmt.Sprintf("%s/%s", clientId, now.Add(-time.Hour*24).Format(time.RFC3339)))
 	for k, _ := c.Seek(min); k != nil && bytes.Compare(k, max) <= 0; k, _ = c.Next() {
-		bkt.Delete(k)
+		err := bkt.Delete(k)
+		if err != nil {
+			log.Println("delete err:", err.Error())
+		} else {
+			log.Println("delete key:", string(k))
+		}
 	}
 	return nil
 }

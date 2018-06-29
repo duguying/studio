@@ -57,7 +57,7 @@ func clearAllAgentPerf() (err error) {
 		return err
 	}
 	for _, agent := range list {
-		ClearRange(agent.ClientID)
+		return ClearRange(agent.ClientID)
 	}
 	return nil
 }

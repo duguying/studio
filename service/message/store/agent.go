@@ -10,24 +10,24 @@ import (
 	"time"
 )
 
-type AgentInfo struct {
+type AgentStatusInfo struct {
 	Online      bool      `json:"online"`
 	ClientID    string    `json:"client_id"`
 	OnlineTime  time.Time `json:"online_time"`
 	OfflineTime time.Time `json:"offline_time"`
 }
 
-func (ai *AgentInfo) String() string {
+func (ai *AgentStatusInfo) String() string {
 	c, _ := json.Marshal(ai)
 	return string(c)
 }
 
-func PutAgent(clientId string, info *AgentInfo) error {
+func PutAgent(clientId string, info *AgentStatusInfo) error {
 	value := info.String()
 	return put("agent", clientId, []byte(value))
 }
 
-func ListAllAgent() (list []*AgentInfo, err error) {
+func ListAllAgent() (list []*AgentStatusInfo, err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
 		return nil, err
@@ -36,10 +36,10 @@ func ListAllAgent() (list []*AgentInfo, err error) {
 	bkt := tx.Bucket([]byte("agent"))
 
 	c := bkt.Cursor()
-	list = []*AgentInfo{}
+	list = []*AgentStatusInfo{}
 
 	for k, v := c.First(); k != nil; k, v = c.Next() {
-		info := &AgentInfo{}
+		info := &AgentStatusInfo{}
 		err := json.Unmarshal(v, info)
 		if err != nil {
 			log.Println("marshal agent info failed, err:", err.Error())

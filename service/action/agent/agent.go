@@ -7,6 +7,7 @@ package agent
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/alidns"
+	"duguying/studio/service/message/store"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -53,4 +54,21 @@ func Report(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"ok": true,
 	})
+}
+
+func List(c *gin.Context) {
+	agents, err := store.ListAllAgent()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":   true,
+		"list": agents,
+	})
+	return
 }

@@ -40,10 +40,11 @@ func Run() {
 		api.Any("/xterm", action.ConnectXTerm)
 		api.GET("/username_check", action.UsernameCheck)
 
-		rpi := api.Group("/agent")
+		agt := api.Group("/agent")
 		{
-			rpi.Any("/ws", agent.Ws)
-			rpi.GET("/list_perf", agent.PerfList)
+			agt.GET("/list", agent.List)
+			agt.Any("/ws", agent.Ws)
+			agt.GET("/list_perf", agent.PerfList)
 		}
 	}
 

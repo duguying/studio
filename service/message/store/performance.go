@@ -54,9 +54,9 @@ func ClearRange(clientId string) (err error) {
 
 	c := bkt.Cursor()
 	now := time.Now()
-	min := []byte(fmt.Sprintf("%s/", clientId))
+	min := []byte(fmt.Sprintf("%s/%s", clientId, time.Now().Add(-time.Hour*24*365).Format(time.RFC3339)))
 	max := []byte(fmt.Sprintf("%s/%s", clientId, now.Add(-time.Hour*24).Format(time.RFC3339)))
-	for k, _ := c.Seek(min); k != nil && bytes.Compare(k, max) > 0; k, _ = c.Next() {
+	for k, _ := c.Seek(min); k != nil && bytes.Compare(k, max) <= 0; k, _ = c.Next() {
 		err := bkt.Delete(k)
 		if err != nil {
 			log.Println("delete err:", err.Error())

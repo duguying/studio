@@ -13,8 +13,10 @@ import (
 type AgentStatusInfo struct {
 	Online      bool      `json:"online"`
 	ClientID    string    `json:"client_id"`
+	Os          string    `json:"os"`
+	Arch        string    `json:"arch"`
 	Hostname    string    `json:"hostname"`
-	Ip          string    `json:"ips"`
+	Ip          string    `json:"ip"`
 	IpIns       []string  `json:"ipins"`
 	OnlineTime  time.Time `json:"online_time"`
 	OfflineTime time.Time `json:"offline_time"`
@@ -35,6 +37,12 @@ func PutAgent(clientId string, info *AgentStatusInfo) error {
 		}
 		if info.OnlineTime.IsZero() {
 			info.OnlineTime = infoOld.OnlineTime
+		}
+		if info.Os == "" {
+			info.Os = infoOld.Os
+		}
+		if info.Arch == "" {
+			info.Arch = infoOld.Arch
 		}
 		if info.Hostname == "" {
 			info.Hostname = infoOld.Hostname

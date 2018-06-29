@@ -25,8 +25,10 @@ func PutPerf(clientId string, timestamp uint64, value []byte) error {
 		}
 		info := &AgentStatusInfo{
 			ClientID: clientId,
-			IpIns:    ips,
+			Os:       perf.Os,
+			Arch:     perf.Arch,
 			Hostname: perf.Hostname,
+			IpIns:    ips,
 		}
 		PutAgent(clientId, info)
 	}

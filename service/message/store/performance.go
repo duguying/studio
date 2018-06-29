@@ -24,6 +24,7 @@ func PutPerf(clientId string, timestamp uint64, value []byte) error {
 			ips = append(ips, network.Ip)
 		}
 		info := &AgentStatusInfo{
+			Online:   true,
 			ClientID: clientId,
 			Os:       perf.Os,
 			Arch:     perf.Arch,

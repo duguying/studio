@@ -72,6 +72,10 @@
 			"Rev": "a69d9f6de432e2c6b296a947d8a5ee88f68522cf"
 		},
 		{
+			"ImportPath": "github.com/ipipdotnet/datx-go",
+			"Rev": "0ac818a639c339140ca04aaa6ea8a738d9167d28"
+		},
+		{
 			"ImportPath": "github.com/jinzhu/gorm",
 			"Comment": "v1.9.1",
 			"Rev": "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"

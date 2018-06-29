@@ -66,7 +66,7 @@ func GetAgent(clientId string) (info *AgentStatusInfo, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return info, nil
+	return info, tx.Commit()
 }
 
 func ListAllAgent() (list []*AgentStatusInfo, err error) {

@@ -5,10 +5,8 @@
 package agent
 
 import (
-	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/store"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/protobuf/proto"
 	"net/http"
 )
 
@@ -22,23 +20,9 @@ func PerfList(c *gin.Context) {
 		})
 		return
 	} else {
-		perfs := []*model.PerformanceMonitor{}
-		for _, item := range list {
-			perf := model.PerformanceMonitor{}
-			err := proto.Unmarshal(item, &perf)
-			if err != nil {
-				c.JSON(http.StatusOK, gin.H{
-					"ok":  false,
-					"err": err.Error(),
-				})
-				return
-			}
-			perfs = append(perfs, &perf)
-		}
-
 		c.JSON(http.StatusOK, gin.H{
 			"ok":   true,
-			"list": perfs,
+			"list": list,
 		})
 		return
 	}

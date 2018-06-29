@@ -8,6 +8,7 @@ import (
 	"duguying/studio/g"
 	"github.com/boltdb/bolt"
 	"log"
+	"time"
 )
 
 var (
@@ -25,6 +26,14 @@ func InitBoltDB() {
 	}
 
 	initBucket()
+	clearPerf()
+}
+
+func clearPerf() {
+	go func() {
+		clearAllAgentPerf()
+		time.Sleep(time.Minute * 10)
+	}()
 }
 
 func initBucket() error {

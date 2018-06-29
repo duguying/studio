@@ -50,3 +50,14 @@ func ListAllAgent() (list []*AgentStatusInfo, err error) {
 
 	return list, tx.Commit()
 }
+
+func clearAllAgentPerf() (err error) {
+	list, err := ListAllAgent()
+	if err != nil {
+		return err
+	}
+	for _, agent := range list {
+		ClearRange(agent.ClientID)
+	}
+	return nil
+}

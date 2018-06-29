@@ -52,7 +52,7 @@ func Ws(c *gin.Context) {
 	pipe.AddUserPipe(clientId, out, connId)
 
 	// store agent info
-	info := &store.AgentInfo{
+	info := &store.AgentStatusInfo{
 		Online:     true,
 		ClientID:   clientId,
 		OnlineTime: time.Now(),
@@ -102,7 +102,7 @@ func Ws(c *gin.Context) {
 	pipe.RemoveConnect(connId)
 
 	// update agent info
-	info = &store.AgentInfo{
+	info = &store.AgentStatusInfo{
 		Online:      false,
 		ClientID:    clientId,
 		OfflineTime: time.Now(),

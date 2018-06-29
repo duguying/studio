@@ -44,7 +44,7 @@ func ListPerf(clientId string) (list []*model.PerformanceMonitor, err error) {
 	return list, tx.Commit()
 }
 
-func ClearRange(clientId string) (err error) {
+func clearRange(clientId string) (err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
 		return err
@@ -64,5 +64,6 @@ func ClearRange(clientId string) (err error) {
 			log.Println("delete key:", string(k))
 		}
 	}
-	return nil
+
+	return tx.Commit()
 }

@@ -111,4 +111,7 @@ message PerformanceMonitor {
     repeated FileSystem file_system_list = 7;
     repeated Process process_list = 8;
     repeated NetWork nets = 9;
+    string os = 10;       // 系统名称
+    string hostname = 11; // 主机名称
+    string arch = 12;     // 架构
 }

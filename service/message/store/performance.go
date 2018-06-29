@@ -14,6 +14,23 @@ import (
 )
 
 func PutPerf(clientId string, timestamp uint64, value []byte) error {
+	perf := &model.PerformanceMonitor{}
+	err := proto.Unmarshal(value, perf)
+	if err != nil {
+		log.Println("proto unmarshal failed, err:", err.Error())
+	} else {
+		ips := []string{}
+		for _, network := range perf.Nets {
+			ips = append(ips, network.Ip)
+		}
+		info := &AgentStatusInfo{
+			ClientID: clientId,
+			IpIns:    ips,
+			Hostname: perf.Hostname,
+		}
+		PutAgent(clientId, info)
+	}
+
 	key := fmt.Sprintf("%s/%s", clientId, time.Unix(int64(timestamp), 0).Format(time.RFC3339))
 	return put("performance", key, value)
 }

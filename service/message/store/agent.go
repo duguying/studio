@@ -13,6 +13,9 @@ import (
 type AgentStatusInfo struct {
 	Online      bool      `json:"online"`
 	ClientID    string    `json:"client_id"`
+	Hostname    string    `json:"hostname"`
+	Ip          string    `json:"ips"`
+	IpIns       []string  `json:"ipins"`
 	OnlineTime  time.Time `json:"online_time"`
 	OfflineTime time.Time `json:"offline_time"`
 }
@@ -23,8 +26,47 @@ func (ai *AgentStatusInfo) String() string {
 }
 
 func PutAgent(clientId string, info *AgentStatusInfo) error {
+	infoOld, err := GetAgent(clientId)
+	if err != nil {
+		// nop
+	} else {
+		if info.OfflineTime.IsZero() {
+			info.OfflineTime = infoOld.OfflineTime
+		}
+		if info.OnlineTime.IsZero() {
+			info.OnlineTime = infoOld.OnlineTime
+		}
+		if info.Hostname == "" {
+			info.Hostname = infoOld.Hostname
+		}
+		if info.Ip == "" {
+			info.Ip = infoOld.Ip
+		}
+		if len(info.IpIns) <= 0 || info.IpIns[0] == "" {
+			info.IpIns = infoOld.IpIns
+		}
+	}
+
 	value := info.String()
+
 	return put("agent", clientId, []byte(value))
+}
+
+func GetAgent(clientId string) (info *AgentStatusInfo, err error) {
+	tx, err := boltDB.Begin(true)
+	if err != nil {
+		return nil, err
+	}
+
+	bkt := tx.Bucket([]byte("agent"))
+
+	value := bkt.Get([]byte(clientId))
+	info = &AgentStatusInfo{}
+	err = json.Unmarshal(value, info)
+	if err != nil {
+		return nil, err
+	}
+	return info, nil
 }
 
 func ListAllAgent() (list []*AgentStatusInfo, err error) {

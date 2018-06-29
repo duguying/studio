@@ -14,7 +14,7 @@ import (
 
 func PerfList(c *gin.Context) {
 	clientId := c.Query("client_id")
-	list, err := store.List(clientId)
+	list, err := store.ListPerf(clientId)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

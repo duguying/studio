@@ -7,11 +7,13 @@ package agent
 import (
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
+	"duguying/studio/service/message/store"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"time"
 )
 
 func Ws(c *gin.Context) {
@@ -48,6 +50,14 @@ func Ws(c *gin.Context) {
 
 	// register in and out channel
 	pipe.AddUserPipe(clientId, out, connId)
+
+	// store agent info
+	info := &store.AgentInfo{
+		Online:     true,
+		ClientID:   clientId,
+		OnlineTime: time.Now(),
+	}
+	store.PutAgent(clientId, info)
 
 	// read from client, put into in channel
 	go func(con *websocket.Conn) {
@@ -90,4 +100,12 @@ func Ws(c *gin.Context) {
 	// exit websocket finally, and remove client pipeline
 	pipe.RemoveUserPipe(clientId)
 	pipe.RemoveConnect(connId)
+
+	// update agent info
+	info = &store.AgentInfo{
+		Online:      false,
+		ClientID:    clientId,
+		OfflineTime: time.Now(),
+	}
+	store.PutAgent(clientId, info)
 }

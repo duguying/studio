@@ -5,12 +5,9 @@
 package store
 
 import (
-	"bytes"
 	"duguying/studio/g"
-	"fmt"
 	"github.com/boltdb/bolt"
 	"log"
-	"time"
 )
 
 var (
@@ -41,42 +38,25 @@ func initBucket() error {
 		return err
 	}
 
+	_, err = tx.CreateBucketIfNotExists([]byte("agent"))
+	if err != nil {
+		return err
+	}
+
 	return tx.Commit()
 }
 
-func Put(clientId string, timestamp uint64, value []byte) error {
+func put(bucket string, key string, value []byte) error {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
 		return err
 	}
 
-	bkt := tx.Bucket([]byte("performance"))
+	bkt := tx.Bucket([]byte(bucket))
 
-	key := fmt.Sprintf("%s/%s", clientId, time.Unix(int64(timestamp), 0).Format(time.RFC3339))
 	err = bkt.Put([]byte(key), value)
 	if err != nil {
 		return tx.Rollback()
 	}
 	return tx.Commit()
-}
-
-func List(clientId string) (list [][]byte, err error) {
-	tx, err := boltDB.Begin(true)
-	if err != nil {
-		return nil, err
-	}
-
-	bkt := tx.Bucket([]byte("performance"))
-
-	c := bkt.Cursor()
-	now := time.Now()
-	min := []byte(fmt.Sprintf("%s/%s", clientId, now.Add(-time.Hour*24).Format(time.RFC3339)))
-	max := []byte(fmt.Sprintf("%s/%s", clientId, now.Format(time.RFC3339)))
-
-	list = [][]byte{}
-	for k, v := c.Seek(min); k != nil && bytes.Compare(k, max) <= 0; k, v = c.Next() {
-		list = append(list, v)
-	}
-
-	return list, tx.Commit()
 }

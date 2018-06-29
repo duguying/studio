@@ -185,7 +185,7 @@ func ConnectXTerm(c *gin.Context) {
 			}
 
 			if data[0] == model.TERM_PONG {
-				log.Println("pong")
+				//log.Println("pong")
 			} else if data[0] == model.TERM_SIZE {
 				layout := TermLayout{}
 				err = json.Unmarshal(data[1:], &layout)
@@ -215,7 +215,7 @@ func ConnectXTerm(c *gin.Context) {
 					pipe.SendMsg(clientId, cmdCloseMsg)
 				}
 			} else if data[0] == model.TERM_PIPE {
-				log.Printf("what's header: %d\n", data[0])
+				//log.Printf("what's header: %d\n", data[0])
 				pair.ChanOut <- data[1:]
 			}
 

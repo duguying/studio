@@ -14,7 +14,7 @@ func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 	switch rcvMsgPack.Cmd {
 	case model.CMD_PERF:
 		{
-			err := store.Put(rcvMsgPack.ClientId, uint64(time.Now().Unix()), data)
+			err := store.PutPerf(rcvMsgPack.ClientId, uint64(time.Now().Unix()), data)
 			if err != nil {
 				log.Println("boltdb store data failed, err:", err.Error())
 			}

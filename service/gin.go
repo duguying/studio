@@ -39,6 +39,8 @@ func Run() {
 		api.POST("/user_login", action.UserLogin)
 		api.Any("/xterm", action.ConnectXTerm)
 		api.GET("/username_check", action.UsernameCheck)
+		api.POST("/put", action.PutFile)
+		api.POST("/upload", action.UploadFile)
 
 		agt := api.Group("/agent")
 		{

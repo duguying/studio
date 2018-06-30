@@ -51,3 +51,5 @@ release.zip
 dist/
 
 *.db
+
+store/

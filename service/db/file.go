@@ -28,3 +28,19 @@ func SaveFile(fpath string, mime string, size uint64) (err error) {
 		return nil
 	}
 }
+
+func PageFile(page uint64, size uint64) (list []*models.File, total uint, err error) {
+	list = []*models.File{}
+	total = 0
+	errs := g.Db.Table("files").Count(&total).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, 0, errs[0]
+	}
+
+	errs = g.Db.Table("files").Order("id desc").Offset((page - 1) * size).Limit(size).Find(&list).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, 0, errs[0]
+	} else {
+		return list, total, nil
+	}
+}

@@ -10,11 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"io"
+	"log"
 	"mime"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -133,4 +135,50 @@ func UploadFile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"ok": true,
 	})
+}
+
+func PageFile(c *gin.Context) {
+	pageStr := c.Query("page")
+	page, err := strconv.ParseUint(pageStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	sizeStr := c.Query("size")
+	size, err := strconv.ParseUint(sizeStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	if page <= 0 {
+		page = 1
+	}
+	if size <= 0 {
+		size = 20
+	}
+
+	list, total, err := db.PageFile(page, size)
+	if err != nil {
+		log.Println("page file failed, err:", err.Error())
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":    true,
+		"list":  list,
+		"total": total,
+	})
+	return
 }

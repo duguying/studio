@@ -41,6 +41,7 @@ func Run() {
 		api.GET("/username_check", action.UsernameCheck)
 		api.POST("/put", action.PutFile)
 		api.POST("/upload", action.UploadFile)
+		api.GET("/file/list", action.PageFile)
 
 		agt := api.Group("/agent")
 		{

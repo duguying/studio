@@ -43,3 +43,7 @@ nohup.out
 var/
 
 release.zip
+*.ini
+*.db
+studio
+dist/

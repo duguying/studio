@@ -8,12 +8,17 @@ import (
 	"time"
 )
 
+const (
+	LOCAL = 0
+	OSS   = 1
+)
+
 type File struct {
 	Id       int
 	Filename string
 	Path     string
 	Time     time.Time `orm:"column(created_at)"`
-	Store    string
+	Store    int
 	Mime     string
 }
 
@@ -37,9 +42,9 @@ func AddFile(filename string, path string, store string, mime string) (int64, er
 	file.Filename = filename
 	file.Path = path
 	if "local" == store {
-		file.Store = "local"
+		file.Store = LOCAL
 	} else {
-		file.Store = "oss"
+		file.Store = OSS
 	}
 	file.Mime = mime
 

@@ -25,7 +25,12 @@ func InitBoltDB() {
 		boltDB = db
 	}
 
-	initBucket()
+	err = initBucket()
+	if err != nil {
+		log.Println("initial bolt db bucket failed, err:", err.Error())
+		return
+	}
+
 	clearPerf()
 }
 

@@ -53,11 +53,15 @@ func initBucket() error {
 	_, err = tx.CreateBucketIfNotExists([]byte("performance"))
 	if err != nil {
 		return err
+	} else {
+		log.Println("create or exist bucket: performance")
 	}
 
 	_, err = tx.CreateBucketIfNotExists([]byte("agent"))
 	if err != nil {
 		return err
+	} else {
+		log.Println("create or exist bucket: agent")
 	}
 
 	return tx.Commit()

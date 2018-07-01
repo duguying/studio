@@ -44,6 +44,7 @@ func PutPerf(clientId string, timestamp uint64, value []byte) error {
 func ListPerf(clientId string) (list []*model.PerformanceMonitor, err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
@@ -70,6 +71,7 @@ func ListPerf(clientId string) (list []*model.PerformanceMonitor, err error) {
 func clearRange(clientId string) (err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 

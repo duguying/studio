@@ -47,11 +47,13 @@ func clearPerf() {
 func initBucket() error {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
 	_, err = tx.CreateBucketIfNotExists([]byte("performance"))
 	if err != nil {
+		tx.Rollback()
 		return err
 	} else {
 		log.Println("create or exist bucket: performance")
@@ -59,6 +61,7 @@ func initBucket() error {
 
 	_, err = tx.CreateBucketIfNotExists([]byte("agent"))
 	if err != nil {
+		tx.Rollback()
 		return err
 	} else {
 		log.Println("create or exist bucket: agent")
@@ -70,6 +73,7 @@ func initBucket() error {
 func put(bucket string, key string, value []byte) error {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 

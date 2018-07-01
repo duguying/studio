@@ -64,6 +64,7 @@ func PutAgent(clientId string, info *AgentStatusInfo) error {
 func GetAgent(clientId string) (info *AgentStatusInfo, err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
@@ -73,6 +74,7 @@ func GetAgent(clientId string) (info *AgentStatusInfo, err error) {
 	info = &AgentStatusInfo{}
 	err = json.Unmarshal(value, info)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 	return info, tx.Commit()
@@ -81,6 +83,7 @@ func GetAgent(clientId string) (info *AgentStatusInfo, err error) {
 func ListAllAgent() (list []*AgentStatusInfo, err error) {
 	tx, err := boltDB.Begin(true)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 

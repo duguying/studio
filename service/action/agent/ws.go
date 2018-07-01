@@ -61,7 +61,10 @@ func Ws(c *gin.Context) {
 		ClientID:   clientId,
 		OnlineTime: time.Now(),
 	}
-	store.PutAgent(clientId, info)
+	err = store.PutAgent(clientId, info)
+	if err != nil {
+		log.Println("put agent failed, err:", err.Error())
+	}
 
 	// read from client, put into in channel
 	go func(con *websocket.Conn) {
@@ -112,5 +115,8 @@ func Ws(c *gin.Context) {
 		Ip:          ip,
 		OfflineTime: time.Now(),
 	}
-	store.PutAgent(clientId, info)
+	err = store.PutAgent(clientId, info)
+	if err != nil {
+		log.Println("put agent failed, err:", err.Error())
+	}
 }

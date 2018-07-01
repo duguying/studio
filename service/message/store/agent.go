@@ -30,6 +30,7 @@ func (ai *AgentStatusInfo) String() string {
 func PutAgent(clientId string, info *AgentStatusInfo) error {
 	infoOld, err := GetAgent(clientId)
 	if err != nil {
+		log.Println("get agent failed, err:", err.Error())
 		// nop
 	} else {
 		if info.OfflineTime.IsZero() {

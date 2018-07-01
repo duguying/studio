@@ -31,7 +31,10 @@ func PutPerf(clientId string, timestamp uint64, value []byte) error {
 			Hostname: perf.Hostname,
 			IpIns:    ips,
 		}
-		PutAgent(clientId, info)
+		err = PutAgent(clientId, info)
+		if err != nil {
+			log.Println("put agent failed, err:", err.Error())
+		}
 	}
 
 	key := fmt.Sprintf("%s/%s", clientId, time.Unix(int64(timestamp), 0).Format(time.RFC3339))

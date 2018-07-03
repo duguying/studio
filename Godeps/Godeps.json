@@ -18,23 +18,23 @@
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin",
-			"Comment": "v1.2-165-g7c8d633",
-			"Rev": "7c8d6339c869af88196566fd12508922798dd540"
+			"Comment": "v1.2-179-g85221af",
+			"Rev": "85221af84cf6ee99dc900bc41912abc09acfc1b5"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/binding",
-			"Comment": "v1.2-165-g7c8d633",
-			"Rev": "7c8d6339c869af88196566fd12508922798dd540"
+			"Comment": "v1.2-179-g85221af",
+			"Rev": "85221af84cf6ee99dc900bc41912abc09acfc1b5"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/json",
-			"Comment": "v1.2-165-g7c8d633",
-			"Rev": "7c8d6339c869af88196566fd12508922798dd540"
+			"Comment": "v1.2-179-g85221af",
+			"Rev": "85221af84cf6ee99dc900bc41912abc09acfc1b5"
 		},
 		{
 			"ImportPath": "github.com/gin-gonic/gin/render",
-			"Comment": "v1.2-165-g7c8d633",
-			"Rev": "7c8d6339c869af88196566fd12508922798dd540"
+			"Comment": "v1.2-179-g85221af",
+			"Rev": "85221af84cf6ee99dc900bc41912abc09acfc1b5"
 		},
 		{
 			"ImportPath": "github.com/go-sql-driver/mysql",

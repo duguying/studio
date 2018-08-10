@@ -90,7 +90,7 @@ func PackageUpload(c *gin.Context) {
 		f.Close()
 
 		// unzip file
-		err = unzip(fpath)
+		err = untgz(fpath, strings.TrimSuffix(fpath, ".tar.gz"))
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"ok":  false,
@@ -170,4 +170,43 @@ func unzip(filePath string) error {
 
 	log.Println("un tar.gz ok")
 	return nil
+}
+
+func untgz(tarFile, dest string) error {
+	srcFile, err := os.Open(tarFile)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+	gr, err := gzip.NewReader(srcFile)
+	if err != nil {
+		return err
+	}
+	defer gr.Close()
+	tr := tar.NewReader(gr)
+	for {
+		hdr, err := tr.Next()
+		if err != nil {
+			if err == io.EOF {
+				break
+			} else {
+				return err
+			}
+		}
+		filename := dest + hdr.Name
+		file, err := createFile(filename, os.FileMode(hdr.Mode))
+		if err != nil {
+			return err
+		}
+		io.Copy(file, tr)
+	}
+	return nil
+}
+
+func createFile(name string, perm os.FileMode) (*os.File, error) {
+	err := os.MkdirAll(string([]rune(name)[0:strings.LastIndex(name, "/")]), perm)
+	if err != nil {
+		return nil, err
+	}
+	return os.Create(name)
 }

@@ -148,7 +148,13 @@ func unzip(filePath string) error {
 		log.Println(h.Name)
 
 		// 打开文件
-		fw, err := os.OpenFile(filepath.Join(prefix, strings.TrimPrefix(h.Name, "./")), os.O_CREATE|os.O_WRONLY, 0644 /*os.FileMode(h.Mode)*/)
+		fullpath := filepath.Join(prefix, strings.TrimPrefix(h.Name, "./"))
+		fulldir := filepath.Dir(fullpath)
+		perm := os.FileMode(h.Mode)
+		if !com.FileExist(fullpath) {
+			os.MkdirAll(fulldir, perm)
+		}
+		fw, err := os.OpenFile(fullpath, os.O_CREATE|os.O_WRONLY, perm)
 		if err != nil {
 			panic(err)
 		}

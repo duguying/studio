@@ -52,4 +52,4 @@ dist/
 
 *.db
 
-store/
+/store/

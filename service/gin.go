@@ -49,6 +49,11 @@ func Run() {
 			agt.Any("/ws", agent.Ws)
 			agt.GET("/list_perf", agent.PerfList)
 		}
+
+		deployer := api.Group("/deploy", action.CheckToken)
+		{
+			deployer.POST("/upload", action.PackageUpload)
+		}
 	}
 
 	auth := router.Group("/api/admin", action.SessionValidate)

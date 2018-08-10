@@ -193,7 +193,7 @@ func untgz(tarFile, dest string) error {
 				return err
 			}
 		}
-		filename := dest + hdr.Name
+		filename := filepath.Join(dest, hdr.Name)
 		file, err := createFile(filename, os.FileMode(hdr.Mode))
 		if err != nil {
 			return err

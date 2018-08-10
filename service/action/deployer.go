@@ -15,9 +15,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
-	"path/filepath"
 )
 
 func CheckToken(c *gin.Context) {
@@ -144,10 +144,11 @@ func unzip(filePath string) error {
 		}
 
 		// 显示文件
+		log.Println("prefix", prefix)
 		log.Println(h.Name)
 
 		// 打开文件
-		fw, err := os.OpenFile(filepath.Join(prefix, strings.TrimPrefix(h.Name,"./")), os.O_CREATE|os.O_WRONLY, 0644 /*os.FileMode(h.Mode)*/)
+		fw, err := os.OpenFile(filepath.Join(prefix, strings.TrimPrefix(h.Name, "./")), os.O_CREATE|os.O_WRONLY, 0644 /*os.FileMode(h.Mode)*/)
 		if err != nil {
 			panic(err)
 		}

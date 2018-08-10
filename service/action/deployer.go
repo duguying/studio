@@ -194,19 +194,30 @@ func untgz(tarFile, dest string) error {
 			}
 		}
 		filename := filepath.Join(dest, hdr.Name)
-		file, err := createFile(filename, os.FileMode(hdr.Mode))
+		file, err := createFile(filename, os.FileMode(hdr.Mode), hdr.FileInfo().IsDir())
 		if err != nil {
 			return err
 		}
-		io.Copy(file, tr)
+		if file != nil {
+			io.Copy(file, tr)
+		}
 	}
 	return nil
 }
 
-func createFile(name string, perm os.FileMode) (*os.File, error) {
-	err := os.MkdirAll(string([]rune(name)[0:strings.LastIndex(name, "/")]), perm)
-	if err != nil {
-		return nil, err
+func createFile(name string, perm os.FileMode, isDir bool) (*os.File, error) {
+	if isDir {
+		err := os.MkdirAll(name, perm)
+		if err != nil {
+			return nil, err
+		} else {
+			return nil, nil
+		}
+	} else {
+		err := os.MkdirAll(filepath.Dir(name), perm)
+		if err != nil {
+			return nil, err
+		}
+		return os.Create(name)
 	}
-	return os.Create(name)
 }

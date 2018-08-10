@@ -40,6 +40,7 @@ func PackageUpload(c *gin.Context) {
 	appPath := g.Config.Get("deployer", fmt.Sprintf("%s-path", appName), "" /*"/root/sites/parsing-techniques"*/)
 	fh, err := c.FormFile("file")
 	if err != nil {
+		log.Println("get form file failed,", err.Error())
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
 			"err": err.Error(),
@@ -61,6 +62,7 @@ func PackageUpload(c *gin.Context) {
 		fpath := fmt.Sprintf("%s.%s", appPath, "tar.gz")
 		f, err := os.Create(fpath)
 		if err != nil {
+			log.Println("create file failed,", err.Error())
 			c.JSON(http.StatusOK, gin.H{
 				"ok":  false,
 				"err": err.Error(),
@@ -80,6 +82,7 @@ func PackageUpload(c *gin.Context) {
 
 		_, err = io.Copy(f, hFile)
 		if err != nil {
+			log.Println("copy file failed,", err.Error())
 			c.JSON(http.StatusOK, gin.H{
 				"ok":  false,
 				"err": err.Error(),
@@ -92,6 +95,7 @@ func PackageUpload(c *gin.Context) {
 		// unzip file
 		err = untgz(fpath, strings.TrimSuffix(fpath, ".tar.gz"))
 		if err != nil {
+			log.Println("untgz failed,", err.Error())
 			c.JSON(http.StatusOK, gin.H{
 				"ok":  false,
 				"err": err.Error(),
@@ -105,71 +109,6 @@ func PackageUpload(c *gin.Context) {
 		return
 
 	}
-}
-
-func unzip(filePath string) error {
-	// check file type
-	if !strings.HasSuffix(filePath, ".tar.gz") {
-		return fmt.Errorf("invalid file type")
-	}
-
-	// get prefix path
-	prefix := strings.TrimSuffix(filePath, ".tar.gz")
-
-	// file read
-	fr, err := os.Open(filePath)
-	if err != nil {
-		panic(err)
-	}
-	defer fr.Close()
-
-	// gzip read
-	gr, err := gzip.NewReader(fr)
-	if err != nil {
-		panic(err)
-	}
-	defer gr.Close()
-
-	// tar read
-	tr := tar.NewReader(gr)
-
-	// 读取文件
-	for {
-		h, err := tr.Next()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			panic(err)
-		}
-
-		// 显示文件
-		log.Println("prefix", prefix)
-		log.Println(h.Name)
-
-		// 打开文件
-		fullpath := filepath.Join(prefix, strings.TrimPrefix(h.Name, "./"))
-		fulldir := filepath.Dir(fullpath)
-		perm := os.FileMode(h.Mode)
-		if !com.FileExist(fullpath) {
-			os.MkdirAll(fulldir, perm)
-		}
-		fw, err := os.OpenFile(fullpath, os.O_CREATE|os.O_WRONLY, perm)
-		if err != nil {
-			panic(err)
-		}
-		defer fw.Close()
-
-		// 写文件
-		_, err = io.Copy(fw, tr)
-		if err != nil {
-			panic(err)
-		}
-
-	}
-
-	log.Println("un tar.gz ok")
-	return nil
 }
 
 func untgz(tarFile, dest string) error {

@@ -58,7 +58,7 @@ func PackageUpload(c *gin.Context) {
 			return
 		}
 
-		fpath := fmt.Sprintf("%s.%s", appPath, ".tar.gz")
+		fpath := fmt.Sprintf("%s.%s", appPath, "tar.gz")
 		f, err := os.Create(fpath)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{

@@ -50,65 +50,65 @@ func PackageUpload(c *gin.Context) {
 
 	if com.FileExist(appPath) {
 		os.Rename(appPath, fmt.Sprintf("%s.%s", appPath, time.Now().Format("20060102150405")))
-	} else {
-		if !strings.HasSuffix(fh.Filename, ".tar.gz") {
-			c.JSON(http.StatusOK, gin.H{
-				"ok":  false,
-				"err": "invalid file type",
-			})
-			return
-		}
-
-		fpath := fmt.Sprintf("%s.%s", appPath, "tar.gz")
-		f, err := os.Create(fpath)
-		if err != nil {
-			log.Println("create file failed,", err.Error())
-			c.JSON(http.StatusOK, gin.H{
-				"ok":  false,
-				"err": err.Error(),
-			})
-			return
-		}
-
-		hFile, err := fh.Open()
-		if err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"ok":  false,
-				"err": err.Error(),
-			})
-			return
-		}
-		defer hFile.Close()
-
-		_, err = io.Copy(f, hFile)
-		if err != nil {
-			log.Println("copy file failed,", err.Error())
-			c.JSON(http.StatusOK, gin.H{
-				"ok":  false,
-				"err": err.Error(),
-			})
-			return
-		}
-
-		f.Close()
-
-		// unzip file
-		err = untgz(fpath, strings.TrimSuffix(fpath, ".tar.gz"))
-		if err != nil {
-			log.Println("untgz failed,", err.Error())
-			c.JSON(http.StatusOK, gin.H{
-				"ok":  false,
-				"err": err.Error(),
-			})
-		} else {
-			c.JSON(http.StatusOK, gin.H{
-				"ok": true,
-			})
-		}
-
-		return
-
 	}
+
+	if !strings.HasSuffix(fh.Filename, ".tar.gz") {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": "invalid file type",
+		})
+		return
+	}
+
+	fpath := fmt.Sprintf("%s.%s", appPath, "tar.gz")
+	f, err := os.Create(fpath)
+	if err != nil {
+		log.Println("create file failed,", err.Error())
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	hFile, err := fh.Open()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	defer hFile.Close()
+
+	_, err = io.Copy(f, hFile)
+	if err != nil {
+		log.Println("copy file failed,", err.Error())
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	f.Close()
+
+	// unzip file
+	err = untgz(fpath, strings.TrimSuffix(fpath, ".tar.gz"))
+	if err != nil {
+		log.Println("untgz failed,", err.Error())
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ok": true,
+		})
+	}
+
+	return
+
 }
 
 func untgz(tarFile, dest string) error {

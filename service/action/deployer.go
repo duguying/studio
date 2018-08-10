@@ -17,6 +17,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"path/filepath"
 )
 
 func CheckToken(c *gin.Context) {
@@ -146,7 +147,7 @@ func unzip(filePath string) error {
 		log.Println(h.Name)
 
 		// 打开文件
-		fw, err := os.OpenFile(prefix+"/"+h.Name, os.O_CREATE|os.O_WRONLY, 0644 /*os.FileMode(h.Mode)*/)
+		fw, err := os.OpenFile(filepath.Join(prefix, h.Name), os.O_CREATE|os.O_WRONLY, 0644 /*os.FileMode(h.Mode)*/)
 		if err != nil {
 			panic(err)
 		}

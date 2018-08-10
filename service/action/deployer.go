@@ -15,7 +15,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
@@ -50,7 +49,15 @@ func PackageUpload(c *gin.Context) {
 	if com.FileExist(appPath) {
 		os.Rename(appPath, fmt.Sprintf("%s.%s", appPath, time.Now().Format("20060102150405")))
 	} else {
-		fpath := fmt.Sprintf("%s.%s", appPath, filepath.Ext(fh.Filename))
+		if !strings.HasSuffix(fh.Filename, ".tar.gz") {
+			c.JSON(http.StatusOK, gin.H{
+				"ok":  false,
+				"err": "invalid file type",
+			})
+			return
+		}
+
+		fpath := fmt.Sprintf("%s.%s", appPath, ".tar.gz")
 		f, err := os.Create(fpath)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
@@ -82,11 +89,19 @@ func PackageUpload(c *gin.Context) {
 		f.Close()
 
 		// unzip file
-		unzip(fpath)
+		err = unzip(fpath)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"ok":  false,
+				"err": err.Error(),
+			})
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"ok": true,
+			})
+		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"ok": true,
-		})
+		return
 
 	}
 }

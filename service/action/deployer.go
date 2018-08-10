@@ -48,10 +48,23 @@ func PackageUpload(c *gin.Context) {
 		return
 	}
 
+	// 检查 tar.gz 是否已经存在，若已存在则可能正在部署，停止此次部署
+	fpath := fmt.Sprintf("%s.%s", appPath, "tar.gz")
+	if com.FileExist(fpath) {
+		log.Println("tgz file exist, maybe someone else is deploying, deploy stopped.")
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	// 检查旧版展开目录是否已经存在，若已经存在则备份
 	if com.FileExist(appPath) {
 		os.Rename(appPath, fmt.Sprintf("%s.%s", appPath, time.Now().Format("20060102150405")))
 	}
 
+	// 检查上传文件是否为 tar.gz 后缀，不是则终止
 	if !strings.HasSuffix(fh.Filename, ".tar.gz") {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -60,7 +73,7 @@ func PackageUpload(c *gin.Context) {
 		return
 	}
 
-	fpath := fmt.Sprintf("%s.%s", appPath, "tar.gz")
+	// 创建待存储文件
 	f, err := os.Create(fpath)
 	if err != nil {
 		log.Println("create file failed,", err.Error())
@@ -71,6 +84,7 @@ func PackageUpload(c *gin.Context) {
 		return
 	}
 
+	// 打开上传文件流
 	hFile, err := fh.Open()
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -81,6 +95,7 @@ func PackageUpload(c *gin.Context) {
 	}
 	defer hFile.Close()
 
+	// 报存文件
 	_, err = io.Copy(f, hFile)
 	if err != nil {
 		log.Println("copy file failed,", err.Error())
@@ -104,6 +119,16 @@ func PackageUpload(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"ok": true,
+		})
+	}
+
+	// 移除 tar.gz 包
+	err = os.Remove(fpath)
+	if err != nil {
+		log.Println("remove tgz failed,", err.Error())
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
 		})
 	}
 

@@ -1,13 +1,13 @@
 package datx
 
 import (
-	"encoding/json"
 	"encoding/binary"
+	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net"
 	"os"
 	"strings"
-	"errors"
 )
 
 var ErrIPv4Format = errors.New("ipv4 format error")
@@ -49,7 +49,7 @@ func (db *City) load(fn string) error {
 		return err
 	}
 
-	l := off-262148-262144
+	l := off - 262148 - 262144
 	db.index = make([]byte, l)
 	_, err = db.file.Read(db.index)
 	if err != nil {
@@ -136,11 +136,25 @@ func (db *City) FindLocation(s string) (Location, error) {
 	loc.CountryCode = a[11]
 	loc.ContinentCode = a[12]
 
-	if len(a) == 15 {
+	if len(a) == 17 {
 		loc.IDC = a[13]
 		loc.BaseStation = a[14]
-	} else if len(a) == 16 {
-		if a[15] == "ANYCAST" {
+		loc.CountryCode3 = a[15]
+		if a[15] == "1" {
+			loc.EuropeanUnion = true
+		} else {
+			loc.EuropeanUnion = false
+		}
+	} else if len(a) == 20 {
+		loc.IDC = a[13]
+		loc.BaseStation = a[14]
+		loc.CountryCode3 = a[15]
+		if a[15] == "1" {
+			loc.EuropeanUnion = true
+		} else {
+			loc.EuropeanUnion = false
+		}
+		if a[19] == "ANYCAST" {
 			loc.Anycast = true
 		}
 	}
@@ -148,23 +162,27 @@ func (db *City) FindLocation(s string) (Location, error) {
 	return loc, nil
 }
 
-type Location struct{
-	Country string
-	Province string
-	City string
-	Organization string
-	ISP string
-	Latitude string
-	Longitude string
-	TimeZone string
-	TimeZone2 string
-	CityCode string
-	PhonePrefix string
-	CountryCode string
+type Location struct {
+	Country       string
+	Province      string
+	City          string
+	Organization  string
+	ISP           string
+	Latitude      string
+	Longitude     string
+	TimeZone      string
+	TimeZone2     string
+	CityCode      string
+	PhonePrefix   string
+	CountryCode   string
 	ContinentCode string
-	IDC string // IDC | VPN
-	BaseStation string // WIFI | BS (Base Station)
-	Anycast bool
+	IDC           string // IDC | VPN
+	BaseStation   string // WIFI | BS (Base Station)
+	CountryCode3  string
+	EuropeanUnion bool
+	CurrencyCode  string
+	CurrencyName  string
+	Anycast       bool
 }
 
 func (l Location) ToJSON() []byte {

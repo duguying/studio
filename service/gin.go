@@ -13,11 +13,18 @@ import (
 	"duguying/studio/service/message/deal"
 	"duguying/studio/service/message/pipe"
 	"fmt"
+	"github.com/getsentry/raven-go"
+	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
 )
 
 func Run() {
+	if g.Config.Get("sentry", "enable", "false") == "true" {
+		dsn := g.Config.Get("sentry", "dsn", "https://<key>:<secret>@app.getsentry.com/<project>")
+		raven.SetDSN(dsn)
+	}
+
 	gin.SetMode(g.Config.Get("system", "mode", gin.ReleaseMode))
 	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join("log", "gin.log"))
 
@@ -25,6 +32,7 @@ func Run() {
 
 	router := gin.Default()
 	router.Use(middleware.CrossSite())
+	router.Use(sentry.Recovery(raven.DefaultClient, false))
 
 	router.Any("/version", action.Version)
 

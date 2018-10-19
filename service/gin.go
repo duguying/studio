@@ -36,7 +36,7 @@ func Run() {
 
 	router.Any("/version", action.Version)
 
-	api := router.Group("/api")
+	api := router.Group("/api/v1")
 	{
 		api.GET("/get_article", action.GetArticle)
 		api.GET("/list", action.ListArticleWithContent)
@@ -62,11 +62,11 @@ func Run() {
 		{
 			deployer.POST("/upload", action.PackageUpload)
 		}
-	}
 
-	auth := router.Group("/api/admin", action.SessionValidate)
-	{
-		auth.POST("/user_logout", action.UserLogout)
+		auth := router.Group("/admin", action.SessionValidate)
+		{
+			auth.POST("/user_logout", action.UserLogout)
+		}
 	}
 
 	router.Static("/static/upload", g.Config.Get("upload", "dir", "upload"))

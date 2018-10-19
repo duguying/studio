@@ -36,36 +36,54 @@ func Run() {
 
 	router.Any("/version", action.Version)
 
-	api := router.Group("/api/v1")
+	// v1 api
+	apiV1 := router.Group("/api/v1")
 	{
-		api.GET("/get_article", action.GetArticle)
-		api.GET("/list", action.ListArticleWithContent)
-		api.GET("/list_title", action.ListArticleTitle)
-		api.GET("/hot_article", action.HotArticleTitle)
-		api.GET("/month_archive", action.MonthArchive)
-		api.GET("/user_info", action.UserInfo)
-		api.POST("/user_login", action.UserLogin)
-		api.Any("/xterm", action.ConnectXTerm)
-		api.GET("/username_check", action.UsernameCheck)
-		api.POST("/put", action.PutFile)
-		api.POST("/upload", action.UploadFile)
-		api.GET("/file/list", action.PageFile)
+		// needn't auth
+		{
+			apiV1.GET("/get_article", action.GetArticle)       // 获取文章详情
+			apiV1.GET("/list", action.ListArticleWithContent)  // 列出文章
+			apiV1.GET("/list_title", action.ListArticleTitle)  // 列出文章标题
+			apiV1.GET("/hot_article", action.HotArticleTitle)  // 热门文章列表
+			apiV1.GET("/month_archive", action.MonthArchive)   // 文章按月归档列表
+			apiV1.GET("/user_info", action.UserInfo)           // 用户信息
+			apiV1.POST("/user_login", action.UserLogin)        // 用户登陆
+			apiV1.GET("/username_check", action.UsernameCheck) // 用户名检查
+			apiV1.GET("/file/list", action.PageFile)           // 文件列表
+		}
 
+		// auth require
+		auth := apiV1.Group("", action.SessionValidate)
+		{
+			auth.POST("/user_logout", action.UserLogout) // 用户登出
+			apiV1.POST("/put", action.PutFile)           // 上传文件
+			apiV1.POST("/upload", action.UploadFile)     // 上传文件
+			apiV1.Any("/xterm", action.ConnectXTerm)     // 连接xterm
+		}
+
+		// agent connection point
+		agt := apiV1.Group("/agent")
+		{
+			agt.GET("/list", agent.List)          // agent列表
+			agt.Any("/ws", agent.Ws)              // agent连接点
+			agt.GET("/list_perf", agent.PerfList) // 性能列表
+		}
+
+	}
+
+	// 兼容旧版
+	api := router.Group("/api")
+	{
+		// 旧版 agent 连接点
 		agt := api.Group("/agent")
 		{
-			agt.GET("/list", agent.List)
 			agt.Any("/ws", agent.Ws)
-			agt.GET("/list_perf", agent.PerfList)
 		}
 
-		deployer := api.Group("/deploy", action.CheckToken)
+		// 静态站点部署器
+		deployer := apiV1.Group("/deploy", action.CheckToken)
 		{
 			deployer.POST("/upload", action.PackageUpload)
-		}
-
-		auth := router.Group("/admin", action.SessionValidate)
-		{
-			auth.POST("/user_logout", action.UserLogout)
 		}
 	}
 

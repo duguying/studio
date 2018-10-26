@@ -7,7 +7,24 @@ package db
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/models"
+	"github.com/gogather/com"
 )
+
+func RegisterUser(username string, password string, email string) (user *models.User, err error) {
+	salt := com.RandString(7)
+	passwordEncrypt := com.Md5(password + salt)
+	user = &models.User{
+		Username: username,
+		Password: passwordEncrypt,
+		Salt:     salt,
+		Email:    email,
+	}
+	errs := g.Db.Table("users").Create(user).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return user, nil
+}
 
 func GetUser(username string) (user *models.User, err error) {
 	user = &models.User{}

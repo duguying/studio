@@ -23,6 +23,41 @@ type LoginArgs struct {
 	Password string `json:"password"`
 }
 
+type RegisterArgs struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+}
+
+func UserRegister(c *gin.Context) {
+	register := &RegisterArgs{}
+	err := c.BindJSON(register)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	user, err := db.RegisterUser(register.Username, register.Password, register.Email)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ok": true,
+			"user": gin.H{
+				"id":       user.Id,
+				"username": user.Username,
+			},
+		})
+		return
+	}
+}
+
 func UserLogin(c *gin.Context) {
 	login := &LoginArgs{}
 	err := c.BindJSON(login)

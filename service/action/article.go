@@ -5,7 +5,10 @@
 package action
 
 import (
+	"duguying/studio/modules/models"
 	"duguying/studio/service/db"
+	"duguying/studio/utils"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -150,6 +153,160 @@ func GetArticle(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":   true,
 			"data": art.ToArticleContent(),
+		})
+		return
+	}
+}
+
+type ArticleAddRequest struct {
+	Title    string
+	Keywords []string
+	Content  string
+	Status   int
+}
+
+func (aar *ArticleAddRequest) String() string {
+	c, _ := json.Marshal(aar)
+	return string(c)
+}
+
+func AddArticle(c *gin.Context) {
+	aar := &ArticleAddRequest{}
+	err := c.BindJSON(aar)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	userId := uint(c.GetInt64("user_id"))
+	user, err := db.GetUserById(userId)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	article, err := db.AddArticle(aar.Title, utils.TitleToUri(aar.Title), aar.Keywords, "", aar.Content, user.Username, user.Id, aar.Status)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":   true,
+			"data": article,
+		})
+		return
+	}
+}
+
+func PublishArticle(c *gin.Context) {
+	aidStr := c.Param("article_id")
+	aid64, err := strconv.ParseUint(aidStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	aid := uint(aid64)
+
+	// get article
+	article, err := db.GetArticleById(aid)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	// check article status
+	if article.Status != models.ART_STATUS_PUBLISH {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": "it's already published, needn't publish again",
+		})
+		return
+	}
+
+	// check auth
+	userId := uint(c.GetInt64("user_id"))
+	if userId != article.AuthorId {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": "auth failed, it's not you article, could not publish",
+		})
+		return
+	}
+
+	// publish
+	err = db.PublishArticle(aid, userId)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  true,
+			"err": "publish success",
+		})
+		return
+	}
+}
+
+func DeleteArticle(c *gin.Context) {
+	aidStr := c.Param("article_id")
+	aid64, err := strconv.ParseUint(aidStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	aid := uint(aid64)
+
+	// get article
+	article, err := db.GetArticleById(aid)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	// check auth
+	userId := uint(c.GetInt64("user_id"))
+	if userId != article.AuthorId {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": "auth failed, it's not you article, could not publish",
+		})
+		return
+	}
+
+	// delete
+	err = db.DeleteArticle(aid, userId)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  true,
+			"err": "delete success",
 		})
 		return
 	}

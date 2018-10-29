@@ -5,9 +5,11 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/sha1"
 	"fmt"
+	"github.com/mozillazg/go-pinyin"
 	"github.com/satori/go.uuid"
 	"net/http"
 	"os"
@@ -44,4 +46,25 @@ func GetFileContentType(out *os.File) (string, error) {
 	contentType := http.DetectContentType(buffer)
 
 	return contentType, nil
+}
+
+func TitleToUri(title string) (uri string) {
+	var buffer bytes.Buffer
+	for _, c := range title {
+		char := fmt.Sprintf("%c", c)
+		pys := pinyin.LazyConvert(char, nil)
+		pystr := strings.Join(pys, "")
+		if pystr != "" {
+			buffer.WriteString(pystr + "-")
+		} else {
+			buffer.WriteString(char)
+		}
+	}
+	uri = buffer.String()
+	uri = strings.Replace(uri, "\n", "", -1)
+	uri = strings.Replace(uri, "\r", "", -1)
+	uri = strings.Replace(uri, "\t", " ", -1)
+	uri = strings.Replace(uri, " ", "-", -1)
+	uri = strings.TrimSuffix(uri, "-")
+	return uri
 }

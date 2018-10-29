@@ -13,6 +13,7 @@ import (
 const (
 	ART_STATUS_DRAFT   = 0
 	ART_STATUS_PUBLISH = 1
+	ART_STATUS_DELETE  = 2
 )
 
 type Article struct {

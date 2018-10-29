@@ -35,6 +35,15 @@ func GetUser(username string) (user *models.User, err error) {
 	return user, nil
 }
 
+func GetUserById(uid uint) (user *models.User, err error) {
+	user = &models.User{}
+	errs := g.Db.Table("users").Where("id=?", uid).First(user).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return user, nil
+}
+
 func CheckUsername(username string) (valid bool, err error) {
 	count := 0
 	errs := g.Db.Table("users").Where("username=?", username).Count(&count).GetErrors()

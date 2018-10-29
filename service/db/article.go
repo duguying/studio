@@ -9,7 +9,8 @@ import (
 	"duguying/studio/modules/models"
 	"encoding/json"
 	"strings"
-	)
+	"time"
+)
 
 func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, err error) {
 	total = 0
@@ -87,4 +88,53 @@ func GetArticle(uri string) (art *models.Article, err error) {
 		return nil, errs[0]
 	}
 	return art, nil
+}
+
+func GetArticleById(aid uint) (art *models.Article, err error) {
+	art = &models.Article{}
+	errs := g.Db.Table("articles").Where("id=?", aid).First(art).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return art, nil
+}
+
+func AddArticle(title string, uri string, keywords []string, abstract string, content string, author string, authorId uint, status int) (art *models.Article, err error) {
+	article := &models.Article{
+		Title:       title,
+		Uri:         uri,
+		Keywords:    strings.Join(keywords, ","),
+		Abstract:    abstract,
+		Author:      author,
+		AuthorId:    authorId,
+		Status:      status,
+		PublishTime: time.Now(),
+		CreatedAt:   time.Now(),
+	}
+	errs := g.Db.Table("articles").Create(article).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return article, nil
+}
+
+func PublishArticle(aid uint, uid uint) (err error) {
+	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumns(models.Article{
+		Status:      models.ART_STATUS_PUBLISH,
+		PublishTime: time.Now(),
+	}).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return errs[0]
+	}
+	return nil
+}
+
+func DeleteArticle(aid uint, uid uint) (err error) {
+	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumn(models.Article{
+		Status: models.ART_STATUS_DELETE,
+	}).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return errs[0]
+	}
+	return nil
 }

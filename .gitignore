@@ -51,5 +51,6 @@ release.zip
 dist/
 
 *.db
+*.lock
 
 /store/

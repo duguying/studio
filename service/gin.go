@@ -60,6 +60,10 @@ func Run() {
 			apiV1.POST("/put", action.PutFile)           // 上传文件
 			apiV1.POST("/upload", action.UploadFile)     // 上传文件
 			apiV1.Any("/xterm", action.ConnectXTerm)     // 连接xterm
+
+			apiV1.POST("/article/add", action.AddArticle)         // 添加文章
+			apiV1.POST("/article/publish", action.PublishArticle) // 发布草稿
+			apiV1.POST("/article/delete", action.DeleteArticle)   // 删除文章
 		}
 
 		// agent connection point

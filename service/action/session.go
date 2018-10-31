@@ -8,11 +8,17 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/session"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
 func SessionValidate(c *gin.Context) {
-	sid, _ := c.Cookie("sid")
+	sid, err := c.Cookie("sid")
+	if err != nil {
+		log.Printf("get cookie failed, try to get token, err: %s\n", err.Error())
+	} else {
+		sid = c.GetHeader("X-Token")
+	}
 	c.Set("sid", sid)
 	sessionDomain := g.Config.Get("session", "domain", ".duguying.net")
 	entity := session.SessionGet(sid)

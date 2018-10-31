@@ -31,6 +31,7 @@ func Run() {
 	initWsMessage()
 
 	router := gin.Default()
+	router.Use(middleware.ServerMark())
 	router.Use(middleware.CrossSite())
 	router.Use(sentry.Recovery(raven.DefaultClient, false))
 

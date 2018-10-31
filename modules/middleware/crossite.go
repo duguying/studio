@@ -4,6 +4,7 @@ import (
 	"duguying/studio/g"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func ServerMark() gin.HandlerFunc {
@@ -20,7 +21,13 @@ func CrossSite() gin.HandlerFunc {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-CSRF-TOKEN")
-		c.Next()
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-CSRF-TOKEN, X-Token")
+
+		if c.Request.Method == "OPTIONS" {
+			c.Status(http.StatusOK)
+			c.Abort()
+		} else {
+			c.Next()
+		}
 	}
 }

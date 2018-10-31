@@ -109,12 +109,9 @@ func UserLogin(c *gin.Context) {
 					UserId: user.Id,
 				})
 
-				// store cookie
-				sessionDomain := g.Config.Get("session", "domain", ".duguying.net")
-				c.SetCookie("sid", sid, int(sessionExpire.Seconds()), "/", sessionDomain, true, false)
-
 				c.JSON(http.StatusOK, gin.H{
 					"ok": true,
+					"sid": sid,
 				})
 				return
 			}

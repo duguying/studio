@@ -138,6 +138,11 @@
 			"Rev": "9ac6cf4d929b2fa8fd2d2e6dec5bb0feb4f4911d"
 		},
 		{
+			"ImportPath": "github.com/mozillazg/go-pinyin",
+			"Comment": "v0.14.0",
+			"Rev": "b950aaffc7bf031ae4b8e7759eaff767b32c3214"
+		},
+		{
 			"ImportPath": "github.com/parnurzeal/gorequest",
 			"Comment": "v0.2.15-24-g8e3aed2",
 			"Rev": "8e3aed27fe49f7fdc765dad067845f600fc984e8"

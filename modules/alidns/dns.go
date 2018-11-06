@@ -6,7 +6,7 @@ package alidns
 
 import (
 	"duguying/studio/utils"
-	"encoding/json"
+	"github.com/gogather/json"
 	"fmt"
 	"github.com/Unknwon/com"
 	"github.com/parnurzeal/gorequest"

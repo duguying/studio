@@ -8,7 +8,7 @@ import (
 	"duguying/studio/modules/models"
 	"duguying/studio/service/db"
 	"duguying/studio/utils"
-	"encoding/json"
+	"github.com/gogather/json"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

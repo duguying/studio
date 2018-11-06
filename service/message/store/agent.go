@@ -5,7 +5,7 @@
 package store
 
 import (
-	"encoding/json"
+	"github.com/gogather/json"
 	"log"
 	"time"
 )

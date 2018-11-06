@@ -9,7 +9,7 @@ import (
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/utils"
-	"encoding/json"
+	"github.com/gogather/json"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"

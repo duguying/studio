@@ -7,7 +7,7 @@ package db
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/models"
-	"encoding/json"
+	"github.com/gogather/json"
 	"strings"
 	"time"
 )

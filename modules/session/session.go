@@ -7,7 +7,7 @@ package session
 import (
 	"duguying/studio/modules/redis"
 	"duguying/studio/utils"
-	"encoding/json"
+	"github.com/gogather/json"
 	"time"
 )
 

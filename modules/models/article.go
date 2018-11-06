@@ -5,7 +5,7 @@
 package models
 
 import (
-	"encoding/json"
+	"github.com/gogather/json"
 	"strings"
 	"time"
 )

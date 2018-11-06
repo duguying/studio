@@ -5,7 +5,7 @@
 package model
 
 import (
-	"encoding/json"
+	"github.com/gogather/json"
 	"fmt"
 	"github.com/gorilla/websocket"
 )

@@ -6,6 +6,7 @@ package action
 
 import (
 	"duguying/studio/g"
+	"duguying/studio/modules/logger"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/utils"
@@ -216,6 +217,7 @@ func ConnectXTerm(c *gin.Context) {
 				}
 			} else if data[0] == model.TERM_PIPE {
 				//log.Printf("what's header: %d\n", data[0])
+				logger.L("browsersnt").Printf("browser sent: %s\n", string(data[1:]))
 				pair.ChanOut <- data[1:]
 			}
 
@@ -241,7 +243,7 @@ func ConnectXTerm(c *gin.Context) {
 		case data := <-pair.ChanIn:
 			{
 				wsLock.Lock()
-				log.Printf("browser received: %s\n", string(data))
+				logger.L("browserrcv").Printf("browser received: %s\n", string(data))
 				err = conn.WriteMessage(websocket.BinaryMessage, data)
 				if err != nil {
 					log.Println("即时消息发送到客户端:", err)

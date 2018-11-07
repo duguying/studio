@@ -5,7 +5,6 @@
 package agent
 
 import (
-	"duguying/studio/modules/logger"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/service/message/store"
@@ -87,7 +86,6 @@ func Ws(c *gin.Context) {
 
 			pipe.In <- msg
 			//log.Printf("recv: %s\n", msg.String())
-			logger.L("agentrcv").Printf("agent receive: %s\n", string(msg.Data))
 		}
 	}(conn)
 
@@ -98,7 +96,6 @@ func Ws(c *gin.Context) {
 
 		msg = <-out
 		//log.Println("send message:", msg.String())
-		logger.L("agentsnt").Printf("agent sent: %s\n", string(msg.Data))
 
 		err = conn.WriteMessage(msg.Type, append([]byte{byte(msg.Cmd)}, msg.Data...))
 		if err != nil {

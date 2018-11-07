@@ -135,7 +135,7 @@ func ConnectXTerm(c *gin.Context) {
 						Pid:     pid,
 						Data:    data,
 					}
-					logger.L("agentsnt").Printf("agent sent: %s\n", string(data))
+					logger.L("agentrcv").Printf("agent received in: %s\n", string(data))
 					pipeData, err := proto.Marshal(&pipeStruct)
 					if err != nil {
 						log.Println("proto marshal failed, err:", err.Error())

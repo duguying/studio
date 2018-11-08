@@ -14,6 +14,7 @@ import (
 	"duguying/studio/service/message/pipe"
 	"fmt"
 	"github.com/getsentry/raven-go"
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
@@ -99,6 +100,7 @@ func Run() {
 	port := g.Config.GetInt64("system", "port", 9080)
 	fmt.Printf("port: %d\n", port)
 
+	pprof.Register(router)
 	router.Run(fmt.Sprintf(":%d", port))
 }
 

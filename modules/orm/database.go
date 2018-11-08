@@ -56,5 +56,5 @@ func initSqlite() {
 }
 
 func initOrm() {
-	g.Db.AutoMigrate(&models.Article{},&models.User{},&models.File{})
+	g.Db.AutoMigrate(&models.Article{},&models.User{},&models.File{},&models.Agent{},&models.AgentPerform{})
 }

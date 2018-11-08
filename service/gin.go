@@ -101,7 +101,10 @@ func Run() {
 	fmt.Printf("port: %d\n", port)
 
 	pprof.Register(router)
-	router.Run(fmt.Sprintf(":%d", port))
+	err := router.Run(fmt.Sprintf(":%d", port))
+	if err != nil {
+		fmt.Println("run gin server failed, err:" + err.Error())
+	}
 }
 
 func initWsMessage() {

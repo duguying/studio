@@ -53,6 +53,7 @@ func Run() {
 			apiV1.POST("/user_login", action.UserLogin)        // 用户登陆
 			apiV1.GET("/username_check", action.UsernameCheck) // 用户名检查
 			apiV1.GET("/file/list", action.PageFile)           // 文件列表
+			apiV1.POST("/2fa", action.TfaAuth)                 // 2FA校验
 		}
 
 		// auth require
@@ -66,6 +67,8 @@ func Run() {
 			apiV1.POST("/article/add", action.AddArticle)         // 添加文章
 			apiV1.POST("/article/publish", action.PublishArticle) // 发布草稿
 			apiV1.POST("/article/delete", action.DeleteArticle)   // 删除文章
+
+			apiV1.GET("/2faqr", action.QrGoogleAuth) // 获取2FA二维码
 		}
 
 		// agent connection point

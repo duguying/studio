@@ -13,11 +13,13 @@ import (
 func RegisterUser(username string, password string, email string) (user *models.User, err error) {
 	salt := com.RandString(7)
 	passwordEncrypt := com.Md5(password + salt)
+	tfaSecret := com.RandString(10)
 	user = &models.User{
-		Username: username,
-		Password: passwordEncrypt,
-		Salt:     salt,
-		Email:    email,
+		Username:  username,
+		Password:  passwordEncrypt,
+		Salt:      salt,
+		Email:     email,
+		TfaSecret: tfaSecret,
 	}
 	errs := g.Db.Table("users").Create(user).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {

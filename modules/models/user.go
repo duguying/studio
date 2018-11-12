@@ -15,6 +15,7 @@ type User struct {
 	Password  string    `json:"password"`
 	Salt      string    `json:"salt"`
 	Email     string    `json:"email"`
+	TfaSecret string    `json:"tfa_secret"` // 2FA secret base 32
 	CreatedAt time.Time `json:"created_at"`
 }
 

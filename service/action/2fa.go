@@ -101,7 +101,7 @@ func TfaAuth(c *gin.Context) {
 	secretBase32 := base32.StdEncoding.EncodeToString([]byte(user.TfaSecret))
 	otpc := &dgoogauth.OTPConfig{
 		Secret:      secretBase32,
-		WindowSize:  3,
+		WindowSize:  1,
 		HotpCounter: 0,
 		UTC:         true,
 	}

@@ -91,7 +91,7 @@ func Run() {
 		}
 
 		// 静态站点部署器
-		deployer := apiV1.Group("/deploy", action.CheckToken)
+		deployer := api.Group("/deploy", action.CheckToken)
 		{
 			deployer.POST("/upload", action.PackageUpload)
 		}

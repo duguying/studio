@@ -6,7 +6,6 @@ steps:
   image: golang
   commands:
   - mkdir -p $(go env GOPATH)/src/duguying
-  - git for-each-ref
   - ln -s $(pwd) $(go env GOPATH)/src/duguying/studio
   - ./control build
 

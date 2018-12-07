@@ -137,7 +137,7 @@ func UploadFile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"ok":  true,
-		"url": filepath.Join(domain, key),
+		"url": domain + filepath.Join("/", key),
 	})
 }
 

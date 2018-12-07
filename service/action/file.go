@@ -91,6 +91,8 @@ func UploadFile(c *gin.Context) {
 	size := fh.Size
 	key := filepath.Join(time.Now().Format("2006/01"), fh.Filename)
 	fpath := filepath.Join(store, key)
+	dir := filepath.Dir(fpath)
+	_ = os.MkdirAll(dir, 0644)
 
 	f, err := os.Create(fpath)
 	if err != nil {

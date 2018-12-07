@@ -32,6 +32,9 @@ func main() {
 	// 初始化 ipip
 	initIPIP()
 
+	// 初始化 p2p
+	//p2p.Init()
+
 	// 初始化 redis
 	redis.InitRedisConn()
 
@@ -68,7 +71,7 @@ func versionFlag() {
 
 func initLogger() {
 	expireDefault := time.Hour * 24 * 1
-	expireStr := g.Config.Get(logDir, "expire", expireDefault.String())
+	expireStr := g.Config.Get("log", "expire", expireDefault.String())
 	expire, err := time.ParseDuration(expireStr)
 	if err != nil {
 		expire = expireDefault

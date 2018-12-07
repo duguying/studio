@@ -89,7 +89,14 @@ func UploadFile(c *gin.Context) {
 	store := g.Config.Get("upload", "store-path", "store")
 	domain := g.Config.Get("upload", "down-domain", "http://archive.duguying.net")
 	size := fh.Size
-	key := filepath.Join(time.Now().Format("2006/01"), fh.Filename)
+	pdir := c.PostForm("project")
+	key := ""
+	if pdir == "" {
+		key = filepath.Join(time.Now().Format("2006/01"), fh.Filename)
+	} else {
+		key = filepath.Join(pdir, fh.Filename)
+	}
+
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	_ = os.MkdirAll(dir, 0644)

@@ -87,6 +87,7 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 	store := g.Config.Get("upload", "store-path", "store")
+	domain := g.Config.Get("upload", "down-domain", "http://archive.duguying.net")
 	size := fh.Size
 	key := filepath.Join(time.Now().Format("2006/01"), fh.Filename)
 	fpath := filepath.Join(store, key)
@@ -133,7 +134,8 @@ func UploadFile(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"ok": true,
+		"ok":  true,
+		"url": filepath.Join(domain, key),
 	})
 }
 

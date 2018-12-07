@@ -94,6 +94,7 @@ func Run() {
 		deployer := api.Group("/deploy", action.CheckToken)
 		{
 			deployer.POST("/upload", action.PackageUpload)
+			deployer.POST("/archive", action.UploadFile)
 		}
 	}
 

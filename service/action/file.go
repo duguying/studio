@@ -17,6 +17,7 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -144,7 +145,7 @@ func UploadFile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"ok":  true,
-		"url": domain + filepath.Join("/", key),
+		"url": domain + strings.Replace(filepath.Join("/", key), `\`, `/`, -1),
 	})
 }
 

@@ -16,7 +16,6 @@ func SessionValidate(c *gin.Context) {
 	sid, err := c.Cookie("sid")
 	if err != nil {
 		log.Printf("get cookie failed, try to get token, err: %s\n", err.Error())
-	} else {
 		sid = c.GetHeader("X-Token")
 	}
 	c.Set("sid", sid)

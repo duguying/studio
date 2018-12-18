@@ -35,7 +35,7 @@ func SessionDel(sessionId string) {
 }
 
 func SessionGet(sessionId string) (entity *Entity) {
-	value, err := redis.Get(sessionId)
+	value, err := redis.Get(redis.SESS + sessionId)
 	if err != nil {
 		log.Println("get session from redis failed, err:", err.Error())
 		return nil

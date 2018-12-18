@@ -8,6 +8,7 @@ import (
 	"duguying/studio/modules/redis"
 	"duguying/studio/utils"
 	"github.com/gogather/json"
+	"log"
 	"time"
 )
 
@@ -36,11 +37,13 @@ func SessionDel(sessionId string) {
 func SessionGet(sessionId string) (entity *Entity) {
 	value, err := redis.Get(sessionId)
 	if err != nil {
+		log.Println("get session from redis failed, err:", err.Error())
 		return nil
 	} else {
 		entity = &Entity{}
 		err = json.Unmarshal([]byte(value), entity)
 		if err != nil {
+			log.Println("unmarshal session entity failed, err:", err.Error())
 			return nil
 		} else {
 			return entity

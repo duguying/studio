@@ -8,7 +8,6 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/session"
 	"github.com/gin-gonic/gin"
-	"github.com/gogather/json"
 	"log"
 	"net/http"
 )
@@ -18,9 +17,8 @@ func SessionValidate(c *gin.Context) {
 	if err != nil {
 		log.Printf("get cookie failed, try to get token, err: %s\n", err.Error())
 		sid = c.GetHeader("X-Token")
-		cj, _ := json.Marshal(c.Request.Header)
-		log.Printf("Header Content: %s\n", string(cj))
 	}
+	log.Printf("get sid: %s\n", sid)
 	c.Set("sid", sid)
 	sessionDomain := g.Config.Get("session", "domain", ".duguying.net")
 	entity := session.SessionGet(sid)
@@ -32,6 +30,8 @@ func SessionValidate(c *gin.Context) {
 		})
 		c.Abort()
 		return
+	} else {
+		log.Printf("the entity is: %s\n", entity.String())
 	}
 	if entity.UserId <= 0 {
 		c.SetCookie("sid", "", 0, "/", sessionDomain, true, false)

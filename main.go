@@ -50,8 +50,8 @@ func main() {
 
 func versionFlag() {
 	version := flag.Bool("v", false, "version")
-	config := flag.String("c", "studio.ini", "configuration file")
-	logDirectory := flag.String("l", "log", "log directory")
+	config := flag.String("c", configPath, "configuration file")
+	logDirectory := flag.String("l", logDir, "log directory")
 	flag.Parse()
 	if *version {
 		fmt.Println("Version: " + g.Version)

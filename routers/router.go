@@ -25,6 +25,7 @@ func init() {
 	beego.Router("/about/resume", &index.ResumeController{})
 	beego.Router("/logo", &index.LogoController{})
 	beego.Router("/favicon", &index.SiteIconController{})
+	beego.Router("/ads.txt", &index.SiteAdsenceController{})
 
 	beego.ErrorController(&controllers.ErrorController{})
 

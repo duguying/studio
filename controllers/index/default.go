@@ -2,6 +2,7 @@ package index
 
 import (
 	"fmt"
+	"log"
 	"github.com/astaxie/beego"
 	"github.com/duguying/blog/controllers"
 	. "github.com/duguying/blog/models"
@@ -319,4 +320,20 @@ func (this *SiteIconController) Get() {
 
 	this.Ctx.Output.Body(data)
 	this.Ctx.Output.ContentType("image/x-icon")
+}
+
+type SiteAdsenceController struct {
+	controllers.BaseController
+}
+
+func (this *SiteAdsenceController) Get(){
+	localfile := "static/ads.txt"
+
+	data, err := utils.ReadFileByte(localfile)
+	if err!=nil {
+		log.Println("read ads.txt failed, err:", err.Error)
+	}
+
+	this.Ctx.Output.Body(data)
+	this.Ctx.Output.ContentType("text/plain")
 }

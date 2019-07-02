@@ -5,15 +5,15 @@
 package agent
 
 import (
+	"duguying/studio/service/db"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
-	"duguying/studio/service/message/store"
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"github.com/gorilla/websocket"
-	"log"
-	"net/http"
-	"time"
 )
 
 func Ws(c *gin.Context) {
@@ -55,13 +55,7 @@ func Ws(c *gin.Context) {
 	pipe.AddUserPipe(clientId, out, connId)
 
 	// store agent info
-	info := &store.AgentStatusInfo{
-		Online:     true,
-		Ip:         ip,
-		ClientID:   clientId,
-		OnlineTime: time.Now(),
-	}
-	err = store.PutAgent(clientId, info)
+	_, err = db.CreateOrUpdateAgent(clientId, ip)
 	if err != nil {
 		log.Println("put agent failed, err:", err.Error())
 	}
@@ -109,14 +103,8 @@ func Ws(c *gin.Context) {
 	pipe.RemoveConnect(connId)
 
 	// update agent info
-	info = &store.AgentStatusInfo{
-		Online:      false,
-		ClientID:    clientId,
-		Ip:          ip,
-		OfflineTime: time.Now(),
-	}
-	err = store.PutAgent(clientId, info)
+	err = db.UpdateAgentOffline(clientId)
 	if err != nil {
-		log.Println("put agent failed, err:", err.Error())
+		log.Println("update agent offline failed, err:", err.Error())
 	}
 }

@@ -8,7 +8,6 @@ import (
 	"duguying/studio/modules/orm"
 	"duguying/studio/modules/redis"
 	"duguying/studio/service"
-	"duguying/studio/service/message/store"
 	"flag"
 	"fmt"
 	"os"
@@ -37,9 +36,6 @@ func main() {
 
 	// 初始化 redis
 	redis.InitRedisConn()
-
-	// 初始化 boltDB
-	store.InitBoltDB()
 
 	// 初始化 database
 	orm.InitDatabase()

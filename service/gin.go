@@ -75,7 +75,6 @@ func Run() {
 		agt := apiV1.Group("/agent")
 		{
 			agt.GET("/list", action.SessionValidate, agent.List)          // agent列表
-			agt.GET("/list_perf", action.SessionValidate, agent.PerfList) // 性能列表
 			agt.Any("/ws", agent.Ws)                                      // agent连接点
 		}
 

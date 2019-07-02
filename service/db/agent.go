@@ -24,11 +24,12 @@ func CreateOrUpdateAgent(clientId string, ip string) (agent *models.Agent, err e
 	if len(errs) > 0 && errs[0] != nil {
 		// not exist, create
 		agent = &models.Agent{
-			ClientId:   clientId,
-			Ip:         ip,
-			Online:     AGENT_ONLINE,
-			Status:     AGENT_STATUS_ALLOW,
-			OnlineTime: time.Now(),
+			ClientId:    clientId,
+			Ip:          ip,
+			Online:      AGENT_ONLINE,
+			Status:      AGENT_STATUS_ALLOW,
+			OnlineTime:  time.Now(),
+			OfflineTime: time.Now(),
 		}
 		errs = tx.Table("agents").Create(agent).GetErrors()
 		if len(errs) > 0 && errs[0] != nil {
@@ -104,7 +105,7 @@ func GetAgentByClientId(clientId string) (agent *models.Agent, err error) {
 // 列出所有可用 agent
 func ListAllAvailableAgents() (agents []*models.Agent, err error) {
 	agents = []*models.Agent{}
-	errs := g.Db.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(agents).GetErrors()
+	errs := g.Db.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
 	} else {

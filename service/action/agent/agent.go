@@ -7,9 +7,11 @@ package agent
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/alidns"
-	"github.com/gin-gonic/gin"
 	"duguying/studio/service/db"
 	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type AgentInfo struct {
@@ -54,6 +56,20 @@ func Report(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"ok": true,
 	})
+}
+
+type AgentDetail struct {
+	Id          uint      `json:"id"`
+	Online      uint      `json:"online"` // 1 online, 0 offline
+	ClientId    string    `json:"client_id" gorm:"unique;not null"`
+	Os          string    `json:"os"`
+	Arch        string    `json:"arch"`
+	Hostname    string    `json:"hostname"`
+	Ip          string    `json:"ip"`
+	IpIns       []string  `json:"ip_ins"` // json
+	Status      uint      `json:"status"`
+	OnlineTime  time.Time `json:"online_time"`
+	OfflineTime time.Time `json:"offline_time"`
 }
 
 func List(c *gin.Context) {

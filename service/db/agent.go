@@ -38,10 +38,10 @@ func CreateOrUpdateAgent(clientId string, ip string) (agent *models.Agent, err e
 		}
 	} else {
 		// exist, update
-		errs = tx.Table("agents").Updates(map[string]interface{}{
+		errs = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 			"online": AGENT_ONLINE,
 			"ip":     ip,
-		}).Where("client_id=?", clientId).GetErrors()
+		}).GetErrors()
 		if len(errs) > 0 && errs[0] != nil {
 			tx.Rollback()
 			return nil, errs[0]
@@ -60,13 +60,13 @@ func PutPerf(clientId string, os string, arch string, hostname string, ipIns []s
 	tx := g.Db.Begin()
 	ipInBytes, _ := json.Marshal(ipIns)
 
-	errs := tx.Table("agents").Updates(map[string]interface{}{
+	errs := tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 		"online":   AGENT_ONLINE,
 		"os":       os,
 		"arch":     arch,
 		"hostname": hostname,
 		"ip_ins":   string(ipInBytes),
-	}).Where("client_id=?", clientId).GetErrors()
+	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		tx.Rollback()
 		return errs[0]

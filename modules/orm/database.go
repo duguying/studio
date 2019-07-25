@@ -6,12 +6,13 @@ package orm
 
 import (
 	"duguying/studio/g"
+	"duguying/studio/modules/models"
 	"fmt"
+	"log"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"log"
-	"duguying/studio/modules/models"
 )
 
 func InitDatabase() {
@@ -39,7 +40,7 @@ func initMysql() {
 	g.Db, err = gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname))
 	if err != nil {
 		log.Printf("数据库连接失败 err:%v\n", err)
-	}else {
+	} else {
 		if g.Config.Get("database", "log", "enable") == "enable" {
 			g.Db.LogMode(true)
 		}
@@ -56,5 +57,12 @@ func initSqlite() {
 }
 
 func initOrm() {
-	g.Db.AutoMigrate(&models.Article{},&models.User{},&models.File{},&models.Agent{},&models.AgentPerform{})
+	g.Db.AutoMigrate(
+		&models.Article{},
+		&models.User{},
+		&models.File{},
+		&models.Agent{},
+		&models.AgentPerform{},
+		&models.ExternalApiLog{},
+	)
 }

@@ -10,9 +10,9 @@ import (
 
 var gl *logger.GroupLogger
 
-func InitLogger(dir string, expire time.Duration) {
+func InitLogger(dir string, expire time.Duration, level int) {
 	logSlice := []string{"blog", "orm", "ws", "browserrcv", "browsersnt", "agentrcv", "agentsnt"}
-	gl = logger.NewGroupLogger(dir, "studio", expire, logSlice, log.Ldate|log.Ltime|log.Lshortfile)
+	gl = logger.NewGroupLogger(dir, "studio", expire, logSlice, log.Ldate|log.Ltime|log.Lshortfile, level)
 }
 
 func L(group string) *logger.Logger {

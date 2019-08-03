@@ -67,6 +67,27 @@ func WriteFile(fullpath string, str string) error {
 	return ioutil.WriteFile(fullpath, data, 0644)
 }
 
+// WriteFile 字符串写入文件追加
+func WriteFileAppend(fullpath string, str string) error {
+	data := []byte(str)
+	return writeFileAppend(fullpath, data, 0644)
+}
+
+func writeFileAppend(filename string, data []byte, perm os.FileMode) error {
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, perm)
+	if err != nil {
+		return err
+	}
+	n, err := f.Write(data)
+	if err == nil && n < len(data) {
+		err = io.ErrShortWrite
+	}
+	if err1 := f.Close(); err == nil {
+		err = err1
+	}
+	return err
+}
+
 // Mkdir 创建文件夹
 func Mkdir(path string) error {
 	return os.Mkdir(path, os.ModePerm)
@@ -119,6 +140,19 @@ func WriteFileWithCreatePath(fullpath string, str string) error {
 		err = MkdirWithCreatePath(fileDir)
 	}
 	err = WriteFile(fullpath, str)
+
+	return err
+}
+
+// 写入文件，若目录不存在则自动创建，若存在文件则追加
+func WriteFileAppendWithCreatePath(fullpath string, str string) error {
+	fileDir := ""
+	var err error = nil
+	if !FileExist(fullpath) {
+		fileDir = filepath.Dir(fullpath)
+		err = MkdirWithCreatePath(fileDir)
+	}
+	err = WriteFileAppend(fullpath, str)
 
 	return err
 }

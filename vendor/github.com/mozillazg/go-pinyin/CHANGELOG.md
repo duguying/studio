@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.15.0] (2019-04-06)
+
+* **Changed** 使用 [pinyin-data][pinyin-data] v0.7.0 的拼音数据
+* **NEW** 添加 go.mod 文件
+
 
 ## [0.14.0] (2018-08-05)
 
@@ -207,3 +212,4 @@
 [0.12.0]: https://github.com/mozillazg/go-pinyin/compare/v0.11.0...v0.12.0
 [0.13.0]: https://github.com/mozillazg/go-pinyin/compare/v0.12.0...v0.13.0
 [0.14.0]: https://github.com/mozillazg/go-pinyin/compare/v0.13.0...v0.14.0
+[0.15.0]: https://github.com/mozillazg/go-pinyin/compare/v0.14.0...v0.15.0

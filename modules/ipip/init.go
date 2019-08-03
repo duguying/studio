@@ -5,23 +5,22 @@
 package ipip
 
 import (
-	"github.com/ipipdotnet/datx-go"
+	"github.com/ipipdotnet/ipdb-go"
 	"log"
 )
 
 var (
-	city *datx.City
+	db *ipdb.City
 )
 
 func InitIPIP(path string) {
 	var err error
-	city, err = datx.NewCity(path)
-	if err == nil {
-		log.Println("load ip db failed, err:", err.Error())
-		return
+	db, err = ipdb.NewCity(path)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
-func GetLocation(ip string) (location datx.Location, err error) {
-	return city.FindLocation(ip)
+func GetLocation(ip string) (location *ipdb.CityInfo, err error) {
+	return db.FindInfo(ip,"CN")
 }

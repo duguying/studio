@@ -17,7 +17,7 @@ type FCleaner struct {
 	expire   time.Duration
 	interval time.Duration
 	batchNum int64
-	filter   func(info os.FileInfo) (willClean bool)
+	filter   func(path string, info os.FileInfo) (willClean bool)
 	count    int64
 }
 
@@ -32,13 +32,13 @@ func New(root string, expire time.Duration, interval time.Duration, batchNum int
 		expire:   expire,
 		interval: interval,
 		batchNum: batchNum,
-		filter: func(info os.FileInfo) (willClean bool) {
+		filter: func(path string, info os.FileInfo) (willClean bool) {
 			return true
 		},
 	}
 }
 
-func (fc *FCleaner) SetFilter(filter func(info os.FileInfo) (willClean bool)) {
+func (fc *FCleaner) SetFilter(filter func(path string, info os.FileInfo) (willClean bool)) {
 	fc.filter = filter
 }
 
@@ -46,6 +46,7 @@ func (fc *FCleaner) SetFilter(filter func(info os.FileInfo) (willClean bool)) {
 func (fc *FCleaner) StartCleanTask() {
 	go func(fc *FCleaner) {
 		for {
+			fc.count = 0
 			err := fc.clean(fc.root)
 			if err != nil {
 				log.Printf("[FCleaner] clean err: %v\n", err)
@@ -87,7 +88,7 @@ func (fc *FCleaner) clean(root string) error {
 			}
 		} else {
 			// do clean
-			if fc.filter(info) && fc.checkExpire(info) {
+			if fc.filter(path, info) && fc.checkExpire(info) {
 				fc.removePath(path)
 			}
 			return nil

@@ -72,7 +72,8 @@ func initLogger() {
 	if err != nil {
 		expire = expireDefault
 	}
-	logger.InitLogger(logDir, expire)
+	level := g.Config.GetInt64("log", "level", 15)
+	logger.InitLogger(logDir, expire, int(level))
 }
 
 func initIPIP() {

@@ -10,6 +10,10 @@ type errWrappedWithExtra struct {
 }
 
 func (ewx *errWrappedWithExtra) Error() string {
+	if ewx.err == nil {
+		return ""
+	}
+
 	return ewx.err.Error()
 }
 
@@ -21,7 +25,7 @@ func (ewx *errWrappedWithExtra) ExtraInfo() Extra {
 	return ewx.extraInfo
 }
 
-// Adds extra data to an error before reporting to Sentry
+// WrapWithExtra adds extra data to an error before reporting to Sentry
 func WrapWithExtra(err error, extraInfo map[string]interface{}) error {
 	return &errWrappedWithExtra{
 		err:       err,
@@ -29,10 +33,16 @@ func WrapWithExtra(err error, extraInfo map[string]interface{}) error {
 	}
 }
 
-type ErrWithExtra interface {
-	Error() string
-	Cause() error
+// errWithJustExtra is a regular error with just the user-provided extras added but without a cause
+type errWithJustExtra interface {
+	error
 	ExtraInfo() Extra
+}
+
+// ErrWithExtra links Error with attached user-provided extras that will be reported alongside the Error
+type ErrWithExtra interface {
+	errWithJustExtra
+	Cause() error
 }
 
 // Iteratively fetches all the Extra data added to an error,
@@ -43,7 +53,7 @@ func extractExtra(err error) Extra {
 
 	currentErr := err
 	for currentErr != nil {
-		if errWithExtra, ok := currentErr.(ErrWithExtra); ok {
+		if errWithExtra, ok := currentErr.(errWithJustExtra); ok {
 			for k, v := range errWithExtra.ExtraInfo() {
 				extra[k] = v
 			}

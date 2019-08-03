@@ -15,10 +15,11 @@ type PeriodLogger struct {
 	tag         string
 	isDefault   bool
 	flag        int
+	level       int
 }
 
 // NewPeriodLogger new a period logger
-func NewPeriodLogger(appName, tag, dir string, isDefault bool, flag int) *PeriodLogger {
+func NewPeriodLogger(appName, tag, dir string, isDefault bool, flag int, lv int) *PeriodLogger {
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		log.Println("mkdir", dir, "err:", err)
@@ -30,6 +31,7 @@ func NewPeriodLogger(appName, tag, dir string, isDefault bool, flag int) *Period
 		tag:         tag,
 		isDefault:   isDefault,
 		flag:        flag,
+		level:       lv,
 	}
 
 	l.setLog(dir, appName)
@@ -56,6 +58,7 @@ func (l *PeriodLogger) setLog(logDir string, appName string) error {
 	if l.isDefault {
 		log.SetOutput(l.gFile)
 		log.SetFlags(l.flag)
+		//log.SetPrefix("[INFO]")
 	}
 
 	l.Ls = log.New(l.gFile, "", l.flag)

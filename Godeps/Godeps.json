@@ -171,6 +171,11 @@
 			"Rev": "b2ce2384e17bbe0c6d34077efa39dbab3e09123b"
 		},
 		{
+			"ImportPath": "github.com/shurcooL/sanitized_anchor_name",
+			"Comment": "v1.0.0",
+			"Rev": "7bfe4c7ecddb3666a94b053b422cdd8f5aaa3615"
+		},
+		{
 			"ImportPath": "github.com/ugorji/go/codec",
 			"Comment": "codec/codecgen/v1.1.7-26-ge118e2d",
 			"Rev": "e118e2d506a6b252f6b85f2e2f2ac1bfed82f1b8"
@@ -222,6 +227,11 @@
 			"ImportPath": "gopkg.in/redis.v5/internal/proto",
 			"Comment": "v5.2.9",
 			"Rev": "a16aeec10ff407b1e7be6dd35797ccf5426ef0f0"
+		},
+		{
+			"ImportPath": "gopkg.in/russross/blackfriday.v2",
+			"Comment": "v2.0.1",
+			"Rev": "d3b5b032dc8e8927d31a5071b56e14c89f045135"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",

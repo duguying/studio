@@ -11,9 +11,14 @@ import (
 )
 
 const (
-	ART_STATUS_DRAFT   = 0
-	ART_STATUS_PUBLISH = 1
-	ART_STATUS_DELETE  = 2
+	ArtStatus_Draft   = 0
+	ArtStatus_Publish = 1
+	ArtStatus_Delete  = 2
+)
+
+const (
+	ContentType_HTML     = 0
+	ContentType_MarkDown = 1
 )
 
 type Article struct {
@@ -22,6 +27,7 @@ type Article struct {
 	Uri         string    `json:"uri"`
 	Keywords    string    `json:"keywords"`
 	Abstract    string    `json:"abstract"`
+	Type        int       `json:"type"`
 	Content     string    `json:"content"`
 	Author      string    `json:"author"`
 	AuthorId    uint      `json:"author_id"`

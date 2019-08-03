@@ -122,12 +122,14 @@ func GetArticleById(aid uint) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
-func AddArticle(title string, uri string, keywords []string, abstract string, content string, author string, authorId uint, status int) (art *dbmodels.Article, err error) {
+func AddArticle(title string, uri string, keywords []string, abstract string, artType int, content string, author string, authorId uint, status int) (art *dbmodels.Article, err error) {
 	article := &dbmodels.Article{
 		Title:       title,
 		Uri:         uri,
 		Keywords:    strings.Join(keywords, ","),
 		Abstract:    abstract,
+		Type:        artType,
+		Content:     content,
 		Author:      author,
 		AuthorId:    authorId,
 		Status:      status,
@@ -143,7 +145,7 @@ func AddArticle(title string, uri string, keywords []string, abstract string, co
 
 func PublishArticle(aid uint, uid uint) (err error) {
 	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumns(dbmodels.Article{
-		Status:      dbmodels.ART_STATUS_PUBLISH,
+		Status:      dbmodels.ArtStatus_Publish,
 		PublishTime: time.Now(),
 	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
@@ -154,7 +156,7 @@ func PublishArticle(aid uint, uid uint) (err error) {
 
 func DeleteArticle(aid uint, uid uint) (err error) {
 	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumn(dbmodels.Article{
-		Status: dbmodels.ART_STATUS_DELETE,
+		Status: dbmodels.ArtStatus_Delete,
 	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return errs[0]

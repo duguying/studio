@@ -6,6 +6,7 @@ package dbmodels
 
 import (
 	"github.com/gogather/json"
+	"gopkg.in/russross/blackfriday.v2"
 	"strings"
 	"time"
 )
@@ -43,6 +44,10 @@ func (a *Article) String() string {
 }
 
 func (a *Article) ToArticleContent() *WrapperArticleContent {
+	content := []byte(a.Content)
+	if a.Type == ContentType_MarkDown {
+		content = blackfriday.Run([]byte(a.Content))
+	}
 	return &WrapperArticleContent{
 		Id:        a.Id,
 		Title:     a.Title,
@@ -51,7 +56,7 @@ func (a *Article) ToArticleContent() *WrapperArticleContent {
 		Tags:      strings.Split(strings.Replace(a.Keywords, "，", ",", -1), ","),
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
-		Content:   a.Content,
+		Content:   string(content),
 	}
 }
 

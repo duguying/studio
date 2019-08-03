@@ -28,8 +28,8 @@ type Article struct {
 	Uri         string    `json:"uri"`
 	Keywords    string    `json:"keywords"`
 	Abstract    string    `json:"abstract"`
-	Type        int       `json:"type"`
-	Content     string    `json:"content"`
+	Type        int       `json:"type" gorm:"default:0"`
+	Content     string    `json:"content" sql:"type:longtext"`
 	Author      string    `json:"author"`
 	AuthorId    uint      `json:"author_id"`
 	Count       uint      `json:"count"`

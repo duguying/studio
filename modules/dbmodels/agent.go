@@ -1,4 +1,4 @@
-package models
+package dbmodels
 
 import (
 	"github.com/gogather/json"

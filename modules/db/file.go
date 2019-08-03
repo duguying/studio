@@ -6,17 +6,17 @@ package db
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/modules/models"
+	"duguying/studio/modules/dbmodels"
 	"path"
 	"time"
 )
 
 func SaveFile(fpath string, mime string, size uint64) (err error) {
 	filename := path.Base(fpath)
-	f := &models.File{
+	f := &dbmodels.File{
 		Filename:  filename,
 		Path:      fpath,
-		Store:     models.LOCAL,
+		Store:     dbmodels.LOCAL,
 		Mime:      mime,
 		Size:      size,
 		CreatedAt: time.Now(),
@@ -29,8 +29,8 @@ func SaveFile(fpath string, mime string, size uint64) (err error) {
 	}
 }
 
-func PageFile(page uint64, size uint64) (list []*models.File, total uint, err error) {
-	list = []*models.File{}
+func PageFile(page uint64, size uint64) (list []*dbmodels.File, total uint, err error) {
+	list = []*dbmodels.File{}
 	total = 0
 	errs := g.Db.Table("files").Count(&total).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {

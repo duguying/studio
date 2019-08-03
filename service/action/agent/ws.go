@@ -5,7 +5,7 @@
 package agent
 
 import (
-	"duguying/studio/service/db"
+	"duguying/studio/modules/db"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"log"

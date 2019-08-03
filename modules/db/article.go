@@ -6,21 +6,21 @@ package db
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/modules/models"
+	"duguying/studio/modules/dbmodels"
 	"github.com/gogather/json"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, err error) {
+func PageArticle(page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
 	total = 0
 	errs := g.Db.Table("articles").Where("status=?", 1).Count(&total).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return 0, nil, errs[0]
 	}
 
-	list = []*models.Article{}
+	list = []*dbmodels.Article{}
 	errs = g.Db.Table("articles").Where("status=?", 1).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return 0, nil, errs[0]
@@ -29,29 +29,29 @@ func PageArticle(page uint, pageSize uint) (total uint, list []*models.Article, 
 	return total, list, nil
 }
 
-func ArticleToContent(articles []*models.Article) (articleContent []*models.WrapperArticleContent) {
-	articleContent = []*models.WrapperArticleContent{}
+func ArticleToContent(articles []*dbmodels.Article) (articleContent []*dbmodels.WrapperArticleContent) {
+	articleContent = []*dbmodels.WrapperArticleContent{}
 	for _, article := range articles {
 		articleContent = append(articleContent, article.ToArticleContent())
 	}
 	return articleContent
 }
 
-func ArticleToTitle(articles []*models.Article) (articleTitle []*models.WrapperArticleTitle) {
-	articleTitle = []*models.WrapperArticleTitle{}
+func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*dbmodels.WrapperArticleTitle) {
+	articleTitle = []*dbmodels.WrapperArticleTitle{}
 	for _, article := range articles {
 		articleTitle = append(articleTitle, article.ToArticleTitle())
 	}
 	return articleTitle
 }
 
-func HotArticleTitle(num uint) (articleTitle []*models.WrapperArticleTitle, err error) {
-	list := []*models.Article{}
+func HotArticleTitle(num uint) (articleTitle []*dbmodels.WrapperArticleTitle, err error) {
+	list := []*dbmodels.Article{}
 	errs := g.Db.Table("articles").Order("count desc").Limit(num).Find(&list).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
 	}
-	articleTitle = []*models.WrapperArticleTitle{}
+	articleTitle = []*dbmodels.WrapperArticleTitle{}
 	for _, article := range list {
 		articleTitle = append(articleTitle, article.ToArticleTitle())
 	}
@@ -104,8 +104,8 @@ func MonthArch() (archInfos []*ArchInfo, err error) {
 	return archInfos, nil
 }
 
-func GetArticle(uri string) (art *models.Article, err error) {
-	art = &models.Article{}
+func GetArticle(uri string) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{}
 	errs := g.Db.Table("articles").Where("uri=?", uri).First(art).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
@@ -113,8 +113,8 @@ func GetArticle(uri string) (art *models.Article, err error) {
 	return art, nil
 }
 
-func GetArticleById(aid uint) (art *models.Article, err error) {
-	art = &models.Article{}
+func GetArticleById(aid uint) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{}
 	errs := g.Db.Table("articles").Where("id=?", aid).First(art).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
@@ -122,8 +122,8 @@ func GetArticleById(aid uint) (art *models.Article, err error) {
 	return art, nil
 }
 
-func AddArticle(title string, uri string, keywords []string, abstract string, content string, author string, authorId uint, status int) (art *models.Article, err error) {
-	article := &models.Article{
+func AddArticle(title string, uri string, keywords []string, abstract string, content string, author string, authorId uint, status int) (art *dbmodels.Article, err error) {
+	article := &dbmodels.Article{
 		Title:       title,
 		Uri:         uri,
 		Keywords:    strings.Join(keywords, ","),
@@ -142,8 +142,8 @@ func AddArticle(title string, uri string, keywords []string, abstract string, co
 }
 
 func PublishArticle(aid uint, uid uint) (err error) {
-	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumns(models.Article{
-		Status:      models.ART_STATUS_PUBLISH,
+	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumns(dbmodels.Article{
+		Status:      dbmodels.ART_STATUS_PUBLISH,
 		PublishTime: time.Now(),
 	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
@@ -153,8 +153,8 @@ func PublishArticle(aid uint, uid uint) (err error) {
 }
 
 func DeleteArticle(aid uint, uid uint) (err error) {
-	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumn(models.Article{
-		Status: models.ART_STATUS_DELETE,
+	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumn(dbmodels.Article{
+		Status: dbmodels.ART_STATUS_DELETE,
 	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return errs[0]

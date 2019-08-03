@@ -6,7 +6,7 @@ package orm
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/modules/models"
+	"duguying/studio/modules/dbmodels"
 	"fmt"
 	"log"
 
@@ -58,11 +58,11 @@ func initSqlite() {
 
 func initOrm() {
 	g.Db.AutoMigrate(
-		&models.Article{},
-		&models.User{},
-		&models.File{},
-		&models.Agent{},
-		&models.AgentPerform{},
-		&models.ExternalApiLog{},
+		&dbmodels.Article{},
+		&dbmodels.User{},
+		&dbmodels.File{},
+		&dbmodels.Agent{},
+		&dbmodels.AgentPerform{},
+		&dbmodels.ExternalApiLog{},
 	)
 }

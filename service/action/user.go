@@ -6,8 +6,8 @@ package action
 
 import (
 	"duguying/studio/g"
+	"duguying/studio/modules/db"
 	"duguying/studio/modules/session"
-	"duguying/studio/service/db"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"net/http"
@@ -110,7 +110,7 @@ func UserLogin(c *gin.Context) {
 				})
 
 				c.JSON(http.StatusOK, gin.H{
-					"ok": true,
+					"ok":  true,
 					"sid": sid,
 				})
 				return

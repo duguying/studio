@@ -7,7 +7,7 @@ package agent
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/alidns"
-	"duguying/studio/service/db"
+	"duguying/studio/modules/db"
 	"net/http"
 	"time"
 

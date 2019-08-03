@@ -6,7 +6,7 @@ package action
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/service/db"
+	"duguying/studio/modules/db"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"io"

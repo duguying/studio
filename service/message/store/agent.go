@@ -5,7 +5,7 @@
 package store
 
 import (
-	"duguying/studio/service/db"
+	"duguying/studio/modules/db"
 	"duguying/studio/service/message/model"
 	"log"
 

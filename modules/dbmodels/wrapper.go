@@ -2,7 +2,7 @@
 // This file is part of blog project
 // Created by duguying on 2018/1/25.
 
-package models
+package dbmodels
 
 import (
 	"github.com/gogather/json"

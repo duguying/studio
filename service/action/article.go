@@ -5,8 +5,8 @@
 package action
 
 import (
-	"duguying/studio/modules/models"
-	"duguying/studio/service/db"
+	"duguying/studio/modules/dbmodels"
+	"duguying/studio/modules/db"
 	"duguying/studio/utils"
 	"github.com/gogather/json"
 	"github.com/gin-gonic/gin"
@@ -228,7 +228,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// check article status
-	if article.Status != models.ART_STATUS_PUBLISH {
+	if article.Status != dbmodels.ART_STATUS_PUBLISH {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
 			"err": "it's already published, needn't publish again",

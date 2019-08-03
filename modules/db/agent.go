@@ -2,7 +2,7 @@ package db
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/modules/models"
+	"duguying/studio/modules/dbmodels"
 	"time"
 
 	"github.com/gogather/json"
@@ -17,13 +17,13 @@ const (
 )
 
 // 创建或更新 agent
-func CreateOrUpdateAgent(clientId string, ip string) (agent *models.Agent, err error) {
+func CreateOrUpdateAgent(clientId string, ip string) (agent *dbmodels.Agent, err error) {
 	tx := g.Db.Begin()
-	existAgent := &models.Agent{}
+	existAgent := &dbmodels.Agent{}
 	errs := tx.Table("agents").Where("client_id=?", clientId).First(existAgent).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		// not exist, create
-		agent = &models.Agent{
+		agent = &dbmodels.Agent{
 			ClientId:    clientId,
 			Ip:          ip,
 			Online:      AGENT_ONLINE,
@@ -81,8 +81,8 @@ func PutPerf(clientId string, os string, arch string, hostname string, ipIns []s
 }
 
 // 通过 id 获取 agent
-func GetAgent(id uint) (agent *models.Agent, err error) {
-	agent = &models.Agent{}
+func GetAgent(id uint) (agent *dbmodels.Agent, err error) {
+	agent = &dbmodels.Agent{}
 	errs := g.Db.Table("agents").Where("id=?", id).First(agent).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
@@ -92,8 +92,8 @@ func GetAgent(id uint) (agent *models.Agent, err error) {
 }
 
 // 通过 clientId 获取 agent
-func GetAgentByClientId(clientId string) (agent *models.Agent, err error) {
-	agent = &models.Agent{}
+func GetAgentByClientId(clientId string) (agent *dbmodels.Agent, err error) {
+	agent = &dbmodels.Agent{}
 	errs := g.Db.Table("agents").Where("client_id=?", clientId).First(agent).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
@@ -103,8 +103,8 @@ func GetAgentByClientId(clientId string) (agent *models.Agent, err error) {
 }
 
 // 列出所有可用 agent
-func ListAllAvailableAgents() (agents []*models.Agent, err error) {
-	agents = []*models.Agent{}
+func ListAllAvailableAgents() (agents []*dbmodels.Agent, err error) {
+	agents = []*dbmodels.Agent{}
 	errs := g.Db.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
@@ -115,7 +115,7 @@ func ListAllAvailableAgents() (agents []*models.Agent, err error) {
 
 // 禁用 agent
 func ForbidAgent(id uint) (err error) {
-	agent := &models.Agent{}
+	agent := &dbmodels.Agent{}
 	errs := g.Db.Table("agents").Where("id=?", id).First(agent).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return errs[0]

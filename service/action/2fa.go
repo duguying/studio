@@ -1,7 +1,7 @@
 package action
 
 import (
-	"duguying/studio/service/db"
+	"duguying/studio/modules/db"
 	"encoding/base32"
 	"fmt"
 	"github.com/dgryski/dgoogauth"

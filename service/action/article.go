@@ -158,6 +158,33 @@ func GetArticle(c *gin.Context) {
 	}
 }
 
+func GetArticleInfo(c *gin.Context) {
+	idStr := c.Query("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	art, err := db.GetArticleById(uint(id))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":   true,
+		"item": art,
+	})
+	return
+}
+
 type ArticleAddRequest struct {
 	Title    string
 	Keywords []string

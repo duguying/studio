@@ -5,11 +5,11 @@
 package action
 
 import (
-	"duguying/studio/modules/dbmodels"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dbmodels"
 	"duguying/studio/utils"
-	"github.com/gogather/json"
 	"github.com/gin-gonic/gin"
+	"github.com/gogather/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -162,6 +162,7 @@ type ArticleAddRequest struct {
 	Title    string
 	Keywords []string
 	Content  string
+	Type     int
 	Status   int
 }
 
@@ -189,7 +190,7 @@ func AddArticle(c *gin.Context) {
 		})
 		return
 	}
-	article, err := db.AddArticle(aar.Title, utils.TitleToUri(aar.Title), aar.Keywords, "", aar.Content, user.Username, user.Id, aar.Status)
+	article, err := db.AddArticle(aar.Title, utils.TitleToUri(aar.Title), aar.Keywords, "", aar.Type, aar.Content, user.Username, user.Id, aar.Status)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -228,7 +229,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// check article status
-	if article.Status != dbmodels.ART_STATUS_PUBLISH {
+	if article.Status != dbmodels.ArtStatus_Publish {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
 			"err": "it's already published, needn't publish again",

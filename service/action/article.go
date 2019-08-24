@@ -339,3 +339,25 @@ func DeleteArticle(c *gin.Context) {
 		return
 	}
 }
+
+func ListAllArticleUri(c *gin.Context) {
+	list, err := db.ListAllArticleUri()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	uris := []string{}
+	for _, item := range list {
+		uris = append(uris, item.Uri)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":   true,
+		"list": uris,
+	})
+	return
+}

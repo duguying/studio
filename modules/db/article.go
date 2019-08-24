@@ -163,3 +163,12 @@ func DeleteArticle(aid uint, uid uint) (err error) {
 	}
 	return nil
 }
+
+func ListAllArticleUri() (list []*dbmodels.Article, err error) {
+	list = []*dbmodels.Article{}
+	errs := g.Db.Table("articles").Select("uri").Order("id desc").Find(&list).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, errs[0]
+	}
+	return list, nil
+}

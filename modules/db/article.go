@@ -166,7 +166,7 @@ func DeleteArticle(aid uint, uid uint) (err error) {
 
 func ListAllArticleUri() (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
-	errs := g.Db.Table("articles").Select("uri").Order("id desc").Find(&list).GetErrors()
+	errs := g.Db.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
 	}

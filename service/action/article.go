@@ -8,6 +8,7 @@ import (
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/dbmodels"
 	"duguying/studio/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/json"
 	"log"
@@ -340,7 +341,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 }
 
-func ListAllArticleUri(c *gin.Context) {
+func SiteMap(c *gin.Context) {
 	list, err := db.ListAllArticleUri()
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -350,14 +351,38 @@ func ListAllArticleUri(c *gin.Context) {
 		return
 	}
 
-	uris := []string{}
+	sitemap := []string{
+		"/",
+		"/about",
+	}
+
+	// articles
 	for _, item := range list {
-		uris = append(uris, item.Uri)
+		sitemap = append(sitemap, fmt.Sprintf("/article/%s", item.Uri))
+	}
+
+	// list pages
+	totalPage := len(list) / 40
+	if len(list)%40 > 0 {
+		totalPage++
+	}
+
+	for i := 1; i <= totalPage; i++ {
+		sitemap = append(sitemap, fmt.Sprintf("/list/%d", i))
+	}
+
+	// pages
+	totalArticlePage := len(list) / 10
+	if len(list)%10 > 0 {
+		totalArticlePage++
+	}
+	for i := 1; i <= totalArticlePage; i++ {
+		sitemap = append(sitemap, fmt.Sprintf("/page/%d", i))
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"ok":   true,
-		"list": uris,
+		"list": sitemap,
 	})
 	return
 }

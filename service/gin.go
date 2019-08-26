@@ -43,19 +43,19 @@ func Run() {
 	{
 		// needn't auth
 		{
-			apiV1.GET("/get_article", action.GetArticle)            // 获取文章详情
-			apiV1.GET("/get_article_info", action.GetArticleInfo)   // 获取文章原始信息
-			apiV1.GET("/all_article_uri", action.ListAllArticleUri) // 列出所有文章URI
-			apiV1.GET("/list", action.ListArticleWithContent)       // 列出文章
-			apiV1.GET("/list_title", action.ListArticleTitle)       // 列出文章标题
-			apiV1.GET("/hot_article", action.HotArticleTitle)       // 热门文章列表
-			apiV1.GET("/month_archive", action.MonthArchive)        // 文章按月归档列表
-			apiV1.POST("/user_register", action.UserRegister)       // 用户注册
-			apiV1.GET("/user_info", action.UserInfo)                // 用户信息
-			apiV1.POST("/user_login", action.UserLogin)             // 用户登陆
-			apiV1.GET("/username_check", action.UsernameCheck)      // 用户名检查
-			apiV1.GET("/file/list", action.PageFile)                // 文件列表
-			apiV1.POST("/2fa", action.TfaAuth)                      // 2FA校验
+			apiV1.GET("/get_article", action.GetArticle)          // 获取文章详情
+			apiV1.GET("/get_article_info", action.GetArticleInfo) // 获取文章原始信息
+			apiV1.GET("/list", action.ListArticleWithContent)     // 列出文章
+			apiV1.GET("/list_title", action.ListArticleTitle)     // 列出文章标题
+			apiV1.GET("/hot_article", action.HotArticleTitle)     // 热门文章列表
+			apiV1.GET("/month_archive", action.MonthArchive)      // 文章按月归档列表
+			apiV1.POST("/user_register", action.UserRegister)     // 用户注册
+			apiV1.GET("/user_info", action.UserInfo)              // 用户信息
+			apiV1.POST("/user_login", action.UserLogin)           // 用户登陆
+			apiV1.GET("/username_check", action.UsernameCheck)    // 用户名检查
+			apiV1.GET("/file/list", action.PageFile)              // 文件列表
+			apiV1.POST("/2fa", action.TfaAuth)                    // 2FA校验
+			apiV1.GET("/sitemap", action.SiteMap)                 // 列出所有文章URI
 		}
 
 		// auth require

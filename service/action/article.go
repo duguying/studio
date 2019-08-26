@@ -9,6 +9,7 @@ import (
 	"duguying/studio/modules/dbmodels"
 	"duguying/studio/utils"
 	"fmt"
+	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/json"
 	"log"
@@ -358,7 +359,7 @@ func SiteMap(c *gin.Context) {
 
 	// articles
 	for _, item := range list {
-		sitemap = append(sitemap, fmt.Sprintf("/article/%s", item.Uri))
+		sitemap = append(sitemap, fmt.Sprintf("/article/%s", com.UrlEncode(item.Uri)))
 	}
 
 	// list pages

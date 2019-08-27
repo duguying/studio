@@ -62,17 +62,17 @@ func Run() {
 		// auth require
 		auth := apiV1.Group("", action.SessionValidate)
 		{
-			apiV1.GET("/user_info", action.UserInfo)     // 用户信息
+			auth.GET("/user_info", action.UserInfo)      // 用户信息
 			auth.POST("/user_logout", action.UserLogout) // 用户登出
-			apiV1.POST("/put", action.PutFile)           // 上传文件
-			apiV1.POST("/upload", action.UploadFile)     // 上传文件
-			apiV1.Any("/xterm", action.ConnectXTerm)     // 连接xterm
+			auth.POST("/put", action.PutFile)            // 上传文件
+			auth.POST("/upload", action.UploadFile)      // 上传文件
+			auth.Any("/xterm", action.ConnectXTerm)      // 连接xterm
 
-			apiV1.POST("/article/add", action.AddArticle)         // 添加文章
-			apiV1.POST("/article/publish", action.PublishArticle) // 发布草稿
-			apiV1.POST("/article/delete", action.DeleteArticle)   // 删除文章
+			auth.POST("/article/add", action.AddArticle)         // 添加文章
+			auth.POST("/article/publish", action.PublishArticle) // 发布草稿
+			auth.POST("/article/delete", action.DeleteArticle)   // 删除文章
 
-			apiV1.GET("/2faqr", action.QrGoogleAuth) // 获取2FA二维码
+			auth.GET("/2faqr", action.QrGoogleAuth) // 获取2FA二维码
 		}
 
 		// agent connection point

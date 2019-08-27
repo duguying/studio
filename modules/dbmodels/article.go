@@ -64,7 +64,7 @@ func (a *Article) ToArticleTitle() *WrapperArticleTitle {
 	return &WrapperArticleTitle{
 		Id:        a.Id,
 		Title:     a.Title,
-		Uri:       a.Uri,
+		Uri:       "/article/" + a.Uri,
 		Author:    a.Author,
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,

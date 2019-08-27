@@ -10,12 +10,20 @@ import (
 	"time"
 )
 
+const (
+	RoleUser  = 0
+	RoleAdmin = 1
+)
+
+var role = []string{"user", "admin"}
+
 type User struct {
 	Id        uint      `json:"id"`
 	Username  string    `json:"username"`
 	Password  string    `json:"password"`
 	Salt      string    `json:"salt"`
 	Email     string    `json:"email"`
+	Role      int       `json:"role" gorm:"default:0"`
 	TfaSecret string    `json:"tfa_secret"` // 2FA secret base 32
 	CreatedAt time.Time `json:"created_at"`
 }
@@ -31,5 +39,6 @@ func (u *User) ToInfo() *models.UserInfo {
 		Username: u.Username,
 		Email:    u.Email,
 		Avatar:   "http://duguying.net/logo",
+		Access:   role[u.Role],
 	}
 }

@@ -12,5 +12,6 @@ type UserInfo struct {
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Avatar    string    `json:"avatar"`
+	Access    string    `json:"access"`
 	CreatedAt time.Time `json:"created_at"`
 }

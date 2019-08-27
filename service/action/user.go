@@ -14,8 +14,26 @@ import (
 	"time"
 )
 
-func UserInfo(c *gin.Context) {
+func UserSimpleInfo(c *gin.Context) {
 
+}
+
+func UserInfo(c *gin.Context) {
+	userId := uint(c.GetInt64("user_id"))
+	user, err := db.GetUserById(userId)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":   true,
+		"data": user.ToInfo(),
+	})
+	return
 }
 
 type LoginArgs struct {

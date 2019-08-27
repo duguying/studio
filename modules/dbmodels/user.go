@@ -5,6 +5,7 @@
 package dbmodels
 
 import (
+	"duguying/studio/service/models"
 	"github.com/gogather/json"
 	"time"
 )
@@ -22,4 +23,13 @@ type User struct {
 func (u *User) String() string {
 	c, _ := json.Marshal(u)
 	return string(c)
+}
+
+func (u *User) ToInfo() *models.UserInfo {
+	return &models.UserInfo{
+		Id:       u.Id,
+		Username: u.Username,
+		Email:    u.Email,
+		Avatar:   "http://duguying.net/logo",
+	}
 }

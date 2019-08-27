@@ -51,7 +51,7 @@ func Run() {
 			apiV1.GET("/hot_article", action.HotArticleTitle)                        // 热门文章列表
 			apiV1.GET("/month_archive", action.MonthArchive)                         // 文章按月归档列表
 			apiV1.POST("/user_register", action.UserRegister)                        // 用户注册
-			apiV1.GET("/user_info", action.UserInfo)                                 // 用户信息
+			apiV1.GET("/user_simple_info", action.UserSimpleInfo)                    // 用户信息
 			apiV1.POST("/user_login", action.UserLogin)                              // 用户登陆
 			apiV1.GET("/username_check", action.UsernameCheck)                       // 用户名检查
 			apiV1.GET("/file/list", action.PageFile)                                 // 文件列表
@@ -62,6 +62,7 @@ func Run() {
 		// auth require
 		auth := apiV1.Group("", action.SessionValidate)
 		{
+			apiV1.GET("/user_info", action.UserInfo)     // 用户信息
 			auth.POST("/user_logout", action.UserLogout) // 用户登出
 			apiV1.POST("/put", action.PutFile)           // 上传文件
 			apiV1.POST("/upload", action.UploadFile)     // 上传文件

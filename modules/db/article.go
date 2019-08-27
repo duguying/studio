@@ -29,6 +29,22 @@ func PageArticle(page uint, pageSize uint) (total uint, list []*dbmodels.Article
 	return total, list, nil
 }
 
+func PageArticleMonthly(year, month uint, page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
+	total = 0
+	errs := g.Db.Table("articles").Where("status=?", 1).Count(&total).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return 0, nil, errs[0]
+	}
+
+	list = []*dbmodels.Article{}
+	errs = g.Db.Table("articles").Where("status=? and year(created_at)=? and month(created_at)=?", 1, year, month).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return 0, nil, errs[0]
+	}
+
+	return total, list, nil
+}
+
 func ArticleToContent(articles []*dbmodels.Article) (articleContent []*dbmodels.WrapperArticleContent) {
 	articleContent = []*dbmodels.WrapperArticleContent{}
 	for _, article := range articles {

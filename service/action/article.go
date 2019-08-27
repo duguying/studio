@@ -57,6 +57,69 @@ func ListArticleWithContent(c *gin.Context) {
 	return
 }
 
+func ListArticleWithContentMonthly(c *gin.Context) {
+	pageStr := c.Query("page")
+	page, err := strconv.ParseUint(pageStr, 10, 64)
+	if err != nil {
+		log.Println("page 解析错误, err:", err)
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	pageSizeStr := c.Query("page_size")
+	pageSize, err := strconv.ParseUint(pageSizeStr, 10, 64)
+	if err != nil {
+		log.Println("page_size 解析错误, err:", err)
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	yearStr := c.Query("year")
+	year, err := strconv.ParseUint(yearStr, 10, 64)
+	if err != nil {
+		log.Println("year 解析错误, err:", err)
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	monthStr := c.Query("month")
+	month, err := strconv.ParseUint(monthStr, 10, 64)
+	if err != nil {
+		log.Println("month 解析错误, err:", err)
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	total, list, err := db.PageArticleMonthly(uint(year), uint(month), uint(page), uint(pageSize))
+	if err != nil {
+		log.Println("分页查询错误, err:", err)
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":    true,
+		"total": total,
+		"list":  db.ArticleToContent(list),
+	})
+	return
+}
+
 func ListArticleTitle(c *gin.Context) {
 	pageStr := c.Query("page")
 	page, err := strconv.ParseUint(pageStr, 10, 64)

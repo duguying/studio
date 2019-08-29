@@ -83,6 +83,10 @@ function proto(){
     echo "compile finished."
 }
 
+function doc() {
+    swag init
+}
+
 function tailf() {
     tail -f $logfile
 }
@@ -95,6 +99,8 @@ if [ "$1" == "" ]; then
     help
 elif [ "$1" == "build" ];then
     build `go env GOOS` `go env GOARCH`
+elif [ "$1" == "doc" ];then
+    doc
 elif [ "$1" == "stop" ];then
     stop
 elif [ "$1" == "start" ];then

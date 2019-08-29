@@ -13,7 +13,6 @@
 package unix
 
 import (
-	"runtime"
 	"syscall"
 	"unsafe"
 )
@@ -94,18 +93,6 @@ func nametomib(name string) (mib []_C_int, err error) {
 	return mib, nil
 }
 
-func direntIno(buf []byte) (uint64, bool) {
-	return readInt(buf, unsafe.Offsetof(Dirent{}.Fileno), unsafe.Sizeof(Dirent{}.Fileno))
-}
-
-func direntReclen(buf []byte) (uint64, bool) {
-	return readInt(buf, unsafe.Offsetof(Dirent{}.Reclen), unsafe.Sizeof(Dirent{}.Reclen))
-}
-
-func direntNamlen(buf []byte) (uint64, bool) {
-	return readInt(buf, unsafe.Offsetof(Dirent{}.Namlen), unsafe.Sizeof(Dirent{}.Namlen))
-}
-
 func SysctlClockinfo(name string) (*Clockinfo, error) {
 	mib, err := sysctlmib(name)
 	if err != nil {
@@ -132,30 +119,9 @@ func Pipe(p []int) (err error) {
 	return
 }
 
-//sys Getdents(fd int, buf []byte) (n int, err error)
+//sys getdents(fd int, buf []byte) (n int, err error)
 func Getdirentries(fd int, buf []byte, basep *uintptr) (n int, err error) {
-	n, err = Getdents(fd, buf)
-	if err != nil || basep == nil {
-		return
-	}
-
-	var off int64
-	off, err = Seek(fd, 0, 1 /* SEEK_CUR */)
-	if err != nil {
-		*basep = ^uintptr(0)
-		return
-	}
-	*basep = uintptr(off)
-	if unsafe.Sizeof(*basep) == 8 {
-		return
-	}
-	if off>>32 != 0 {
-		// We can't stuff the offset back into a uintptr, so any
-		// future calls would be suspect. Generate an error.
-		// EIO is allowed by getdirentries.
-		err = EIO
-	}
-	return
+	return getdents(fd, buf)
 }
 
 const ImplementsGetwd = true
@@ -224,13 +190,6 @@ func IoctlGetTermios(fd int, req uint) (*Termios, error) {
 	return &value, err
 }
 
-func IoctlGetPtmget(fd int, req uint) (*Ptmget, error) {
-	var value Ptmget
-	err := ioctl(fd, req, uintptr(unsafe.Pointer(&value)))
-	runtime.KeepAlive(value)
-	return &value, err
-}
-
 func Uname(uname *Utsname) error {
 	mib := []_C_int{CTL_KERN, KERN_OSTYPE}
 	n := unsafe.Sizeof(uname.Sysname)
@@ -275,13 +234,6 @@ func Uname(uname *Utsname) error {
 	}
 
 	return nil
-}
-
-func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
-	if raceenabled {
-		raceReleaseMerge(unsafe.Pointer(&ioSync))
-	}
-	return sendfile(outfd, infd, offset, count)
 }
 
 /*

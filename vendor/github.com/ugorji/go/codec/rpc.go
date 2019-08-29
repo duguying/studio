@@ -10,7 +10,7 @@ import (
 	"net/rpc"
 )
 
-var errRpcJsonNeedsTermWhitespace = errors.New("rpc requires JsonHandle with TermWhitespace=true")
+var errRpcJsonNeedsTermWhitespace = errors.New("rpc requires a JsonHandle with TermWhitespace set to true")
 
 // Rpc provides a rpc Server or Client Codec for rpc communication.
 type Rpc interface {
@@ -57,7 +57,7 @@ func newRPCCodec2(r io.Reader, w io.Writer, c io.Closer, h Handle) rpcCodec {
 	// always ensure that we use a flusher, and always flush what was written to the connection.
 	// we lose nothing by using a buffered writer internally.
 	f, ok := w.(ioFlusher)
-	bh := basicHandle(h)
+	bh := h.getBasicHandle()
 	if !bh.RPCNoBuffer {
 		if bh.WriterBufferSize <= 0 {
 			if !ok {
@@ -68,7 +68,8 @@ func newRPCCodec2(r io.Reader, w io.Writer, c io.Closer, h Handle) rpcCodec {
 		if bh.ReaderBufferSize <= 0 {
 			if _, ok = w.(ioPeeker); !ok {
 				if _, ok = w.(ioBuffered); !ok {
-					r = bufio.NewReader(r)
+					br := bufio.NewReader(r)
+					r = br
 				}
 			}
 		}
@@ -96,6 +97,9 @@ func (c *rpcCodec) write(obj1, obj2 interface{}, writeObj2 bool) (err error) {
 		if writeObj2 {
 			err = c.enc.Encode(obj2)
 		}
+		// if err == nil && c.f != nil {
+		// 	err = c.f.Flush()
+		// }
 	}
 	if c.f != nil {
 		if err == nil {
@@ -105,6 +109,11 @@ func (c *rpcCodec) write(obj1, obj2 interface{}, writeObj2 bool) (err error) {
 		}
 	}
 	return
+}
+
+func (c *rpcCodec) swallow(err *error) {
+	defer panicToErr(c.dec, err)
+	c.dec.swallow()
 }
 
 func (c *rpcCodec) read(obj interface{}) (err error) {
@@ -118,8 +127,7 @@ func (c *rpcCodec) read(obj interface{}) (err error) {
 	if obj == nil {
 		// var obj2 interface{}
 		// return c.dec.Decode(&obj2)
-		defer panicToErr(c.dec, &err)
-		c.dec.swallow()
+		c.swallow(&err)
 		return
 	}
 	return c.dec.Decode(obj)

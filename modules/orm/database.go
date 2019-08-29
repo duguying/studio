@@ -65,4 +65,13 @@ func initOrm() {
 		&dbmodels.AgentPerform{},
 		&dbmodels.ExternalApiLog{},
 	)
+
+	g.Db.Callback().Create().After("gorm:create").Register("plugin:run_after_create", func(scope *gorm.Scope) {
+		// business logic
+
+		// set error if some thing wrong happened, will rollback the creating
+		//scope.Err(errors.New("error"))
+		fmt.Println("table:", scope.TableName())
+		fmt.Println("columns:", scope.Fields())
+	})
 }

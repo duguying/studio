@@ -5,6 +5,7 @@
 package service
 
 import (
+	_ "duguying/studio/docs"
 	"duguying/studio/g"
 	"duguying/studio/modules/logger"
 	"duguying/studio/modules/middleware"
@@ -12,22 +13,26 @@ import (
 	"duguying/studio/service/action/agent"
 	"duguying/studio/service/message/deal"
 	"duguying/studio/service/message/pipe"
+	"duguying/studio/service/models"
 	"fmt"
 	"github.com/getsentry/raven-go"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"path/filepath"
 )
 
-func Run() {
+func Run(logDir string) {
 	if g.Config.Get("sentry", "enable", "false") == "true" {
 		dsn := g.Config.Get("sentry", "dsn", "https://<key>:<secret>@app.getsentry.com/<project>")
 		raven.SetDSN(dsn)
 	}
 
+	models.RegisterTimeAsLayoutCodec("2006-01-02 15:04:05")
 	gin.SetMode(g.Config.Get("system", "mode", gin.ReleaseMode))
-	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join("log", "gin.log"))
+	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join(logDir, "gin.log"))
 
 	initWsMessage()
 
@@ -36,6 +41,7 @@ func Run() {
 	router.Use(middleware.CrossSite())
 	router.Use(sentry.Recovery(raven.DefaultClient, false))
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Any("/version", action.Version)
 
 	// v1 api

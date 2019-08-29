@@ -708,7 +708,10 @@ func (w *messageWriter) Close() error {
 	if w.err != nil {
 		return w.err
 	}
-	return w.flushFrame(true, nil)
+	if err := w.flushFrame(true, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 // WritePreparedMessage writes prepared message into connection.

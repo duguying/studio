@@ -36,7 +36,7 @@ func HtmlEncode(str string) string {
 	return html.EscapeString(str)
 }
 
-// HtmlDecode decodes string to html chars
+// decode string to html chars
 func HtmlDecode(str string) string {
 	return html.UnescapeString(str)
 }

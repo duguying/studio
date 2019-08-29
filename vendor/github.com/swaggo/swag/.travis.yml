@@ -1,0 +1,25 @@
+language: go
+sudo: false
+
+go:
+  - 1.9.x
+  - 1.10.x
+  - 1.11.x
+
+matrix:
+  fast_finish: true
+  include:
+  - go: 1.11.x
+    env: GO111MODULE=on
+
+install:
+  - make install
+  - if [[ "${GO111MODULE}" = "on" ]]; then make tools; fi
+  
+script:
+  - make lint
+  - make build
+  - make test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

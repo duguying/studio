@@ -96,35 +96,6 @@ func (mc *mysqlConn) writePacket(data []byte) error {
 		return ErrPktTooLarge
 	}
 
-	// Perform a stale connection check. We only perform this check for
-	// the first query on a connection that has been checked out of the
-	// connection pool: a fresh connection from the pool is more likely
-	// to be stale, and it has not performed any previous writes that
-	// could cause data corruption, so it's safe to return ErrBadConn
-	// if the check fails.
-	if mc.reset {
-		mc.reset = false
-		conn := mc.netConn
-		if mc.rawConn != nil {
-			conn = mc.rawConn
-		}
-		var err error
-		// If this connection has a ReadTimeout which we've been setting on
-		// reads, reset it to its default value before we attempt a non-blocking
-		// read, otherwise the scheduler will just time us out before we can read
-		if mc.cfg.ReadTimeout != 0 {
-			err = conn.SetReadDeadline(time.Time{})
-		}
-		if err == nil {
-			err = connCheck(conn)
-		}
-		if err != nil {
-			errLog.Print("closing bad idle connection: ", err)
-			mc.Close()
-			return driver.ErrBadConn
-		}
-	}
-
 	for {
 		var size int
 		if pktLen >= maxPacketSize {
@@ -361,7 +332,6 @@ func (mc *mysqlConn) writeHandshakeResponsePacket(authResp []byte, plugin string
 		if err := tlsConn.Handshake(); err != nil {
 			return err
 		}
-		mc.rawConn = mc.netConn
 		mc.netConn = tlsConn
 		mc.buf.nc = tlsConn
 	}
@@ -1008,22 +978,6 @@ func (stmt *mysqlStmt) writeExecutePacket(args []driver.Value) error {
 			case int64:
 				paramTypes[i+i] = byte(fieldTypeLongLong)
 				paramTypes[i+i+1] = 0x00
-
-				if cap(paramValues)-len(paramValues)-8 >= 0 {
-					paramValues = paramValues[:len(paramValues)+8]
-					binary.LittleEndian.PutUint64(
-						paramValues[len(paramValues)-8:],
-						uint64(v),
-					)
-				} else {
-					paramValues = append(paramValues,
-						uint64ToBytes(uint64(v))...,
-					)
-				}
-
-			case uint64:
-				paramTypes[i+i] = byte(fieldTypeLongLong)
-				paramTypes[i+i+1] = 0x80 // type is unsigned
 
 				if cap(paramValues)-len(paramValues)-8 >= 0 {
 					paramValues = paramValues[:len(paramValues)+8]

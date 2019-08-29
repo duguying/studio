@@ -26,8 +26,8 @@ func (r YAML) Render(w http.ResponseWriter) error {
 		return err
 	}
 
-	_, err = w.Write(bytes)
-	return err
+	w.Write(bytes)
+	return nil
 }
 
 // WriteContentType (YAML) writes YAML ContentType for response.

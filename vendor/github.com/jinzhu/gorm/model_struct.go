@@ -202,7 +202,7 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 					modelStruct.PrimaryFields = append(modelStruct.PrimaryFields, field)
 				}
 
-				if _, ok := field.TagSettingsGet("DEFAULT"); ok && !field.IsPrimaryKey {
+				if _, ok := field.TagSettingsGet("DEFAULT"); ok {
 					field.HasDefaultValue = true
 				}
 

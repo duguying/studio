@@ -26,8 +26,8 @@ func (r ProtoBuf) Render(w http.ResponseWriter) error {
 		return err
 	}
 
-	_, err = w.Write(bytes)
-	return err
+	w.Write(bytes)
+	return nil
 }
 
 // WriteContentType (ProtoBuf) writes ProtoBuf ContentType.

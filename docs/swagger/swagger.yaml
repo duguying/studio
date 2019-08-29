@@ -1,0 +1,16 @@
+basePath: /api/v1
+host: '{{.Host}}'
+info:
+  contact:
+    email: rainesli@tencent.com
+    name: API Support
+    url: http://sparta.wsd.com/support
+  description: This is a Studio Api server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Studio管理平台API文档
+  version: "1.0"
+paths: {}
+swagger: "2.0"

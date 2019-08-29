@@ -12,8 +12,6 @@ var (
 	json = jsoniter.ConfigCompatibleWithStandardLibrary
 	// Marshal is exported by gin/json package.
 	Marshal = json.Marshal
-	// Unmarshal is exported by gin/json package.
-	Unmarshal = json.Unmarshal
 	// MarshalIndent is exported by gin/json package.
 	MarshalIndent = json.MarshalIndent
 	// NewDecoder is exported by gin/json package.

@@ -7,7 +7,6 @@ import (
 
 var errorMsgPattern = regexp.MustCompile(`\A(\w+): (.+)\z`)
 
-// NewException constructs an Exception using provided Error and Stacktrace
 func NewException(err error, stacktrace *Stacktrace) *Exception {
 	msg := err.Error()
 	ex := &Exception{
@@ -21,7 +20,7 @@ func NewException(err error, stacktrace *Stacktrace) *Exception {
 	return ex
 }
 
-// Exception defines Sentry's spec compliant interface holding Exception information - https://docs.sentry.io/development/sdk-dev/interfaces/exception/
+// https://docs.getsentry.com/hosted/clientdev/interfaces/#failure-interfaces
 type Exception struct {
 	// Required
 	Value string `json:"value"`
@@ -32,10 +31,8 @@ type Exception struct {
 	Stacktrace *Stacktrace `json:"stacktrace,omitempty"`
 }
 
-// Class provides name of implemented Sentry's interface
 func (e *Exception) Class() string { return "exception" }
 
-// Culprit tries to read top-most error message from Exception's stacktrace
 func (e *Exception) Culprit() string {
 	if e.Stacktrace == nil {
 		return ""
@@ -43,11 +40,11 @@ func (e *Exception) Culprit() string {
 	return e.Stacktrace.Culprit()
 }
 
-// Exceptions defines Sentry's spec compliant interface holding Exceptions information - https://docs.sentry.io/development/sdk-dev/interfaces/exception/
+// Exceptions allows for chained errors
+// https://docs.sentry.io/clientdev/interfaces/exception/
 type Exceptions struct {
 	// Required
 	Values []*Exception `json:"values"`
 }
 
-// Class provides name of implemented Sentry's interface
 func (es Exceptions) Class() string { return "exception" }

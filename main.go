@@ -1,6 +1,7 @@
 package main
 
 import (
+	"duguying/studio/docs"
 	"duguying/studio/g"
 	"duguying/studio/modules/configuration"
 	"duguying/studio/modules/ipip"
@@ -19,6 +20,19 @@ var (
 	logDir     string = "log"
 )
 
+// @title Studio管理平台API文档
+// @version 1.0
+// @description This is a Studio Api server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://sparta.wsd.com/support
+// @contact.email rainesli@tencent.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @BasePath /api/v1
 func main() {
 	versionFlag()
 
@@ -39,6 +53,9 @@ func main() {
 
 	// 初始化 database
 	orm.InitDatabase()
+
+	// 初始化 swagger
+	initSwagger()
 
 	// 初始化 gin
 	service.Run()
@@ -79,4 +96,9 @@ func initLogger() {
 func initIPIP() {
 	path := g.Config.Get("ipip", "path", "17monipdb.datx")
 	ipip.InitIPIP(path)
+}
+
+func initSwagger() {
+	listenAddress := g.Config.Get("system", "listen", "127.0.0.1:20192")
+	docs.SwaggerInfo.Host = listenAddress
 }

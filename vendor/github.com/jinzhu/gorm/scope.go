@@ -277,23 +277,6 @@ func (scope *Scope) AddToVars(value interface{}) string {
 	return scope.Dialect().BindVar(len(scope.SQLVars))
 }
 
-// IsCompleteParentheses check if the string has complete parentheses to prevent SQL injection
-func (scope *Scope) IsCompleteParentheses(value string) bool {
-	count := 0
-	for i, _ := range value {
-		if value[i] == 40 { // (
-			count++
-		} else if value[i] == 41 { // )
-			count--
-		}
-		if count < 0 {
-			break
-		}
-		i++
-	}
-	return count == 0
-}
-
 // SelectAttrs return selected attributes
 func (scope *Scope) SelectAttrs() []string {
 	if scope.selectAttrs == nil {
@@ -375,7 +358,7 @@ func (scope *Scope) Raw(sql string) *Scope {
 
 // Exec perform generated SQL
 func (scope *Scope) Exec() *Scope {
-	defer scope.trace(scope.db.nowFunc())
+	defer scope.trace(NowFunc())
 
 	if !scope.HasError() {
 		if result, err := scope.SQLDB().Exec(scope.SQL, scope.SQLVars...); scope.Err(err) == nil {
@@ -419,7 +402,7 @@ func (scope *Scope) InstanceGet(name string) (interface{}, bool) {
 // Begin start a transaction
 func (scope *Scope) Begin() *Scope {
 	if db, ok := scope.SQLDB().(sqlDb); ok {
-		if tx, err := db.Begin(); scope.Err(err) == nil {
+		if tx, err := db.Begin(); err == nil {
 			scope.db.db = interface{}(tx).(SQLCommon)
 			scope.InstanceSet("gorm:started_transaction", true)
 		}
@@ -573,10 +556,6 @@ func (scope *Scope) buildCondition(clause map[string]interface{}, include bool) 
 		}
 
 		if value != "" {
-			if !scope.IsCompleteParentheses(value) {
-				scope.Err(fmt.Errorf("incomplete parentheses found: %v", value))
-				return
-			}
 			if !include {
 				if comparisonRegexp.MatchString(value) {
 					str = fmt.Sprintf("NOT (%v)", value)
@@ -893,7 +872,7 @@ func (scope *Scope) callCallbacks(funcs []*func(s *Scope)) *Scope {
 	return scope
 }
 
-func convertInterfaceToMap(values interface{}, withIgnoredField bool, db *DB) map[string]interface{} {
+func convertInterfaceToMap(values interface{}, withIgnoredField bool) map[string]interface{} {
 	var attrs = map[string]interface{}{}
 
 	switch value := values.(type) {
@@ -901,7 +880,7 @@ func convertInterfaceToMap(values interface{}, withIgnoredField bool, db *DB) ma
 		return value
 	case []interface{}:
 		for _, v := range value {
-			for key, value := range convertInterfaceToMap(v, withIgnoredField, db) {
+			for key, value := range convertInterfaceToMap(v, withIgnoredField) {
 				attrs[key] = value
 			}
 		}
@@ -914,7 +893,7 @@ func convertInterfaceToMap(values interface{}, withIgnoredField bool, db *DB) ma
 				attrs[ToColumnName(key.Interface().(string))] = reflectValue.MapIndex(key).Interface()
 			}
 		default:
-			for _, field := range (&Scope{Value: values, db: db}).Fields() {
+			for _, field := range (&Scope{Value: values}).Fields() {
 				if !field.IsBlank && (withIgnoredField || !field.IsIgnored) {
 					attrs[field.DBName] = field.Field.Interface()
 				}
@@ -926,12 +905,12 @@ func convertInterfaceToMap(values interface{}, withIgnoredField bool, db *DB) ma
 
 func (scope *Scope) updatedAttrsWithValues(value interface{}) (results map[string]interface{}, hasUpdate bool) {
 	if scope.IndirectValue().Kind() != reflect.Struct {
-		return convertInterfaceToMap(value, false, scope.db), true
+		return convertInterfaceToMap(value, false), true
 	}
 
 	results = map[string]interface{}{}
 
-	for key, value := range convertInterfaceToMap(value, true, scope.db) {
+	for key, value := range convertInterfaceToMap(value, true) {
 		if field, ok := scope.FieldByName(key); ok && scope.changeableField(field) {
 			if _, ok := value.(*expr); ok {
 				hasUpdate = true
@@ -953,7 +932,7 @@ func (scope *Scope) updatedAttrsWithValues(value interface{}) (results map[strin
 }
 
 func (scope *Scope) row() *sql.Row {
-	defer scope.trace(scope.db.nowFunc())
+	defer scope.trace(NowFunc())
 
 	result := &RowQueryResult{}
 	scope.InstanceSet("row_query_result", result)
@@ -963,7 +942,7 @@ func (scope *Scope) row() *sql.Row {
 }
 
 func (scope *Scope) rows() (*sql.Rows, error) {
-	defer scope.trace(scope.db.nowFunc())
+	defer scope.trace(NowFunc())
 
 	result := &RowsQueryResult{}
 	scope.InstanceSet("row_query_result", result)
@@ -1003,10 +982,6 @@ func (scope *Scope) pluck(column string, value interface{}) *Scope {
 	if dest.Kind() != reflect.Slice {
 		scope.Err(fmt.Errorf("results should be a slice, not %s", dest.Kind()))
 		return scope
-	}
-
-	if dest.Len() > 0 {
-		dest.Set(reflect.Zero(dest.Type()))
 	}
 
 	if query, ok := scope.Search.selects["query"]; !ok || !scope.isQueryForColumn(query, column) {
@@ -1215,7 +1190,7 @@ func (scope *Scope) createTable() *Scope {
 }
 
 func (scope *Scope) dropTable() *Scope {
-	scope.Raw(fmt.Sprintf("DROP TABLE %v", scope.QuotedTableName())).Exec()
+	scope.Raw(fmt.Sprintf("DROP TABLE %v%s", scope.QuotedTableName(), scope.getTableOptions())).Exec()
 	return scope
 }
 

@@ -13,6 +13,7 @@
 
 Gin is a web framework written in Go (Golang). It features a martini-like API with much better performance, up to 40 times faster thanks to [httprouter](https://github.com/julienschmidt/httprouter). If you need performance and good productivity, you will love Gin.
 
+![Gin console logger](https://gin-gonic.github.io/gin/other/console.png)
 
 ## Contents
 
@@ -34,13 +35,10 @@ Gin is a web framework written in Go (Golang). It features a martini-like API wi
     - [Blank Gin without middleware by default](#blank-gin-without-middleware-by-default)
     - [Using middleware](#using-middleware)
     - [How to write log file](#how-to-write-log-file)
-    - [Custom Log Format](#custom-log-format)
     - [Model binding and validation](#model-binding-and-validation)
     - [Custom Validators](#custom-validators)
     - [Only Bind Query String](#only-bind-query-string)
     - [Bind Query String or Post Data](#bind-query-string-or-post-data)
-    - [Bind Uri](#bind-uri)
-    - [Bind Header](#bind-header)
     - [Bind HTML checkboxes](#bind-html-checkboxes)
     - [Multipart/Urlencoded binding](#multiparturlencoded-binding)
     - [XML, JSON, YAML and ProtoBuf rendering](#xml-json-yaml-and-protobuf-rendering)
@@ -70,7 +68,7 @@ Gin is a web framework written in Go (Golang). It features a martini-like API wi
 
 To install Gin package, you need to install Go and set your Go workspace first.
 
-1. The first need [Go](https://golang.org/) installed (**version 1.10+ is required**), then you can use the below Go command to install Gin.
+1. Download and install it:
 
 ```sh
 $ go get -u github.com/gin-gonic/gin
@@ -111,7 +109,7 @@ $ govendor fetch github.com/gin-gonic/gin@v1.3
 4. Copy a starting template inside your project
 
 ```sh
-$ curl https://raw.githubusercontent.com/gin-gonic/examples/master/basic/main.go > main.go
+$ curl https://raw.githubusercontent.com/gin-gonic/gin/master/examples/basic/main.go > main.go
 ```
 
 5. Run your project
@@ -119,6 +117,10 @@ $ curl https://raw.githubusercontent.com/gin-gonic/examples/master/basic/main.go
 ```sh
 $ go run main.go
 ```
+
+## Prerequisite
+
+Now Gin requires Go 1.6 or later and Go 1.7 will be required soon.
 
 ## Quick start
  
@@ -207,12 +209,13 @@ $ go build -tags=jsoniter .
 
 ## API Examples
 
-You can find a number of ready-to-run examples at [Gin examples repository](https://github.com/gin-gonic/examples).
-
 ### Using GET, POST, PUT, PATCH, DELETE and OPTIONS
 
 ```go
 func main() {
+	// Disable Console Color
+	// gin.DisableConsoleColor()
+
 	// Creates a gin router with default middleware:
 	// logger and recovery (crash-free) middleware
 	router := gin.Default()
@@ -251,11 +254,6 @@ func main() {
 		action := c.Param("action")
 		message := name + " is " + action
 		c.String(http.StatusOK, message)
-	})
-
-	// For each matched request Context will hold the route definition
-	router.POST("/user/:name/*action", func(c *gin.Context) {
-		c.FullPath() == "/user/:name/*action" // true
 	})
 
 	router.Run(":8080")
@@ -362,11 +360,7 @@ ids: map[b:hello a:1234], names: map[second:tianou first:thinkerou]
 
 #### Single file
 
-References issue [#774](https://github.com/gin-gonic/gin/issues/774) and detail [example code](https://github.com/gin-gonic/examples/tree/master/upload-file/single).
-
-`file.Filename` **SHOULD NOT** be trusted. See [`Content-Disposition` on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#Directives) and [#1693](https://github.com/gin-gonic/gin/issues/1693)
-
-> The filename is always optional and must not be used blindly by the application: path information should be stripped, and conversion to the server file system rules should be done.
+References issue [#774](https://github.com/gin-gonic/gin/issues/774) and detail [example code](examples/upload-file/single).
 
 ```go
 func main() {
@@ -397,7 +391,7 @@ curl -X POST http://localhost:8080/upload \
 
 #### Multiple files
 
-See the detail [example code](https://github.com/gin-gonic/examples/tree/master/upload-file/multiple).
+See the detail [example code](examples/upload-file/multiple).
 
 ```go
 func main() {
@@ -533,88 +527,9 @@ func main() {
 }
 ```
 
-### Custom Log Format
-```go
-func main() {
-	router := gin.New()
-
-	// LoggerWithFormatter middleware will write the logs to gin.DefaultWriter
-	// By default gin.DefaultWriter = os.Stdout
-	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-
-		// your custom format
-		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
-				param.ClientIP,
-				param.TimeStamp.Format(time.RFC1123),
-				param.Method,
-				param.Path,
-				param.Request.Proto,
-				param.StatusCode,
-				param.Latency,
-				param.Request.UserAgent(),
-				param.ErrorMessage,
-		)
-	}))
-	router.Use(gin.Recovery())
-
-	router.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
-
-	router.Run(":8080")
-}
-```
-
-**Sample Output**
-```
-::1 - [Fri, 07 Dec 2018 17:04:38 JST] "GET /ping HTTP/1.1 200 122.767µs "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36" "
-```
-
-### Controlling Log output coloring 
-
-By default, logs output on console should be colorized depending on the detected TTY.
-
-Never colorize logs: 
-
-```go
-func main() {
-    // Disable log's color
-    gin.DisableConsoleColor()
-    
-    // Creates a gin router with default middleware:
-    // logger and recovery (crash-free) middleware
-    router := gin.Default()
-    
-    router.GET("/ping", func(c *gin.Context) {
-        c.String(200, "pong")
-    })
-    
-    router.Run(":8080")
-}
-```
-
-Always colorize logs: 
-
-```go
-func main() {
-    // Force log's color
-    gin.ForceConsoleColor()
-    
-    // Creates a gin router with default middleware:
-    // logger and recovery (crash-free) middleware
-    router := gin.Default()
-    
-    router.GET("/ping", func(c *gin.Context) {
-        c.String(200, "pong")
-    })
-    
-    router.Run(":8080")
-}
-```
-
 ### Model binding and validation
 
-To bind a request body into a type, use model binding. We currently support binding of JSON, XML, YAML and standard form values (foo=bar&boo=baz).
+To bind a request body into a type, use model binding. We currently support binding of JSON, XML and standard form values (foo=bar&boo=baz).
 
 Gin uses [**go-playground/validator.v8**](https://github.com/go-playground/validator) for validation. Check the full docs on tags usage [here](http://godoc.org/gopkg.in/go-playground/validator.v8#hdr-Baked_In_Validators_and_Tags).
 
@@ -622,10 +537,10 @@ Note that you need to set the corresponding binding tag on all fields you want t
 
 Also, Gin provides two sets of methods for binding:
 - **Type** - Must bind
-  - **Methods** - `Bind`, `BindJSON`, `BindXML`, `BindQuery`, `BindYAML`
+  - **Methods** - `Bind`, `BindJSON`, `BindXML`, `BindQuery`
   - **Behavior** - These methods use `MustBindWith` under the hood. If there is a binding error, the request is aborted with `c.AbortWithError(400, err).SetType(ErrorTypeBind)`. This sets the response status code to 400 and the `Content-Type` header is set to `text/plain; charset=utf-8`. Note that if you try to set the response code after this, it will result in a warning `[GIN-debug] [WARNING] Headers were already written. Wanted to override status code 400 with 422`. If you wish to have greater control over the behavior, consider using the `ShouldBind` equivalent method.
 - **Type** - Should bind
-  - **Methods** - `ShouldBind`, `ShouldBindJSON`, `ShouldBindXML`, `ShouldBindQuery`, `ShouldBindYAML`
+  - **Methods** - `ShouldBind`, `ShouldBindJSON`, `ShouldBindXML`, `ShouldBindQuery`
   - **Behavior** - These methods use `ShouldBindWith` under the hood. If there is a binding error, the error is returned and it is the developer's responsibility to handle the request and error appropriately.
 
 When using the Bind-method, Gin tries to infer the binder depending on the Content-Type header. If you are sure what you are binding, you can use `MustBindWith` or `ShouldBindWith`.
@@ -662,7 +577,7 @@ func main() {
 	//	<?xml version="1.0" encoding="UTF-8"?>
 	//	<root>
 	//		<user>user</user>
-	//		<password>123</password>
+	//		<password>123</user>
 	//	</root>)
 	router.POST("/loginXML", func(c *gin.Context) {
 		var xml Login
@@ -729,8 +644,9 @@ When running the above example using the above the `curl` command, it returns er
 
 ### Custom Validators
 
-It is also possible to register custom validators. See the [example code](https://github.com/gin-gonic/examples/tree/master/custom-validation/server.go).
+It is also possible to register custom validators. See the [example code](examples/custom-validation/server.go).
 
+[embedmd]:# (examples/custom-validation/server.go go)
 ```go
 package main
 
@@ -756,7 +672,7 @@ func bookableDate(
 ) bool {
 	if date, ok := field.Interface().(time.Time); ok {
 		today := time.Now()
-		if today.After(date) {
+		if today.Year() > date.Year() || today.YearDay() > date.YearDay() {
 			return false
 		}
 	}
@@ -793,7 +709,7 @@ $ curl "localhost:8085/bookable?check_in=2018-03-08&check_out=2018-03-09"
 ```
 
 [Struct level validations](https://github.com/go-playground/validator/releases/tag/v8.7) can also be registered this way.
-See the [struct-lvl-validation example](https://github.com/gin-gonic/examples/tree/master/struct-lvl-validations) to learn more.
+See the [struct-lvl-validation example](examples/struct-lvl-validations) to learn more.
 
 ### Only Bind Query String
 
@@ -846,11 +762,9 @@ import (
 )
 
 type Person struct {
-        Name       string    `form:"name"`
-        Address    string    `form:"address"`
-        Birthday   time.Time `form:"birthday" time_format:"2006-01-02" time_utc:"1"`
-        CreateTime time.Time `form:"createTime" time_format:"unixNano"`
-        UnixTime   time.Time `form:"unixTime" time_format:"unix"`
+	Name     string    `form:"name"`
+	Address  string    `form:"address"`
+	Birthday time.Time `form:"birthday" time_format:"2006-01-02" time_utc:"1"`
 }
 
 func main() {
@@ -864,13 +778,11 @@ func startPage(c *gin.Context) {
 	// If `GET`, only `Form` binding engine (`query`) used.
 	// If `POST`, first checks the `content-type` for `JSON` or `XML`, then uses `Form` (`form-data`).
 	// See more at https://github.com/gin-gonic/gin/blob/master/binding/binding.go#L48
-        if c.ShouldBind(&person) == nil {
-                log.Println(person.Name)
-                log.Println(person.Address)
-                log.Println(person.Birthday)
-                log.Println(person.CreateTime)
-                log.Println(person.UnixTime)
-        }
+	if c.ShouldBind(&person) == nil {
+		log.Println(person.Name)
+		log.Println(person.Address)
+		log.Println(person.Birthday)
+	}
 
 	c.String(200, "Success")
 }
@@ -878,78 +790,7 @@ func startPage(c *gin.Context) {
 
 Test it with:
 ```sh
-$ curl -X GET "localhost:8085/testing?name=appleboy&address=xyz&birthday=1992-03-15&createTime=1562400033000000123&unixTime=1562400033"
-```
-
-### Bind Uri
-
-See the [detail information](https://github.com/gin-gonic/gin/issues/846).
-
-```go
-package main
-
-import "github.com/gin-gonic/gin"
-
-type Person struct {
-	ID string `uri:"id" binding:"required,uuid"`
-	Name string `uri:"name" binding:"required"`
-}
-
-func main() {
-	route := gin.Default()
-	route.GET("/:name/:id", func(c *gin.Context) {
-		var person Person
-		if err := c.ShouldBindUri(&person); err != nil {
-			c.JSON(400, gin.H{"msg": err})
-			return
-		}
-		c.JSON(200, gin.H{"name": person.Name, "uuid": person.ID})
-	})
-	route.Run(":8088")
-}
-```
-
-Test it with:
-```sh
-$ curl -v localhost:8088/thinkerou/987fbc97-4bed-5078-9f07-9141ba07c9f3
-$ curl -v localhost:8088/thinkerou/not-uuid
-```
-
-### Bind Header
-
-```go
-package main
-
-import (
-	"fmt"
-	"github.com/gin-gonic/gin"
-)
-
-type testHeader struct {
-	Rate   int    `header:"Rate"`
-	Domain string `header:"Domain"`
-}
-
-func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		h := testHeader{}
-
-		if err := c.ShouldBindHeader(&h); err != nil {
-			c.JSON(200, err)
-		}
-
-		fmt.Printf("%#v\n", h)
-		c.JSON(200, gin.H{"Rate": h.Rate, "Domain": h.Domain})
-	})
-
-	r.Run()
-
-// client
-// curl -H "rate:300" -H "domain:music" 127.0.0.1:8080/
-// output
-// {"Domain":"music","Rate":300}
-}
+$ curl -X GET "localhost:8085/testing?name=appleboy&address=xyz&birthday=1992-03-15"
 ```
 
 ### Bind HTML checkboxes
@@ -983,12 +824,12 @@ form.html
 <form action="/" method="POST">
     <p>Check some colors</p>
     <label for="red">Red</label>
-    <input type="checkbox" name="colors[]" value="red" id="red">
+    <input type="checkbox" name="colors[]" value="red" id="red" />
     <label for="green">Green</label>
-    <input type="checkbox" name="colors[]" value="green" id="green">
+    <input type="checkbox" name="colors[]" value="green" id="green" />
     <label for="blue">Blue</label>
-    <input type="checkbox" name="colors[]" value="blue" id="blue">
-    <input type="submit">
+    <input type="checkbox" name="colors[]" value="blue" id="blue" />
+    <input type="submit" />
 </form>
 ```
 
@@ -1001,36 +842,32 @@ result:
 ### Multipart/Urlencoded binding
 
 ```go
-type ProfileForm struct {
-	Name   string                `form:"name" binding:"required"`
-	Avatar *multipart.FileHeader `form:"avatar" binding:"required"`
+package main
 
-	// or for multiple files
-	// Avatars []*multipart.FileHeader `form:"avatar" binding:"required"`
+import (
+	"github.com/gin-gonic/gin"
+)
+
+type LoginForm struct {
+	User     string `form:"user" binding:"required"`
+	Password string `form:"password" binding:"required"`
 }
 
 func main() {
 	router := gin.Default()
-	router.POST("/profile", func(c *gin.Context) {
+	router.POST("/login", func(c *gin.Context) {
 		// you can bind multipart form with explicit binding declaration:
 		// c.ShouldBindWith(&form, binding.Form)
 		// or you can simply use autobinding with ShouldBind method:
-		var form ProfileForm
+		var form LoginForm
 		// in this case proper binding will be automatically selected
-		if err := c.ShouldBind(&form); err != nil {
-			c.String(http.StatusBadRequest, "bad request")
-			return
+		if c.ShouldBind(&form) == nil {
+			if form.User == "user" && form.Password == "password" {
+				c.JSON(200, gin.H{"status": "you are logged in"})
+			} else {
+				c.JSON(401, gin.H{"status": "unauthorized"})
+			}
 		}
-
-		err := c.SaveUploadedFile(form.Avatar, form.Avatar.Filename)
-		if err != nil {
-			c.String(http.StatusInternalServerError, "unknown error")
-			return
-		}
-
-		// db.Save(&form)
-
-		c.String(http.StatusOK, "ok")
 	})
 	router.Run(":8080")
 }
@@ -1038,7 +875,7 @@ func main() {
 
 Test it with:
 ```sh
-$ curl -X POST -v --form name=user --form "avatar=@./avatar.png" http://localhost:8080/profile
+$ curl -v --form user=user --form password=password http://localhost:8080/login
 ```
 
 ### XML, JSON, YAML and ProtoBuf rendering
@@ -1123,8 +960,8 @@ Using JSONP to request data from a server  in a different domain. Add callback t
 func main() {
 	r := gin.Default()
 
-	r.GET("/JSONP", func(c *gin.Context) {
-		data := gin.H{
+	r.GET("/JSONP?callback=x", func(c *gin.Context) {
+		data := map[string]interface{}{
 			"foo": "bar",
 		}
 		
@@ -1135,9 +972,6 @@ func main() {
 
 	// Listen and serve on 0.0.0.0:8080
 	r.Run(":8080")
-
-        // client
-        // curl http://127.0.0.1:8080/JSONP?callback=x
 }
 ```
 
@@ -1150,7 +984,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/someJSON", func(c *gin.Context) {
-		data := gin.H{
+		data := map[string]interface{}{
 			"lang": "GO语言",
 			"tag":  "<br>",
 		}
@@ -1188,7 +1022,7 @@ func main() {
 	})
 	
 	// listen and serve on 0.0.0.0:8080
-	r.Run(":8080")
+	r.Run(":8080)
 }
 ```
 
@@ -1326,12 +1160,12 @@ You may use custom delims
 ```go
 	r := gin.Default()
 	r.Delims("{[{", "}]}")
-	r.LoadHTMLGlob("/path/to/templates")
+	r.LoadHTMLGlob("/path/to/templates"))
 ```
 
 #### Custom Template Funcs
 
-See the detail [example code](https://github.com/gin-gonic/examples/tree/master/template).
+See the detail [example code](examples/template).
 
 main.go
 
@@ -1359,7 +1193,7 @@ func main() {
     router.LoadHTMLFiles("./testdata/template/raw.tmpl")
 
     router.GET("/raw", func(c *gin.Context) {
-        c.HTML(http.StatusOK, "raw.tmpl", gin.H{
+        c.HTML(http.StatusOK, "raw.tmpl", map[string]interface{}{
             "now": time.Date(2017, 07, 01, 0, 0, 0, 0, time.UTC),
         })
     })
@@ -1551,6 +1385,7 @@ func main() {
 
 example for 1-line LetsEncrypt HTTPS servers.
 
+[embedmd]:# (examples/auto-tls/example1/main.go go)
 ```go
 package main
 
@@ -1575,6 +1410,7 @@ func main() {
 
 example for custom autocert manager.
 
+[embedmd]:# (examples/auto-tls/example2/main.go go)
 ```go
 package main
 
@@ -1608,6 +1444,7 @@ func main() {
 
 See the [question](https://github.com/gin-gonic/gin/issues/346) and try the following example:
 
+[embedmd]:# (examples/multiple-service/main.go go)
 ```go
 package main
 
@@ -1705,8 +1542,9 @@ An alternative to endless:
 * [graceful](https://github.com/tylerb/graceful): Graceful is a Go package enabling graceful shutdown of an http.Handler server.
 * [grace](https://github.com/facebookgo/grace): Graceful restart & zero downtime deploy for Go servers.
 
-If you are using Go 1.8, you may not need to use this library! Consider using http.Server's built-in [Shutdown()](https://golang.org/pkg/net/http/#Server.Shutdown) method for graceful shutdowns. See the full [graceful-shutdown](https://github.com/gin-gonic/examples/tree/master/graceful-shutdown) example with gin.
+If you are using Go 1.8, you may not need to use this library! Consider using http.Server's built-in [Shutdown()](https://golang.org/pkg/net/http/#Server.Shutdown) method for graceful shutdowns. See the full [graceful-shutdown](./examples/graceful-shutdown) example with gin.
 
+[embedmd]:# (examples/graceful-shutdown/graceful-shutdown/server.go go)
 ```go
 // +build go1.8
 
@@ -1718,7 +1556,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -1746,10 +1583,7 @@ func main() {
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.
 	quit := make(chan os.Signal)
-	// kill (no param) default send syscall.SIGTERM
-	// kill -2 is syscall.SIGINT
-	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(quit, os.Interrupt)
 	<-quit
 	log.Println("Shutdown Server ...")
 
@@ -1757,11 +1591,6 @@ func main() {
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown:", err)
-	}
-	// catching ctx.Done(). timeout of 5 seconds.
-	select {
-	case <-ctx.Done():
-		log.Println("timeout of 5 seconds.")
 	}
 	log.Println("Server exiting")
 }
@@ -1809,7 +1638,7 @@ func loadTemplate() (*template.Template, error) {
 }
 ```
 
-See a complete example in the `https://github.com/gin-gonic/examples/tree/master/assets-in-binary` directory.
+See a complete example in the `examples/assets-in-binary` directory.
 
 ### Bind form-data request with custom struct
 
@@ -1885,6 +1714,24 @@ $ curl "http://localhost:8080/getd?field_x=hello&field_d=world"
 {"d":"world","x":{"FieldX":"hello"}}
 ```
 
+**NOTE**: NOT support the follow style struct:
+
+```go
+type StructX struct {
+    X struct {} `form:"name_x"` // HERE have form
+}
+
+type StructY struct {
+    Y StructX `form:"name_y"` // HERE have form
+}
+
+type StructZ struct {
+    Z *StructZ `form:"name_z"` // HERE have form
+}
+```
+
+In a word, only support nested custom struct which have no `form` now.
+
 ### Try to bind body into different structs
 
 The normal methods for binding request body consumes `c.Request.Body` and they
@@ -1947,6 +1794,7 @@ performance (See [#1341](https://github.com/gin-gonic/gin/pull/1341)).
 
 http.Pusher is supported only **go1.8+**. See the [golang blog](https://blog.golang.org/h2push) for detail information.
 
+[embedmd]:# (examples/http-pusher/main.go go)
 ```go
 package main
 
@@ -2113,9 +1961,7 @@ func TestPingRoute(t *testing.T) {
 
 Awesome project lists using [Gin](https://github.com/gin-gonic/gin) web framework.
 
+* [drone](https://github.com/drone/drone): Drone is a Continuous Delivery platform built on Docker, written in Go.
 * [gorush](https://github.com/appleboy/gorush): A push notification server written in Go.
 * [fnproject](https://github.com/fnproject/fn): The container native, cloud agnostic serverless platform.
 * [photoprism](https://github.com/photoprism/photoprism): Personal photo management powered by Go and Google TensorFlow.
-* [krakend](https://github.com/devopsfaith/krakend): Ultra performant API Gateway with middlewares.
-* [picfit](https://github.com/thoas/picfit): An image resizing server written in Go.
-* [brigade](https://github.com/brigadecore/brigade): Event-based Scripting for Kubernetes.

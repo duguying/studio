@@ -15,11 +15,16 @@ import (
 	"strconv"
 )
 
+// @Router /list [get]
+// @Tags 文章
+// @Description 文章列表
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.CommonCreateResponse
 func ListArticleWithContent(c *gin.Context) {
-	pageStr := c.Query("page")
-	page, err := strconv.ParseUint(pageStr, 10, 64)
+	pager := models.CommonPagerRequest{}
+	err := c.BindQuery(&pager)
 	if err != nil {
-		log.Println("page 解析错误, err:", err)
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
 			"err": err.Error(),
@@ -27,18 +32,7 @@ func ListArticleWithContent(c *gin.Context) {
 		return
 	}
 
-	pageSizeStr := c.Query("page_size")
-	pageSize, err := strconv.ParseUint(pageSizeStr, 10, 64)
-	if err != nil {
-		log.Println("page_size 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
-	}
-
-	total, list, err := db.PageArticle(uint(page), uint(pageSize))
+	total, list, err := db.PageArticle(pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, gin.H{
@@ -248,6 +242,11 @@ func GetArticleInfo(c *gin.Context) {
 	return
 }
 
+// @Router /admin/article/add [post]
+// @Tags 文章
+// @Description 创建文章
+// @Param area body models.Article true "文章信息"
+// @Success 200 {object} models.CommonCreateResponse
 func AddArticle(c *gin.Context) {
 	aar := &models.Article{}
 	err := c.BindJSON(aar)

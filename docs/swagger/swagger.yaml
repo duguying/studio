@@ -1,4 +1,35 @@
 basePath: /api/v1
+definitions:
+  models.Article:
+    properties:
+      abstract:
+        type: string
+      content:
+        type: string
+      draft:
+        type: boolean
+      id:
+        type: integer
+      keywords:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      type:
+        type: integer
+      uri:
+        type: string
+    type: object
+  models.CommonCreateResponse:
+    properties:
+      id:
+        type: integer
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
 host: '{{.Host}}'
 info:
   contact:
@@ -12,5 +43,46 @@ info:
   termsOfService: http://swagger.io/terms/
   title: Studio管理平台API文档
   version: "1.0"
-paths: {}
+paths:
+  /admin/article/add:
+    post:
+      description: 创建文章
+      parameters:
+      - description: 文章信息
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonCreateResponse'
+            type: object
+      tags:
+      - 文章
+  /list:
+    get:
+      description: 文章列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页数
+        in: query
+        name: size
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonCreateResponse'
+            type: object
+      tags:
+      - 文章
 swagger: "2.0"

@@ -58,7 +58,7 @@ func main() {
 	initSwagger()
 
 	// 初始化 gin
-	service.Run()
+	service.Run(logDir)
 }
 
 func versionFlag() {

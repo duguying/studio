@@ -111,11 +111,11 @@ func Run(logDir string) {
 	router.Static("/static/upload", g.Config.Get("upload", "dir", "upload"))
 
 	// print http port
-	port := g.Config.GetInt64("system", "port", 9080)
-	fmt.Printf("port: %d\n", port)
+	addr := g.Config.Get("system", "listen", "127.0.0.1:9080")
+	fmt.Printf("listen: %s\n", addr)
 
 	pprof.Register(router)
-	err := router.Run(fmt.Sprintf(":%d", port))
+	err := router.Run(addr)
 	if err != nil {
 		fmt.Println("run gin server failed, err:" + err.Error())
 	}

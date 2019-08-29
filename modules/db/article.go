@@ -7,6 +7,7 @@ package db
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/dbmodels"
+	"duguying/studio/service/models"
 	"github.com/gogather/json"
 	"strconv"
 	"strings"
@@ -138,31 +139,37 @@ func GetArticleById(aid uint) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
-func AddArticle(title string, uri string, keywords []string, abstract string, artType int, content string, author string, authorId uint, status int) (art *dbmodels.Article, err error) {
-	article := &dbmodels.Article{
-		Title:       title,
-		Uri:         uri,
-		Keywords:    strings.Join(keywords, ","),
-		Abstract:    abstract,
-		Type:        artType,
-		Content:     content,
-		Author:      author,
-		AuthorId:    authorId,
-		Status:      status,
-		PublishTime: time.Now(),
-		CreatedAt:   time.Now(),
+func AddArticle(aar *models.Article, author string, authorId uint) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{
+		Title:     aar.Title,
+		Uri:       aar.Uri,
+		Keywords:  strings.Join(aar.Keywords, ","),
+		Abstract:  aar.Abstract,
+		Type:      aar.Type,
+		Content:   aar.Content,
+		Author:    author,
+		AuthorId:  authorId,
+		Status:    dbmodels.ArtStatus_Draft,
+		CreatedAt: time.Now(),
 	}
-	errs := g.Db.Table("articles").Create(article).GetErrors()
+
+	if !aar.Draft {
+		art.Status = dbmodels.ArtStatus_Publish
+		art.PublishTime = time.Now()
+	}
+
+	errs := g.Db.Model(dbmodels.Article{}).Create(art).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
 	}
-	return article, nil
+	return art, nil
 }
 
 func PublishArticle(aid uint, uid uint) (err error) {
-	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumns(dbmodels.Article{
+	errs := g.Db.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
 		Status:      dbmodels.ArtStatus_Publish,
 		PublishTime: time.Now(),
+		UpdatedBy:   uid,
 	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return errs[0]
@@ -171,9 +178,9 @@ func PublishArticle(aid uint, uid uint) (err error) {
 }
 
 func DeleteArticle(aid uint, uid uint) (err error) {
-	errs := g.Db.Table("articles").Where("id=?", aid).UpdateColumn(dbmodels.Article{
-		Status: dbmodels.ArtStatus_Delete,
-	}).GetErrors()
+	errs := g.Db.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumn(dbmodels.Article{
+		UpdatedBy: uid,
+	}).Delete(&dbmodels.Article{}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return errs[0]
 	}

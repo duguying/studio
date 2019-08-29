@@ -14,7 +14,6 @@ import (
 const (
 	ArtStatus_Draft   = 0
 	ArtStatus_Publish = 1
-	ArtStatus_Delete  = 2
 )
 
 const (
@@ -23,19 +22,22 @@ const (
 )
 
 type Article struct {
-	Id          uint      `json:"id"`
-	Title       string    `json:"title"`
-	Uri         string    `json:"uri"`
-	Keywords    string    `json:"keywords"`
-	Abstract    string    `json:"abstract"`
-	Type        int       `json:"type" gorm:"default:0"`
-	Content     string    `json:"content" sql:"type:longtext"`
-	Author      string    `json:"author"`
-	AuthorId    uint      `json:"author_id"`
-	Count       uint      `json:"count"`
-	Status      int       `json:"status"`
-	PublishTime time.Time `json:"publish_time"`
-	CreatedAt   time.Time `json:"created_at"`
+	Id          uint       `json:"id"`
+	Title       string     `json:"title"`
+	Uri         string     `json:"uri"`
+	Keywords    string     `json:"keywords"`
+	Abstract    string     `json:"abstract"`
+	Type        int        `json:"type" gorm:"default:0"`
+	Content     string     `json:"content" sql:"type:longtext"`
+	Author      string     `json:"author"`
+	AuthorId    uint       `json:"author_id"`
+	Count       uint       `json:"count"`
+	Status      int        `json:"status"`
+	PublishTime time.Time  `json:"publish_time"`
+	UpdatedBy   uint       `json:"updated_by"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	CreatedAt   time.Time  `json:"created_at"`
+	DeletedAt   *time.Time `json:"deleted_at"`
 }
 
 func (a *Article) String() string {

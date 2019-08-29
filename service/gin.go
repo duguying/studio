@@ -60,7 +60,7 @@ func Run() {
 		}
 
 		// auth require
-		auth := apiV1.Group("", action.SessionValidate)
+		auth := apiV1.Group("/admin", action.SessionValidate)
 		{
 			auth.GET("/user_info", action.UserInfo)      // 用户信息
 			auth.POST("/user_logout", action.UserLogout) // 用户登出
@@ -71,6 +71,7 @@ func Run() {
 			auth.POST("/article/add", action.AddArticle)         // 添加文章
 			auth.POST("/article/publish", action.PublishArticle) // 发布草稿
 			auth.POST("/article/delete", action.DeleteArticle)   // 删除文章
+			auth.GET("/article/list", action.ListArticleTitle)
 
 			auth.GET("/2faqr", action.QrGoogleAuth) // 获取2FA二维码
 		}

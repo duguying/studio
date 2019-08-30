@@ -87,6 +87,13 @@ definitions:
       total:
         type: integer
     type: object
+  models.ArticlePublishRequest:
+    properties:
+      id:
+        type: integer
+      publish:
+        type: boolean
+    type: object
   models.ArticleTitle:
     properties:
       author:
@@ -124,6 +131,13 @@ definitions:
       ok:
         type: boolean
     type: object
+  models.CommonResponse:
+    properties:
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
 host: '{{.Host}}'
 info:
   contact:
@@ -138,13 +152,29 @@ info:
   title: Studio管理平台API文档
   version: "1.0"
 paths:
-  /admin/article/add:
+  /admin/article:
+    delete:
+      description: 删除文章
+      parameters:
+      - description: 文章ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonResponse'
+            type: object
+      tags:
+      - 文章
     post:
       description: 创建文章
       parameters:
       - description: 文章信息
         in: body
-        name: area
+        name: article
         required: true
         schema:
           $ref: '#/definitions/models.Article'
@@ -154,6 +184,25 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.CommonCreateResponse'
+            type: object
+      tags:
+      - 文章
+  /admin/article/publish:
+    put:
+      description: 发布文章
+      parameters:
+      - description: 文章信息
+        in: body
+        name: publish
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArticlePublishRequest'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonResponse'
             type: object
       tags:
       - 文章

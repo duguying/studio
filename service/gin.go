@@ -73,9 +73,9 @@ func Run(logDir string) {
 			auth.POST("/upload", action.UploadFile)      // 上传文件
 			auth.Any("/xterm", action.ConnectXTerm)      // 连接xterm
 
-			auth.POST("/article/add", action.AddArticle)         // 添加文章
-			auth.POST("/article/publish", action.PublishArticle) // 发布草稿
-			auth.POST("/article/delete", action.DeleteArticle)   // 删除文章
+			auth.POST("/article", action.AddArticle)            // 添加文章
+			auth.PUT("/article/publish", action.PublishArticle) // 发布草稿
+			auth.DELETE("/article", action.DeleteArticle)       // 删除文章
 			auth.GET("/article/list", action.ListArticleTitle)
 
 			auth.GET("/2faqr", action.QrGoogleAuth) // 获取2FA二维码

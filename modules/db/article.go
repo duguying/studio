@@ -138,9 +138,14 @@ func AddArticle(aar *models.Article, author string, authorId uint) (art *dbmodel
 	return art, nil
 }
 
-func PublishArticle(aid uint, uid uint) (err error) {
+func PublishArticle(aid uint, publish bool, uid uint) (err error) {
+	status := dbmodels.ArtStatus_Publish
+	if !publish {
+		status = dbmodels.ArtStatus_Draft
+	}
+
 	errs := g.Db.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
-		Status:      dbmodels.ArtStatus_Publish,
+		Status:      status,
 		PublishTime: time.Now(),
 		UpdatedBy:   uid,
 	}).GetErrors()

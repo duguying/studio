@@ -30,3 +30,8 @@ type ArticleUriGetterRequest struct {
 	Uri string `json:"uri" form:"uri"`
 	Id  uint   `json:"id" form:"id"`
 }
+
+type ArticlePublishRequest struct {
+	Id      uint `json:"id" form:"id"`
+	Publish bool `json:"publish" form:"publish"`
+}

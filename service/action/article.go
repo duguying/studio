@@ -6,7 +6,6 @@ package action
 
 import (
 	"duguying/studio/modules/db"
-	"duguying/studio/modules/dbmodels"
 	"duguying/studio/service/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -233,10 +232,10 @@ func GetArticle(c *gin.Context) {
 	return
 }
 
-// @Router /admin/article/add [post]
+// @Router /admin/article [post]
 // @Tags 文章
 // @Description 创建文章
-// @Param area body models.Article true "文章信息"
+// @Param article body models.Article true "文章信息"
 // @Success 200 {object} models.CommonCreateResponse
 func AddArticle(c *gin.Context) {
 	aar := &models.Article{}
@@ -275,9 +274,14 @@ func AddArticle(c *gin.Context) {
 	}
 }
 
+// @Router /admin/article/publish [put]
+// @Tags 文章
+// @Description 发布文章
+// @Param publish body models.ArticlePublishRequest true "文章信息"
+// @Success 200 {object} models.CommonResponse
 func PublishArticle(c *gin.Context) {
-	getter := models.CommonGetterRequest{}
-	err := c.BindQuery(&getter)
+	pub := models.ArticlePublishRequest{}
+	err := c.BindJSON(&pub)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -287,20 +291,11 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// get article
-	article, err := db.GetArticleById(getter.Id)
+	article, err := db.GetArticleById(pub.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
 			Msg: err.Error(),
-		})
-		return
-	}
-
-	// check article status
-	if article.Status == dbmodels.ArtStatus_Publish {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "it's already published, needn't publish again",
 		})
 		return
 	}
@@ -316,7 +311,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// publish
-	err = db.PublishArticle(getter.Id, userId)
+	err = db.PublishArticle(pub.Id, pub.Publish, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -332,6 +327,11 @@ func PublishArticle(c *gin.Context) {
 	}
 }
 
+// @Router /admin/article [delete]
+// @Tags 文章
+// @Description 删除文章
+// @Param id query uint true "文章ID"
+// @Success 200 {object} models.CommonResponse
 func DeleteArticle(c *gin.Context) {
 	aidStr := c.Param("article_id")
 	aid64, err := strconv.ParseUint(aidStr, 10, 64)

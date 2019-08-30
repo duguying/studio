@@ -18,7 +18,7 @@
     "host": "{{.Host}}",
     "basePath": "/api/v1",
     "paths": {
-        "/admin/article/add": {
+        "/admin/article": {
             "post": {
                 "description": "创建文章",
                 "tags": [
@@ -27,7 +27,7 @@
                 "parameters": [
                     {
                         "description": "文章信息",
-                        "name": "area",
+                        "name": "article",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -42,6 +42,59 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/models.CommonCreateResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除文章",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文章ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.CommonResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/article/publish": {
+            "put": {
+                "description": "发布文章",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "description": "文章信息",
+                        "name": "publish",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ArticlePublishRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.CommonResponse"
                         }
                     }
                 }
@@ -378,6 +431,17 @@
                 }
             }
         },
+        "models.ArticlePublishRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "publish": {
+                    "type": "boolean"
+                }
+            }
+        },
         "models.ArticleTitle": {
             "type": "object",
             "properties": {
@@ -427,6 +491,17 @@
                 "id": {
                     "type": "integer"
                 },
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.CommonResponse": {
+            "type": "object",
+            "properties": {
                 "msg": {
                     "type": "string"
                 },

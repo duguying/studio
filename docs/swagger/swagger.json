@@ -47,6 +47,63 @@
                 }
             }
         },
+        "/get_article": {
+            "get": {
+                "description": "文章按月归档",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "URI",
+                        "name": "uri",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ArticleContentGetResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/hot_article": {
+            "get": {
+                "description": "文章TopN列表",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "前N",
+                        "name": "top",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ArticleTitleListResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/list": {
             "get": {
                 "description": "文章列表",
@@ -74,7 +131,113 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/models.CommonCreateResponse"
+                            "$ref": "#/definitions/models.ArticleContentListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/list_archive_monthly": {
+            "get": {
+                "description": "文章列表",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "年",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "月",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ArticleContentListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/list_title": {
+            "get": {
+                "description": "文章列表",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ArticleTitleListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/month_archive": {
+            "get": {
+                "description": "文章按月归档",
+                "tags": [
+                    "文章"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "前N",
+                        "name": "top",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ArticleArchListResponse"
                         }
                     }
                 }
@@ -82,6 +245,23 @@
         }
     },
     "definitions": {
+        "models.ArchInfo": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "month": {
+                    "type": "integer"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Article": {
             "type": "object",
             "properties": {
@@ -111,6 +291,133 @@
                 },
                 "uri": {
                     "type": "string"
+                }
+            }
+        },
+        "models.ArticleArchListResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ArchInfo"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.ArticleContent": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "view_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ArticleContentGetResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.ArticleContent"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.ArticleContentListResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ArticleContent"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ArticleTitle": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "view_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ArticleTitleListResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ArticleTitle"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },

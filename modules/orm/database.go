@@ -87,7 +87,7 @@ func initOrm() {
 	// todo: query cache
 	g.Db.Callback().Query().Before("gorm:query").Register("plugin:run_before_query", func(scope *gorm.Scope) {
 		scope.CallMethod("prepareQuerySQL")
-		fmt.Println("bef SQL:", scope.SQL)
+		//fmt.Println("bef SQL:", scope.SQL, "scope:", scope)
 		cacheRaw, exist := cache.Get(scope.TableName(), scope.SQL)
 		if exist {
 			err := json.Unmarshal([]byte(cacheRaw.(string)), scope.Value)
@@ -103,7 +103,7 @@ func initOrm() {
 	// set cache
 	g.Db.Callback().Query().After("gorm:query").Register("plugin:run_after_query", func(scope *gorm.Scope) {
 		c, _ := json.Marshal(scope.Value)
-		fmt.Println("SQL:", scope.SQL)
+		//fmt.Println("SQL:", scope.SQL)
 		cache.Add(scope.TableName(), scope.SQL, string(c))
 	})
 }

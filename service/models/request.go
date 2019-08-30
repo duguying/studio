@@ -14,3 +14,19 @@ type CommonPagerRequest struct {
 type CommonGetterRequest struct {
 	Id uint `json:"id" form:"id"`
 }
+
+type MonthlyPagerRequest struct {
+	Page  uint `json:"page" form:"page"`
+	Size  uint `json:"size" form:"size"`
+	Year  uint `json:"year" form:"year"`
+	Month uint `json:"month" form:"month"`
+}
+
+type TopGetterRequest struct {
+	Top uint `json:"top" form:"top"`
+}
+
+type ArticleUriGetterRequest struct {
+	Uri string `json:"uri" form:"uri"`
+	Id  uint   `json:"id" form:"id"`
+}

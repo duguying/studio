@@ -15,3 +15,30 @@ type CommonCreateResponse struct {
 	Msg string `json:"msg"`
 	Id  uint   `json:"id"`
 }
+
+type ArticleContentListResponse struct {
+	Ok    bool              `json:"ok"`
+	Msg   string            `json:"msg"`
+	Total uint              `json:"total"`
+	List  []*ArticleContent `json:"list"`
+}
+
+type ArticleTitleListResponse struct {
+	Ok    bool            `json:"ok"`
+	Msg   string          `json:"msg"`
+	Total uint            `json:"total"`
+	List  []*ArticleTitle `json:"list"`
+}
+
+type ArticleArchListResponse struct {
+	Ok   bool        `json:"ok"`
+	Msg  string      `json:"msg"`
+	List []*ArchInfo `json:"list"`
+}
+
+type ArticleContentGetResponse struct {
+	Ok   bool            `json:"ok"`
+	Msg  string          `json:"msg"`
+	Data *ArticleContent `json:"data"`
+}
+

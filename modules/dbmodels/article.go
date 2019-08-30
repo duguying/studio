@@ -5,8 +5,10 @@
 package dbmodels
 
 import (
+	"duguying/studio/service/models"
 	"github.com/gogather/json"
 	"gopkg.in/russross/blackfriday.v2"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -45,12 +47,12 @@ func (a *Article) String() string {
 	return string(c)
 }
 
-func (a *Article) ToArticleContent() *WrapperArticleContent {
+func (a *Article) ToArticleContent() *models.ArticleContent {
 	content := []byte(a.Content)
 	if a.Type == ContentType_MarkDown {
 		content = blackfriday.Run([]byte(a.Content))
 	}
-	return &WrapperArticleContent{
+	return &models.ArticleContent{
 		Id:        a.Id,
 		Title:     a.Title,
 		Uri:       a.Uri,
@@ -62,13 +64,47 @@ func (a *Article) ToArticleContent() *WrapperArticleContent {
 	}
 }
 
-func (a *Article) ToArticleTitle() *WrapperArticleTitle {
-	return &WrapperArticleTitle{
+func (a *Article) ToArticleTitle() *models.ArticleTitle {
+	return &models.ArticleTitle{
 		Id:        a.Id,
 		Title:     a.Title,
 		Uri:       "/article/" + a.Uri,
 		Author:    a.Author,
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
+	}
+}
+
+type ArchInfo struct {
+	Date   string `json:"date"`
+	Number uint   `json:"number"`
+	Year   uint   `json:"year"`
+	Month  uint   `json:"month"`
+}
+
+func (ai *ArchInfo) String() string {
+	c, _ := json.Marshal(ai)
+	return string(c)
+}
+
+func (ai *ArchInfo) parse() {
+	segs := strings.Split(ai.Date, "-")
+	if len(segs) > 1 {
+		month, _ := strconv.ParseInt(segs[1], 10, 32)
+		ai.Month = uint(month)
+	}
+	if len(segs) > 0 {
+		year, _ := strconv.ParseInt(segs[0], 10, 32)
+		ai.Year = uint(year)
+	}
+}
+
+func (ai *ArchInfo) ToModel() *models.ArchInfo {
+	ai.parse()
+	return &models.ArchInfo{
+		Date:   ai.Date,
+		Number: ai.Number,
+		Year:   ai.Year,
+		Month:  ai.Month,
 	}
 }

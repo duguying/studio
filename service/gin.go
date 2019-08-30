@@ -50,7 +50,6 @@ func Run(logDir string) {
 		// needn't auth
 		{
 			apiV1.GET("/get_article", action.GetArticle)                             // 获取文章详情
-			apiV1.GET("/get_article_info", action.GetArticleInfo)                    // 获取文章原始信息
 			apiV1.GET("/list", action.ListArticleWithContent)                        // 列出文章
 			apiV1.GET("/list_archive_monthly", action.ListArticleWithContentMonthly) // 按月归档文章内容列表
 			apiV1.GET("/list_title", action.ListArticleTitle)                        // 列出文章标题

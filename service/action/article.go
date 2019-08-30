@@ -20,14 +20,14 @@ import (
 // @Description 文章列表
 // @Param page query uint true "页码"
 // @Param size query uint true "每页数"
-// @Success 200 {object} models.CommonCreateResponse
+// @Success 200 {object} models.ArticleContentListResponse
 func ListArticleWithContent(c *gin.Context) {
 	pager := models.CommonPagerRequest{}
 	err := c.BindQuery(&pager)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleContentListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
@@ -35,209 +35,200 @@ func ListArticleWithContent(c *gin.Context) {
 	total, list, err := db.PageArticle(pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleContentListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":    true,
-		"total": total,
-		"list":  db.ArticleToContent(list),
+	c.JSON(http.StatusOK, models.ArticleContentListResponse{
+		Ok:    true,
+		Total: total,
+		List:  db.ArticleToContent(list),
 	})
 	return
 }
 
+// @Router /list_archive_monthly [get]
+// @Tags 文章
+// @Description 文章列表
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Param year query uint true "年"
+// @Param month query uint true "月"
+// @Success 200 {object} models.ArticleContentListResponse
 func ListArticleWithContentMonthly(c *gin.Context) {
-	pageStr := c.Query("page")
-	page, err := strconv.ParseUint(pageStr, 10, 64)
+	pager := models.MonthlyPagerRequest{}
+	err := c.BindQuery(pager)
 	if err != nil {
-		log.Println("page 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleContentListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 
-	pageSizeStr := c.Query("page_size")
-	pageSize, err := strconv.ParseUint(pageSizeStr, 10, 64)
-	if err != nil {
-		log.Println("page_size 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
-	}
-
-	yearStr := c.Query("year")
-	year, err := strconv.ParseUint(yearStr, 10, 64)
-	if err != nil {
-		log.Println("year 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
-	}
-
-	monthStr := c.Query("month")
-	month, err := strconv.ParseUint(monthStr, 10, 64)
-	if err != nil {
-		log.Println("month 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
-	}
-
-	total, list, err := db.PageArticleMonthly(uint(year), uint(month), uint(page), uint(pageSize))
+	total, list, err := db.PageArticleMonthly(pager.Year, pager.Month, pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleContentListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":    true,
-		"total": total,
-		"list":  db.ArticleToContent(list),
+	c.JSON(http.StatusOK, models.ArticleContentListResponse{
+		Ok:    true,
+		Total: total,
+		List:  db.ArticleToContent(list),
 	})
 	return
 }
 
+// @Router /list_title [get]
+// @Tags 文章
+// @Description 文章列表
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.ArticleTitleListResponse
 func ListArticleTitle(c *gin.Context) {
-	pageStr := c.Query("page")
-	page, err := strconv.ParseUint(pageStr, 10, 64)
+	pager := models.CommonPagerRequest{}
+	err := c.BindQuery(&pager)
 	if err != nil {
-		log.Println("page 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 
-	pageSizeStr := c.Query("page_size")
-	pageSize, err := strconv.ParseUint(pageSizeStr, 10, 64)
-	if err != nil {
-		log.Println("page_size 解析错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
-	}
-
-	total, list, err := db.PageArticle(uint(page), uint(pageSize))
+	total, list, err := db.PageArticle(pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":    true,
-		"total": total,
-		"list":  db.ArticleToTitle(list),
+	c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+		Ok:    true,
+		Total: total,
+		List:  db.ArticleToTitle(list),
 	})
 	return
 }
 
+// @Router /hot_article [get]
+// @Tags 文章
+// @Description 文章TopN列表
+// @Param top query uint true "前N"
+// @Success 200 {object} models.ArticleTitleListResponse
 func HotArticleTitle(c *gin.Context) {
-	topStr := c.DefaultQuery("top", "10")
-	top, err := strconv.ParseUint(topStr, 10, 64)
+	getter := models.TopGetterRequest{}
+	err := c.BindQuery(&getter)
 	if err != nil {
-		log.Printf("解析错误, err: %s\n", err.Error())
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
-	list, err := db.HotArticleTitle(uint(top))
+
+	list, err := db.HotArticleTitle(getter.Top)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"ok":   true,
-		"list": list,
+	c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+		Ok:   true,
+		List: list,
 	})
 	return
 }
 
+// @Router /month_archive [get]
+// @Tags 文章
+// @Description 文章按月归档
+// @Param top query uint true "前N"
+// @Success 200 {object} models.ArticleArchListResponse
 func MonthArchive(c *gin.Context) {
 	list, err := db.MonthArch()
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleArchListResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
-	log.Println("按月归档 list:", list)
-	c.JSON(http.StatusOK, gin.H{
-		"ok":   true,
-		"list": list,
+
+	apiList := []*models.ArchInfo{}
+	for _, item := range list {
+		apiList = append(apiList, item.ToModel())
+	}
+
+	c.JSON(http.StatusOK, models.ArticleArchListResponse{
+		Ok:   true,
+		List: apiList,
 	})
 	return
 }
 
+// @Router /get_article [get]
+// @Tags 文章
+// @Description 文章按月归档
+// @Param id query uint false "ID"
+// @Param uri query string false "URI"
+// @Success 200 {object} models.ArticleContentGetResponse
 func GetArticle(c *gin.Context) {
-	uri := c.Query("uri")
-	art, err := db.GetArticle(uri)
+	getter := models.ArticleUriGetterRequest{}
+	err := c.BindQuery(&getter)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
+	}
+
+	art := &models.ArticleContent{}
+	if getter.Id > 0 {
+		dbArt, err := db.GetArticleById(getter.Id)
+		if err != nil {
+			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+				Ok:  false,
+				Msg: err.Error(),
+			})
+			return
+		}
+		art = dbArt.ToArticleContent()
+	} else if len(getter.Uri) > 0 {
+		dbArt, err := db.GetArticle(getter.Uri)
+		if err != nil {
+			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+				Ok:  false,
+				Msg: err.Error(),
+			})
+			return
+		}
+		art = dbArt.ToArticleContent()
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":   true,
-			"data": art.ToArticleContent(),
-		})
-		return
-	}
-}
-
-func GetArticleInfo(c *gin.Context) {
-	idStr := c.Query("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+			Ok:  false,
+			Msg: "invalid id and uri",
 		})
 		return
 	}
 
-	art, err := db.GetArticleById(uint(id))
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"ok":   true,
-		"item": art,
+	c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+		Ok:   true,
+		Data: art,
 	})
 	return
 }

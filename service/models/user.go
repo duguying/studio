@@ -15,3 +15,14 @@ type UserInfo struct {
 	Access    string    `json:"access"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type LoginArgs struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type RegisterArgs struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+}

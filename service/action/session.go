@@ -7,6 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/session"
+	"duguying/studio/service/models"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -24,9 +25,9 @@ func SessionValidate(c *gin.Context) {
 	entity := session.SessionGet(sid)
 	if entity == nil {
 		c.SetCookie("sid", "", 0, "/", sessionDomain, true, false)
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"ok":  false,
-			"err": "login first",
+		c.JSON(http.StatusUnauthorized, models.CommonResponse{
+			Ok:  false,
+			Msg: "login first",
 		})
 		c.Abort()
 		return
@@ -36,9 +37,9 @@ func SessionValidate(c *gin.Context) {
 	if entity.UserId <= 0 {
 		c.SetCookie("sid", "", 0, "/", sessionDomain, true, false)
 		session.SessionDel(sid)
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"ok":  false,
-			"err": "invalid user",
+		c.JSON(http.StatusUnauthorized, models.CommonResponse{
+			Ok:  false,
+			Msg: "invalid user",
 		})
 		c.Abort()
 		return

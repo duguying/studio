@@ -138,6 +138,47 @@ definitions:
       ok:
         type: boolean
     type: object
+  models.LoginArgs:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.LoginResponse:
+    properties:
+      msg:
+        type: string
+      ok:
+        type: boolean
+      sid:
+        type: string
+    type: object
+  models.UserInfo:
+    properties:
+      access:
+        type: string
+      avatar:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.UserInfoResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.UserInfo'
+        type: object
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
 host: '{{.Host}}'
 info:
   contact:
@@ -206,6 +247,17 @@ paths:
             type: object
       tags:
       - 文章
+  /admin/user_info:
+    get:
+      description: 当前用户信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserInfoResponse'
+            type: object
+      tags:
+      - 用户
   /get_article:
     get:
       description: 文章按月归档
@@ -336,4 +388,23 @@ paths:
             type: object
       tags:
       - 文章
+  /user_login:
+    put:
+      description: 用户登录
+      parameters:
+      - description: 登录鉴权信息
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginArgs'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LoginResponse'
+            type: object
+      tags:
+      - 用户
 swagger: "2.0"

@@ -42,3 +42,14 @@ type ArticleContentGetResponse struct {
 	Data *ArticleContent `json:"data"`
 }
 
+type UserInfoResponse struct {
+	Ok   bool      `json:"ok"`
+	Msg  string    `json:"msg"`
+	Data *UserInfo `json:"data"`
+}
+
+type LoginResponse struct {
+	Ok  bool   `json:"ok"`
+	Msg string `json:"msg"`
+	Sid string `json:"sid"`
+}

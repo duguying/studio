@@ -8,6 +8,7 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/session"
+	"duguying/studio/service/models"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
 	"net/http"
@@ -18,42 +19,35 @@ func UserSimpleInfo(c *gin.Context) {
 
 }
 
+// @Router /admin/user_info [get]
+// @Tags 用户
+// @Description 当前用户信息
+// @Success 200 {object} models.UserInfoResponse
 func UserInfo(c *gin.Context) {
 	userId := uint(c.GetInt64("user_id"))
 	user, err := db.GetUserById(userId)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.UserInfoResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":   true,
-		"data": user.ToInfo(),
+	c.JSON(http.StatusOK, models.UserInfoResponse{
+		Ok:   true,
+		Data: user.ToInfo(),
 	})
 	return
 }
 
-type LoginArgs struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type RegisterArgs struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-}
-
 func UserRegister(c *gin.Context) {
-	register := &RegisterArgs{}
+	register := &models.RegisterArgs{}
 	err := c.BindJSON(register)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
-			"err": err.Error(),
+			"msg": err.Error(),
 		})
 		return
 	}
@@ -61,7 +55,7 @@ func UserRegister(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
-			"err": err.Error(),
+			"msg": err.Error(),
 		})
 		return
 	} else {
@@ -76,21 +70,26 @@ func UserRegister(c *gin.Context) {
 	}
 }
 
+// @Router /user_login [put]
+// @Tags 用户
+// @Description 用户登录
+// @Param auth body models.LoginArgs true "登录鉴权信息"
+// @Success 200 {object} models.LoginResponse
 func UserLogin(c *gin.Context) {
-	login := &LoginArgs{}
+	login := &models.LoginArgs{}
 	err := c.BindJSON(login)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.LoginResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
 	user, err := db.GetUser(login.Username)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
+		c.JSON(http.StatusOK, models.LoginResponse{
+			Ok:  false,
+			Msg: err.Error(),
 		})
 		return
 	}
@@ -98,17 +97,17 @@ func UserLogin(c *gin.Context) {
 	// validate
 	passwd := com.Md5(login.Password + user.Salt)
 	if passwd != user.Password {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "login failed, invalid password",
+		c.JSON(http.StatusOK, models.LoginResponse{
+			Ok:  false,
+			Msg: "login failed, invalid password",
 		})
 		return
 	} else {
 		sid := session.SessionID()
 		if sid == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"ok":  false,
-				"err": "generate sid failed",
+			c.JSON(http.StatusOK, models.LoginResponse{
+				Ok:  false,
+				Msg: "generate sid failed",
 			})
 			return
 		} else {
@@ -116,9 +115,9 @@ func UserLogin(c *gin.Context) {
 			sessionTimeCfg := g.Config.Get("session", "expire", defaultSessionTime.String())
 			sessionExpire, err := time.ParseDuration(sessionTimeCfg)
 			if err != nil {
-				c.JSON(http.StatusOK, gin.H{
-					"ok":  false,
-					"err": err.Error(),
+				c.JSON(http.StatusOK, models.LoginResponse{
+					Ok:  false,
+					Msg: err.Error(),
 				})
 				return
 			} else {
@@ -127,9 +126,9 @@ func UserLogin(c *gin.Context) {
 					UserId: user.Id,
 				})
 
-				c.JSON(http.StatusOK, gin.H{
-					"ok":  true,
-					"sid": sid,
+				c.JSON(http.StatusOK, models.LoginResponse{
+					Ok:  true,
+					Sid: sid,
 				})
 				return
 			}
@@ -144,7 +143,7 @@ func UserLogout(c *gin.Context) {
 	session.SessionDel(sid)
 	c.JSON(http.StatusOK, gin.H{
 		"ok":      true,
-		"message": "logout success",
+		"msg":     "logout success",
 		"user_id": userId,
 	})
 }
@@ -154,7 +153,7 @@ func UsernameCheck(c *gin.Context) {
 	if username == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
-			"err": "username could not be empty",
+			"msg": "username could not be empty",
 		})
 		return
 	} else {
@@ -162,7 +161,7 @@ func UsernameCheck(c *gin.Context) {
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"ok":  false,
-				"err": err.Error(),
+				"msg": err.Error(),
 			})
 			return
 		} else {

@@ -100,6 +100,23 @@
                 }
             }
         },
+        "/admin/user_info": {
+            "get": {
+                "description": "当前用户信息",
+                "tags": [
+                    "用户"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.UserInfoResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/get_article": {
             "get": {
                 "description": "文章按月归档",
@@ -291,6 +308,35 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/models.ArticleArchListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user_login": {
+            "put": {
+                "description": "用户登录",
+                "tags": [
+                    "用户"
+                ],
+                "parameters": [
+                    {
+                        "description": "登录鉴权信息",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.LoginArgs"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.LoginResponse"
                         }
                     }
                 }
@@ -502,6 +548,69 @@
         "models.CommonResponse": {
             "type": "object",
             "properties": {
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.LoginArgs": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string"
+                },
+                "ok": {
+                    "type": "boolean"
+                },
+                "sid": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserInfo": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserInfoResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.UserInfo"
+                },
                 "msg": {
                     "type": "string"
                 },

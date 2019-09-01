@@ -94,3 +94,17 @@ func (ai *ArchInfo) ToModel() *models.ArchInfo {
 		Month:  ai.Month,
 	}
 }
+
+type ArchInfoList []*ArchInfo
+
+func (al ArchInfoList) Len() int {
+	return len(al)
+}
+
+func (al ArchInfoList) Less(i, j int) bool {
+	return (al[i].Year*100 + al[i].Month) < (al[j].Year*100 + al[j].Month)
+}
+
+func (al ArchInfoList) Swap(i, j int) {
+	al[i], al[j] = al[j], al[i]
+}

@@ -9,6 +9,7 @@ import (
 	"duguying/studio/modules/dbmodels"
 	"duguying/studio/service/models"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -75,14 +76,6 @@ func HotArticleTitle(num uint) (articleTitle []*models.ArticleTitle, err error) 
 	return articleTitle, nil
 }
 
-func sortAndParse(arch []*dbmodels.ArchInfo) []*dbmodels.ArchInfo {
-	sortArch := []*dbmodels.ArchInfo{}
-	for _, item := range arch {
-		sortArch = append([]*dbmodels.ArchInfo{item}, sortArch...)
-	}
-	return sortArch
-}
-
 func MonthArch() (archInfos []*dbmodels.ArchInfo, err error) {
 	list := []*dbmodels.Article{}
 	archInfos = []*dbmodels.ArchInfo{}
@@ -115,7 +108,7 @@ func MonthArch() (archInfos []*dbmodels.ArchInfo, err error) {
 		})
 	}
 
-	archInfos = sortAndParse(archInfos)
+	sort.Sort(dbmodels.ArchInfoList(archInfos))
 	return archInfos, nil
 }
 

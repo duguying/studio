@@ -15,15 +15,22 @@ import (
 	"time"
 )
 
-func PageArticle(page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
+func PageArticle(keyword string, page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
 	total = 0
-	errs := g.Db.Table("articles").Where("status=?", 1).Count(&total).GetErrors()
+	query := "status=?"
+	params := []interface{}{1}
+	if keyword != "" {
+		keyword = keyword + " and keywords like ?"
+		params = append(params, fmt.Sprintf("%%%s%%", keyword))
+	}
+
+	errs := g.Db.Table("articles").Where(query, params...).Count(&total).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return 0, nil, errs[0]
 	}
 
 	list = []*dbmodels.Article{}
-	errs = g.Db.Table("articles").Where("status=?", 1).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
+	errs = g.Db.Table("articles").Where(query, params...).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return 0, nil, errs[0]
 	}

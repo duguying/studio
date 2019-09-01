@@ -31,7 +31,43 @@ func ListArticleWithContent(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(pager.Page, pager.Size)
+	total, list, err := db.PageArticle("", pager.Page, pager.Size)
+	if err != nil {
+		log.Println("分页查询错误, err:", err)
+		c.JSON(http.StatusOK, models.ArticleContentListResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, models.ArticleContentListResponse{
+		Ok:    true,
+		Total: total,
+		List:  db.ArticleToContent(list),
+	})
+	return
+}
+
+// @Router /list_tag [get]
+// @Tags 文章
+// @Description 文章列表
+// @Param tag query string true "Tag"
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.ArticleContentListResponse
+func ListArticleWithContentByTag(c *gin.Context) {
+	pager := models.TagPagerRequest{}
+	err := c.BindQuery(&pager)
+	if err != nil {
+		c.JSON(http.StatusOK, models.ArticleContentListResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+
+	total, list, err := db.PageArticle(pager.Tag, pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -103,7 +139,7 @@ func ListArticleTitle(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(pager.Page, pager.Size)
+	total, list, err := db.PageArticle("", pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleTitleListResponse{

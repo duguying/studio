@@ -35,3 +35,9 @@ type ArticlePublishRequest struct {
 	Id      uint `json:"id" form:"id"`
 	Publish bool `json:"publish" form:"publish"`
 }
+
+type TagPagerRequest struct {
+	Page uint   `json:"page" form:"page"`
+	Size uint   `json:"size" form:"size"`
+	Tag  string `json:"tag" form:"tag"`
+}

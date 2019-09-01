@@ -59,7 +59,7 @@ func ListArticleWithContent(c *gin.Context) {
 // @Success 200 {object} models.ArticleContentListResponse
 func ListArticleWithContentMonthly(c *gin.Context) {
 	pager := models.MonthlyPagerRequest{}
-	err := c.BindQuery(pager)
+	err := c.BindQuery(&pager)
 	if err != nil {
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
 			Ok:  false,

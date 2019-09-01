@@ -20,7 +20,7 @@ func PageArticle(keyword string, page uint, pageSize uint) (total uint, list []*
 	query := "status=?"
 	params := []interface{}{1}
 	if keyword != "" {
-		keyword = keyword + " and keywords like ?"
+		query = query + " and keywords like ?"
 		params = append(params, fmt.Sprintf("%%%s%%", keyword))
 	}
 

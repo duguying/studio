@@ -102,7 +102,7 @@ func (al ArchInfoList) Len() int {
 }
 
 func (al ArchInfoList) Less(i, j int) bool {
-	return (al[i].Year*100 + al[i].Month) < (al[j].Year*100 + al[j].Month)
+	return (al[i].Year*100 + al[i].Month) > (al[j].Year*100 + al[j].Month)
 }
 
 func (al ArchInfoList) Swap(i, j int) {

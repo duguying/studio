@@ -8,7 +8,6 @@ import (
 	"duguying/studio/service/models"
 	"github.com/gogather/json"
 	"gopkg.in/russross/blackfriday.v2"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -87,20 +86,7 @@ func (ai *ArchInfo) String() string {
 	return string(c)
 }
 
-func (ai *ArchInfo) parse() {
-	segs := strings.Split(ai.Date, "-")
-	if len(segs) > 1 {
-		month, _ := strconv.ParseInt(segs[1], 10, 32)
-		ai.Month = uint(month)
-	}
-	if len(segs) > 0 {
-		year, _ := strconv.ParseInt(segs[0], 10, 32)
-		ai.Year = uint(year)
-	}
-}
-
 func (ai *ArchInfo) ToModel() *models.ArchInfo {
-	ai.parse()
 	return &models.ArchInfo{
 		Date:   ai.Date,
 		Number: ai.Number,

@@ -8,6 +8,8 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/dbmodels"
 	"duguying/studio/service/models"
+	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -82,15 +84,38 @@ func sortAndParse(arch []*dbmodels.ArchInfo) []*dbmodels.ArchInfo {
 }
 
 func MonthArch() (archInfos []*dbmodels.ArchInfo, err error) {
+	list := []*dbmodels.Article{}
 	archInfos = []*dbmodels.ArchInfo{}
-	errs := g.Db.Table("articles").Select("DATE_FORMAT(created_at,'%Y-%m') as date,count(*) as number").Where("status=?", 1).Group("date").Find(&archInfos).GetErrors()
+	errs := g.Db.Table("articles").Select("created_at").Where("status=?", 1).Find(&list).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return nil, errs[0]
 	}
-	archInfos = sortAndParse(archInfos)
-	for _, arch := range archInfos {
-		arch.Date = strings.Replace(arch.Date, "-", "年", -1) + "月"
+
+	// assemble ArchInfo
+	archMap := map[string]uint{}
+	for _, item := range list {
+		key := item.CreatedAt.Format("2006-01")
+		val, ok := archMap[key]
+		if ok {
+			val++
+		} else {
+			val = 1
+		}
+		archMap[key] = val
 	}
+	for key, value := range archMap {
+		segs := strings.Split(key, "-")
+		year, _ := strconv.ParseInt(segs[0], 10, 64)
+		month, _ := strconv.ParseInt(segs[1], 10, 64)
+		archInfos = append(archInfos, &dbmodels.ArchInfo{
+			Date:   fmt.Sprintf("%d年%d月", year, month),
+			Year:   uint(year),
+			Month:  uint(month),
+			Number: value,
+		})
+	}
+
+	archInfos = sortAndParse(archInfos)
 	return archInfos, nil
 }
 

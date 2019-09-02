@@ -212,7 +212,7 @@ func ListAllTags() (tags []string, counts []uint, err error) {
 		tgs := strings.Split(item.Keywords, ",")
 		for _, tg := range tgs {
 			if tg != "" {
-				if utils.StrContain(tg, tags) {
+				if !utils.StrContain(tg, tags) {
 					tags = append(tags, tg)
 				}
 			}

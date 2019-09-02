@@ -213,7 +213,7 @@ func ListAllTags() (tags []string, counts []uint, err error) {
 		for _, tg := range tgs {
 			if tg != "" {
 				if !utils.StrContain(tg, tags) {
-					tags = append(tags, tg)
+					tags = append(tags, strings.TrimSpace(tg))
 				}
 			}
 		}

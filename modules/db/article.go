@@ -221,7 +221,7 @@ func ListAllTags() (tags []string, counts []uint, err error) {
 	counts = []uint{}
 	for _, tag := range tags {
 		total := uint(0)
-		errs := g.Db.Model(dbmodels.Article{}).Where("keyword like ?", fmt.Sprintf("%%%s%%", tag)).Count(total).GetErrors()
+		errs := g.Db.Model(dbmodels.Article{}).Where("keywords like ?", fmt.Sprintf("%%%s%%", tag)).Count(total).GetErrors()
 		if len(errs) > 0 && errs[0] != nil {
 			log.Println("count keyword failed, err:", errs[0].Error())
 		}

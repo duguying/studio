@@ -456,9 +456,29 @@ func SiteMap(c *gin.Context) {
 		sitemap = append(sitemap, fmt.Sprintf("/page/%d", i))
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":   true,
-		"list": sitemap,
+	// tag
+	tags, counts, err := db.ListAllTags()
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonListResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+	for idx, tag := range tags {
+		total := counts[idx]
+		number := total / 10
+		if total%10 > 0 {
+			number++
+		}
+		for i := uint(1); i <= number; i++ {
+			sitemap = append(sitemap, fmt.Sprintf("/tag/%s/%d", tag, number))
+		}
+	}
+
+	c.JSON(http.StatusOK, models.CommonListResponse{
+		Ok:   true,
+		List: sitemap,
 	})
 	return
 }

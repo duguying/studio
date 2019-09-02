@@ -68,3 +68,12 @@ func TitleToUri(title string) (uri string) {
 	uri = strings.TrimSuffix(uri, "-")
 	return uri
 }
+
+func StrContain(keyword string, vendor []string) bool {
+	for _, item := range vendor {
+		if keyword == item {
+			return true
+		}
+	}
+	return false
+}

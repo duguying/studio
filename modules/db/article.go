@@ -8,7 +8,9 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/dbmodels"
 	"duguying/studio/service/models"
+	"duguying/studio/utils"
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -197,4 +199,33 @@ func ListAllArticleUri() (list []*dbmodels.Article, err error) {
 		return nil, errs[0]
 	}
 	return list, nil
+}
+
+func ListAllTags() (tags []string, counts []uint, err error) {
+	list := []*dbmodels.Article{}
+	errs := g.Db.Model(dbmodels.Article{}).Select("keywords").Find(&list).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return nil, nil, errs[0]
+	}
+	tags = []string{}
+	for _, item := range list {
+		tgs := strings.Split(item.Keywords, ",")
+		for _, tg := range tgs {
+			if tg != "" {
+				if utils.StrContain(tg, tags) {
+					tags = append(tags, tg)
+				}
+			}
+		}
+	}
+	counts = []uint{}
+	for _, tag := range tags {
+		total := uint(0)
+		errs := g.Db.Model(dbmodels.Article{}).Where("keyword like ?", fmt.Sprintf("%%%s%%", tag)).Count(total).GetErrors()
+		if len(errs) > 0 && errs[0] != nil {
+			log.Println("count keyword failed, err:", errs[0].Error())
+		}
+		counts = append(counts, total)
+	}
+	return tags, counts, nil
 }

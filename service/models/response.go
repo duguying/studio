@@ -16,6 +16,13 @@ type CommonCreateResponse struct {
 	Id  uint   `json:"id"`
 }
 
+type CommonListResponse struct {
+	Ok    bool        `json:"ok"`
+	Msg   string      `json:"msg"`
+	Total uint        `json:"total"`
+	List  interface{} `json:"list"`
+}
+
 type ArticleContentListResponse struct {
 	Ok    bool              `json:"ok"`
 	Msg   string            `json:"msg"`

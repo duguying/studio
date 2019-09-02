@@ -44,7 +44,7 @@ func ListArticleWithContent(c *gin.Context) {
 	c.JSON(http.StatusOK, models.ArticleContentListResponse{
 		Ok:    true,
 		Total: total,
-		List:  db.ArticleToContent(list),
+		List:  db.ArticleToShowContent(list),
 	})
 	return
 }
@@ -80,7 +80,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 	c.JSON(http.StatusOK, models.ArticleContentListResponse{
 		Ok:    true,
 		Total: total,
-		List:  db.ArticleToContent(list),
+		List:  db.ArticleToShowContent(list),
 	})
 	return
 }
@@ -117,7 +117,7 @@ func ListArticleWithContentMonthly(c *gin.Context) {
 	c.JSON(http.StatusOK, models.ArticleContentListResponse{
 		Ok:    true,
 		Total: total,
-		List:  db.ArticleToContent(list),
+		List:  db.ArticleToShowContent(list),
 	})
 	return
 }
@@ -153,6 +153,59 @@ func ListArticleTitle(c *gin.Context) {
 		Ok:    true,
 		Total: total,
 		List:  db.ArticleToTitle(list),
+	})
+	return
+}
+
+// @Router /article [get]
+// @Tags 文章
+// @Description 获取文章
+// @Param id query uint false "ID"
+// @Param uri query string false "URI"
+// @Success 200 {object} models.ArticleContentGetResponse
+func GetArticle(c *gin.Context) {
+	getter := models.ArticleUriGetterRequest{}
+	err := c.BindQuery(&getter)
+	if err != nil {
+		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+
+	art := &models.ArticleContent{}
+	if getter.Id > 0 {
+		dbArt, err := db.GetArticleById(getter.Id)
+		if err != nil {
+			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+				Ok:  false,
+				Msg: err.Error(),
+			})
+			return
+		}
+		art = dbArt.ToArticleContent()
+	} else if len(getter.Uri) > 0 {
+		dbArt, err := db.GetArticle(getter.Uri)
+		if err != nil {
+			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+				Ok:  false,
+				Msg: err.Error(),
+			})
+			return
+		}
+		art = dbArt.ToArticleContent()
+	} else {
+		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+			Ok:  false,
+			Msg: "invalid id and uri",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+		Ok:   true,
+		Data: art,
 	})
 	return
 }
@@ -217,51 +270,51 @@ func MonthArchive(c *gin.Context) {
 
 // @Router /get_article [get]
 // @Tags 文章
-// @Description 文章按月归档
+// @Description 获取文章
 // @Param id query uint false "ID"
 // @Param uri query string false "URI"
-// @Success 200 {object} models.ArticleContentGetResponse
-func GetArticle(c *gin.Context) {
+// @Success 200 {object} models.ArticleShowContentGetResponse
+func GetArticleShow(c *gin.Context) {
 	getter := models.ArticleUriGetterRequest{}
 	err := c.BindQuery(&getter)
 	if err != nil {
-		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+		c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 			Ok:  false,
 			Msg: err.Error(),
 		})
 		return
 	}
 
-	art := &models.ArticleContent{}
+	art := &models.ArticleShowContent{}
 	if getter.Id > 0 {
 		dbArt, err := db.GetArticleById(getter.Id)
 		if err != nil {
-			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
 				Msg: err.Error(),
 			})
 			return
 		}
-		art = dbArt.ToArticleContent()
+		art = dbArt.ToArticleShowContent()
 	} else if len(getter.Uri) > 0 {
 		dbArt, err := db.GetArticle(getter.Uri)
 		if err != nil {
-			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
 				Msg: err.Error(),
 			})
 			return
 		}
-		art = dbArt.ToArticleContent()
+		art = dbArt.ToArticleShowContent()
 	} else {
-		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+		c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 			Ok:  false,
 			Msg: "invalid id and uri",
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+	c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 		Ok:   true,
 		Data: art,
 	})

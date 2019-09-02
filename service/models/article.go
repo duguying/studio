@@ -26,7 +26,7 @@ func (aar *Article) String() string {
 	return string(c)
 }
 
-type ArticleContent struct {
+type ArticleShowContent struct {
 	Id        uint      `json:"id"`
 	Title     string    `json:"title"`
 	Uri       string    `json:"uri"`
@@ -37,8 +37,25 @@ type ArticleContent struct {
 	Content   string    `json:"content"`
 }
 
-func (ac *ArticleContent) String() string {
+func (ac *ArticleShowContent) String() string {
 	c, _ := json.Marshal(ac)
+	return string(c)
+}
+
+type ArticleContent struct {
+	Id        uint      `json:"id"`
+	Title     string    `json:"title"`
+	Uri       string    `json:"uri"`
+	Author    string    `json:"author"`
+	Tags      []string  `json:"tags"`
+	Type      int       `json:"type"`
+	CreatedAt time.Time `json:"created_at"`
+	ViewCount uint      `json:"view_count"`
+	Content   string    `json:"content"`
+}
+
+func (asc *ArticleContent) String() string {
+	c, _ := json.Marshal(asc)
 	return string(c)
 }
 

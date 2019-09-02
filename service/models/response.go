@@ -27,7 +27,7 @@ type ArticleContentListResponse struct {
 	Ok    bool              `json:"ok"`
 	Msg   string            `json:"msg"`
 	Total uint              `json:"total"`
-	List  []*ArticleContent `json:"list"`
+	List  []*ArticleShowContent `json:"list"`
 }
 
 type ArticleTitleListResponse struct {
@@ -41,6 +41,12 @@ type ArticleArchListResponse struct {
 	Ok   bool        `json:"ok"`
 	Msg  string      `json:"msg"`
 	List []*ArchInfo `json:"list"`
+}
+
+type ArticleShowContentGetResponse struct {
+	Ok   bool                `json:"ok"`
+	Msg  string              `json:"msg"`
+	Data *ArticleShowContent `json:"data"`
 }
 
 type ArticleContentGetResponse struct {

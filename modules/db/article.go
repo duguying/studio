@@ -56,10 +56,10 @@ func PageArticleMonthly(year, month uint, page uint, pageSize uint) (total uint,
 	return total, list, nil
 }
 
-func ArticleToContent(articles []*dbmodels.Article) (articleContent []*models.ArticleContent) {
-	articleContent = []*models.ArticleContent{}
+func ArticleToShowContent(articles []*dbmodels.Article) (articleContent []*models.ArticleShowContent) {
+	articleContent = []*models.ArticleShowContent{}
 	for _, article := range articles {
-		articleContent = append(articleContent, article.ToArticleContent())
+		articleContent = append(articleContent, article.ToArticleShowContent())
 	}
 	return articleContent
 }

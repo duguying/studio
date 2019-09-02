@@ -46,11 +46,29 @@ func (a *Article) String() string {
 	return string(c)
 }
 
-func (a *Article) ToArticleContent() *models.ArticleContent {
+func (a *Article) ToArticleShowContent() *models.ArticleShowContent {
 	content := []byte(a.Content)
 	if a.Type == ContentType_MarkDown {
 		content = blackfriday.Run([]byte(a.Content))
 	}
+	tags := []string{}
+	segs := strings.Split(strings.Replace(a.Keywords, "，", ",", -1), ",")
+	for _, seg := range segs {
+		tags = append(tags, strings.TrimSpace(seg))
+	}
+	return &models.ArticleShowContent{
+		Id:        a.Id,
+		Title:     a.Title,
+		Uri:       a.Uri,
+		Author:    a.Author,
+		Tags:      tags,
+		CreatedAt: a.CreatedAt,
+		ViewCount: a.Count,
+		Content:   string(content),
+	}
+}
+
+func (a *Article) ToArticleContent() *models.ArticleContent {
 	tags := []string{}
 	segs := strings.Split(strings.Replace(a.Keywords, "，", ",", -1), ",")
 	for _, seg := range segs {
@@ -62,9 +80,10 @@ func (a *Article) ToArticleContent() *models.ArticleContent {
 		Uri:       a.Uri,
 		Author:    a.Author,
 		Tags:      tags,
+		Type:      a.Type,
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
-		Content:   string(content),
+		Content:   a.Content,
 	}
 }
 

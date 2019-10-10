@@ -49,6 +49,7 @@ release.zip
 *.ini
 
 dist/
+*.zip
 
 *.db
 *.lock

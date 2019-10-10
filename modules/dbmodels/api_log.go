@@ -6,7 +6,7 @@ import (
 	"github.com/gogather/json"
 )
 
-type ExternalApiLog struct {
+type ApiLog struct {
 	Id        uint      `json:"id"`
 	Method    string    `json:"method"`
 	Uri       string    `json:"uri"`
@@ -17,7 +17,7 @@ type ExternalApiLog struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-func (a *ExternalApiLog) String() string {
+func (a *ApiLog) String() string {
 	c, _ := json.Marshal(a)
 	return string(c)
 }

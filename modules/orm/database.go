@@ -68,7 +68,7 @@ func initOrm() {
 		&dbmodels.File{},
 		&dbmodels.Agent{},
 		&dbmodels.AgentPerform{},
-		&dbmodels.ExternalApiLog{},
+		&dbmodels.ApiLog{},
 	)
 
 	// clear cache

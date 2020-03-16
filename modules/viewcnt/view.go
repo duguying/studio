@@ -6,7 +6,6 @@
 package viewcnt
 
 import (
-	"fmt"
 	"github.com/gogather/safemap"
 )
 
@@ -14,20 +13,18 @@ var (
 	viewCntMap = safemap.New()
 )
 
-func ViewHit(articleId int) {
-	key := fmt.Sprintf("%d", articleId)
-	val, ok := viewCntMap.Get(key)
+func ViewHit(ident string) {
+	val, ok := viewCntMap.Get(ident)
 	if !ok {
-		viewCntMap.Put(key, int(1))
+		viewCntMap.Put(ident, int(1))
 	} else {
 		cnt := val.(int)
-		viewCntMap.Put(key, cnt+1)
+		viewCntMap.Put(ident, cnt+1)
 	}
 }
 
-func GetViewCnt(articleId int) (cnt int) {
-	key := fmt.Sprintf("%d", articleId)
-	val, ok := viewCntMap.Get(key)
+func GetViewCnt(ident string) (cnt int) {
+	val, ok := viewCntMap.Get(ident)
 	if ok {
 		return val.(int)
 	} else {
@@ -35,9 +32,8 @@ func GetViewCnt(articleId int) (cnt int) {
 	}
 }
 
-func ResetViewCnt(articleId int) {
-	key := fmt.Sprintf("%d", articleId)
-	viewCntMap.Remove(key)
+func ResetViewCnt(ident string) {
+	viewCntMap.Remove(ident)
 }
 
 func GetMap() *safemap.SafeMap {

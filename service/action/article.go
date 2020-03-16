@@ -329,15 +329,7 @@ func GetArticleShow(c *gin.Context) {
 // @Summary 文章文章浏览统计上报
 // @Success 200 {object} models.CommonResponse
 func ArticleViewCount(c *gin.Context) {
-	idStr := c.Query("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
-	}
+	ident := c.Query("ident")
 	refer := c.GetHeader("Referer")
 	referUrl, err := url.Parse(refer)
 	if err != nil {
@@ -354,7 +346,7 @@ func ArticleViewCount(c *gin.Context) {
 		})
 		return
 	}
-	viewcnt.ViewHit(int(id))
+	viewcnt.ViewHit(ident)
 	c.JSON(http.StatusOK, models.CommonResponse{
 		Ok:  true,
 		Msg: "",

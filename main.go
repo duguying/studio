@@ -4,6 +4,7 @@ import (
 	"duguying/studio/docs"
 	"duguying/studio/g"
 	"duguying/studio/modules/configuration"
+	"duguying/studio/modules/cron"
 	"duguying/studio/modules/ipip"
 	"duguying/studio/modules/logger"
 	"duguying/studio/modules/orm"
@@ -56,6 +57,9 @@ func main() {
 
 	// 初始化 swagger
 	initSwagger()
+
+	// 初始化定时任务
+	cron.Init()
 
 	// 初始化 gin
 	service.Run(logDir)

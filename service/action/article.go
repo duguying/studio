@@ -5,12 +5,15 @@
 package action
 
 import (
+	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/viewcnt"
 	"duguying/studio/service/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -317,6 +320,44 @@ func GetArticleShow(c *gin.Context) {
 	c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 		Ok:   true,
 		Data: art,
+	})
+	return
+}
+
+// @Router /article/view_count [get]
+// @Tags 文章
+// @Summary 文章文章浏览统计上报
+// @Success 200 {object} models.CommonResponse
+func ArticleViewCount(c *gin.Context) {
+	idStr := c.Query("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+	refer := c.GetHeader("Referer")
+	referUrl, err := url.Parse(refer)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  true,
+			Msg: "",
+		})
+		return
+	}
+	if referUrl.Host != g.Config.Get("system", "host", "www.duguying.net") {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  true,
+			Msg: "",
+		})
+		return
+	}
+	viewcnt.ViewHit(int(id))
+	c.JSON(http.StatusOK, models.CommonResponse{
+		Ok:  true,
+		Msg: "",
 	})
 	return
 }

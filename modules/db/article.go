@@ -229,3 +229,17 @@ func ListAllTags() (tags []string, counts []uint, err error) {
 	}
 	return tags, counts, nil
 }
+
+func UpdateArticleViewCount(id uint, cnt int) (err error) {
+	art, err := GetArticleById(id)
+	if err != nil {
+		return err
+	}
+	errs := g.Db.Model(dbmodels.Article{}).Where("id=?", id).Updates(map[string]interface{}{
+		"count": art.Count + uint(cnt),
+	}).GetErrors()
+	if len(errs) > 0 && errs[0] != nil {
+		return errs[0]
+	}
+	return nil
+}

@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package webdav provides a WebDAV server implementation.
-package webdav
+package webdav // import "golang.org/x/net/webdav"
 
 import (
 	"errors"
@@ -557,7 +557,7 @@ func (h *Handler) handlePropfind(w http.ResponseWriter, r *http.Request) (status
 			return err
 		}
 		href := path.Join(h.Prefix, reqPath)
-		if info.IsDir() {
+		if href != "/" && info.IsDir() {
 			href += "/"
 		}
 		return mw.write(makePropstatResponse(href, pstats))

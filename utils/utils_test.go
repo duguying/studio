@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/Unknwon/com"
+	"github.com/unknwon/com"
 	"testing"
 )
 

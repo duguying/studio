@@ -2,10 +2,21 @@ package swag
 
 import "fmt"
 
-// CheckSchemaType begins panicking if typeName is not a name of primitive type
-func CheckSchemaType(typeName string) {
+// CheckSchemaType checks if typeName is not a name of primitive type
+func CheckSchemaType(typeName string) error {
 	if !IsPrimitiveType(typeName) {
-		panic(fmt.Errorf("%s is not basic types", typeName))
+		return fmt.Errorf("%s is not basic types", typeName)
+	}
+	return nil
+}
+
+// IsSimplePrimitiveType determine whether the type name is a simple primitive type
+func IsSimplePrimitiveType(typeName string) bool {
+	switch typeName {
+	case "string", "number", "integer", "boolean":
+		return true
+	default:
+		return false
 	}
 }
 

@@ -8,7 +8,7 @@ import (
 	"duguying/studio/utils"
 	"github.com/gogather/json"
 	"fmt"
-	"github.com/Unknwon/com"
+	"github.com/unknwon/com"
 	"github.com/parnurzeal/gorequest"
 	"log"
 	"net/http"

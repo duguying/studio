@@ -7,7 +7,7 @@ package dbmodels
 import (
 	"duguying/studio/service/models"
 	"github.com/gogather/json"
-	"gopkg.in/russross/blackfriday.v2"
+	"github.com/russross/blackfriday/v2"
 	"strings"
 	"time"
 )

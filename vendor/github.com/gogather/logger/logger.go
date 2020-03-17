@@ -89,6 +89,21 @@ func (l *Logger) Print(v ...interface{}) {
 	}
 }
 
+func (l *Logger) Write(p []byte) (n int, err error) {
+	if l.level&INFO <= 0 {
+		return
+	}
+
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	n, err = l.d.Writer().Write(p)
+	if l.v != nil {
+		n, err = l.v.Writer().Write(p)
+	}
+	return n, err
+}
+
 // debug
 
 func (l *Logger) Debugln(v ...interface{}) {

@@ -4,9 +4,13 @@
 
 [![Travis Status](https://img.shields.io/travis/swaggo/swag/master.svg)](https://travis-ci.org/swaggo/swag)
 [![Coverage Status](https://img.shields.io/codecov/c/github/swaggo/swag/master.svg)](https://codecov.io/gh/swaggo/swag)
- [![Go Report Card](https://goreportcard.com/badge/github.com/swaggo/swag)](https://goreportcard.com/badge/github.com/swaggo/swag)
+[![Go Report Card](https://goreportcard.com/badge/github.com/swaggo/swag)](https://goreportcard.com/report/github.com/swaggo/swag)
 [![codebeat badge](https://codebeat.co/badges/71e2f5e5-9e6b-405d-baf9-7cc8b5037330)](https://codebeat.co/projects/github-com-swaggo-swag-master)
 [![Go Doc](https://godoc.org/github.com/swaggo/swagg?status.svg)](https://godoc.org/github.com/swaggo/swag)
+[![Backers on Open Collective](https://opencollective.com/swag/backers/badge.svg)](#backers) 
+[![Sponsors on Open Collective](https://opencollective.com/swag/sponsors/badge.svg)](#sponsors) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fswaggo%2Fswag.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fswaggo%2Fswag?ref=badge_shield)
+[![Release](https://img.shields.io/github/release/swaggo/swag.svg?style=flat-square)](https://github.com/swaggo/swag/releases)
+
 
 Swag converts Go annotations to Swagger Documentation 2.0. We've created a variety of plugins for popular [Go web frameworks](#supported-web-frameworks). This allows you to quickly integrate with an existing Go project (using Swagger UI).
 
@@ -16,17 +20,17 @@ Swag converts Go annotations to Swagger Documentation 2.0. We've created a varie
  - [How to use it with Gin](#how-to-use-it-with-gin)
  - [Implementation Status](#implementation-status)
  - [Declarative Comments Format](#declarative-comments-format)
-	- [General API Info](##general-api-info)
+	- [General API Info](#general-api-info)
 	- [API Operation](#api-operation)
 	- [Security](#security)
- - [Examples](#tips)
+ - [Examples](#examples)
 	- [Descriptions over multiple lines](#descriptions-over-multiple-lines)
 	- [User defined structure with an array type](#user-defined-structure-with-an-array-type)
 	- [Add a headers in response](#add-a-headers-in-response) 
 	- [Use multiple path params](#use-multiple-path-params)
 	- [Example value of struct](#example-value-of-struct)
 	- [Description of struct](#description-of-struct)
-	- [Override swagger type of a struct field](#Override-swagger-type-of-a-struct-field)
+	- [Use swaggertype tag to supported custom type](#use-swaggertype-tag-to-supported-custom-type)
 	- [Add extension info to struct field](#add-extension-info-to-struct-field)
 	- [How to using security annotations](#how-to-using-security-annotations)
 - [About the Project](#about-the-project)
@@ -39,7 +43,9 @@ Swag converts Go annotations to Swagger Documentation 2.0. We've created a varie
 ```sh
 $ go get -u github.com/swaggo/swag/cmd/swag
 ```
-Or download the pre-compiled binaries binray form [release page](https://github.com/swaggo/swag/releases).
+To build from source you need [Go](https://golang.org/dl/) (1.9 or newer).
+
+Or download a pre-compiled binary from the [release page](https://github.com/swaggo/swag/releases).
 
 3. Run `swag init` in the project's root folder which contains the `main.go` file. This will parse your comments and generate the required files (`docs` folder and `docs/docs.go`).
 ```sh
@@ -64,8 +70,10 @@ USAGE:
 OPTIONS:
    --generalInfo value, -g value       Go file path in which 'swagger general API Info' is written (default: "main.go")
    --dir value, -d value               Directory you want to parse (default: "./")
-   --swagger value, -s value           Output the swagger conf for json and yaml (default: "./docs/swagger")
    --propertyStrategy value, -p value  Property Naming Strategy like snakecase,camelcase,pascalcase (default: "camelcase")
+   --output value, -o value            Output directory for all the generated files(swagger.json, swagger.yaml and doc.go) (default: "./docs")
+   --parseVendor                       Parse go files in 'vendor' folder, disabled by default
+   --parseDependency                   Parse go files in outside dependency folder, disabled by default
 ```
 
 ## Supported Web Frameworks
@@ -82,7 +90,7 @@ Find the example source code [here](https://github.com/swaggo/swag/tree/master/e
 1. After using `swag init` to generate Swagger 2.0 docs, import the following packages:
 ```go
 import "github.com/swaggo/gin-swagger" // gin-swagger middleware
-import "github.com/swaggo/gin-swagger/swaggerFiles" // swagger embed files
+import "github.com/swaggo/files" // swagger embed files
 ```
 
 2. Add [General API](#general-api-info) annotations in `main.go` code:
@@ -130,6 +138,8 @@ import "github.com/swaggo/gin-swagger/swaggerFiles" // swagger embed files
 // @authorizationurl https://example.com/oauth/authorize
 // @scope.admin Grants read and write access to administrative information
 
+// @x-extension-openapi {"example": "value on a json format"}
+
 func main() {
 	r := gin.Default()
 
@@ -161,9 +171,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
-
+	
 	"./docs" // docs is generated by Swag CLI, you have to import it.
 )
 
@@ -184,7 +194,8 @@ func main() {
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "petstore.swagger.io"
 	docs.SwaggerInfo.BasePath = "/v2"
-
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+		
 	r := gin.New()
 
 	// use ginSwagger middleware to serve the API docs
@@ -266,7 +277,7 @@ func (c *Controller) ListAccounts(ctx *gin.Context) {
 $ swag init
 ```
 
-4.Run your app, and browse to http://localhost:8080/swagger/index.html. You will see Swagger 2.0 Api documents as shown below:
+4. Run your app, and browse to http://localhost:8080/swagger/index.html. You will see Swagger 2.0 Api documents as shown below:
 
 ![swagger_index.html](https://raw.githubusercontent.com/swaggo/swag/master/assets/swagger-image.png)
 
@@ -305,7 +316,7 @@ $ swag init
 | tag.name    | Name of a tag.| // @tag.name This is the name of the tag                     |
 | tag.description   | Description of the tag  | // @tag.description Cool Description         |
 | tag.docs.url      | Url of the external Documentation of the tag | // @tag.docs.url https://example.com|
-| tag.docs.descripiton  | Description of the external Documentation of the tag| // @tag.docs.descirption Best example documentation |
+| tag.docs.description  | Description of the external Documentation of the tag| // @tag.docs.description Best example documentation |
 | termsOfService | The Terms of Service for the API.| // @termsOfService http://swagger.io/terms/                     |
 | contact.name | The contact information for the exposed API.| // @contact.name API Support  |
 | contact.url  | The URL pointing to the contact information. MUST be in the format of a URL.  | // @contact.url http://www.swagger.io/support|
@@ -314,6 +325,22 @@ $ swag init
 | license.url  | A URL to the license used for the API. MUST be in the format of a URL.                       | // @license.url http://www.apache.org/licenses/LICENSE-2.0.html |
 | host        | The host (name or ip) serving the API.     | // @host localhost:8080         |
 | BasePath    | The base path on which the API is served. | // @BasePath /api/v1             |
+| schemes     | The transfer protocol for the operation that separated by spaces. | // @schemes http https |
+| x-name      | The extension key, must be start by x- and take only json value | // @x-example-key {"key": "value"} |
+
+### Using markdown descriptions
+When a short string in your documentation is insufficient, or you need images, code examples and things like that you may want to use markdown descriptions. In order to use markdown descriptions use the following annotations.
+
+
+| annotation  | description                                | example                         |
+|-------------|--------------------------------------------|---------------------------------|
+| title       | **Required.** The title of the application.| // @title Swagger Example API   |
+| version     | **Required.** Provides the version of the application API.| // @version 1.0  |
+| description.markdown  | A short description of the application. Parsed from the api.md file. This is an alternative to @description    |// @description.markdown No value needed, this parses the description from api.md         																 |
+| tag.name    | Name of a tag.| // @tag.name This is the name of the tag                     |
+| tag.description.markdown   | Description of the tag this is an alternative to tag.description. The description will be read from a file named like tagname.md  | // @tag.description.markdown         |
+
+
 
 ## API Operation
 
@@ -321,20 +348,21 @@ $ swag init
 [celler/controller](https://github.com/swaggo/swag/tree/master/example/celler/controller)
 
 
-| annotation         | description                                                                                                                |
-|--------------------|----------------------------------------------------------------------------------------------------------------------------|
-| description        | A verbose explanation of the operation behavior.                                                                           |
-| id                 | A unique string used to identify the operation. Must be unique among all API operations.                                   |
-| tags               | A list of tags to each API operation that separated by commas.                                                             |
-| summary            | A short summary of what the operation does.                                                                                |
-| accept             | A list of MIME types the APIs can consume. Value MUST be as described under [Mime Types](#mime-types).                     |
-| produce            | A list of MIME types the APIs can produce. Value MUST be as described under [Mime Types](#mime-types).                     |
-| param              | Parameters that separated by spaces. `param name`,`param type`,`data type`,`is mandatory?`,`comment` `attribute(optional)` |
-| security           | [Security](#security) to each API operation.                                                                               |
-| success            | Success response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                              |
-| failure            | Failure response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                              |
-| header             | Header in response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                              |
-| router             | Path definition that separated by spaces. `path`,`[httpMethod]`                                                           |
+| annotation  | description                                                                                                                |
+|-------------|----------------------------------------------------------------------------------------------------------------------------|
+| description | A verbose explanation of the operation behavior.                                                                           |
+| id          | A unique string used to identify the operation. Must be unique among all API operations.                                   |
+| tags        | A list of tags to each API operation that separated by commas.                                                             |
+| summary     | A short summary of what the operation does.                                                                                |
+| accept      | A list of MIME types the APIs can consume. Value MUST be as described under [Mime Types](#mime-types).                     |
+| produce     | A list of MIME types the APIs can produce. Value MUST be as described under [Mime Types](#mime-types).                     |
+| param       | Parameters that separated by spaces. `param name`,`param type`,`data type`,`is mandatory?`,`comment` `attribute(optional)` |
+| security    | [Security](#security) to each API operation.                                                                               |
+| success     | Success response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                              |
+| failure     | Failure response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                              |
+| header      | Header in response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                            |
+| router      | Path definition that separated by spaces. `path`,`[httpMethod]`                                                            |
+| x-name      | The extension key, must be start by x- and take only json value.                                                           |
 
 ## Mime Types
 
@@ -360,12 +388,11 @@ Besides that, `swag` also accepts aliases for some MIME Types as follows:
 
 ## Param Type
 
-- object (struct)
-- string (string)
-- integer (int, uint, uint32, uint64)
-- number (float32)
-- boolean (bool)
-- array
+- query
+- path
+- header
+- body
+- formData
 
 ## Data Type
 
@@ -497,12 +524,14 @@ type Account struct {
 
 ```go
 type Account struct {
-    // ID this is userid
-    ID   int    `json:"id"
+	// ID this is userid
+	ID   int    `json:"id"`
+	Name string `json:"name"` // This is Name
 }
 ```
 
-### Override swagger type of a struct field
+### Use swaggertype tag to supported custom type
+[#201](https://github.com/swaggo/swag/issues/201#issuecomment-475479409)
 
 ```go
 type TimestampTime struct {
@@ -538,11 +567,38 @@ type Account struct {
 }
 ```
 
+[#379](https://github.com/swaggo/swag/issues/379)
+```go
+type CerticateKeyPair struct {
+	Crt []byte `json:"crt" swaggertype:"string" format:"base64" example:"U3dhZ2dlciByb2Nrcw=="`
+	Key []byte `json:"key" swaggertype:"string" format:"base64" example:"U3dhZ2dlciByb2Nrcw=="`
+}
+```
+generated swagger doc as follows:
+```go
+"api.MyBinding": {
+  "type":"object",
+  "properties":{
+    "crt":{
+      "type":"string",
+      "format":"base64",
+      "example":"U3dhZ2dlciByb2Nrcw=="
+    },
+    "key":{
+      "type":"string",
+      "format":"base64",
+      "example":"U3dhZ2dlciByb2Nrcw=="
+    }
+  }
+}
+
+```
+
 ### Add extension info to struct field
 
 ```go
 type Account struct {
-    ID   int    `json:"id"   extensions:"x-nullable,x-abc=def"` // extensions fields must start with "x-"
+    ID   string    `json:"id"   extensions:"x-nullable,x-abc=def"` // extensions fields must start with "x-"
 }
 ```
 
@@ -589,3 +645,36 @@ Make it AND condition
 
 ## About the Project
 This project was inspired by [yvasiyarov/swagger](https://github.com/yvasiyarov/swagger) but we simplified the usage and added support a variety of [web frameworks](#supported-web-frameworks). Gopher image source is [tenntenn/gopher-stickers](https://github.com/tenntenn/gopher-stickers). It has licenses [creative commons licensing](http://creativecommons.org/licenses/by/3.0/deed.en).
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/swaggo/swag/graphs/contributors"><img src="https://opencollective.com/swag/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/swag#backer)]
+
+<a href="https://opencollective.com/swag#backers" target="_blank"><img src="https://opencollective.com/swag/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/swag#sponsor)]
+
+<a href="https://opencollective.com/swag/sponsor/0/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/1/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/2/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/3/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/4/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/5/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/6/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/7/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/8/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/swag/sponsor/9/website" target="_blank"><img src="https://opencollective.com/swag/sponsor/9/avatar.svg"></a>
+
+
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fswaggo%2Fswag.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fswaggo%2Fswag?ref=badge_large)

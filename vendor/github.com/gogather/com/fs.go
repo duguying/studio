@@ -1,11 +1,16 @@
 package com
 
 import (
+	"archive/tar"
 	"bytes"
+	"compress/gzip"
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"os/user"
@@ -214,4 +219,77 @@ func homeWindows() (string, error) {
 func Dir(fullpath string) string {
 	unixPath := strings.Replace(fullpath, fmt.Sprintf("%c", filepath.Separator), "/", -1)
 	return strings.Replace(filepath.Dir(unixPath), "/", fmt.Sprintf("%c", filepath.Separator), -1)
+}
+
+//解压 tar.gz
+func UnpackTar(fpath string, dist string) error {
+	if fpath == "" {
+		return fmt.Errorf("empty input")
+	}
+
+	_ = os.Mkdir(dist, 0755)
+
+	f, err := os.Open(fpath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	gzf, err := gzip.NewReader(f)
+	if err != nil {
+		return err
+	}
+
+	tarReader := tar.NewReader(gzf)
+
+	for true {
+		header, err := tarReader.Next()
+
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			return err
+		}
+
+		name := filepath.Join(dist, header.Name)
+
+		switch header.Typeflag {
+		case tar.TypeDir:
+			if err := os.MkdirAll(name, header.FileInfo().Mode()); err != nil {
+				return err
+			}
+		case tar.TypeReg:
+			outFile, err := os.Create(name)
+			if err != nil {
+				return err
+			}
+			defer outFile.Close()
+			if _, err := io.Copy(outFile, tarReader); err != nil {
+				return err
+			}
+		default:
+			return fmt.Errorf(
+				"ExtractTarGz: uknown type: %d in %s",
+				header.Typeflag,
+				name)
+		}
+	}
+	return nil
+}
+
+// 计算文件MD5
+func FileMD5(fpath string) string {
+	file, err := os.OpenFile(fpath, os.O_RDONLY, 0755)
+	if err != nil {
+		log.Println("get md5 err:", err.Error())
+		return ""
+	}
+	defer file.Close()
+
+	buf := md5.New()
+	io.Copy(buf, file)
+
+	return hex.EncodeToString(buf.Sum(nil))
 }

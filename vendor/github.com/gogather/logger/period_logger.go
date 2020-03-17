@@ -12,6 +12,7 @@ type PeriodLogger struct {
 	gFile       *os.File
 	nextLogTime time.Time
 	Ls          *log.Logger
+	ls          log.Logger
 	tag         string
 	isDefault   bool
 	flag        int
@@ -34,18 +35,22 @@ func NewPeriodLogger(appName, tag, dir string, isDefault bool, flag int, lv int)
 		level:       lv,
 	}
 
-	l.setLog(dir, appName)
+	l.setLog(dir, appName, "")
 	go l.logPeriod(dir, appName)
 
 	return l
 }
 
-func (l *PeriodLogger) setLog(logDir string, appName string) error {
+func (l *PeriodLogger) setLog(logDir string, appName string, switchId string) error {
 	yy, mm, dd := l.nextLogTime.Date()
 
 	group := ""
 	if !l.isDefault {
 		group = fmt.Sprintf("_%s", l.tag)
+	}
+
+	if switchId != "" {
+		group = fmt.Sprintf("%s_%s", group, switchId)
 	}
 
 	filename := fmt.Sprintf("%d_%02d_%02d_%s%s.log", yy, mm, dd, appName, group)
@@ -61,7 +66,9 @@ func (l *PeriodLogger) setLog(logDir string, appName string) error {
 		//log.SetPrefix("[INFO]")
 	}
 
-	l.Ls = log.New(l.gFile, "", l.flag)
+	l.ls = *(log.New(l.gFile, "", l.flag))
+
+	l.Ls = &l.ls
 
 	return nil
 }
@@ -73,7 +80,7 @@ func (l *PeriodLogger) logPeriod(logDir, appName string) {
 		if now.After(l.nextLogTime.Add(period)) {
 			l.nextLogTime = l.nextLogTime.Add(period)
 			oldFile := l.gFile
-			err := l.setLog(logDir, appName)
+			err := l.setLog(logDir, appName, "")
 			if err != nil {
 				log.Println("set log failed", err, logDir)
 			}
@@ -81,6 +88,15 @@ func (l *PeriodLogger) logPeriod(logDir, appName string) {
 		}
 		time.Sleep(time.Second)
 	}
+}
+
+func (l *PeriodLogger) SwitchLog(logDir, appName, switchId string) {
+	oldFile := l.gFile
+	err := l.setLog(logDir, appName, switchId)
+	if err != nil {
+		log.Println("set log failed", err, logDir)
+	}
+	oldFile.Close()
 }
 
 func getTonight() time.Time {

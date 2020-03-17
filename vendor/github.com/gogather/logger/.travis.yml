@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - tips
+  - stable
 
 # let us have speedy Docker-based Travis workers
 sudo: false

@@ -17,10 +17,7 @@ import (
 )
 
 func GenUUID() (string, error) {
-	guuid, err := uuid.NewV4()
-	if err != nil {
-		return "", err
-	}
+	guuid := uuid.NewV4()
 	return strings.Replace(guuid.String(), "-", "", -1), nil
 }
 

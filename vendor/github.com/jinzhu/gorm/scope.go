@@ -225,7 +225,7 @@ func (scope *Scope) SetColumn(column interface{}, value interface{}) error {
 				updateAttrs[field.DBName] = value
 				return field.Set(value)
 			}
-			if (field.DBName == dbName) || (field.Name == name && mostMatchedField == nil) {
+			if !field.IsIgnored && ((field.DBName == dbName) || (field.Name == name && mostMatchedField == nil)) {
 				mostMatchedField = field
 			}
 		}
@@ -257,7 +257,7 @@ func (scope *Scope) CallMethod(methodName string) {
 func (scope *Scope) AddToVars(value interface{}) string {
 	_, skipBindVar := scope.InstanceGet("skip_bindvar")
 
-	if expr, ok := value.(*expr); ok {
+	if expr, ok := value.(*SqlExpr); ok {
 		exp := expr.expr
 		for _, arg := range expr.args {
 			if skipBindVar {
@@ -402,7 +402,7 @@ func (scope *Scope) InstanceGet(name string) (interface{}, bool) {
 // Begin start a transaction
 func (scope *Scope) Begin() *Scope {
 	if db, ok := scope.SQLDB().(sqlDb); ok {
-		if tx, err := db.Begin(); err == nil {
+		if tx, err := db.Begin(); scope.Err(err) == nil {
 			scope.db.db = interface{}(tx).(SQLCommon)
 			scope.InstanceSet("gorm:started_transaction", true)
 		}
@@ -785,7 +785,7 @@ func (scope *Scope) orderSQL() string {
 	for _, order := range scope.Search.orders {
 		if str, ok := order.(string); ok {
 			orders = append(orders, scope.quoteIfPossible(str))
-		} else if expr, ok := order.(*expr); ok {
+		} else if expr, ok := order.(*SqlExpr); ok {
 			exp := expr.expr
 			for _, arg := range expr.args {
 				exp = strings.Replace(exp, "?", scope.AddToVars(arg), 1)
@@ -797,7 +797,9 @@ func (scope *Scope) orderSQL() string {
 }
 
 func (scope *Scope) limitAndOffsetSQL() string {
-	return scope.Dialect().LimitAndOffsetSQL(scope.Search.limit, scope.Search.offset)
+	sql, err := scope.Dialect().LimitAndOffsetSQL(scope.Search.limit, scope.Search.offset)
+	scope.Err(err)
+	return sql
 }
 
 func (scope *Scope) groupSQL() string {
@@ -872,7 +874,7 @@ func (scope *Scope) callCallbacks(funcs []*func(s *Scope)) *Scope {
 	return scope
 }
 
-func convertInterfaceToMap(values interface{}, withIgnoredField bool) map[string]interface{} {
+func convertInterfaceToMap(values interface{}, withIgnoredField bool, db *DB) map[string]interface{} {
 	var attrs = map[string]interface{}{}
 
 	switch value := values.(type) {
@@ -880,7 +882,7 @@ func convertInterfaceToMap(values interface{}, withIgnoredField bool) map[string
 		return value
 	case []interface{}:
 		for _, v := range value {
-			for key, value := range convertInterfaceToMap(v, withIgnoredField) {
+			for key, value := range convertInterfaceToMap(v, withIgnoredField, db) {
 				attrs[key] = value
 			}
 		}
@@ -893,7 +895,7 @@ func convertInterfaceToMap(values interface{}, withIgnoredField bool) map[string
 				attrs[ToColumnName(key.Interface().(string))] = reflectValue.MapIndex(key).Interface()
 			}
 		default:
-			for _, field := range (&Scope{Value: values}).Fields() {
+			for _, field := range (&Scope{Value: values, db: db}).Fields() {
 				if !field.IsBlank && (withIgnoredField || !field.IsIgnored) {
 					attrs[field.DBName] = field.Field.Interface()
 				}
@@ -905,14 +907,14 @@ func convertInterfaceToMap(values interface{}, withIgnoredField bool) map[string
 
 func (scope *Scope) updatedAttrsWithValues(value interface{}) (results map[string]interface{}, hasUpdate bool) {
 	if scope.IndirectValue().Kind() != reflect.Struct {
-		return convertInterfaceToMap(value, false), true
+		return convertInterfaceToMap(value, false, scope.db), true
 	}
 
 	results = map[string]interface{}{}
 
-	for key, value := range convertInterfaceToMap(value, true) {
+	for key, value := range convertInterfaceToMap(value, true, scope.db) {
 		if field, ok := scope.FieldByName(key); ok && scope.changeableField(field) {
-			if _, ok := value.(*expr); ok {
+			if _, ok := value.(*SqlExpr); ok {
 				hasUpdate = true
 				results[field.DBName] = value
 			} else {
@@ -982,6 +984,10 @@ func (scope *Scope) pluck(column string, value interface{}) *Scope {
 	if dest.Kind() != reflect.Slice {
 		scope.Err(fmt.Errorf("results should be a slice, not %s", dest.Kind()))
 		return scope
+	}
+
+	if dest.Len() > 0 {
+		dest.Set(reflect.Zero(dest.Type()))
 	}
 
 	if query, ok := scope.Search.selects["query"]; !ok || !scope.isQueryForColumn(query, column) {
@@ -1190,7 +1196,7 @@ func (scope *Scope) createTable() *Scope {
 }
 
 func (scope *Scope) dropTable() *Scope {
-	scope.Raw(fmt.Sprintf("DROP TABLE %v%s", scope.QuotedTableName(), scope.getTableOptions())).Exec()
+	scope.Raw(fmt.Sprintf("DROP TABLE %v", scope.QuotedTableName())).Exec()
 	return scope
 }
 

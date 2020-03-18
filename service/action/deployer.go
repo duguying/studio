@@ -37,7 +37,7 @@ func CheckToken(c *gin.Context) {
 
 func PackageUpload(c *gin.Context) {
 	appName := c.GetHeader("name")
-	appPath := g.Config.Get("deployer", fmt.Sprintf("%s-path", appName), "" /*"/root/sites/parsing-techniques"*/)
+	appPath := g.Config.Get("deployer", fmt.Sprintf("%s-path", appName), "")
 	fh, err := c.FormFile("file")
 	if err != nil {
 		log.Println("get form file failed,", err.Error())

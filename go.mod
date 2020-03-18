@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
+	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gin-contrib/pprof v1.2.1
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7
@@ -25,7 +26,7 @@ require (
 	github.com/libp2p/go-libp2p-crypto v0.1.0
 	github.com/libp2p/go-libp2p-net v0.1.0
 	github.com/mattn/go-colorable v0.1.1 // indirect
-	github.com/mozillazg/go-pinyin v0.16.0
+	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/multiformats/go-multiaddr v0.2.1
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/russross/blackfriday/v2 v2.0.1

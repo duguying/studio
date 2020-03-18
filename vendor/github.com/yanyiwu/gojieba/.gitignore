@@ -1,8 +1,0 @@
-tags
-*swp
-*.out
-*.o
-*.d
-*.ut
-build
-example/example

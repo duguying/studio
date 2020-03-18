@@ -228,8 +228,6 @@ github.com/minio/sha256-simd
 github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v1.0.1
 github.com/modern-go/reflect2
-# github.com/mozillazg/go-pinyin v0.16.0
-github.com/mozillazg/go-pinyin
 # github.com/mr-tron/base58 v1.1.3
 github.com/mr-tron/base58/base58
 # github.com/multiformats/go-base32 v0.0.3
@@ -281,8 +279,6 @@ github.com/unknwon/com
 github.com/whyrusleeping/mafmt
 # github.com/whyrusleeping/multiaddr-filter v0.0.0-20160516205228-e903e4adabd7
 github.com/whyrusleeping/multiaddr-filter
-# github.com/yanyiwu/gojieba v1.1.0
-github.com/yanyiwu/gojieba
 # go.opencensus.io v0.22.3
 go.opencensus.io/stats/view
 go.opencensus.io/internal/tagencoding

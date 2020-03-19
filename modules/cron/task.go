@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"github.com/gogather/cron"
 	"log"
-	"strconv"
 )
 
 func Init() {
@@ -31,16 +30,12 @@ func Init() {
 
 func flushViewCnt() {
 	vcm := viewcnt.GetMap()
-	for idStr, val := range vcm.M {
-		id, err := strconv.ParseInt(idStr, 10, 64)
+	for ident, val := range vcm.M {
+		err := db.UpdateArticleViewCount(ident, val.(int))
 		if err != nil {
-			log.Println("parse article id failed, err:", err.Error())
-			continue
+			log.Println("update article view count failed, err:", err.Error())
 		} else {
-			err = db.UpdateArticleViewCount(uint(id), val.(int))
-			if err != nil {
-				log.Println("update article view count failed, err:", err.Error())
-			}
+			viewcnt.ResetViewCnt(ident)
 		}
 	}
 }

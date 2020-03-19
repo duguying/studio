@@ -54,7 +54,7 @@ func PackageUpload(c *gin.Context) {
 		log.Println("tgz file exist, maybe someone else is deploying, deploy stopped.")
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
-			"err": err.Error(),
+			"err": "tgz文件已存在",
 		})
 		return
 	}

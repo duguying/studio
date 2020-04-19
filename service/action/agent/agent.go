@@ -44,7 +44,7 @@ func Report(c *gin.Context) {
 	sk := g.Config.Get("dns", "sk", "")
 	rootDomain := g.Config.Get("dns", "root", "duguying.net")
 	rpiRecord := g.Config.Get("dns", "rr", "rpi")
-	err = alidns.AddDomainRecord(rootAddr, ak, sk, rootDomain, rpiRecord, "A", 60, "default", c.ClientIP())
+	err = dns.AddDomainRecord(rootAddr, ak, sk, rootDomain, rpiRecord, "A", 60, "default", c.ClientIP())
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

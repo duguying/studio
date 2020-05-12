@@ -19,6 +19,9 @@ const (
 
 	FileTypeArchive FileType = 0
 	FileTypeImage   FileType = 1
+
+	RecognizeNotNeed RecognizeStatus = 0
+	RecognizeDone    RecognizeStatus = 1
 )
 
 type StorageType int64
@@ -123,7 +126,8 @@ type File struct {
 	Mime       string          `json:"mime"`
 	Size       uint64          `json:"size"`
 	FileType   FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
-	Recognized RecognizeStatus `json:"recognized" sql:"comment:'识别状态'"`
+	Md5        string          `json:"md5" sql:"comment:'MD5'"`
+	Recognized RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
 	CreatedAt  time.Time       `json:"created_at"`
 }
 

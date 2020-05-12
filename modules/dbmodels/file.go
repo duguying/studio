@@ -83,16 +83,48 @@ func (tt *FileType) Scan(value interface{}) error {
 
 // ---------
 
+type RecognizeStatus int64
+
+func (rs RecognizeStatus) Value() (driver.Value, error) {
+	return int64(rs), nil
+}
+
+func (rs *RecognizeStatus) Scan(value interface{}) error {
+	val, ok := value.(int64)
+	if !ok {
+		switch reflect.TypeOf(value).String() {
+		case "[]uint8":
+			{
+				ba := []byte{}
+				for _, b := range value.([]uint8) {
+					ba = append(ba, byte(b))
+				}
+				val, _ = strconv.ParseInt(string(ba), 10, 64)
+				break
+			}
+		default:
+			{
+				return fmt.Errorf("value: %v, is not int, is %s", value, reflect.TypeOf(value))
+			}
+		}
+	}
+	*rs = RecognizeStatus(val)
+	return nil
+}
+
+// ---------
+
 type File struct {
-	Id        uint        `json:"id"`
-	Filename  string      `json:"filename"`
-	Path      string      `json:"path"`
-	Store     StorageType `json:"store"`
-	OssHost   string      `json:"oss_host"`
-	Mime      string      `json:"mime"`
-	Size      uint64      `json:"size"`
-	FileType  FileType    `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
-	CreatedAt time.Time   `json:"created_at"`
+	Id         uint            `json:"id"`
+	Filename   string          `json:"filename"`
+	Path       string          `json:"path"`
+	Store      StorageType     `json:"store"`
+	OssHost    string          `json:"oss_host"`
+	Mime       string          `json:"mime"`
+	Size       uint64          `json:"size"`
+	FileType   FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
+	Recognized RecognizeStatus `json:"recognized" sql:"comment:'识别状态'"`
+	CreatedAt  time.Time       `json:"created_at"`
 }
 
 func (f *File) String() string {

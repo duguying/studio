@@ -122,7 +122,6 @@ type File struct {
 	Filename   string          `json:"filename"`
 	Path       string          `json:"path"`
 	Store      StorageType     `json:"store"`
-	OssHost    string          `json:"oss_host"`
 	Mime       string          `json:"mime"`
 	Size       uint64          `json:"size"`
 	FileType   FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`

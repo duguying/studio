@@ -8,7 +8,8 @@ package dbmodels
 import "time"
 
 type FaceLabel struct {
-	Id        uint      `json:"id"`
+	UUID
+
 	Label     string    `json:"label"`
 	CreatedAt time.Time `json:"created_at"`
 }

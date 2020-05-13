@@ -118,7 +118,8 @@ func (rs *RecognizeStatus) Scan(value interface{}) error {
 // ---------
 
 type File struct {
-	Id         uint            `json:"id"`
+	UUID
+
 	Filename   string          `json:"filename"`
 	Path       string          `json:"path"`
 	Store      StorageType     `json:"store"`

@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
-	github.com/aliyun/alibaba-cloud-sdk-go v1.61.123
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.191
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/getsentry/raven-go v0.2.0

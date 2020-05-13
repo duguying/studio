@@ -8,7 +8,8 @@ package dbmodels
 import "time"
 
 type Face struct {
-	Id             uint      `json:"id"`
+	UUID
+
 	FileId         uint      `json:"file_id"`
 	FaceDescriptor string    `json:"face_descriptor" sql:"type:longtext"`
 	LabelId        uint      `json:"label_id"`

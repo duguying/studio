@@ -6,8 +6,8 @@ package agent
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/modules/alidns"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dns"
 	"net/http"
 	"time"
 
@@ -39,12 +39,20 @@ func Report(c *gin.Context) {
 		return
 	}
 
-	rootAddr := g.Config.Get("dns", "addr", "http://alidns.aliyuncs.com")
 	ak := g.Config.Get("dns", "ak", "")
 	sk := g.Config.Get("dns", "sk", "")
 	rootDomain := g.Config.Get("dns", "root", "duguying.net")
 	rpiRecord := g.Config.Get("dns", "rr", "rpi")
-	err = dns.AddDomainRecord(rootAddr, ak, sk, rootDomain, rpiRecord, "A", 60, "default", c.ClientIP())
+	alidns, err := dns.NewAliDns(ak, sk)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	_, err = alidns.AddDomainRecord(rootDomain, rpiRecord, "A", c.ClientIP())
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

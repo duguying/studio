@@ -95,7 +95,7 @@ function docker() {
     cp ./setenv ./dockerdist
     image=duguying/studio
     version=`git tag | head -1`
-    docker build
+    docker build -t $image .
     docker push $image:$version
     docker push $image:latest
 }
@@ -105,7 +105,7 @@ function tailf() {
 }
 
 function help() {
-    echo "$0 build|pack|start|stop|restart|status|tail"
+    echo "$0 build|pack|start|stop|restart|status|tail|docker"
 }
 
 if [ "$1" == "" ]; then
@@ -128,6 +128,8 @@ elif [ "$1" == "pack" ];then
     pack
 elif [ "$1" == "proto" ];then
     proto
+elif [ "$1" == "docker" ];then
+    docker
 else
     help
 fi

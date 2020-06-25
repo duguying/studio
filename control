@@ -87,7 +87,7 @@ function doc() {
     swag init
 }
 
-function docker() {
+function dockerbuild() {
     build `go env GOOS` `go env GOARCH`
     rm -rf dockerdist
     mkdir -p dockerdist
@@ -129,7 +129,7 @@ elif [ "$1" == "pack" ];then
 elif [ "$1" == "proto" ];then
     proto
 elif [ "$1" == "docker" ];then
-    docker
+    dockerbuild
 else
     help
 fi

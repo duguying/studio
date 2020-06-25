@@ -95,7 +95,7 @@ function dockerbuild() {
     cp ./setenv ./dockerdist
     image=duguying/studio
     version=`git tag | head -1`
-    docker build -t $image .
+    docker build -t $image -t $image:$version .
     docker push $image:$version
     docker push $image:latest
 }

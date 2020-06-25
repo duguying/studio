@@ -87,6 +87,19 @@ function doc() {
     swag init
 }
 
+function docker() {
+    build
+    rm -rf dockerdist
+    mkdir -p dockerdist
+    cp ./studio ./dockerdist
+    cp ./setenv ./dockerdist
+    image=duguying/studio
+    version=`git tag | head -1`
+    docker build
+    docker push $image:$version
+    docker push $image:latest
+}
+
 function tailf() {
     tail -f $logfile
 }

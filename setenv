@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir -p /root/studio
+mv /tmp/studio /root/studio/
+rm /tmp/setenv

@@ -93,6 +93,7 @@ function dockerbuild() {
     mkdir -p dockerdist
     cp ./studio ./dockerdist
     cp ./setenv ./dockerdist
+    cp ./ipipfree.ipdb ./dockerdist
     image=duguying/studio
     version=`git tag | head -1`
     docker build -t $image -t $image:$version .

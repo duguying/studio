@@ -98,7 +98,7 @@ func initLogger() {
 }
 
 func initIPIP() {
-	path := g.Config.Get("ipip", "path", "17monipdb.datx")
+	path := g.Config.Get("ipip", "path", "/data/ipipfree.ipdb")
 	ipip.InitIPIP(path)
 }
 

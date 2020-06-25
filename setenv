@@ -1,6 +1,8 @@
 #!/bin/sh
 
 mkdir -p /root/studio
+mkdir -p /data
 mv /tmp/studio /root/studio/
+mv /tmp/ipipfree.ipdb /data/
 chmod +x /root/studio/studio
 rm /tmp/setenv

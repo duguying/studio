@@ -2,4 +2,5 @@
 
 mkdir -p /root/studio
 mv /tmp/studio /root/studio/
+chmod +x /root/studio/studio
 rm /tmp/setenv

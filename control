@@ -88,7 +88,7 @@ function doc() {
 }
 
 function docker() {
-    build
+    build `go env GOOS` `go env GOARCH`
     rm -rf dockerdist
     mkdir -p dockerdist
     cp ./studio ./dockerdist

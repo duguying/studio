@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 mkdir -p /root/studio
 mv /tmp/studio /root/studio/

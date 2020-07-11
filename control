@@ -21,7 +21,7 @@ function check_pid() {
 }
 
 function build() {
-    version=`git tag | head -1`
+    version=`git tag | tail -1`
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
     GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .

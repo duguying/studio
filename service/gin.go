@@ -45,7 +45,7 @@ func Run(logDir string) {
 	router.Any("/version", action.Version)
 
 	// v1 api
-	apiV1 := router.Group("/api/v1")
+	apiV1 := router.Group("/api/v1", action.SessionValidate(false))
 	{
 		// needn't auth
 		{
@@ -67,7 +67,7 @@ func Run(logDir string) {
 		}
 
 		// auth require
-		auth := apiV1.Group("/admin", action.SessionValidate)
+		auth := apiV1.Group("/admin", action.SessionValidate(true))
 		{
 			auth.GET("/user_info", action.UserInfo)      // 用户信息
 			auth.POST("/user_logout", action.UserLogout) // 用户登出
@@ -87,8 +87,8 @@ func Run(logDir string) {
 		// agent connection point
 		agt := apiV1.Group("/agent")
 		{
-			agt.GET("/list", action.SessionValidate, agent.List) // agent列表
-			agt.Any("/ws", agent.Ws)                             // agent连接点
+			agt.GET("/list", action.SessionValidate(true), agent.List) // agent列表
+			agt.Any("/ws", agent.Ws)                                   // agent连接点
 		}
 
 	}

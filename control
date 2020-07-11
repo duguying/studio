@@ -20,8 +20,12 @@ function check_pid() {
     return 0
 }
 
+function tagversion() {
+    git tag | tail -1
+}
+
 function build() {
-    version=`git tag | tail -1`
+    version=`tagversion`
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
     GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
@@ -95,7 +99,7 @@ function dockerbuild() {
     cp ./setenv ./dockerdist
     cp ./ipipfree.ipdb ./dockerdist
     image=duguying/studio
-    version=`git tag | head -1`
+    version=`tagversion`
     docker build -t $image -t $image:$version .
     docker push $image:$version
     docker push $image:latest

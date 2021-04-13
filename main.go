@@ -27,7 +27,7 @@ var (
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
-// @contact.url http://sparta.wsd.com/support
+// @contact.url http://duguying.net/
 // @contact.email rainesli@tencent.com
 
 // @license.name Apache 2.0

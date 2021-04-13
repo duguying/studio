@@ -28,6 +28,7 @@ require (
 	github.com/libp2p/go-libp2p-net v0.1.0
 	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/multiformats/go-multiaddr v0.2.1
+	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/russross/blackfriday/v2 v2.0.1
 	github.com/satori/go.uuid v1.2.0

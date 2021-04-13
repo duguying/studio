@@ -10,8 +10,9 @@ import (
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/viewcnt"
 	"fmt"
-	"github.com/gogather/cron"
 	"log"
+
+	"github.com/gogather/cron"
 )
 
 func Init() {
@@ -23,6 +24,14 @@ func Init() {
 		log.Println("create cron task failed, err:", err.Error())
 	} else {
 		log.Println("create cron task success, task id:", t1)
+	}
+
+	spec2 := g.Config.Get("calendar", "birth-check", fmt.Sprintf("@daily"))
+	t2, err := task.AddFunc(spec2, calendarCheck)
+	if err != nil {
+		log.Println("create cron task failed, err:", err.Error())
+	} else {
+		log.Println("create cron task success, task id:", t2)
 	}
 
 	task.Start()
@@ -38,4 +47,8 @@ func flushViewCnt() {
 			viewcnt.ResetViewCnt(ident)
 		}
 	}
+}
+
+func calendarCheck() {
+
 }

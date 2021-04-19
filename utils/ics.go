@@ -9,7 +9,8 @@ import (
 )
 
 // GenerateICS 生成日历事件
-func GenerateICS(id string, start, end, stamp time.Time, summary, address, description, link, attendee string) {
+func GenerateICS(id string, start, end, stamp time.Time,
+	summary, address, description, link, attendee string) string {
 	cal := ics.NewCalendar()
 	cal.SetMethod(ics.MethodRequest)
 	event := cal.AddEvent(fmt.Sprintf("%s@ics.duguying.net", id))
@@ -21,12 +22,13 @@ func GenerateICS(id string, start, end, stamp time.Time, summary, address, descr
 	event.SetSummary(summary)
 	event.SetLocation(address)
 	event.SetDescription(description)
-	event.SetURL(link)
+	if link != "" {
+		event.SetURL(link)
+	}
 	event.SetOrganizer("studio@ics.duguying.net", ics.WithCN("This Machine"))
 	event.AddAttendee(attendee,
 		ics.CalendarUserTypeIndividual, ics.ParticipationStatusNeedsAction,
 		ics.ParticipationRoleReqParticipant, ics.WithRSVP(true),
 	)
-	content := cal.Serialize()
-	fmt.Println(content)
+	return cal.Serialize()
 }

@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.191
+	github.com/arran4/golang-ical v0.0.0-20210405013514-3a97d5d26366
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/getsentry/raven-go v0.2.0
@@ -29,7 +30,7 @@ require (
 	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/multiformats/go-multiaddr v0.2.1
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
-	github.com/parnurzeal/gorequest v0.2.16
+	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/swaggo/gin-swagger v1.2.0

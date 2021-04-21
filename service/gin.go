@@ -76,6 +76,7 @@ func Run(logDir string) {
 			auth.Any("/xterm", action.ConnectXTerm)      // 连接xterm
 
 			auth.POST("/article", action.AddArticle)                 // 添加文章
+			auth.PUT("/article", action.UpdateArticle)               // 修改文章
 			auth.PUT("/article/publish", action.PublishArticle)      // 发布草稿
 			auth.DELETE("/article", action.DeleteArticle)            // 删除文章
 			auth.GET("/article/list_title", action.ListArticleTitle) // 列出文章列表

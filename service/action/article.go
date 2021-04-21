@@ -396,6 +396,18 @@ func AddArticle(c *gin.Context) {
 	}
 }
 
+func UpdateArticle(c *gin.Context) {
+	article := models.Article{}
+	err := c.BindJSON(&article)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  false,
+			Msg: "解析参数失败",
+		})
+		return
+	}
+}
+
 // @Router /admin/article/publish [put]
 // @Tags 文章
 // @Description 发布文章

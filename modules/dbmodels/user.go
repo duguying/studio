@@ -34,11 +34,12 @@ func (u *User) String() string {
 }
 
 func (u *User) ToInfo() *models.UserInfo {
+	host := g.Config.Get("system", "host", "http://duguying.net")
 	return &models.UserInfo{
 		Id:       u.Id,
 		Username: u.Username,
 		Email:    u.Email,
-		Avatar:   "http://duguying.net/logo",
+		Avatar:   host + "/logo",
 		Access:   role[u.Role],
 	}
 }

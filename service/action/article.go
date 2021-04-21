@@ -10,11 +10,12 @@ import (
 	"duguying/studio/modules/viewcnt"
 	"duguying/studio/service/models"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // @Router /list [get]
@@ -396,6 +397,11 @@ func AddArticle(c *gin.Context) {
 	}
 }
 
+// @Router /admin/article [put]
+// @Tags 文章
+// @Description 修改文章
+// @Param publish body models.Article true "文章信息"
+// @Success 200 {object} models.CommonResponse
 func UpdateArticle(c *gin.Context) {
 	article := models.Article{}
 	err := c.BindJSON(&article)
@@ -406,6 +412,18 @@ func UpdateArticle(c *gin.Context) {
 		})
 		return
 	}
+	err = db.UpdateArticle(g.Db, article.Id, &article)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  false,
+			Msg: "解析参数失败",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, models.CommonResponse{
+		Ok: true,
+	})
+	return
 }
 
 // @Router /admin/article/publish [put]

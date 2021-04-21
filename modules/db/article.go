@@ -15,6 +15,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 func PageArticle(keyword string, page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
@@ -240,6 +242,20 @@ func UpdateArticleViewCount(uri string, cnt int) (err error) {
 	}).GetErrors()
 	if len(errs) > 0 && errs[0] != nil {
 		return errs[0]
+	}
+	return nil
+}
+
+func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
+	_, err = GetArticleById(id)
+	if err != nil {
+		return err
+	}
+	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(map[string]interface{}{
+		"content": article.Content,
+	}).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }

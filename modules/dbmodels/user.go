@@ -41,7 +41,7 @@ func (u *User) ToInfo() *models.UserInfo {
 		Id:       u.Id,
 		Username: u.Username,
 		Email:    u.Email,
-		Avatar:   host + "/logo",
+		Avatar:   host + "/logo.png",
 		Access:   role[u.Role],
 	}
 }

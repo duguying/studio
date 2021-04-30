@@ -15,13 +15,14 @@ import (
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/service/models"
 	"fmt"
+	"path/filepath"
+
 	"github.com/getsentry/raven-go"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"path/filepath"
 )
 
 func Run(logDir string) {
@@ -64,6 +65,8 @@ func Run(logDir string) {
 			apiV1.GET("/file/list", action.PageFile)                                 // 文件列表
 			apiV1.POST("/2fa", action.TfaAuth)                                       // 2FA校验
 			apiV1.GET("/sitemap", action.SiteMap)                                    // 列出所有文章URI
+
+			apiV1.GET("/tj/traffic_total", action.TrafficTotal)
 		}
 
 		// auth require
@@ -72,7 +75,7 @@ func Run(logDir string) {
 			auth.GET("/user_info", action.UserInfo)      // 用户信息
 			auth.POST("/user_logout", action.UserLogout) // 用户登出
 			auth.POST("/put", action.PutFile)            // 上传文件
-			auth.POST("/upload", action.UploadFile)      // 上传文件
+			auth.POST("/upload", action.UploadFile)      // 上传归档文件
 			auth.Any("/xterm", action.ConnectXTerm)      // 连接xterm
 
 			auth.POST("/article", action.AddArticle)                 // 添加文章

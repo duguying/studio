@@ -2,6 +2,7 @@
 // This file is part of blog project
 // Created by duguying on 2017/11/2.
 
+// Package orm ORM初始化包
 package orm
 
 import (
@@ -9,11 +10,12 @@ import (
 	"duguying/studio/modules/dbmodels"
 	"encoding/json"
 	"fmt"
+	"log"
+
 	"github.com/gogather/d2"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"log"
 )
 
 var (
@@ -21,6 +23,11 @@ var (
 )
 
 func InitDatabase() {
+	initDatabase()
+	initTjDatabase()
+}
+
+func initDatabase() {
 	if g.Config.SectionExist("database") {
 		dbType := g.Config.Get("database", "type", "sqlite")
 		if dbType == "mysql" {

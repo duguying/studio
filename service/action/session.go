@@ -2,15 +2,17 @@
 // This file is part of blog project
 // Created by duguying on 2018/5/18.
 
+// Package action 控制器包
 package action
 
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/session"
 	"duguying/studio/service/models"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SessionValidate(forbidAnonymous bool) func(c *gin.Context) {

@@ -5,7 +5,7 @@ import (
 	"duguying/studio/modules/dbmodels"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // AddCalendar 添加日志事件

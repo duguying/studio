@@ -11,22 +11,22 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func initTjDatabase() {
 	if g.Config.SectionExist("database") {
-		dbType := g.Config.Get("database", "type", "sqlite")
+		dbType := g.Config.Get("database-tj", "type", "sqlite")
 		if dbType == "mysql" {
 			initTjMysql()
 		} else {
 			initTjSqlite()
 		}
 
-		if g.Config.Get("database", "log", "enable") == "enable" {
-			g.Db.LogMode(true)
+		if g.Config.Get("database-tj", "log", "enable") == "enable" {
+			// g.Db.LogMode(true)
 		}
 
 		initTjOrm()
@@ -41,8 +41,10 @@ func initTjMysql() {
 	port := g.Config.GetInt64("database-tj", "port", 3306)
 	username := g.Config.Get("database-tj", "username", "user")
 	password := g.Config.Get("database-tj", "password", "password")
-	dbname := g.Config.Get("database-tj", "name", "blog")
-	g.Db, err = gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname))
+	dbname := g.Config.Get("database-tj", "name", "tgw")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname)
+	g.GfwDb, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Printf("数据库连接失败 err:%v\n", err)
 	}
@@ -50,15 +52,15 @@ func initTjMysql() {
 
 func initTjSqlite() {
 	var err error
-	path := g.Config.Get("database-tj", "path", "blog.db")
-	g.Db, err = gorm.Open("sqlite3", path)
+	path := g.Config.Get("database-tj", "path", "gfw.db")
+	g.GfwDb, err = gorm.Open(sqlite.Open(path), &gorm.Config{})
 	if err != nil {
 		log.Printf("数据库连接失败 err:%v\n", err)
 	}
 }
 
 func initTjOrm() {
-	g.Db.AutoMigrate(
+	g.GfwDb.AutoMigrate(
 		&dbmodels.TrojanUsers{},
 	)
 }

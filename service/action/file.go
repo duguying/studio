@@ -7,8 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
-	"github.com/gin-gonic/gin"
-	"github.com/gogather/com"
+	"duguying/studio/utils"
 	"io"
 	"log"
 	"mime"
@@ -19,6 +18,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gogather/com"
 )
 
 func PutFile(c *gin.Context) {
@@ -75,6 +77,72 @@ func PutFile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"ok": true,
+	})
+}
+
+func UploadImage(c *gin.Context) {
+	fh, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	store := g.Config.Get("upload", "store-path", "store")
+	domain := g.Config.Get("upload", "image-domain", "http://image.duguying.net")
+	size := fh.Size
+	key := filepath.Join("img", time.Now().Format("2006/01"), utils.GenUID())
+
+	fpath := filepath.Join(store, key)
+	dir := filepath.Dir(fpath)
+	_ = os.MkdirAll(dir, 0644)
+
+	f, err := os.Create(fpath)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	defer f.Close()
+
+	hf, err := fh.Open()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+	defer hf.Close()
+
+	_, err = io.Copy(f, hf)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	ext := path.Ext(key)
+	mimeType := mime.TypeByExtension(ext)
+
+	err = db.SaveFile(key, mimeType, uint64(size))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":  true,
+		"url": domain + strings.Replace(filepath.Join("/", key), `\`, `/`, -1),
 	})
 }
 

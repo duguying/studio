@@ -7,6 +7,7 @@ package db
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/dbmodels"
+
 	"github.com/gogather/com"
 )
 
@@ -21,36 +22,36 @@ func RegisterUser(username string, password string, email string) (user *dbmodel
 		Email:     email,
 		TfaSecret: tfaSecret,
 	}
-	errs := g.Db.Table("users").Create(user).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("users").Create(user).Error
+	if err != nil {
+		return nil, err
 	}
 	return user, nil
 }
 
 func GetUser(username string) (user *dbmodels.User, err error) {
 	user = &dbmodels.User{}
-	errs := g.Db.Table("users").Where("username=?", username).First(user).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("users").Where("username=?", username).First(user).Error
+	if err != nil {
+		return nil, err
 	}
 	return user, nil
 }
 
 func GetUserById(uid uint) (user *dbmodels.User, err error) {
 	user = &dbmodels.User{}
-	errs := g.Db.Table("users").Where("id=?", uid).First(user).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("users").Where("id=?", uid).First(user).Error
+	if err != nil {
+		return nil, err
 	}
 	return user, nil
 }
 
 func CheckUsername(username string) (valid bool, err error) {
-	count := 0
-	errs := g.Db.Table("users").Where("username=?", username).Count(&count).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return false, errs[0]
+	count := int64(0)
+	err = g.Db.Table("users").Where("username=?", username).Count(&count).Error
+	if err != nil {
+		return false, err
 	} else {
 		return count <= 0, nil
 	}

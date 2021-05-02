@@ -85,7 +85,8 @@ func Run(logDir string) {
 			auth.GET("/article/list_title", action.ListArticleTitle) // 列出文章列表
 			auth.GET("/article", action.GetArticle)                  // 获取文章
 
-			auth.GET("/2faqr", action.QrGoogleAuth) // 获取2FA二维码
+			auth.GET("/2faqr", action.QrGoogleAuth)        // 获取2FA二维码
+			auth.POST("/upload/image", action.UploadImage) // 上传图片
 		}
 
 		// agent connection point

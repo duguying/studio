@@ -3,7 +3,7 @@ package db
 import (
 	"duguying/studio/modules/dbmodels"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ListAllTrojanUsers 列举所有trojan帐号

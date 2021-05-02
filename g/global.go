@@ -6,13 +6,15 @@ package g
 
 import (
 	"duguying/studio/modules/configuration"
-	"github.com/jinzhu/gorm"
+
 	"gopkg.in/redis.v5"
+	"gorm.io/gorm"
 )
 
 var (
 	Config  *configuration.Config
 	Db      *gorm.DB
+	GfwDb   *gorm.DB
 	Redis   *redis.Client
 	P2pAddr string
 

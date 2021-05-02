@@ -21,11 +21,11 @@ require (
 	github.com/golang/protobuf v1.3.5
 	github.com/gorilla/websocket v1.4.1
 	github.com/ipipdotnet/ipdb-go v1.2.1
-	github.com/jinzhu/gorm v1.9.12
 	github.com/json-iterator/go v1.1.9
 	github.com/libp2p/go-libp2p v0.6.0
 	github.com/libp2p/go-libp2p-crypto v0.1.0
 	github.com/libp2p/go-libp2p-net v0.1.0
+	github.com/martinlindhe/base36 v1.1.0
 	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/multiformats/go-multiaddr v0.2.1
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
@@ -36,5 +36,8 @@ require (
 	github.com/unknwon/com v1.0.1
 	gopkg.in/ini.v1 v1.55.0
 	gopkg.in/redis.v5 v5.2.9
+	gorm.io/driver/mysql v1.0.6 // indirect
+	gorm.io/driver/sqlite v1.1.4 // indirect
+	gorm.io/gorm v1.21.9 // indirect
 	rsc.io/qr v0.2.0
 )

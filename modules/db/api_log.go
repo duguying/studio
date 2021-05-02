@@ -7,9 +7,9 @@ import (
 )
 
 func PutApiLog(apiLog *models.ApiLog) error {
-	errs := g.Db.Model(dbmodels.ApiLog{}).Create(apiLog).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	err := g.Db.Model(dbmodels.ApiLog{}).Create(apiLog).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }

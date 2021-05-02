@@ -20,8 +20,8 @@ const (
 func CreateOrUpdateAgent(clientId string, ip string) (agent *dbmodels.Agent, err error) {
 	tx := g.Db.Begin()
 	existAgent := &dbmodels.Agent{}
-	errs := tx.Table("agents").Where("client_id=?", clientId).First(existAgent).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
+	err = tx.Table("agents").Where("client_id=?", clientId).First(existAgent).Error
+	if err != nil {
 		// not exist, create
 		agent = &dbmodels.Agent{
 			ClientId:    clientId,
@@ -31,26 +31,26 @@ func CreateOrUpdateAgent(clientId string, ip string) (agent *dbmodels.Agent, err
 			OnlineTime:  time.Now(),
 			OfflineTime: time.Now(),
 		}
-		errs = tx.Table("agents").Create(agent).GetErrors()
-		if len(errs) > 0 && errs[0] != nil {
+		err = tx.Table("agents").Create(agent).Error
+		if err != nil {
 			tx.Rollback()
-			return nil, errs[0]
+			return nil, err
 		}
 	} else {
 		// exist, update
-		errs = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
+		err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 			"online": AGENT_ONLINE,
 			"ip":     ip,
-		}).GetErrors()
-		if len(errs) > 0 && errs[0] != nil {
+		}).Error
+		if err != nil {
 			tx.Rollback()
-			return nil, errs[0]
+			return nil, err
 		}
 	}
 
-	errs = tx.Commit().GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = tx.Commit().Error
+	if err != nil {
+		return nil, err
 	} else {
 		return agent, nil
 	}
@@ -60,21 +60,21 @@ func PutPerf(clientId string, os string, arch string, hostname string, ipIns []s
 	tx := g.Db.Begin()
 	ipInBytes, _ := json.Marshal(ipIns)
 
-	errs := tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
+	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 		"online":   AGENT_ONLINE,
 		"os":       os,
 		"arch":     arch,
 		"hostname": hostname,
 		"ip_ins":   string(ipInBytes),
-	}).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
+	}).Error
+	if err != nil {
 		tx.Rollback()
-		return errs[0]
+		return err
 	}
 
-	errs = tx.Commit().GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	err = tx.Commit().Error
+	if err != nil {
+		return err
 	} else {
 		return nil
 	}
@@ -83,9 +83,9 @@ func PutPerf(clientId string, os string, arch string, hostname string, ipIns []s
 // 通过 id 获取 agent
 func GetAgent(id uint) (agent *dbmodels.Agent, err error) {
 	agent = &dbmodels.Agent{}
-	errs := g.Db.Table("agents").Where("id=?", id).First(agent).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("agents").Where("id=?", id).First(agent).Error
+	if err != nil {
+		return nil, err
 	} else {
 		return agent, nil
 	}
@@ -94,9 +94,9 @@ func GetAgent(id uint) (agent *dbmodels.Agent, err error) {
 // 通过 clientId 获取 agent
 func GetAgentByClientId(clientId string) (agent *dbmodels.Agent, err error) {
 	agent = &dbmodels.Agent{}
-	errs := g.Db.Table("agents").Where("client_id=?", clientId).First(agent).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("agents").Where("client_id=?", clientId).First(agent).Error
+	if err != nil {
+		return nil, err
 	} else {
 		return agent, nil
 	}
@@ -105,9 +105,9 @@ func GetAgentByClientId(clientId string) (agent *dbmodels.Agent, err error) {
 // 列出所有可用 agent
 func ListAllAvailableAgents() (agents []*dbmodels.Agent, err error) {
 	agents = []*dbmodels.Agent{}
-	errs := g.Db.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).Error
+	if err != nil {
+		return nil, err
 	} else {
 		return agents, nil
 	}
@@ -116,14 +116,14 @@ func ListAllAvailableAgents() (agents []*dbmodels.Agent, err error) {
 // 禁用 agent
 func ForbidAgent(id uint) (err error) {
 	agent := &dbmodels.Agent{}
-	errs := g.Db.Table("agents").Where("id=?", id).First(agent).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	err = g.Db.Table("agents").Where("id=?", id).First(agent).Error
+	if err != nil {
+		return err
 	}
 
-	errs = g.Db.Table("agents").Where("id=?", id).Update("status", AGENT_STATUS_FOBBID).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	err = g.Db.Table("agents").Where("id=?", id).Update("status", AGENT_STATUS_FOBBID).Error
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -132,18 +132,18 @@ func ForbidAgent(id uint) (err error) {
 func UpdateAgentOffline(clientId string) (err error) {
 	tx := g.Db.Begin()
 
-	errs := tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
+	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 		"online":       AGENT_OFFLINE,
 		"offline_time": time.Now(),
-	}).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
+	}).Error
+	if err != nil {
 		tx.Rollback()
-		return errs[0]
+		return err
 	}
 
-	errs = tx.Commit().GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	err = tx.Commit().Error
+	if err != nil {
+		return err
 	} else {
 		return nil
 	}

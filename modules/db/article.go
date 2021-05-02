@@ -16,10 +16,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
-func PageArticle(keyword string, page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
+func PageArticle(keyword string, page uint, pageSize uint) (total int64, list []*dbmodels.Article, err error) {
 	total = 0
 	query := "status=?"
 	params := []interface{}{1}
@@ -28,31 +28,31 @@ func PageArticle(keyword string, page uint, pageSize uint) (total uint, list []*
 		params = append(params, fmt.Sprintf("%%%s%%", keyword))
 	}
 
-	errs := g.Db.Table("articles").Where(query, params...).Count(&total).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return 0, nil, errs[0]
+	err = g.Db.Table("articles").Where(query, params...).Count(&total).Error
+	if err != nil {
+		return 0, nil, err
 	}
 
 	list = []*dbmodels.Article{}
-	errs = g.Db.Table("articles").Where(query, params...).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return 0, nil, errs[0]
+	err = g.Db.Table("articles").Where(query, params...).Order("id desc").Offset(int((page - 1) * pageSize)).Limit(int(pageSize)).Find(&list).Error
+	if err != nil {
+		return 0, nil, err
 	}
 
 	return total, list, nil
 }
 
-func PageArticleMonthly(year, month uint, page uint, pageSize uint) (total uint, list []*dbmodels.Article, err error) {
+func PageArticleMonthly(year, month uint, page uint, pageSize uint) (total int64, list []*dbmodels.Article, err error) {
 	total = 0
-	errs := g.Db.Table("articles").Where("status=? and year(created_at)=? and month(created_at)=?", 1, year, month).Count(&total).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return 0, nil, errs[0]
+	err = g.Db.Table("articles").Where("status=? and year(created_at)=? and month(created_at)=?", 1, year, month).Count(&total).Error
+	if err != nil {
+		return 0, nil, err
 	}
 
 	list = []*dbmodels.Article{}
-	errs = g.Db.Table("articles").Where("status=? and year(created_at)=? and month(created_at)=?", 1, year, month).Order("id desc").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return 0, nil, errs[0]
+	err = g.Db.Table("articles").Where("status=? and year(created_at)=? and month(created_at)=?", 1, year, month).Order("id desc").Offset(int((page - 1) * pageSize)).Limit(int(pageSize)).Find(&list).Error
+	if err != nil {
+		return 0, nil, err
 	}
 
 	return total, list, nil
@@ -76,9 +76,9 @@ func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.Articl
 
 func HotArticleTitle(num uint) (articleTitle []*models.ArticleTitle, err error) {
 	list := []*dbmodels.Article{}
-	errs := g.Db.Table("articles").Order("count desc").Limit(num).Find(&list).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("articles").Order("count desc").Limit(int(num)).Find(&list).Error
+	if err != nil {
+		return nil, err
 	}
 	articleTitle = []*models.ArticleTitle{}
 	for _, article := range list {
@@ -90,9 +90,9 @@ func HotArticleTitle(num uint) (articleTitle []*models.ArticleTitle, err error) 
 func MonthArch() (archInfos []*dbmodels.ArchInfo, err error) {
 	list := []*dbmodels.Article{}
 	archInfos = []*dbmodels.ArchInfo{}
-	errs := g.Db.Table("articles").Select("created_at").Where("status=?", 1).Find(&list).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("articles").Select("created_at").Where("status=?", 1).Find(&list).Error
+	if err != nil {
+		return nil, err
 	}
 
 	// assemble ArchInfo
@@ -125,18 +125,18 @@ func MonthArch() (archInfos []*dbmodels.ArchInfo, err error) {
 
 func GetArticle(uri string) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
-	errs := g.Db.Table("articles").Where("uri=?", uri).First(art).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("articles").Where("uri=?", uri).First(art).Error
+	if err != nil {
+		return nil, err
 	}
 	return art, nil
 }
 
 func GetArticleById(aid uint) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
-	errs := g.Db.Table("articles").Where("id=?", aid).First(art).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("articles").Where("id=?", aid).First(art).Error
+	if err != nil {
+		return nil, err
 	}
 	return art, nil
 }
@@ -160,9 +160,9 @@ func AddArticle(aar *models.Article, author string, authorId uint) (art *dbmodel
 		art.PublishTime = time.Now()
 	}
 
-	errs := g.Db.Model(dbmodels.Article{}).Create(art).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Model(dbmodels.Article{}).Create(art).Error
+	if err != nil {
+		return nil, err
 	}
 	return art, nil
 }
@@ -173,41 +173,41 @@ func PublishArticle(aid uint, publish bool, uid uint) (err error) {
 		status = dbmodels.ArtStatus_Draft
 	}
 
-	errs := g.Db.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
+	err = g.Db.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
 		Status:      status,
 		PublishTime: time.Now(),
 		UpdatedBy:   uid,
-	}).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	}).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 func DeleteArticle(aid uint, uid uint) (err error) {
-	errs := g.Db.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumn(dbmodels.Article{
-		UpdatedBy: uid,
-	}).Delete(&dbmodels.Article{}).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	err = g.Db.Model(dbmodels.Article{}).Where("id=?", aid).Updates(map[string]interface{}{
+		"updated_by": uid,
+	}).Delete(&dbmodels.Article{}).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 func ListAllArticleUri() (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
-	errs := g.Db.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, errs[0]
+	err = g.Db.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).Error
+	if err != nil {
+		return nil, err
 	}
 	return list, nil
 }
 
-func ListAllTags() (tags []string, counts []uint, err error) {
+func ListAllTags() (tags []string, counts []int64, err error) {
 	list := []*dbmodels.Article{}
-	errs := g.Db.Model(dbmodels.Article{}).Select("keywords").Where("status=?", dbmodels.ArtStatus_Publish).Find(&list).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return nil, nil, errs[0]
+	err = g.Db.Model(dbmodels.Article{}).Select("keywords").Where("status=?", dbmodels.ArtStatus_Publish).Find(&list).Error
+	if err != nil {
+		return nil, nil, err
 	}
 	tags = []string{}
 	for _, item := range list {
@@ -220,12 +220,12 @@ func ListAllTags() (tags []string, counts []uint, err error) {
 			}
 		}
 	}
-	counts = []uint{}
+	counts = []int64{}
 	for _, tag := range tags {
-		total := uint(0)
-		errs := g.Db.Model(dbmodels.Article{}).Where("status=? and keywords like ?", dbmodels.ArtStatus_Publish, fmt.Sprintf("%%%s%%", tag)).Count(&total).GetErrors()
-		if len(errs) > 0 && errs[0] != nil {
-			log.Println("count keyword failed, err:", errs[0].Error())
+		total := int64(0)
+		err := g.Db.Model(dbmodels.Article{}).Where("status=? and keywords like ?", dbmodels.ArtStatus_Publish, fmt.Sprintf("%%%s%%", tag)).Count(&total).Error
+		if err != nil {
+			log.Println("count keyword failed, err:", err.Error())
 		}
 		counts = append(counts, total)
 	}
@@ -237,11 +237,11 @@ func UpdateArticleViewCount(uri string, cnt int) (err error) {
 	if err != nil {
 		return err
 	}
-	errs := g.Db.Model(dbmodels.Article{}).Where("uri=?", uri).Updates(map[string]interface{}{
+	err = g.Db.Model(dbmodels.Article{}).Where("uri=?", uri).Updates(map[string]interface{}{
 		"count": art.Count + uint(cnt),
-	}).GetErrors()
-	if len(errs) > 0 && errs[0] != nil {
-		return errs[0]
+	}).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }

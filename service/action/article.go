@@ -47,7 +47,7 @@ func ListArticleWithContent(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.ArticleContentListResponse{
 		Ok:    true,
-		Total: total,
+		Total: uint(total),
 		List:  db.ArticleToShowContent(list),
 	})
 	return
@@ -83,7 +83,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.ArticleContentListResponse{
 		Ok:    true,
-		Total: total,
+		Total: uint(total),
 		List:  db.ArticleToShowContent(list),
 	})
 	return
@@ -120,7 +120,7 @@ func ListArticleWithContentMonthly(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.ArticleContentListResponse{
 		Ok:    true,
-		Total: total,
+		Total: uint(total),
 		List:  db.ArticleToShowContent(list),
 	})
 	return
@@ -155,7 +155,7 @@ func ListArticleTitle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.ArticleTitleListResponse{
 		Ok:    true,
-		Total: total,
+		Total: uint(total),
 		List:  db.ArticleToTitle(list),
 	})
 	return
@@ -587,7 +587,7 @@ func SiteMap(c *gin.Context) {
 		if total%10 > 0 {
 			number++
 		}
-		for i := uint(1); i <= number; i++ {
+		for i := uint(1); i <= uint(number); i++ {
 			sitemap = append(sitemap, fmt.Sprintf("/tag/%s/%d", tag, number))
 		}
 	}

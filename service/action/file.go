@@ -8,6 +8,7 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/utils"
+	"fmt"
 	"io"
 	"log"
 	"mime"
@@ -93,7 +94,7 @@ func UploadImage(c *gin.Context) {
 	store := g.Config.Get("upload", "store-path", "store")
 	domain := g.Config.Get("upload", "image-domain", "http://image.duguying.net")
 	size := fh.Size
-	key := filepath.Join("img", time.Now().Format("2006/01"), utils.GenUID())
+	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s.png", utils.GenUID()))
 
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)

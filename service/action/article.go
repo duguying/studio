@@ -13,7 +13,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -479,14 +478,15 @@ func PublishArticle(c *gin.Context) {
 	}
 }
 
+// DeleteArticle 删除文章
 // @Router /admin/article [delete]
 // @Tags 文章
 // @Description 删除文章
 // @Param id query uint true "文章ID"
 // @Success 200 {object} models.CommonResponse
 func DeleteArticle(c *gin.Context) {
-	aidStr := c.Param("article_id")
-	aid64, err := strconv.ParseUint(aidStr, 10, 64)
+	getter := models.CommonGetterRequest{}
+	err := c.BindQuery(&getter)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -494,10 +494,9 @@ func DeleteArticle(c *gin.Context) {
 		})
 		return
 	}
-	aid := uint(aid64)
 
 	// get article
-	article, err := db.GetArticleById(aid)
+	article, err := db.GetArticleById(getter.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -517,7 +516,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// delete
-	err = db.DeleteArticle(aid, userId)
+	err = db.DeleteArticle(getter.Id, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,

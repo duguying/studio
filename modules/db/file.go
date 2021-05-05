@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func SaveFile(fpath string, mime string, size uint64) (err error) {
+func SaveFile(fpath string, mime string, size uint64, md5 string) (err error) {
 	filename := path.Base(fpath)
 	f := &dbmodels.File{
 		Filename:  filename,
@@ -19,6 +19,7 @@ func SaveFile(fpath string, mime string, size uint64) (err error) {
 		Store:     dbmodels.LOCAL,
 		Mime:      mime,
 		Size:      size,
+		Md5:       md5,
 		CreatedAt: time.Now(),
 	}
 	err = g.Db.Table("files").Create(f).Error

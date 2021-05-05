@@ -66,8 +66,9 @@ func PutFile(c *gin.Context) {
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
+	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(key, mimeType, uint64(written))
+	err = db.SaveFile(key, mimeType, uint64(written), md5)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -92,7 +93,7 @@ func UploadImage(c *gin.Context) {
 	}
 
 	store := g.Config.Get("upload", "store-path", "store")
-	domain := g.Config.Get("upload", "image-domain", "http://image.duguying.net")
+	domain := g.Config.Get("upload", "file-domain", "http://file.duguying.net")
 	size := fh.Size
 	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s.png", utils.GenUID()))
 
@@ -131,8 +132,9 @@ func UploadImage(c *gin.Context) {
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
+	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(key, mimeType, uint64(size))
+	err = db.SaveFile(key, mimeType, uint64(size), md5)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -157,7 +159,7 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 	store := g.Config.Get("upload", "store-path", "store")
-	domain := g.Config.Get("upload", "down-domain", "http://archive.duguying.net")
+	domain := g.Config.Get("upload", "file-domain", "http://file.duguying.net")
 	size := fh.Size
 	pdir := c.PostForm("project")
 	key := ""
@@ -202,8 +204,9 @@ func UploadFile(c *gin.Context) {
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
+	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(key, mimeType, uint64(size))
+	err = db.SaveFile(key, mimeType, uint64(size), md5)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

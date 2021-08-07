@@ -7,6 +7,7 @@ package g
 import (
 	"duguying/studio/modules/configuration"
 
+	"github.com/blevesearch/bleve"
 	"gopkg.in/redis.v5"
 	"gorm.io/gorm"
 )
@@ -16,6 +17,7 @@ var (
 	Db      *gorm.DB
 	GfwDb   *gorm.DB
 	Redis   *redis.Client
+	Index   bleve.Index
 	P2pAddr string
 
 	InstallMode bool = false

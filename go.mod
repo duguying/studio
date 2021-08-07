@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.191
 	github.com/arran4/golang-ical v0.0.0-20210405013514-3a97d5d26366
+	github.com/blevesearch/bleve v1.0.14
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gin-contrib/pprof v1.2.1
@@ -36,8 +37,8 @@ require (
 	github.com/unknwon/com v1.0.1
 	gopkg.in/ini.v1 v1.55.0
 	gopkg.in/redis.v5 v5.2.9
-	gorm.io/driver/mysql v1.0.6 // indirect
-	gorm.io/driver/sqlite v1.1.4 // indirect
-	gorm.io/gorm v1.21.9 // indirect
+	gorm.io/driver/mysql v1.0.6
+	gorm.io/driver/sqlite v1.1.4
+	gorm.io/gorm v1.21.9
 	rsc.io/qr v0.2.0
 )

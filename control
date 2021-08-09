@@ -29,7 +29,7 @@ function build() {
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
     go mod download
-    GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
+    GO111MODULE=on GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
 }
 
 function pack() {

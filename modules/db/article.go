@@ -164,6 +164,12 @@ func AddArticle(aar *models.Article, author string, authorId uint) (art *dbmodel
 	if err != nil {
 		return nil, err
 	}
+
+	err = g.Index.Index(fmt.Sprintf("%d", art.Id), art)
+	if err != nil {
+		return nil, err
+	}
+
 	return art, nil
 }
 
@@ -185,18 +191,40 @@ func PublishArticle(aid uint, publish bool, uid uint) (err error) {
 }
 
 func DeleteArticle(aid uint, uid uint) (err error) {
-	err = g.Db.Model(dbmodels.Article{}).Where("id=?", aid).Updates(map[string]interface{}{
-		"updated_by": uid,
-	}).Delete(&dbmodels.Article{}).Error
+	art, err := GetArticleById(aid)
 	if err != nil {
 		return err
 	}
+
+	if art.UpdatedBy != uid {
+		return fmt.Errorf("无权限删除")
+	}
+
+	err = g.Db.Model(dbmodels.Article{}).Where("id=?", aid).Delete(&dbmodels.Article{}).Error
+	if err != nil {
+		return err
+	}
+
+	err = g.Index.Delete(fmt.Sprintf("%d", aid))
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func ListAllArticleUri() (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
 	err = g.Db.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).Error
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func ListAllArticle() (list []*dbmodels.Article, err error) {
+	list = []*dbmodels.Article{}
+	err = g.Db.Table("articles").Where("status=?", 1).Order("id desc").Find(&list).Error
 	if err != nil {
 		return nil, err
 	}

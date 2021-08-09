@@ -36,6 +36,14 @@ func Init() {
 		log.Println("create cron task success, task id:", t2)
 	}
 
+	spec3 := g.Config.Get("bleve", "cron", "@every 2h")
+	t3, err := task.AddFunc(spec3, flushArticleBleve)
+	if err != nil {
+		log.Println("create cron task failed, err:", err.Error())
+	} else {
+		log.Println("create cron task success, task id:", t3)
+	}
+
 	task.Start()
 }
 
@@ -73,6 +81,22 @@ func calendarCheck() {
 				cal.Summary, cal.Address, cal.Description,
 				cal.Link, cal.Attendee,
 			)
+		}
+	}
+}
+
+func flushArticleBleve() {
+	articles, err := db.ListAllArticle()
+	if err != nil {
+		log.Println("list all article failed, err:", err.Error())
+		return
+	}
+
+	for _, article := range articles {
+		err = g.Index.Index(fmt.Sprintf("%d", article.Id), article)
+		if err != nil {
+			log.Printf("index article [%s] failed, err: %s\n", article.Uri, err.Error())
+			continue
 		}
 	}
 }

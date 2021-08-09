@@ -13,8 +13,8 @@ require (
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7
 	github.com/gin-gonic/gin v1.5.0
 	github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332 // indirect
-	github.com/gogather/com v0.0.0-20191011102810-6295d2f7e6be
-	github.com/gogather/cron v0.0.0-20170317163300-81a65d17dc70
+	github.com/gogather/com v1.0.0
+	github.com/gogather/cron v0.0.0-20170317163300-81a65d17dc70 // indirect
 	github.com/gogather/d2 v0.0.0-20170930025040-da424aa0003a
 	github.com/gogather/json v0.0.0-20181103101242-a200f6ba6445
 	github.com/gogather/logger v0.0.0-20200203043640-cf0bf9aa076e

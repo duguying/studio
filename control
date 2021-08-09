@@ -28,8 +28,10 @@ function build() {
     version=`tagversion`
     gitversion=`git log --format='%h' | head -1`
     buildtime=`date +%Y-%m-%d_%H:%M:%S`
+    export GOPROXY=https://goproxy.io,direct
+    export GO111MODULE=on
     go mod download
-    GO111MODULE=on GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
+    GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
 }
 
 function pack() {

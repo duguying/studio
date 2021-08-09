@@ -23,12 +23,18 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/ipipdotnet/ipdb-go v1.3.1
 	github.com/json-iterator/go v1.1.11
+	github.com/libp2p/go-libp2p v0.14.4
+	github.com/libp2p/go-libp2p-crypto v0.1.0
+	github.com/libp2p/go-libp2p-net v0.1.0
 	github.com/martinlindhe/base36 v1.1.0
+	github.com/microcosm-cc/bluemonday v1.0.15
+	github.com/multiformats/go-multiaddr v0.4.0
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/swaggo/gin-swagger v1.3.1
 	github.com/swaggo/swag v1.7.0
+	github.com/unknwon/com v1.0.1
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/redis.v5 v5.2.9
 	gorm.io/driver/mysql v1.1.1

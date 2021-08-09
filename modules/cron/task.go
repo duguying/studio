@@ -93,7 +93,7 @@ func flushArticleBleve() {
 	}
 
 	for _, article := range articles {
-		err = g.Index.Index(fmt.Sprintf("%d", article.Id), article)
+		err = g.Index.Index(fmt.Sprintf("%d", article.Id), article.ToArticleIndex())
 		if err != nil {
 			log.Printf("index article [%s] failed, err: %s\n", article.Uri, err.Error())
 			continue

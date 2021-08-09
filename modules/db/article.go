@@ -165,7 +165,7 @@ func AddArticle(aar *models.Article, author string, authorId uint) (art *dbmodel
 		return nil, err
 	}
 
-	err = g.Index.Index(fmt.Sprintf("%d", art.Id), art)
+	err = g.Index.Index(fmt.Sprintf("%d", art.Id), art.ToArticleIndex())
 	if err != nil {
 		return nil, err
 	}

@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/martinlindhe/base36"
+	"github.com/microcosm-cc/bluemonday"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -87,4 +88,10 @@ func GenUID() string {
 		mb36b.WriteRune(base36mix[idx])
 	}
 	return strings.ToLower(mb36b.String())
+}
+
+// TrimHtml 剔除HTML标签
+func TrimHtml(content string) string {
+	p := bluemonday.StripTagsPolicy()
+	return p.Sanitize(content)
 }

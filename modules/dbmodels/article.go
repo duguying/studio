@@ -6,10 +6,12 @@ package dbmodels
 
 import (
 	"duguying/studio/service/models"
-	"github.com/gogather/json"
-	"github.com/russross/blackfriday/v2"
+	"duguying/studio/utils"
 	"strings"
 	"time"
+
+	"github.com/gogather/json"
+	"github.com/russross/blackfriday/v2"
 )
 
 const (
@@ -39,6 +41,40 @@ type Article struct {
 	UpdatedAt   time.Time  `json:"updated_at"`
 	CreatedAt   time.Time  `json:"created_at"`
 	DeletedAt   *time.Time `json:"deleted_at"`
+}
+
+type ArticleIndex struct {
+	Id          uint       `json:"id"`
+	Title       string     `json:"title"`
+	Keywords    string     `json:"keywords"`
+	Abstract    string     `json:"abstract"`
+	Type        int        `json:"type"`
+	Content     string     `json:"content"`
+	Author      string     `json:"author"`
+	Status      int        `json:"status"`
+	PublishTime time.Time  `json:"publish_time"`
+	UpdatedBy   uint       `json:"updated_by"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	CreatedAt   time.Time  `json:"created_at"`
+	DeletedAt   *time.Time `json:"deleted_at"`
+}
+
+func (a *Article) ToArticleIndex() *ArticleIndex {
+	return &ArticleIndex{
+		Id:          a.Id,
+		Title:       a.Title,
+		Keywords:    a.Keywords,
+		Abstract:    a.Abstract,
+		Type:        a.Type,
+		Content:     utils.TrimHtml(a.Content),
+		Author:      a.Author,
+		Status:      a.Status,
+		PublishTime: a.PublishTime,
+		UpdatedBy:   a.UpdatedBy,
+		UpdatedAt:   a.UpdatedAt,
+		CreatedAt:   a.CreatedAt,
+		DeletedAt:   a.DeletedAt,
+	}
 }
 
 func (a *Article) String() string {

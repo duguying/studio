@@ -56,15 +56,16 @@ func Run(logDir string) {
 			apiV1.GET("/list_tag", action.ListArticleWithContentByTag)               // 按Tag列出文章
 			apiV1.GET("/list_archive_monthly", action.ListArticleWithContentMonthly) // 按月归档文章内容列表
 			apiV1.GET("/list_title", action.ListArticleTitle)                        // 列出文章标题
-			apiV1.GET("/hot_article", action.HotArticleTitle)                        // 热门文章列表
-			apiV1.GET("/month_archive", action.MonthArchive)                         // 文章按月归档列表
-			apiV1.POST("/user_register", action.UserRegister)                        // 用户注册
-			apiV1.GET("/user_simple_info", action.UserSimpleInfo)                    // 用户信息
-			apiV1.POST("/user_login", action.UserLogin)                              // 用户登陆
-			apiV1.GET("/username_check", action.UsernameCheck)                       // 用户名检查
-			apiV1.GET("/file/list", action.PageFile)                                 // 文件列表
-			apiV1.POST("/2fa", action.TfaAuth)                                       // 2FA校验
-			apiV1.GET("/sitemap", action.SiteMap)                                    // 列出所有文章URI
+			apiV1.GET("/search_article", action.SearchArticle)
+			apiV1.GET("/hot_article", action.HotArticleTitle)     // 热门文章列表
+			apiV1.GET("/month_archive", action.MonthArchive)      // 文章按月归档列表
+			apiV1.POST("/user_register", action.UserRegister)     // 用户注册
+			apiV1.GET("/user_simple_info", action.UserSimpleInfo) // 用户信息
+			apiV1.POST("/user_login", action.UserLogin)           // 用户登陆
+			apiV1.GET("/username_check", action.UsernameCheck)    // 用户名检查
+			apiV1.GET("/file/list", action.PageFile)              // 文件列表
+			apiV1.POST("/2fa", action.TfaAuth)                    // 2FA校验
+			apiV1.GET("/sitemap", action.SiteMap)                 // 列出所有文章URI
 
 			apiV1.GET("/tj/traffic_total", action.TrafficTotal)
 		}

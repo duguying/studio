@@ -41,3 +41,9 @@ type TagPagerRequest struct {
 	Size uint   `json:"size" form:"size"`
 	Tag  string `json:"tag" form:"tag"`
 }
+
+type SearchPagerRequest struct {
+	Page    uint   `json:"page" form:"page"`
+	Size    uint   `json:"size" form:"size"`
+	Keyword string `json:"keyword" form:"keyword"`
+}

@@ -16,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/blevesearch/bleve"
 	"gorm.io/gorm"
 )
 
@@ -40,6 +41,43 @@ func PageArticle(keyword string, page uint, pageSize uint) (total int64, list []
 	}
 
 	return total, list, nil
+}
+
+// SearchArticle 搜索文章
+func SearchArticle(keyword string, page, size uint) (total uint, list []*dbmodels.Article, err error) {
+	query := bleve.NewQueryStringQuery(keyword)
+	searchRequest := bleve.NewSearchRequest(query)
+	result, err := g.Index.Search(searchRequest)
+	if err != nil {
+		return 0, nil, err
+	}
+
+	total = uint(result.Total)
+	ids := []uint{}
+	for _, hit := range result.Hits[size*(page-1) : size*page] {
+		id, err := strconv.ParseUint(hit.ID, 10, 64)
+		if err != nil {
+			continue
+		}
+		ids = append(ids, uint(id))
+	}
+
+	list, err = LoadArticleByIds(ids)
+	if err != nil {
+		return 0, nil, err
+	}
+
+	return total, list, nil
+}
+
+func LoadArticleByIds(ids []uint) (list []*dbmodels.Article, err error) {
+	list = []*dbmodels.Article{}
+	err = g.Db.Table("articles").Where("id in (?)", ids).Find(&list).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
 }
 
 func PageArticleMonthly(year, month uint, page uint, pageSize uint) (total int64, list []*dbmodels.Article, err error) {

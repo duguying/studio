@@ -52,6 +52,43 @@ func ListArticleWithContent(c *gin.Context) {
 	return
 }
 
+// SearchArticle 文章搜索
+// @Router /search_article [get]
+// @Tags 文章
+// @Description 文章搜索
+// @Param keyword query string true "关键词"
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.ArticleContentListResponse
+func SearchArticle(c *gin.Context) {
+	req := models.SearchPagerRequest{}
+	err := c.BindQuery(&req)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+
+	total, list, err := db.SearchArticle(req.Keyword, req.Page, req.Size)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  false,
+			Msg: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, models.CommonListResponse{
+		Ok:    true,
+		Total: total,
+		List:  list,
+	})
+	return
+}
+
+// ListArticleWithContentByTag 通过tag列举文章
 // @Router /list_tag [get]
 // @Tags 文章
 // @Description 文章列表

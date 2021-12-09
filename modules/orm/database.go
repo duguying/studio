@@ -10,11 +10,13 @@ import (
 	"duguying/studio/modules/dbmodels"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/gogather/d2"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -46,6 +48,14 @@ func initDatabase() {
 }
 
 func initMysql() {
+	newLogger := New(
+		Config{
+			SlowThreshold: time.Second, // Slow SQL threshold
+			LogLevel:      logger.Info, // Log level
+			Colorful:      false,       // Disable color
+		},
+	)
+
 	var err error
 	host := g.Config.Get("database", "host", "127.0.0.1")
 	port := g.Config.GetInt64("database", "port", 3306)
@@ -53,7 +63,7 @@ func initMysql() {
 	password := g.Config.Get("database", "password", "password")
 	dbname := g.Config.Get("database", "name", "blog")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname)
-	g.Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	g.Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: newLogger})
 	if err != nil {
 		log.Printf("数据库连接失败 err:%v\n", err)
 	}

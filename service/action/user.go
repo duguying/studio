@@ -9,10 +9,11 @@ import (
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/session"
 	"duguying/studio/service/models"
-	"github.com/gin-gonic/gin"
-	"github.com/gogather/com"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gogather/com"
 )
 
 func UserSimpleInfo(c *gin.Context) {
@@ -25,7 +26,7 @@ func UserSimpleInfo(c *gin.Context) {
 // @Success 200 {object} models.UserInfoResponse
 func UserInfo(c *gin.Context) {
 	userId := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(userId)
+	user, err := db.GetUserById(g.Db, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.UserInfoResponse{
 			Ok:  false,
@@ -51,7 +52,7 @@ func UserRegister(c *gin.Context) {
 		})
 		return
 	}
-	user, err := db.RegisterUser(register.Username, register.Password, register.Email)
+	user, err := db.RegisterUser(g.Db, register.Username, register.Password, register.Email)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -85,7 +86,7 @@ func UserLogin(c *gin.Context) {
 		})
 		return
 	}
-	user, err := db.GetUser(login.Username)
+	user, err := db.GetUser(g.Db, login.Username)
 	if err != nil {
 		c.JSON(http.StatusOK, models.LoginResponse{
 			Ok:  false,
@@ -157,7 +158,7 @@ func UsernameCheck(c *gin.Context) {
 		})
 		return
 	} else {
-		valid, err := db.CheckUsername(username)
+		valid, err := db.CheckUsername(g.Db, username)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"ok":  false,

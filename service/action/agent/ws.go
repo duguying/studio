@@ -5,6 +5,7 @@
 package agent
 
 import (
+	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
@@ -55,7 +56,7 @@ func Ws(c *gin.Context) {
 	pipe.AddUserPipe(clientId, out, connId)
 
 	// store agent info
-	_, err = db.CreateOrUpdateAgent(clientId, ip)
+	_, err = db.CreateOrUpdateAgent(g.Db, clientId, ip)
 	if err != nil {
 		log.Println("put agent failed, err:", err.Error())
 	}
@@ -103,7 +104,7 @@ func Ws(c *gin.Context) {
 	pipe.RemoveConnect(connId)
 
 	// update agent info
-	err = db.UpdateAgentOffline(clientId)
+	err = db.UpdateAgentOffline(g.Db, clientId)
 	if err != nil {
 		log.Println("update agent offline failed, err:", err.Error())
 	}

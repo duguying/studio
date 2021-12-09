@@ -1,11 +1,11 @@
 package db
 
 import (
-	"duguying/studio/g"
 	"duguying/studio/modules/dbmodels"
 	"time"
 
 	"github.com/gogather/json"
+	"gorm.io/gorm"
 )
 
 const (
@@ -16,9 +16,8 @@ const (
 	AGENT_ONLINE  = 1
 )
 
-// 创建或更新 agent
-func CreateOrUpdateAgent(clientId string, ip string) (agent *dbmodels.Agent, err error) {
-	tx := g.Db.Begin()
+// CreateOrUpdateAgent 创建或更新 agent
+func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmodels.Agent, err error) {
 	existAgent := &dbmodels.Agent{}
 	err = tx.Table("agents").Where("client_id=?", clientId).First(existAgent).Error
 	if err != nil {
@@ -33,7 +32,6 @@ func CreateOrUpdateAgent(clientId string, ip string) (agent *dbmodels.Agent, err
 		}
 		err = tx.Table("agents").Create(agent).Error
 		if err != nil {
-			tx.Rollback()
 			return nil, err
 		}
 	} else {
@@ -43,21 +41,14 @@ func CreateOrUpdateAgent(clientId string, ip string) (agent *dbmodels.Agent, err
 			"ip":     ip,
 		}).Error
 		if err != nil {
-			tx.Rollback()
 			return nil, err
 		}
 	}
 
-	err = tx.Commit().Error
-	if err != nil {
-		return nil, err
-	} else {
-		return agent, nil
-	}
+	return agent, nil
 }
 
-func PutPerf(clientId string, os string, arch string, hostname string, ipIns []string) (err error) {
-	tx := g.Db.Begin()
+func PutPerf(tx *gorm.DB, clientId string, os string, arch string, hostname string, ipIns []string) (err error) {
 	ipInBytes, _ := json.Marshal(ipIns)
 
 	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
@@ -68,22 +59,16 @@ func PutPerf(clientId string, os string, arch string, hostname string, ipIns []s
 		"ip_ins":   string(ipInBytes),
 	}).Error
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
-	err = tx.Commit().Error
-	if err != nil {
-		return err
-	} else {
-		return nil
-	}
+	return nil
 }
 
-// 通过 id 获取 agent
-func GetAgent(id uint) (agent *dbmodels.Agent, err error) {
+// GetAgent 通过 id 获取 agent
+func GetAgent(tx *gorm.DB, id uint) (agent *dbmodels.Agent, err error) {
 	agent = &dbmodels.Agent{}
-	err = g.Db.Table("agents").Where("id=?", id).First(agent).Error
+	err = tx.Table("agents").Where("id=?", id).First(agent).Error
 	if err != nil {
 		return nil, err
 	} else {
@@ -91,10 +76,10 @@ func GetAgent(id uint) (agent *dbmodels.Agent, err error) {
 	}
 }
 
-// 通过 clientId 获取 agent
-func GetAgentByClientId(clientId string) (agent *dbmodels.Agent, err error) {
+// GetAgentByClientId 通过 clientId 获取 agent
+func GetAgentByClientId(tx *gorm.DB, clientId string) (agent *dbmodels.Agent, err error) {
 	agent = &dbmodels.Agent{}
-	err = g.Db.Table("agents").Where("client_id=?", clientId).First(agent).Error
+	err = tx.Table("agents").Where("client_id=?", clientId).First(agent).Error
 	if err != nil {
 		return nil, err
 	} else {
@@ -102,10 +87,10 @@ func GetAgentByClientId(clientId string) (agent *dbmodels.Agent, err error) {
 	}
 }
 
-// 列出所有可用 agent
-func ListAllAvailableAgents() (agents []*dbmodels.Agent, err error) {
+// ListAllAvailableAgents 列出所有可用 agent
+func ListAllAvailableAgents(tx *gorm.DB) (agents []*dbmodels.Agent, err error) {
 	agents = []*dbmodels.Agent{}
-	err = g.Db.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).Error
+	err = tx.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).Error
 	if err != nil {
 		return nil, err
 	} else {
@@ -113,15 +98,15 @@ func ListAllAvailableAgents() (agents []*dbmodels.Agent, err error) {
 	}
 }
 
-// 禁用 agent
-func ForbidAgent(id uint) (err error) {
+// ForbidAgent 禁用 agent
+func ForbidAgent(tx *gorm.DB, id uint) (err error) {
 	agent := &dbmodels.Agent{}
-	err = g.Db.Table("agents").Where("id=?", id).First(agent).Error
+	err = tx.Table("agents").Where("id=?", id).First(agent).Error
 	if err != nil {
 		return err
 	}
 
-	err = g.Db.Table("agents").Where("id=?", id).Update("status", AGENT_STATUS_FOBBID).Error
+	err = tx.Table("agents").Where("id=?", id).Update("status", AGENT_STATUS_FOBBID).Error
 	if err != nil {
 		return err
 	}
@@ -129,22 +114,14 @@ func ForbidAgent(id uint) (err error) {
 	return nil
 }
 
-func UpdateAgentOffline(clientId string) (err error) {
-	tx := g.Db.Begin()
-
+func UpdateAgentOffline(tx *gorm.DB, clientId string) (err error) {
 	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 		"online":       AGENT_OFFLINE,
 		"offline_time": time.Now(),
 	}).Error
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
-	err = tx.Commit().Error
-	if err != nil {
-		return err
-	} else {
-		return nil
-	}
+	return nil
 }

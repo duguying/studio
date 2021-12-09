@@ -34,7 +34,7 @@ func ListArticleWithContent(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle("", pager.Page, pager.Size)
+	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -71,7 +71,7 @@ func SearchArticle(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.SearchArticle(req.Keyword, req.Page, req.Size)
+	total, list, err := db.SearchArticle(g.Db, req.Keyword, req.Page, req.Size)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -107,7 +107,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(pager.Tag, pager.Page, pager.Size)
+	total, list, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -144,7 +144,7 @@ func ListArticleWithContentMonthly(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticleMonthly(pager.Year, pager.Month, pager.Page, pager.Size)
+	total, list, err := db.PageArticleMonthly(g.Db, pager.Year, pager.Month, pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -179,7 +179,7 @@ func ListArticleTitle(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle("", pager.Page, pager.Size)
+	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
@@ -216,7 +216,7 @@ func GetArticle(c *gin.Context) {
 
 	art := &models.ArticleContent{}
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(getter.Id)
+		dbArt, err := db.GetArticleById(g.Db, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
 				Ok:  false,
@@ -226,7 +226,7 @@ func GetArticle(c *gin.Context) {
 		}
 		art = dbArt.ToArticleContent()
 	} else if len(getter.Uri) > 0 {
-		dbArt, err := db.GetArticle(getter.Uri)
+		dbArt, err := db.GetArticle(g.Db, getter.Uri)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
 				Ok:  false,
@@ -266,7 +266,7 @@ func HotArticleTitle(c *gin.Context) {
 		return
 	}
 
-	list, err := db.HotArticleTitle(getter.Top)
+	list, err := db.HotArticleTitle(g.Db, getter.Top)
 	if err != nil {
 		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
 			Ok:  false,
@@ -287,7 +287,7 @@ func HotArticleTitle(c *gin.Context) {
 // @Param top query uint true "前N"
 // @Success 200 {object} models.ArticleArchListResponse
 func MonthArchive(c *gin.Context) {
-	list, err := db.MonthArch()
+	list, err := db.MonthArch(g.Db)
 	if err != nil {
 		c.JSON(http.StatusOK, models.ArticleArchListResponse{
 			Ok:  false,
@@ -327,7 +327,7 @@ func GetArticleShow(c *gin.Context) {
 
 	art := &models.ArticleShowContent{}
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(getter.Id)
+		dbArt, err := db.GetArticleById(g.Db, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -337,7 +337,7 @@ func GetArticleShow(c *gin.Context) {
 		}
 		art = dbArt.ToArticleShowContent()
 	} else if len(getter.Uri) > 0 {
-		dbArt, err := db.GetArticle(getter.Uri)
+		dbArt, err := db.GetArticle(g.Db, getter.Uri)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -408,7 +408,7 @@ func AddArticle(c *gin.Context) {
 	}
 
 	userId := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(userId)
+	user, err := db.GetUserById(g.Db, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok:  false,
@@ -417,7 +417,7 @@ func AddArticle(c *gin.Context) {
 		return
 	}
 
-	article, err := db.AddArticle(aar, user.Username, userId)
+	article, err := db.AddArticle(g.Db, aar, user.Username, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok:  false,
@@ -479,7 +479,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// get article
-	article, err := db.GetArticleById(pub.Id)
+	article, err := db.GetArticleById(g.Db, pub.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -499,7 +499,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// publish
-	err = db.PublishArticle(pub.Id, pub.Publish, userId)
+	err = db.PublishArticle(g.Db, pub.Id, pub.Publish, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -533,7 +533,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// get article
-	article, err := db.GetArticleById(getter.Id)
+	article, err := db.GetArticleById(g.Db, getter.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -553,7 +553,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// delete
-	err = db.DeleteArticle(getter.Id, userId)
+	err = db.DeleteArticle(g.Db, getter.Id, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -570,7 +570,7 @@ func DeleteArticle(c *gin.Context) {
 }
 
 func SiteMap(c *gin.Context) {
-	list, err := db.ListAllArticleUri()
+	list, err := db.ListAllArticleUri(g.Db)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -609,7 +609,7 @@ func SiteMap(c *gin.Context) {
 	}
 
 	// tag
-	tags, counts, err := db.ListAllTags()
+	tags, counts, err := db.ListAllTags(g.Db)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonListResponse{
 			Ok:  false,

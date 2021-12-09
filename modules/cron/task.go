@@ -50,7 +50,7 @@ func Init() {
 func flushViewCnt() {
 	vcm := viewcnt.GetMap()
 	for ident, val := range vcm.M {
-		err := db.UpdateArticleViewCount(ident, val.(int))
+		err := db.UpdateArticleViewCount(g.Db, ident, val.(int))
 		if err != nil {
 			log.Println("update article view count failed, err:", err.Error())
 		} else {
@@ -86,7 +86,7 @@ func calendarCheck() {
 }
 
 func flushArticleBleve() {
-	articles, err := db.ListAllArticle()
+	articles, err := db.ListAllArticle(g.Db)
 	if err != nil {
 		log.Println("list all article failed, err:", err.Error())
 		return

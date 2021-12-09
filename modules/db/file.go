@@ -5,13 +5,14 @@
 package db
 
 import (
-	"duguying/studio/g"
 	"duguying/studio/modules/dbmodels"
 	"path"
 	"time"
+
+	"gorm.io/gorm"
 )
 
-func SaveFile(fpath string, mime string, size uint64, md5 string) (err error) {
+func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string) (err error) {
 	filename := path.Base(fpath)
 	f := &dbmodels.File{
 		Filename:  filename,
@@ -22,7 +23,7 @@ func SaveFile(fpath string, mime string, size uint64, md5 string) (err error) {
 		Md5:       md5,
 		CreatedAt: time.Now(),
 	}
-	err = g.Db.Table("files").Create(f).Error
+	err = tx.Table("files").Create(f).Error
 	if err != nil {
 		return err
 	} else {
@@ -30,15 +31,15 @@ func SaveFile(fpath string, mime string, size uint64, md5 string) (err error) {
 	}
 }
 
-func PageFile(page uint64, size uint64) (list []*dbmodels.File, total int64, err error) {
+func PageFile(tx *gorm.DB, page uint64, size uint64) (list []*dbmodels.File, total int64, err error) {
 	list = []*dbmodels.File{}
 	total = 0
-	err = g.Db.Table("files").Count(&total).Error
+	err = tx.Table("files").Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	err = g.Db.Table("files").Order("id desc").Offset(int((page - 1) * size)).Limit(int(size)).Find(&list).Error
+	err = tx.Table("files").Order("id desc").Offset(int((page - 1) * size)).Limit(int(size)).Find(&list).Error
 	if err != nil {
 		return nil, 0, err
 	} else {

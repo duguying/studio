@@ -5,6 +5,7 @@
 package store
 
 import (
+	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/service/message/model"
 	"log"
@@ -22,7 +23,7 @@ func PutPerf(clientId string, timestamp uint64, value []byte) error {
 		for _, network := range perf.Nets {
 			ips = append(ips, network.Ip)
 		}
-		err = db.PutPerf(clientId, perf.Os, perf.Arch, perf.Hostname, ips)
+		err = db.PutPerf(g.Db, clientId, perf.Os, perf.Arch, perf.Hostname, ips)
 		if err != nil {
 			log.Println("put agent failed, err:", err.Error())
 		}

@@ -81,7 +81,7 @@ type AgentDetail struct {
 }
 
 func List(c *gin.Context) {
-	agents, err := db.ListAllAvailableAgents()
+	agents, err := db.ListAllAvailableAgents(g.Db)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

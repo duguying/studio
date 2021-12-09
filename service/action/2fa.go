@@ -1,16 +1,18 @@
 package action
 
 import (
+	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"encoding/base32"
 	"fmt"
+	"net/http"
+	"net/url"
+	"strconv"
+
 	"github.com/dgryski/dgoogauth"
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/json"
-	"net/http"
-	"net/url"
 	"rsc.io/qr"
-	"strconv"
 )
 
 func QrGoogleAuth(c *gin.Context) {
@@ -25,7 +27,7 @@ func QrGoogleAuth(c *gin.Context) {
 		return
 	}
 
-	user, err := db.GetUserById(uint(uid))
+	user, err := db.GetUserById(g.Db, uint(uid))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -89,7 +91,7 @@ func TfaAuth(c *gin.Context) {
 		return
 	}
 
-	user, err := db.GetUserById(tar.Uid)
+	user, err := db.GetUserById(g.Db, tar.Uid)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

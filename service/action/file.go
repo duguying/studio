@@ -68,7 +68,7 @@ func PutFile(c *gin.Context) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(key, mimeType, uint64(written), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -134,7 +134,7 @@ func UploadImage(c *gin.Context) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(key, mimeType, uint64(size), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -206,7 +206,7 @@ func UploadFile(c *gin.Context) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(key, mimeType, uint64(size), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -249,7 +249,7 @@ func PageFile(c *gin.Context) {
 		size = 20
 	}
 
-	list, total, err := db.PageFile(page, size)
+	list, total, err := db.PageFile(g.Db, page, size)
 	if err != nil {
 		log.Println("page file failed, err:", err.Error())
 		c.JSON(http.StatusOK, gin.H{

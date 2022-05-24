@@ -1,0 +1,7 @@
+syntax = "proto3";
+package model;
+
+// cmd 0
+message HeartBeat {
+    uint64 timestamp = 1;
+}

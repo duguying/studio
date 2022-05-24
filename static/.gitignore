@@ -1,6 +1,0 @@
-# grunt
-/node_modules/
-.sass-cache/
-
-# build
-/build/

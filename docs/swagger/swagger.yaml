@@ -1,0 +1,410 @@
+basePath: /api/v1
+definitions:
+  models.ArchInfo:
+    properties:
+      date:
+        type: string
+      month:
+        type: integer
+      number:
+        type: integer
+      year:
+        type: integer
+    type: object
+  models.Article:
+    properties:
+      abstract:
+        type: string
+      content:
+        type: string
+      draft:
+        type: boolean
+      id:
+        type: integer
+      keywords:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      type:
+        type: integer
+      uri:
+        type: string
+    type: object
+  models.ArticleArchListResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.ArchInfo'
+        type: array
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
+  models.ArticleContent:
+    properties:
+      author:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      uri:
+        type: string
+      view_count:
+        type: integer
+    type: object
+  models.ArticleContentGetResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.ArticleContent'
+        type: object
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
+  models.ArticleContentListResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.ArticleContent'
+        type: array
+      msg:
+        type: string
+      ok:
+        type: boolean
+      total:
+        type: integer
+    type: object
+  models.ArticlePublishRequest:
+    properties:
+      id:
+        type: integer
+      publish:
+        type: boolean
+    type: object
+  models.ArticleTitle:
+    properties:
+      author:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      uri:
+        type: string
+      view_count:
+        type: integer
+    type: object
+  models.ArticleTitleListResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.ArticleTitle'
+        type: array
+      msg:
+        type: string
+      ok:
+        type: boolean
+      total:
+        type: integer
+    type: object
+  models.CommonCreateResponse:
+    properties:
+      id:
+        type: integer
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
+  models.CommonResponse:
+    properties:
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
+  models.LoginArgs:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.LoginResponse:
+    properties:
+      msg:
+        type: string
+      ok:
+        type: boolean
+      sid:
+        type: string
+    type: object
+  models.UserInfo:
+    properties:
+      access:
+        type: string
+      avatar:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.UserInfoResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.UserInfo'
+        type: object
+      msg:
+        type: string
+      ok:
+        type: boolean
+    type: object
+host: '{{.Host}}'
+info:
+  contact:
+    email: rainesli@tencent.com
+    name: API Support
+    url: http://sparta.wsd.com/support
+  description: This is a Studio Api server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Studio管理平台API文档
+  version: "1.0"
+paths:
+  /admin/article:
+    delete:
+      description: 删除文章
+      parameters:
+      - description: 文章ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonResponse'
+            type: object
+      tags:
+      - 文章
+    post:
+      description: 创建文章
+      parameters:
+      - description: 文章信息
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonCreateResponse'
+            type: object
+      tags:
+      - 文章
+  /admin/article/publish:
+    put:
+      description: 发布文章
+      parameters:
+      - description: 文章信息
+        in: body
+        name: publish
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArticlePublishRequest'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommonResponse'
+            type: object
+      tags:
+      - 文章
+  /admin/user_info:
+    get:
+      description: 当前用户信息
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserInfoResponse'
+            type: object
+      tags:
+      - 用户
+  /get_article:
+    get:
+      description: 文章按月归档
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        type: integer
+      - description: URI
+        in: query
+        name: uri
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ArticleContentGetResponse'
+            type: object
+      tags:
+      - 文章
+  /hot_article:
+    get:
+      description: 文章TopN列表
+      parameters:
+      - description: 前N
+        in: query
+        name: top
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ArticleTitleListResponse'
+            type: object
+      tags:
+      - 文章
+  /list:
+    get:
+      description: 文章列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页数
+        in: query
+        name: size
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ArticleContentListResponse'
+            type: object
+      tags:
+      - 文章
+  /list_archive_monthly:
+    get:
+      description: 文章列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页数
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: 年
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: 月
+        in: query
+        name: month
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ArticleContentListResponse'
+            type: object
+      tags:
+      - 文章
+  /list_title:
+    get:
+      description: 文章列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页数
+        in: query
+        name: size
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ArticleTitleListResponse'
+            type: object
+      tags:
+      - 文章
+  /month_archive:
+    get:
+      description: 文章按月归档
+      parameters:
+      - description: 前N
+        in: query
+        name: top
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ArticleArchListResponse'
+            type: object
+      tags:
+      - 文章
+  /user_login:
+    put:
+      description: 用户登录
+      parameters:
+      - description: 登录鉴权信息
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginArgs'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LoginResponse'
+            type: object
+      tags:
+      - 用户
+swagger: "2.0"

@@ -1,0 +1,20 @@
+[Unit]
+Description=Studio (Studio Service)
+After=syslog.target
+After=network.target
+After=mysqld.service
+#After=postgresql.service
+#After=memcached.service
+After=redis.service
+
+[Service]
+Type=simple
+User=app
+Group=app
+WorkingDirectory=/home/app/studio
+ExecStart=/home/app/studio/studio
+Restart=always
+Environment=USER=app HOME=/home/app
+
+[Install]
+WantedBy=multi-user.target

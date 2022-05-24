@@ -1,6 +1,7 @@
 # bin
 *.exe
 blog
+studio
 
 # swap
 *~
@@ -43,7 +44,21 @@ nohup.out
 var/
 
 release.zip
+
+# ini config file
 *.ini
-*.db
-studio
+
 dist/
+*.zip
+
+*.db
+*.lock
+
+/store/
+
+.vscode/
+
+dockerdist/
+
+bleve/
+

@@ -1,0 +1,18 @@
+kind: pipeline
+name: default
+
+steps:
+- name: build
+  image: golang
+  commands:
+  - mkdir -p $(go env GOPATH)/src/duguying
+  - ln -s $(pwd) $(go env GOPATH)/src/duguying/studio
+  - ./control build
+
+- name: integration
+  image: golang
+  commands:
+  - go test -v
+  when:
+    event:
+    - pull_request

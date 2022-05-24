@@ -1,8 +1,10 @@
 language: go
 go:
 - tip
+go_import_path: duguying/studio
 script:
-- "./control.sh build"
+- "./control build"
+- "./control pack"
 deploy:
   provider: releases
   api_key:
@@ -10,5 +12,5 @@ deploy:
   file_glob: true
   file: dist/*
   on:
-    repo: duguying/blog
+    repo: duguying/studio
     tags: true

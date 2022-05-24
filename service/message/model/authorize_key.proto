@@ -1,0 +1,13 @@
+syntax = "proto3";
+package model;
+
+// cmd 2
+message AuthorizeKey {
+    enum KeyCmd {
+        LIST   = 0;
+        SET    = 1;
+        DELETE = 2;
+    }
+    KeyCmd command = 1;
+    repeated string public_keys = 2;
+}

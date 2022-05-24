@@ -1,0 +1,9 @@
+syntax = "proto3";
+package model;
+
+// cmd 3
+message CliPipe {
+    string session = 1;
+    uint32 pid = 2;
+    bytes data = 3;
+}

@@ -3,7 +3,7 @@ name: default
 
 steps:
 - name: build
-  image: golang
+  image: golang:1.18.3
   commands:
   - mkdir -p $(go env GOPATH)/src/duguying
   - ln -s $(pwd) $(go env GOPATH)/src/duguying/studio
@@ -13,6 +13,7 @@ steps:
   image: plugins/docker
   settings:
     repo: duguying/studio
+    auto_tag: true
     username:
       from_secret: docker_username
     password:

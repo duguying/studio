@@ -11,6 +11,8 @@ steps:
 
 - name: docker
   image: plugins/docker
+  commands:
+    - ./control prebuild
   settings:
     repo: duguying/studio
     auto_tag: true

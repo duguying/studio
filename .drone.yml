@@ -8,11 +8,10 @@ steps:
   - mkdir -p $(go env GOPATH)/src/duguying
   - ln -s $(pwd) $(go env GOPATH)/src/duguying/studio
   - ./control build
+  - ./control prebuild
 
 - name: docker
   image: plugins/docker
-  commands:
-    - ./control prebuild
   settings:
     repo: duguying/studio
     auto_tag: true

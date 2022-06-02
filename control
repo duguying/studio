@@ -152,6 +152,8 @@ elif [ "$1" == "proto" ];then
     proto
 elif [ "$1" == "prebuild" ];then
     docker_prebuild
+elif [ "$1" == "dtag" ];then
+    docker_tags
 elif [ "$1" == "docker" ];then
     docker_build
 else

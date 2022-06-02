@@ -9,6 +9,7 @@ steps:
   - ln -s $(pwd) $(go env GOPATH)/src/duguying/studio
   - ./control build
   - ./control prebuild
+  - ./control dtag
 
 - name: docker
   image: plugins/docker

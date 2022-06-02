@@ -15,6 +15,7 @@ steps:
   image: plugins/docker
   settings:
     repo: duguying/studio
+    mirror: registry.cn-hangzhou.aliyuncs.com
     username:
       from_secret: docker_username
     password:

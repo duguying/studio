@@ -94,7 +94,16 @@ function doc() {
     swag init
 }
 
-function dockerbuild() {
+function docker_prebuild() {
+    build `go env GOOS` `go env GOARCH`
+    rm -rf dockerdist
+    mkdir -p dockerdist
+    cp ./studio ./dockerdist
+    cp ./setenv ./dockerdist
+    cp ./ipipfree.ipdb ./dockerdist
+}
+
+function docker_build() {
     build `go env GOOS` `go env GOARCH`
     rm -rf dockerdist
     mkdir -p dockerdist
@@ -136,8 +145,10 @@ elif [ "$1" == "pack" ];then
     pack
 elif [ "$1" == "proto" ];then
     proto
+elif [ "$1" == "prebuild" ];then
+    docker_prebuild
 elif [ "$1" == "docker" ];then
-    dockerbuild
+    docker_build
 else
     help
 fi

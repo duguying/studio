@@ -9,10 +9,14 @@ steps:
   - ln -s $(pwd) $(go env GOPATH)/src/duguying/studio
   - ./control build
 
-- name: integration
-  image: golang
-  commands:
-  - go test -v
+- name: docker
+  image: plugins/docker
+  settings:
+    repo: duguying/studio
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
   when:
     event:
-    - pull_request
+      - tag

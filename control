@@ -117,6 +117,11 @@ function docker_build() {
     docker push $image:latest
 }
 
+function docker_tags() {
+    version=`tagversion`
+    echo -n $version",latest" > .tags
+}
+
 function tailf() {
     tail -f $logfile
 }

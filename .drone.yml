@@ -14,7 +14,6 @@ steps:
   image: plugins/docker
   settings:
     repo: duguying/studio
-    auto_tag: true
     username:
       from_secret: docker_username
     password:

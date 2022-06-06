@@ -16,6 +16,9 @@ steps:
   settings:
     repo: duguying/studio
     mirror: registry.cn-hangzhou.aliyuncs.com
+    add_host: 
+    - registry-1.docker.io:54.174.228.110
+    - auth.docker.io:18.209.128.237
     username:
       from_secret: docker_username
     password:

@@ -15,6 +15,7 @@ steps:
   image: plugins/docker
   settings:
     repo: duguying/studio
+    registry: ghcr.io
     mirror: registry.cn-hangzhou.aliyuncs.com
     add_host: 
     - registry-1.docker.io:54.174.228.110

@@ -124,7 +124,7 @@ function docker_tags() {
 }
 
 function pull_tags() {
-    git pull --tags
+    git fetch --tags
 }
 
 function tailf() {

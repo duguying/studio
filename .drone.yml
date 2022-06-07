@@ -14,6 +14,8 @@ steps:
 
 - name: docker
   image: plugins/docker
+  commands:
+  - sleep 1000
   settings:
     repo: duguying/studio
     registry: ghcr.io

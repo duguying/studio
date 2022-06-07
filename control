@@ -32,7 +32,6 @@ function build() {
     export GO111MODULE=on
     go mod download
     GOOS=$1 GOARCH=$2 go build -tags=jsoniter -ldflags "-X duguying/$app/g.GitVersion=$gitversion -X duguying/$app/g.BuildTime=$buildtime -X duguying/$app/g.Version=$version" -o $app .
-    sleep 600
 }
 
 function pack() {
@@ -124,12 +123,16 @@ function docker_tags() {
     cat .tags
 }
 
+function pull_tags() {
+    git pull --tags
+}
+
 function tailf() {
     tail -f $logfile
 }
 
 function help() {
-    echo "$0 build|pack|start|stop|restart|status|tail|docker"
+    echo "$0 build|pack|start|stop|restart|status|tail|docker|ptag"
 }
 
 if [ "$1" == "" ]; then
@@ -156,6 +159,8 @@ elif [ "$1" == "prebuild" ];then
     docker_prebuild
 elif [ "$1" == "dtag" ];then
     docker_tags
+elif [ "$1" == "ptag" ];then
+    pull_tags
 elif [ "$1" == "docker" ];then
     docker_build
 else

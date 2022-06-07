@@ -120,6 +120,7 @@ function docker_build() {
 function docker_tags() {
     version=`tagversion`
     echo -n $version",latest" > .tags
+    cat .tags
 }
 
 function tailf() {

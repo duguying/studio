@@ -14,8 +14,7 @@ steps:
 
 - name: docker
   image: plugins/docker
-  commands:
-  - sleep 1000
+  custom_dns: 192.168.1.1
   settings:
     repo: duguying/studio
     registry: ghcr.io

@@ -58,12 +58,12 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, li
 	ids := []uint{}
 	from := size * (page - 1)
 	to := size * page
-	
+
 	if int(from) > result.Hits.Len() || result.Hits.Len() <= 0 {
 		return total, list, nil
 	}
 	if int(to) > result.Hits.Len() {
-		to = uint(result.Hits.Len() - 1)
+		to = uint(result.Hits.Len())
 	}
 
 	for _, hit := range result.Hits[from:to] {

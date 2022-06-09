@@ -71,7 +71,16 @@ func SearchArticle(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.SearchArticle(g.Db, req.Keyword, req.Page, req.Size)
+	// 默认参数
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.Size <= 0 {
+		req.Size = 10
+	}
+
+	tx := g.Db.WithContext(c)
+	total, list, err := db.SearchArticle(tx, req.Keyword, req.Page, req.Size)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,

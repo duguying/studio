@@ -308,6 +308,7 @@ func MonthArchive(c *gin.Context) {
 	return
 }
 
+// GetArticleShow 获取文章
 // @Router /get_article [get]
 // @Tags 文章
 // @Description 获取文章
@@ -325,9 +326,10 @@ func GetArticleShow(c *gin.Context) {
 		return
 	}
 
+	tx := g.Db.WithContext(c)
 	art := &models.ArticleShowContent{}
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(g.Db, getter.Id)
+		dbArt, err := db.GetArticleById(tx, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -337,7 +339,7 @@ func GetArticleShow(c *gin.Context) {
 		}
 		art = dbArt.ToArticleShowContent()
 	} else if len(getter.Uri) > 0 {
-		dbArt, err := db.GetArticle(g.Db, getter.Uri)
+		dbArt, err := db.GetArticle(tx, getter.Uri)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -361,6 +363,7 @@ func GetArticleShow(c *gin.Context) {
 	return
 }
 
+// ArticleViewCount 文章文章浏览统计上报
 // @Router /article/view_count [get]
 // @Tags 文章
 // @Summary 文章文章浏览统计上报
@@ -391,6 +394,7 @@ func ArticleViewCount(c *gin.Context) {
 	return
 }
 
+// AddArticle 创建文章
 // @Router /admin/article [post]
 // @Tags 文章
 // @Description 创建文章
@@ -407,8 +411,9 @@ func AddArticle(c *gin.Context) {
 		return
 	}
 
+	tx := g.Db.WithContext(c)
 	userId := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(g.Db, userId)
+	user, err := db.GetUserById(tx, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok:  false,
@@ -417,7 +422,7 @@ func AddArticle(c *gin.Context) {
 		return
 	}
 
-	article, err := db.AddArticle(g.Db, aar, user.Username, userId)
+	article, err := db.AddArticle(tx, aar, user.Username, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok:  false,
@@ -433,6 +438,7 @@ func AddArticle(c *gin.Context) {
 	}
 }
 
+// UpdateArticle 修改文章
 // @Router /admin/article [put]
 // @Tags 文章
 // @Description 修改文章
@@ -448,7 +454,8 @@ func UpdateArticle(c *gin.Context) {
 		})
 		return
 	}
-	err = db.UpdateArticle(g.Db, article.Id, &article)
+	tx := g.Db.WithContext(c)
+	err = db.UpdateArticle(tx, article.Id, &article)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -462,6 +469,7 @@ func UpdateArticle(c *gin.Context) {
 	return
 }
 
+// PublishArticle 发布文章
 // @Router /admin/article/publish [put]
 // @Tags 文章
 // @Description 发布文章
@@ -479,7 +487,8 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// get article
-	article, err := db.GetArticleById(g.Db, pub.Id)
+	tx := g.Db.WithContext(c)
+	article, err := db.GetArticleById(tx, pub.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -499,7 +508,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// publish
-	err = db.PublishArticle(g.Db, pub.Id, pub.Publish, userId)
+	err = db.PublishArticle(tx, pub.Id, pub.Publish, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -533,7 +542,8 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// get article
-	article, err := db.GetArticleById(g.Db, getter.Id)
+	tx := g.Db.WithContext(c)
+	article, err := db.GetArticleById(tx, getter.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -553,7 +563,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// delete
-	err = db.DeleteArticle(g.Db, getter.Id, userId)
+	err = db.DeleteArticle(tx, getter.Id, userId)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -569,8 +579,10 @@ func DeleteArticle(c *gin.Context) {
 	}
 }
 
+// SiteMap 站点地图
 func SiteMap(c *gin.Context) {
-	list, err := db.ListAllArticleUri(g.Db)
+	tx := g.Db.WithContext(c)
+	list, err := db.ListAllArticleUri(tx)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -609,7 +621,7 @@ func SiteMap(c *gin.Context) {
 	}
 
 	// tag
-	tags, counts, err := db.ListAllTags(g.Db)
+	tags, counts, err := db.ListAllTags(tx)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonListResponse{
 			Ok:  false,

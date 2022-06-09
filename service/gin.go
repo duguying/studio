@@ -26,11 +26,6 @@ import (
 )
 
 func Run(logDir string) {
-	if g.Config.Get("sentry", "enable", "false") == "true" {
-		dsn := g.Config.Get("sentry", "dsn", "https://<key>:<secret>@app.getsentry.com/<project>")
-		raven.SetDSN(dsn)
-	}
-
 	models.RegisterTimeAsLayoutCodec("2006-01-02 15:04:05")
 	gin.SetMode(g.Config.Get("system", "mode", gin.ReleaseMode))
 	gin.DefaultWriter, _ = logger.GinLogger(filepath.Join(logDir, "gin.log"))

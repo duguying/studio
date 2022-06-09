@@ -14,8 +14,6 @@ steps:
 
 - name: docker
   image: plugins/docker
-  commands:
-  - sleep 3600
   settings:
     repo: duguying/studio
     username:

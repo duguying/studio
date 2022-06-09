@@ -56,7 +56,17 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, li
 
 	total = uint(result.Total)
 	ids := []uint{}
-	for _, hit := range result.Hits[size*(page-1) : size*page] {
+	from := size * (page - 1)
+	to := size * page
+	
+	if int(from) > result.Hits.Len() || result.Hits.Len() <= 0 {
+		return total, list, nil
+	}
+	if int(to) > result.Hits.Len() {
+		to = uint(result.Hits.Len() - 1)
+	}
+
+	for _, hit := range result.Hits[from:to] {
 		id, err := strconv.ParseUint(hit.ID, 10, 64)
 		if err != nil {
 			continue

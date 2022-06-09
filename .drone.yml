@@ -14,11 +14,10 @@ steps:
 
 - name: docker
   image: plugins/docker
+  commands:
+  - sleep 3600
   settings:
     repo: duguying/studio
-    build_args:
-      - HTTP_PROXY=socks5://192.168.1.1:1080/
-      - HTTPS_PROXY=socks5://192.168.1.1:1080/
     username:
       from_secret: docker_username
     password:

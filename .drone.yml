@@ -14,11 +14,11 @@ steps:
 
 - name: docker
   image: plugins/docker
-  custom_dns: 192.168.1.1
-  custom_dns_search: 192.168.1.1
   settings:
     repo: duguying/studio
-    registry: ghcr.io
+    build_args:
+      - HTTP_PROXY=socks5://192.168.1.1:1080/
+      - HTTPS_PROXY=socks5://192.168.1.1:1080/
     username:
       from_secret: docker_username
     password:

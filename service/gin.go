@@ -61,8 +61,6 @@ func Run(logDir string) {
 			apiV1.GET("/file/list", action.PageFile)              // 文件列表
 			apiV1.POST("/2fa", action.TfaAuth)                    // 2FA校验
 			apiV1.GET("/sitemap", action.SiteMap)                 // 列出所有文章URI
-
-			apiV1.GET("/tj/traffic_total", action.TrafficTotal)
 		}
 
 		// auth require

@@ -5,9 +5,10 @@
 package model
 
 import (
-	"github.com/gogather/json"
 	"fmt"
+	"github.com/gogather/json"
 	"github.com/gorilla/websocket"
+	"log"
 )
 
 const (
@@ -41,6 +42,9 @@ func (m Msg) String() string {
 	} else {
 		ds["data"] = fmt.Sprintf("%v", m.Data)
 	}
-	c, _ := json.Marshal(ds)
+	c, err := json.Marshal(ds)
+	if err != nil {
+		log.Println("json marshal failed, err:", err.Error())
+	}
 	return string(c)
 }

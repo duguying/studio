@@ -36,11 +36,8 @@ func Ws(c *gin.Context) {
 	}
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, c.Writer.Header())
 	if err != nil {
+		// 已经 upgrade 为 websocket，不能再按 http 写入
 		log.Println("upgrade:", err)
-		c.JSON(http.StatusForbidden, map[string]interface{}{
-			"ok":    false,
-			"error": err.Error(),
-		})
 		return
 	}
 

@@ -78,11 +78,11 @@ func Ws(c *gin.Context) {
 				Data:     msgData[1:],
 			}
 
-			pipe.In <- msg
-
 			if g.Config.Get("ws", "log", "enable") == "enable" {
 				log.Printf("recv: %s\n", msg.String())
 			}
+
+			pipe.In <- msg
 		}
 	}(conn)
 

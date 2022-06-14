@@ -31,7 +31,7 @@ type Msg struct {
 	Data     []byte `json:"data"`
 }
 
-func (m Msg) String() string {
+func (m *Msg) String() string {
 	ds := map[string]interface{}{
 		"type":      m.Type,
 		"cmd":       m.Cmd,

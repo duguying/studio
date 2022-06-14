@@ -28,6 +28,8 @@ func Ws(c *gin.Context) {
 		return
 	}
 
+	log.Println("ws connect with client_id:", clientId)
+
 	var upgrader = websocket.Upgrader{}
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/gogather/json"
 	"github.com/microcosm-cc/bluemonday"
@@ -142,15 +143,24 @@ func (a *Article) ToArticleSearchAbstract(keyword string) *models.ArticleSearchA
 
 	content := bluemonday.UGCPolicy().Sanitize(a.Content)
 	idx := strings.Index(content, keyword)
-	if idx > 20 {
-		idx = idx - 20
+	if idx < 0 {
+		idx = 0
 	}
-	last := idx + 100
-	if last > len(content) {
-		last = len(content) - 1
+	idxr := utf8.RuneCountInString(content[:idx])
+	if idxr > 20 {
+		idxr = idxr - 20
+	} else {
+		idxr = 0
 	}
-	content = content[idx:last]
-	content = strings.ReplaceAll(content, keyword, fmt.Sprintf("<b>%s</b>", keyword))
+	last := idxr + 100
+	lenr := utf8.RuneCountInString(content)
+	if last > lenr {
+		last = lenr
+	}
+	contentRunes := []rune(content)
+	contentRunes = contentRunes[idxr:last]
+
+	content = strings.ReplaceAll(string(contentRunes), keyword, fmt.Sprintf("<b>%s</b>", keyword))
 
 	asa := &models.ArticleSearchAbstract{
 		Id:        a.Id,

@@ -3,6 +3,7 @@ package bleve
 
 import (
 	"duguying/studio/g"
+	"duguying/studio/modules/cron"
 	"log"
 
 	"github.com/blevesearch/bleve"
@@ -34,4 +35,6 @@ func Init() {
 		log.Fatalln("open bleve index failed, err:", err.Error())
 		return
 	}
+
+	cron.FlushArticleBleve()
 }

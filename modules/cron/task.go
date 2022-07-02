@@ -37,7 +37,7 @@ func Init() {
 	}
 
 	spec3 := g.Config.Get("bleve", "cron", "@every 2h")
-	t3, err := task.AddFunc(spec3, flushArticleBleve)
+	t3, err := task.AddFunc(spec3, FlushArticleBleve)
 	if err != nil {
 		log.Println("create cron task failed, err:", err.Error())
 	} else {
@@ -85,7 +85,7 @@ func calendarCheck() {
 	}
 }
 
-func flushArticleBleve() {
+func FlushArticleBleve() {
 	articles, err := db.ListAllArticle(g.Db)
 	if err != nil {
 		log.Println("list all article failed, err:", err.Error())

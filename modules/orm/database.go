@@ -25,7 +25,6 @@ var (
 
 func InitDatabase() {
 	initDatabase()
-	initTjDatabase()
 }
 
 func initDatabase() {

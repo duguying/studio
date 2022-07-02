@@ -139,7 +139,19 @@ func (a *Article) ToArticleTitle() *models.ArticleTitle {
 func (a *Article) ToArticleSearchAbstract(keyword string) *models.ArticleSearchAbstract {
 	title := strings.ReplaceAll(bluemonday.UGCPolicy().Sanitize(a.Title), keyword, fmt.Sprintf("<b>%s</b>", keyword))
 	keywords := strings.ReplaceAll(bluemonday.UGCPolicy().Sanitize(a.Keywords), keyword, fmt.Sprintf("<b>%s</b>", keyword))
-	content := strings.ReplaceAll(bluemonday.UGCPolicy().Sanitize(a.Content), keyword, fmt.Sprintf("<b>%s</b>", keyword))
+
+	content := bluemonday.UGCPolicy().Sanitize(a.Content)
+	idx := strings.Index(content, keyword)
+	if idx > 20 {
+		idx = idx - 20
+	}
+	last := idx + 100
+	if last > len(content) {
+		last = len(content)
+	}
+	content = content[idx:last]
+	content = strings.ReplaceAll(content, keyword, fmt.Sprintf("<b>%s</b>", keyword))
+
 	asa := &models.ArticleSearchAbstract{
 		Id:        a.Id,
 		Title:     title,

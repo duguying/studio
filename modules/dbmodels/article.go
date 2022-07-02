@@ -7,10 +7,12 @@ package dbmodels
 import (
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
+	"fmt"
 	"strings"
 	"time"
 
 	"github.com/gogather/json"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -132,6 +134,20 @@ func (a *Article) ToArticleTitle() *models.ArticleTitle {
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
 	}
+}
+
+func (a *Article) ToArticleSearchAbstract(keyword string) *models.ArticleSearchAbstract {
+	title := strings.ReplaceAll(bluemonday.UGCPolicy().Sanitize(a.Title), keyword, fmt.Sprintf("<b>%s</b>", keyword))
+	keywords := strings.ReplaceAll(bluemonday.UGCPolicy().Sanitize(a.Keywords), keyword, fmt.Sprintf("<b>%s</b>", keyword))
+	content := strings.ReplaceAll(bluemonday.UGCPolicy().Sanitize(a.Content), keyword, fmt.Sprintf("<b>%s</b>", keyword))
+	asa := &models.ArticleSearchAbstract{
+		Id:        a.Id,
+		Title:     title,
+		Keywords:  keywords,
+		Content:   content,
+		CreatedAt: &a.CreatedAt,
+	}
+	return asa
 }
 
 type ArchInfo struct {

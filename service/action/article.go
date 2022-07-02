@@ -89,10 +89,15 @@ func SearchArticle(c *gin.Context) {
 		return
 	}
 
+	searchList := []*models.ArticleSearchAbstract{}
+	for _, item := range list {
+		searchList = append(searchList, item.ToArticleSearchAbstract(req.Keyword))
+	}
+
 	c.JSON(http.StatusOK, models.CommonListResponse{
 		Ok:    true,
 		Total: total,
-		List:  list,
+		List:  searchList,
 	})
 	return
 }

@@ -6,8 +6,9 @@
 package models
 
 import (
-	"github.com/gogather/json"
 	"time"
+
+	"github.com/gogather/json"
 )
 
 type Article struct {
@@ -70,6 +71,19 @@ type ArticleTitle struct {
 
 func (at *ArticleTitle) String() string {
 	c, _ := json.Marshal(at)
+	return string(c)
+}
+
+type ArticleSearchAbstract struct {
+	Id        uint       `json:"id"`
+	Title     string     `json:"title"`
+	Keywords  string     `json:"keywords"`
+	Content   string     `json:"content"`
+	CreatedAt *time.Time `json:"created_at"`
+}
+
+func (asa *ArticleSearchAbstract) String() string {
+	c, _ := json.Marshal(asa)
 	return string(c)
 }
 

@@ -32,6 +32,7 @@ require (
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/satori/go.uuid v1.2.0
+	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/swaggo/gin-swagger v1.3.1
 	github.com/swaggo/swag v1.7.0
 	github.com/unknwon/com v1.0.1

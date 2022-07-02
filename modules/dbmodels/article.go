@@ -147,7 +147,7 @@ func (a *Article) ToArticleSearchAbstract(keyword string) *models.ArticleSearchA
 	}
 	last := idx + 100
 	if last > len(content) {
-		last = len(content)
+		last = len(content) - 1
 	}
 	content = content[idx:last]
 	content = strings.ReplaceAll(content, keyword, fmt.Sprintf("<b>%s</b>", keyword))

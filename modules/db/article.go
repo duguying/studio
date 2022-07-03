@@ -49,6 +49,7 @@ func PageArticle(tx *gorm.DB, keyword string,
 func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, list []*dbmodels.Article, err error) {
 	query := bleve.NewQueryStringQuery(keyword)
 	searchRequest := bleve.NewSearchRequest(query)
+	searchRequest.SortBy([]string{"-_score"})
 	result, err := g.Index.Search(searchRequest)
 	if err != nil {
 		return 0, nil, err

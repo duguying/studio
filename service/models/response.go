@@ -23,10 +23,17 @@ type CommonListResponse struct {
 	List  interface{} `json:"list"`
 }
 
+type CommonSearchListResponse struct {
+	Ok    bool        `json:"ok"`
+	Msg   string      `json:"msg"`
+	Total uint        `json:"total"`
+	List  interface{} `json:"list"`
+}
+
 type ArticleContentListResponse struct {
-	Ok    bool              `json:"ok"`
-	Msg   string            `json:"msg"`
-	Total uint              `json:"total"`
+	Ok    bool                  `json:"ok"`
+	Msg   string                `json:"msg"`
+	Total uint                  `json:"total"`
 	List  []*ArticleShowContent `json:"list"`
 }
 

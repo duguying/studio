@@ -7,13 +7,10 @@ package dbmodels
 import (
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
-	"fmt"
 	"strings"
 	"time"
-	"unicode/utf8"
 
 	"github.com/gogather/json"
-	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -135,41 +132,6 @@ func (a *Article) ToArticleTitle() *models.ArticleTitle {
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
 	}
-}
-
-func (a *Article) ToArticleSearchAbstract(keyword string) *models.ArticleSearchAbstract {
-	title := strings.ReplaceAll(bluemonday.StrictPolicy().Sanitize(a.Title), keyword, fmt.Sprintf("<b>%s</b>", keyword))
-	keywords := strings.ReplaceAll(bluemonday.StrictPolicy().Sanitize(a.Keywords), keyword, fmt.Sprintf("<b>%s</b>", keyword))
-
-	content := bluemonday.StrictPolicy().Sanitize(a.Content)
-	idx := strings.Index(content, keyword)
-	if idx < 0 {
-		idx = 0
-	}
-	idxr := utf8.RuneCountInString(content[:idx])
-	if idxr > 20 {
-		idxr = idxr - 20
-	} else {
-		idxr = 0
-	}
-	last := idxr + 100
-	lenr := utf8.RuneCountInString(content)
-	if last > lenr {
-		last = lenr
-	}
-	contentRunes := []rune(content)
-	contentRunes = contentRunes[idxr:last]
-
-	content = strings.ReplaceAll(string(contentRunes), keyword, fmt.Sprintf("<b>%s</b>", keyword))
-
-	asa := &models.ArticleSearchAbstract{
-		Id:        a.Id,
-		Title:     title,
-		Keywords:  keywords,
-		Content:   content,
-		CreatedAt: &a.CreatedAt,
-	}
-	return asa
 }
 
 type ArchInfo struct {

@@ -46,27 +46,30 @@ func PageArticle(tx *gorm.DB, keyword string,
 }
 
 // SearchArticle 搜索文章
-func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, list []*dbmodels.Article, err error) {
+func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, result *bleve.SearchResult, articleMap map[uint]*dbmodels.Article, err error) {
 	query := bleve.NewQueryStringQuery(keyword)
 	searchRequest := bleve.NewSearchRequest(query)
 	searchRequest.SortBy([]string{"-_score"})
-	result, err := g.Index.Search(searchRequest)
+	searchRequest.Highlight = bleve.NewHighlight()
+	result, err = g.Index.Search(searchRequest)
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, nil, err
 	}
 
 	total = uint(result.Total)
-	ids := []uint{}
 	from := size * (page - 1)
 	to := size * page
 
+	// check list border
 	if int(from) > result.Hits.Len() || result.Hits.Len() <= 0 {
-		return total, list, nil
+		return total, nil, nil, nil
 	}
 	if int(to) > result.Hits.Len() {
 		to = uint(result.Hits.Len())
 	}
 
+	// gather ids
+	ids := []uint{}
 	for _, hit := range result.Hits[from:to] {
 		id, err := strconv.ParseUint(hit.ID, 10, 64)
 		if err != nil {
@@ -75,12 +78,19 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, li
 		ids = append(ids, uint(id))
 	}
 
-	list, err = LoadArticleByIds(tx, ids)
+	// load article list as map
+	list, err := LoadArticleByIds(tx, ids)
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, nil, err
+	}
+	articleMap = make(map[uint]*dbmodels.Article)
+	for _, article := range list {
+		articleMap[article.Id] = article
 	}
 
-	return total, list, nil
+	// scale hits
+	result.Hits = result.Hits[from:to]
+	return total, result, articleMap, nil
 }
 
 func LoadArticleByIds(tx *gorm.DB, ids []uint) (list []*dbmodels.Article, err error) {
@@ -279,7 +289,7 @@ func ListAllArticleUri(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 
 func ListAllArticle(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
-	err = tx.Table("articles").Where("status=?", 1).Order("id desc").Find(&list).Error
+	err = tx.Model(dbmodels.Article{}).Where("status=?", 1).Order("id desc").Find(&list).Error
 	if err != nil {
 		return nil, err
 	}

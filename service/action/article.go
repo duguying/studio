@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -80,7 +81,7 @@ func SearchArticle(c *gin.Context) {
 	}
 
 	tx := g.Db.WithContext(c)
-	total, list, err := db.SearchArticle(tx, req.Keyword, req.Page, req.Size)
+	total, result, articleMap, err := db.SearchArticle(tx, req.Keyword, req.Page, req.Size)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -90,11 +91,37 @@ func SearchArticle(c *gin.Context) {
 	}
 
 	searchList := []*models.ArticleSearchAbstract{}
-	for _, item := range list {
-		searchList = append(searchList, item.ToArticleSearchAbstract(req.Keyword))
+	for _, item := range result.Hits {
+		id, err := strconv.ParseUint(item.ID, 10, 64)
+		if err != nil {
+			continue
+		}
+		article := articleMap[uint(id)]
+		title := article.Title
+		if len(item.Fragments["title"]) > 0 {
+			title = item.Fragments["title"][0]
+		}
+		keywords := article.Keywords
+		if len(item.Fragments["keywords"]) > 0 {
+			keywords = item.Fragments["keywords"][0]
+		}
+		content := article.Content
+		if len(content) > 100 {
+			content = content[:100]
+		}
+		if len(item.Fragments["content"]) > 0 {
+			content = item.Fragments["content"][0]
+		}
+		searchList = append(searchList, &models.ArticleSearchAbstract{
+			Id:        uint(id),
+			Title:     title,
+			Keywords:  keywords,
+			Content:   content,
+			CreatedAt: &article.CreatedAt,
+		})
 	}
 
-	c.JSON(http.StatusOK, models.CommonListResponse{
+	c.JSON(http.StatusOK, models.CommonSearchListResponse{
 		Ok:    true,
 		Total: total,
 		List:  searchList,

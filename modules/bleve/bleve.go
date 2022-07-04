@@ -5,24 +5,30 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/cron"
 	"log"
+	"path/filepath"
 
 	"github.com/blevesearch/bleve"
 	_ "github.com/blevesearch/bleve/analysis/analyzer/custom"
 	"github.com/gogather/com"
 	_ "github.com/ttys3/gojieba-bleve"
-	"github.com/yanyiwu/gojieba"
 )
 
 // IndexInstance 打开索引实例
 func IndexInstance(path string) (index bleve.Index, err error) {
+	dictDir := g.Config.Get("bleve", "gojieba-dict", "bleve/gojieba")
+	dictPath := filepath.Join(dictDir, "jieba.dict.utf8")
+	hmmPath := filepath.Join(dictDir, "hmm_model.utf8")
+	userDictPath := filepath.Join(dictDir, "user.dict.utf8")
+	idfPath := filepath.Join(dictDir, "idf.utf8")
+	stopWordsPath := filepath.Join(dictDir, "stop_words.utf8")
 	indexMapping := bleve.NewIndexMapping()
 	err = indexMapping.AddCustomTokenizer("gojieba",
 		map[string]interface{}{
-			"dictpath":     gojieba.DICT_PATH,
-			"hmmpath":      gojieba.HMM_PATH,
-			"userdictpath": gojieba.USER_DICT_PATH,
-			"idf":          gojieba.IDF_PATH,
-			"stop_words":   gojieba.STOP_WORDS_PATH,
+			"dictpath":     dictPath,
+			"hmmpath":      hmmPath,
+			"userdictpath": userDictPath,
+			"idf":          idfPath,
+			"stop_words":   stopWordsPath,
 			"type":         "gojieba",
 		},
 	)

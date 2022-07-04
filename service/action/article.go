@@ -9,11 +9,13 @@ import (
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/viewcnt"
 	"duguying/studio/service/models"
+	"duguying/studio/utils"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
 )
@@ -105,9 +107,9 @@ func SearchArticle(c *gin.Context) {
 		if len(item.Fragments["keywords"]) > 0 {
 			keywords = item.Fragments["keywords"][0]
 		}
-		content := article.Content
-		if len(content) > 100 {
-			content = content[:100]
+		content := utils.TrimHtml(article.Content)
+		if utf8.RuneCountInString(content) > 100 {
+			content = string([]rune(content)[:100])
 		}
 		if len(item.Fragments["content"]) > 0 {
 			content = item.Fragments["content"][0]

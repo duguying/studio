@@ -7,10 +7,10 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/blevesearch/bleve"
-	_ "github.com/blevesearch/bleve/analysis/analyzer/custom"
+	"github.com/blevesearch/bleve/v2"
+	_ "github.com/blevesearch/bleve/v2/analysis/analyzer/custom"
 	"github.com/gogather/com"
-	_ "github.com/ttys3/gojieba-bleve"
+	_ "github.com/gogather/gojieba-bleve/v2"
 )
 
 // IndexInstance 打开索引实例

@@ -85,7 +85,7 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, re
 	}
 	articleMap = make(map[uint]*dbmodels.Article)
 	for _, article := range list {
-		articleMap[article.Id] = article
+		articleMap[article.ID] = article
 	}
 
 	// scale hits
@@ -206,22 +206,22 @@ func GetArticleById(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
-func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorId uint) (art *dbmodels.Article, err error) {
+func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{
 		Title:     aar.Title,
-		Uri:       aar.Uri,
+		URI:       aar.URI,
 		Keywords:  strings.Join(aar.Keywords, ","),
 		Abstract:  aar.Abstract,
 		Type:      aar.Type,
 		Content:   aar.Content,
 		Author:    author,
-		AuthorId:  authorId,
-		Status:    dbmodels.ArtStatus_Draft,
+		AuthorID:  authorID,
+		Status:    dbmodels.ArtStatusDraft,
 		CreatedAt: time.Now(),
 	}
 
 	if !aar.Draft {
-		art.Status = dbmodels.ArtStatus_Publish
+		art.Status = dbmodels.ArtStatusPublish
 		art.PublishTime = time.Now()
 	}
 
@@ -230,7 +230,7 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorId uint) 
 		return nil, err
 	}
 
-	err = g.Index.Index(fmt.Sprintf("%d", art.Id), art.ToArticleIndex())
+	err = g.Index.Index(fmt.Sprintf("%d", art.ID), art.ToArticleIndex())
 	if err != nil {
 		return nil, err
 	}
@@ -239,9 +239,9 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorId uint) 
 }
 
 func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
-	status := dbmodels.ArtStatus_Publish
+	status := dbmodels.ArtStatusPublish
 	if !publish {
-		status = dbmodels.ArtStatus_Draft
+		status = dbmodels.ArtStatusDraft
 	}
 
 	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
@@ -299,7 +299,7 @@ func ListAllArticle(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	list := []*dbmodels.Article{}
 	err = tx.Model(dbmodels.Article{}).Select("keywords").Where("status=?",
-		dbmodels.ArtStatus_Publish).Find(&list).Error
+		dbmodels.ArtStatusPublish).Find(&list).Error
 	if err != nil {
 		return nil, nil, err
 	}
@@ -317,7 +317,7 @@ func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	counts = []int64{}
 	for _, tag := range tags {
 		total := int64(0)
-		err := tx.Model(dbmodels.Article{}).Where("status=? and keywords like ?", dbmodels.ArtStatus_Publish,
+		err := tx.Model(dbmodels.Article{}).Where("status=? and keywords like ?", dbmodels.ArtStatusPublish,
 			fmt.Sprintf("%%%s%%", tag)).Count(&total).Error
 		if err != nil {
 			log.Println("count keyword failed, err:", err.Error())

@@ -12,9 +12,9 @@ import (
 )
 
 type Article struct {
-	Id       uint     `json:"id"`
+	ID       uint     `json:"id"`
 	Title    string   `json:"title"`
-	Uri      string   `json:"uri"`
+	URI      string   `json:"uri"`
 	Keywords []string `json:"keywords"`
 	Abstract string   `json:"abstract"`
 	Content  string   `json:"content"`
@@ -28,9 +28,9 @@ func (aar *Article) String() string {
 }
 
 type ArticleShowContent struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
-	Uri       string    `json:"uri"`
+	URI       string    `json:"uri"`
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
 	CreatedAt time.Time `json:"created_at"`
@@ -44,9 +44,9 @@ func (ac *ArticleShowContent) String() string {
 }
 
 type ArticleContent struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
-	Uri       string    `json:"uri"`
+	URI       string    `json:"uri"`
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
 	Type      int       `json:"type"`
@@ -61,9 +61,9 @@ func (asc *ArticleContent) String() string {
 }
 
 type ArticleTitle struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
-	Uri       string    `json:"uri"`
+	URI       string    `json:"uri"`
 	Author    string    `json:"author"`
 	CreatedAt time.Time `json:"created_at"`
 	ViewCount uint      `json:"view_count"`
@@ -75,7 +75,7 @@ func (at *ArticleTitle) String() string {
 }
 
 type ArticleSearchAbstract struct {
-	Id        uint       `json:"id"`
+	ID        uint       `json:"id"`
 	Title     string     `json:"title"`
 	Keywords  string     `json:"keywords"`
 	Content   string     `json:"content"`

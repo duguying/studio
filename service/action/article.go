@@ -115,7 +115,7 @@ func SearchArticle(c *gin.Context) {
 			content = item.Fragments["content"][0]
 		}
 		searchList = append(searchList, &models.ArticleSearchAbstract{
-			Id:        uint(id),
+			ID:        uint(id),
 			Title:     title,
 			Keywords:  keywords,
 			Content:   content,
@@ -475,7 +475,7 @@ func AddArticle(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok: true,
-			Id: article.Id,
+			Id: article.ID,
 		})
 		return
 	}
@@ -498,7 +498,7 @@ func UpdateArticle(c *gin.Context) {
 		return
 	}
 	tx := g.Db.WithContext(c)
-	err = db.UpdateArticle(tx, article.Id, &article)
+	err = db.UpdateArticle(tx, article.ID, &article)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -542,7 +542,7 @@ func PublishArticle(c *gin.Context) {
 
 	// check auth
 	userId := uint(c.GetInt64("user_id"))
-	if userId != article.AuthorId {
+	if userId != article.AuthorID {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
 			Msg: "auth failed, it's not you article, could not publish",
@@ -597,7 +597,7 @@ func DeleteArticle(c *gin.Context) {
 
 	// check auth
 	userId := uint(c.GetInt64("user_id"))
-	if userId != article.AuthorId {
+	if userId != article.AuthorID {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
 			Msg: "auth failed, it's not you article, could not publish",
@@ -641,7 +641,7 @@ func SiteMap(c *gin.Context) {
 
 	// articles
 	for _, item := range list {
-		sitemap = append(sitemap, fmt.Sprintf("/article/%s", item.Uri))
+		sitemap = append(sitemap, fmt.Sprintf("/article/%s", item.URI))
 	}
 
 	// list pages

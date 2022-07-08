@@ -15,36 +15,36 @@ import (
 )
 
 const (
-	ArtStatus_Draft   = 0
-	ArtStatus_Publish = 1
+	ArtStatusDraft   = 0
+	ArtStatusPublish = 1
 )
 
 const (
-	ContentType_HTML     = 0
-	ContentType_MarkDown = 1
+	ContentTypeHTML     = 0
+	ContentTypeMarkDown = 1
 )
 
 type Article struct {
-	Id          uint       `json:"id"`
-	Title       string     `json:"title"`
-	Uri         string     `json:"uri"`
-	Keywords    string     `json:"keywords"`
+	ID          uint       `json:"id"`
+	Title       string     `json:"title" gorm:"index"`
+	URI         string     `json:"uri" gorm:"index"`
+	Keywords    string     `json:"keywords" gorm:"index:,class:FULLTEXT"`
 	Abstract    string     `json:"abstract"`
-	Type        int        `json:"type" gorm:"default:0"`
-	Content     string     `json:"content" sql:"type:longtext"`
-	Author      string     `json:"author"`
-	AuthorId    uint       `json:"author_id"`
-	Count       uint       `json:"count"`
-	Status      int        `json:"status"`
-	PublishTime time.Time  `json:"publish_time"`
+	Type        int        `json:"type" gorm:"default:0;index"`
+	Content     string     `json:"content" sql:"type:longtext" gorm:"index:,class:FULLTEXT"`
+	Author      string     `json:"author" gorm:"index"`
+	AuthorID    uint       `json:"author_id" gorm:"index"`
+	Count       uint       `json:"count" gorm:"index:,sort:desc"`
+	Status      int        `json:"status" gorm:"index"`
+	PublishTime time.Time  `json:"publish_time" gorm:"index"`
 	UpdatedBy   uint       `json:"updated_by"`
 	UpdatedAt   time.Time  `json:"updated_at"`
-	CreatedAt   time.Time  `json:"created_at"`
-	DeletedAt   *time.Time `json:"deleted_at"`
+	CreatedAt   time.Time  `json:"created_at" gorm:"index:,sort:desc"`
+	DeletedAt   *time.Time `json:"deleted_at" gorm:"index"`
 }
 
 type ArticleIndex struct {
-	Id          uint       `json:"id"`
+	ID          uint       `json:"id"`
 	Title       string     `json:"title"`
 	Keywords    string     `json:"keywords"`
 	Abstract    string     `json:"abstract"`
@@ -61,7 +61,7 @@ type ArticleIndex struct {
 
 func (a *Article) ToArticleIndex() *ArticleIndex {
 	return &ArticleIndex{
-		Id:          a.Id,
+		ID:          a.ID,
 		Title:       a.Title,
 		Keywords:    a.Keywords,
 		Abstract:    a.Abstract,
@@ -84,7 +84,7 @@ func (a *Article) String() string {
 
 func (a *Article) ToArticleShowContent() *models.ArticleShowContent {
 	content := []byte(a.Content)
-	if a.Type == ContentType_MarkDown {
+	if a.Type == ContentTypeMarkDown {
 		content = blackfriday.Run([]byte(a.Content))
 	}
 	tags := []string{}
@@ -93,9 +93,9 @@ func (a *Article) ToArticleShowContent() *models.ArticleShowContent {
 		tags = append(tags, strings.TrimSpace(seg))
 	}
 	return &models.ArticleShowContent{
-		Id:        a.Id,
+		ID:        a.ID,
 		Title:     a.Title,
-		Uri:       a.Uri,
+		URI:       a.URI,
 		Author:    a.Author,
 		Tags:      tags,
 		CreatedAt: a.CreatedAt,
@@ -111,9 +111,9 @@ func (a *Article) ToArticleContent() *models.ArticleContent {
 		tags = append(tags, strings.TrimSpace(seg))
 	}
 	return &models.ArticleContent{
-		Id:        a.Id,
+		ID:        a.ID,
 		Title:     a.Title,
-		Uri:       a.Uri,
+		URI:       a.URI,
 		Author:    a.Author,
 		Tags:      tags,
 		Type:      a.Type,
@@ -125,9 +125,9 @@ func (a *Article) ToArticleContent() *models.ArticleContent {
 
 func (a *Article) ToArticleTitle() *models.ArticleTitle {
 	return &models.ArticleTitle{
-		Id:        a.Id,
+		ID:        a.ID,
 		Title:     a.Title,
-		Uri:       "/article/" + a.Uri,
+		URI:       "/article/" + a.URI,
 		Author:    a.Author,
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,

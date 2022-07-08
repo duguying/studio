@@ -26,7 +26,7 @@ const (
 
 type Article struct {
 	ID          uint       `json:"id"`
-	Title       string     `json:"title" gorm:"index"`
+	Title       string     `json:"title" gorm:"index:,unique"`
 	URI         string     `json:"uri" gorm:"index"`
 	Keywords    string     `json:"keywords" gorm:"index:,class:FULLTEXT"`
 	Abstract    string     `json:"abstract"`

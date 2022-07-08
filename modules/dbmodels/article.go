@@ -31,7 +31,7 @@ type Article struct {
 	Keywords    string     `json:"keywords" gorm:"index:,class:FULLTEXT"`
 	Abstract    string     `json:"abstract"`
 	Type        int        `json:"type" gorm:"default:0;index"`
-	Content     string     `json:"content" sql:"type:longtext" gorm:"index:,class:FULLTEXT"`
+	Content     string     `json:"content" gorm:"type:longtext;index:,class:FULLTEXT"`
 	Author      string     `json:"author" gorm:"index"`
 	AuthorID    uint       `json:"author_id" gorm:"index"`
 	Count       uint       `json:"count" gorm:"index:,sort:desc"`

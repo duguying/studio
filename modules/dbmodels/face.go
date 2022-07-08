@@ -11,7 +11,7 @@ type Face struct {
 	UUID
 
 	FileId         uint      `json:"file_id"`
-	FaceDescriptor string    `json:"face_descriptor" sql:"type:longtext"`
+	FaceDescriptor string    `json:"face_descriptor" gorm:"type:longtext"`
 	LabelId        uint      `json:"label_id"`
 	CreatedAt      time.Time `json:"created_at"`
 }

@@ -141,7 +141,7 @@ func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.Articl
 
 func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle, err error) {
 	var list []*dbmodels.Article
-	err = tx.Table("articles").Order("count desc").Limit(int(num)).Find(&list).Error
+	err = tx.Model(dbmodels.Article{}).Order("count desc").Limit(int(num)).Find(&list).Error
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +155,7 @@ func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle
 func MonthArch(tx *gorm.DB) (archInfos []*dbmodels.ArchInfo, err error) {
 	var list []*dbmodels.Article
 	archInfos = []*dbmodels.ArchInfo{}
-	err = tx.Table("articles").Select("created_at").Where("status=?", 1).Find(&list).Error
+	err = tx.Model(dbmodels.Article{}).Select("created_at").Where("status=?", 1).Find(&list).Error
 	if err != nil {
 		return nil, err
 	}

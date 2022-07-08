@@ -1,4 +1,3 @@
-// Package orm 数据库对象关系模型初始化模块
 package orm
 
 import (
@@ -27,14 +26,12 @@ const (
 	YellowBold  = "\033[33;1m"
 )
 
-// Config logger配置
 type Config struct {
 	SlowThreshold time.Duration
 	Colorful      bool
 	LogLevel      logger.LogLevel
 }
 
-// Default 默认logger
 var Default = New(Config{
 	SlowThreshold: 100 * time.Millisecond,
 	LogLevel:      logger.Warn,
@@ -54,12 +51,11 @@ func (l *slogger) LogMode(level logger.LogLevel) logger.Interface {
 	return &newlogger
 }
 
-// Printf 格式化打印
 func (l slogger) Printf(ctx context.Context, format string, args ...interface{}) {
-	tracePrefix := ""
-	traceId, ok := ctx.Value("trace_id").(string)
+	reqPrefix := ""
+	reqid, ok := ctx.Value("reqid").(string)
 	if ok {
-		tracePrefix = fmt.Sprintf("[%s] ", traceId)
+		reqPrefix = fmt.Sprintf("[%s] ", reqid)
 	}
 
 	logseg := fmt.Sprintf(format, args...)
@@ -71,7 +67,7 @@ func (l slogger) Printf(ctx context.Context, format string, args ...interface{})
 	sqlog := ""
 	segs := strings.Split(logseg, "\n")
 	for _, seg := range segs {
-		sqlog = sqlog + fmt.Sprintln(tracePrefix+seg)
+		sqlog = sqlog + fmt.Sprintln(reqPrefix+seg)
 	}
 
 	fmt.Print(sqlog)
@@ -112,22 +108,18 @@ func (l slogger) Trace(ctx context.Context, begin time.Time, fc func() (string, 
 		case l.LogLevel >= logger.Info:
 			sql, rows := fc()
 			l.Printf(ctx, l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
-		default:
-			sql, rows := fc()
-			l.Printf(ctx, l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	}
 }
 
-// New 创建logger
 func New(config Config) logger.Interface {
 	var (
-		infoStr      = "%s\n[info] "
-		warnStr      = "%s\n[warn] "
-		errStr       = "%s\n[error] "
-		traceStr     = "%s\n[%v] [rows:%d] %s"
-		traceWarnStr = "%s\n[%v] [rows:%d] %s"
-		traceErrStr  = "%s %s\n[%v] [rows:%d] %s"
+		infoStr      = "%s [info] "
+		warnStr      = "%s [warn] "
+		errStr       = "%s [error] "
+		traceStr     = "%s [%v] [rows:%d] %s"
+		traceWarnStr = "%s [%v] [rows:%d] %s"
+		traceErrStr  = "%s %s [%v] [rows:%d] %s"
 	)
 
 	if config.Colorful {
@@ -136,8 +128,7 @@ func New(config Config) logger.Interface {
 		errStr = Magenta + "%s\n" + Reset + Red + "[error] " + Reset
 		traceStr = Green + "%s\n" + Reset + Yellow + "[%.3fms] " + Blue + "[rows:%d]" + Reset + " %s"
 		traceWarnStr = Green + "%s\n" + Reset + RedBold + "[%.3fms] " + Yellow + "[rows:%d]" + Magenta + " %s" + Reset
-		traceErrStr = RedBold + "%s " + MagentaBold + "%s\n" + Reset +
-			Yellow + "[%.3fms] " + Blue + "[rows:%d]" + Reset + " %s"
+		traceErrStr = RedBold + "%s " + MagentaBold + "%s\n" + Reset + Yellow + "[%.3fms] " + Blue + "[rows:%d]" + Reset + " %s"
 	}
 
 	return &slogger{

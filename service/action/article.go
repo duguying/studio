@@ -117,6 +117,8 @@ func SearchArticle(c *gin.Context) {
 		searchList = append(searchList, &models.ArticleSearchAbstract{
 			ID:        uint(id),
 			Title:     title,
+			URI:       article.URI,
+			Tags:      article.ToArticleContent().Tags,
 			Keywords:  keywords,
 			Content:   content,
 			CreatedAt: &article.CreatedAt,

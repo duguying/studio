@@ -77,6 +77,8 @@ func (at *ArticleTitle) String() string {
 type ArticleSearchAbstract struct {
 	ID        uint       `json:"id"`
 	Title     string     `json:"title"`
+	URI       string     `json:"uri"`
+	Tags      []string   `json:"tags"`
 	Keywords  string     `json:"keywords"`
 	Content   string     `json:"content"`
 	CreatedAt *time.Time `json:"created_at"`

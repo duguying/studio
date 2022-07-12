@@ -74,6 +74,14 @@ func SearchArticle(c *gin.Context) {
 		return
 	}
 
+	// 关键词为空，直接返回空
+	if len(req.Keyword) <= 0 {
+		c.JSON(http.StatusOK, models.CommonSearchListResponse{
+			Ok: true,
+		})
+		return
+	}
+
 	// 默认参数
 	if req.Page <= 0 {
 		req.Page = 1
@@ -119,6 +127,7 @@ func SearchArticle(c *gin.Context) {
 			Title:     title,
 			URI:       article.URI,
 			Tags:      article.ToArticleContent().Tags,
+			Author:    article.Author,
 			Keywords:  keywords,
 			Content:   content,
 			CreatedAt: &article.CreatedAt,

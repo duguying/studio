@@ -48,7 +48,8 @@ func PageArticle(tx *gorm.DB, keyword string,
 // SearchArticle 搜索文章
 func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, result *bleve.SearchResult, articleMap map[uint]*dbmodels.Article, err error) {
 	query := bleve.NewQueryStringQuery(keyword)
-	searchRequest := bleve.NewSearchRequest(query)
+	from := size * (page - 1)
+	searchRequest := bleve.NewSearchRequestOptions(query, int(size), int(from), false)
 	searchRequest.SortBy([]string{"-_score"})
 	searchRequest.Highlight = bleve.NewHighlight()
 	result, err = g.Index.Search(searchRequest)
@@ -57,20 +58,10 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, re
 	}
 
 	total = uint(result.Total)
-	from := size * (page - 1)
-	to := size * page
-
-	// check list border
-	if int(from) > result.Hits.Len() || result.Hits.Len() <= 0 {
-		return total, nil, nil, nil
-	}
-	if int(to) > result.Hits.Len() {
-		to = uint(result.Hits.Len()) + 1
-	}
 
 	// gather ids
 	ids := []uint{}
-	for _, hit := range result.Hits[from:to] {
+	for _, hit := range result.Hits {
 		id, err := strconv.ParseUint(hit.ID, 10, 64)
 		if err != nil {
 			continue
@@ -88,8 +79,6 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, re
 		articleMap[article.ID] = article
 	}
 
-	// scale hits
-	result.Hits = result.Hits[from:to]
 	return total, result, articleMap, nil
 }
 

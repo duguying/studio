@@ -79,6 +79,7 @@ type ArticleSearchAbstract struct {
 	Title     string     `json:"title"`
 	URI       string     `json:"uri"`
 	Tags      []string   `json:"tags"`
+	Author    string     `json:"author"`
 	Keywords  string     `json:"keywords"`
 	Content   string     `json:"content"`
 	CreatedAt *time.Time `json:"created_at"`

@@ -7,6 +7,7 @@ require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1214
 	github.com/arran4/golang-ical v0.0.0-20210807024147-770fa87aff1d
 	github.com/blevesearch/bleve/v2 v2.3.2
+	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gin-contrib/pprof v1.3.0

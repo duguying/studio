@@ -5,11 +5,13 @@
 package session
 
 import (
-	"duguying/studio/modules/redis"
+	"duguying/studio/g"
+	"duguying/studio/modules/cache"
 	"duguying/studio/utils"
-	"github.com/gogather/json"
 	"log"
 	"time"
+
+	"github.com/gogather/json"
 )
 
 type Entity struct {
@@ -27,15 +29,15 @@ func SessionID() string {
 }
 
 func SessionSet(sessionId string, ttl time.Duration, entity *Entity) {
-	redis.SetTTL(redis.SESS+sessionId, entity.String(), ttl)
+	g.Cache.SetTTL(cache.SESS+sessionId, entity.String(), ttl)
 }
 
 func SessionDel(sessionId string) {
-	redis.Delete(redis.SESS + sessionId)
+	g.Cache.Delete(cache.SESS + sessionId)
 }
 
 func SessionGet(sessionId string) (entity *Entity) {
-	value, err := redis.Get(redis.SESS + sessionId)
+	value, err := g.Cache.Get(cache.SESS + sessionId)
 	if err != nil {
 		log.Println("get session from redis failed, err:", err.Error())
 		return nil

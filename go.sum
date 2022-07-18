@@ -164,6 +164,8 @@ github.com/blevesearch/zapx/v14 v14.3.3 h1:dqqAzGphKl0yehHKKntDHKlEMhi9B/tJrD4Os
 github.com/blevesearch/zapx/v14 v14.3.3/go.mod h1:zXNcVzukh0AvG57oUtT1T0ndi09H0kELNaNmekEy0jw=
 github.com/blevesearch/zapx/v15 v15.3.3 h1:60oE+qsJkveLenJmbc0eaH59GWYCbJJsPDV6Z5hEoYY=
 github.com/blevesearch/zapx/v15 v15.3.3/go.mod h1:C+f/97ZzTzK6vt/7sVlZdzZxKu+5+j4SrGCvr9dJzaY=
+github.com/boltdb/bolt v1.3.1 h1:JQmyP4ZBrce+ZQu0dY660FMfatumYDLun9hBCUVIkF4=
+github.com/boltdb/bolt v1.3.1/go.mod h1:clJnj/oiGkjum5o1McbSZDSLxVThjynRyGBgiAx27Ps=
 github.com/bombsimon/wsl/v3 v3.3.0/go.mod h1:st10JtZYLE4D5sC7b8xV4zTKZwAQjCH/Hy2Pm1FNZIc=
 github.com/bradfitz/go-smtpd v0.0.0-20170404230938-deb6d6237625/go.mod h1:HYsPBTaaSFSlLx/70C2HPIMNZpVV8+vt/A+FMnYP11g=
 github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32/go.mod h1:DrZx5ec/dmnfpw9KyYoQyYo7d0KEvTkk/5M/vbZjAr8=

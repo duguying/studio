@@ -20,6 +20,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ListArticleWithContent 文章列表
 // @Router /list [get]
 // @Tags 文章
 // @Description 文章列表
@@ -180,6 +181,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 	return
 }
 
+// ListArticleWithContentMonthly 文章按月列表
 // @Router /list_archive_monthly [get]
 // @Tags 文章
 // @Description 文章列表
@@ -217,6 +219,7 @@ func ListArticleWithContentMonthly(c *gin.Context) {
 	return
 }
 
+// ListArticleTitle 按标题列举文章
 // @Router /list_title [get]
 // @Tags 文章
 // @Description 文章列表
@@ -252,6 +255,7 @@ func ListArticleTitle(c *gin.Context) {
 	return
 }
 
+// GetArticle 获取文章
 // @Router /article [get]
 // @Tags 文章
 // @Description 获取文章
@@ -269,7 +273,7 @@ func GetArticle(c *gin.Context) {
 		return
 	}
 
-	art := &models.ArticleContent{}
+	var art *models.ArticleContent
 	if getter.Id > 0 {
 		dbArt, err := db.GetArticleById(g.Db, getter.Id)
 		if err != nil {
@@ -305,6 +309,7 @@ func GetArticle(c *gin.Context) {
 	return
 }
 
+// HotArticleTitle 文章TopN列表
 // @Router /hot_article [get]
 // @Tags 文章
 // @Description 文章TopN列表
@@ -336,6 +341,7 @@ func HotArticleTitle(c *gin.Context) {
 	return
 }
 
+// MonthArchive 文章按月归档
 // @Router /month_archive [get]
 // @Tags 文章
 // @Description 文章按月归档
@@ -382,7 +388,7 @@ func GetArticleShow(c *gin.Context) {
 	}
 
 	tx := g.Db.WithContext(c)
-	art := &models.ArticleShowContent{}
+	var art *models.ArticleShowContent
 	if getter.Id > 0 {
 		dbArt, err := db.GetArticleById(tx, getter.Id)
 		if err != nil {
@@ -426,7 +432,7 @@ func GetArticleShow(c *gin.Context) {
 func ArticleViewCount(c *gin.Context) {
 	ident := c.Query("ident")
 	refer := c.GetHeader("Referer")
-	referUrl, err := url.Parse(refer)
+	referURL, err := url.Parse(refer)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  true,
@@ -434,7 +440,7 @@ func ArticleViewCount(c *gin.Context) {
 		})
 		return
 	}
-	if referUrl.Host != g.Config.Get("system", "host", "www.duguying.net") {
+	if referURL.Host != g.Config.Get("system", "host", "www.duguying.net") {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  true,
 			Msg: "",
@@ -467,8 +473,8 @@ func AddArticle(c *gin.Context) {
 	}
 
 	tx := g.Db.WithContext(c)
-	userId := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(tx, userId)
+	userID := uint(c.GetInt64("user_id"))
+	user, err := db.GetUserById(tx, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok:  false,
@@ -477,7 +483,7 @@ func AddArticle(c *gin.Context) {
 		return
 	}
 
-	article, err := db.AddArticle(tx, aar, user.Username, userId)
+	article, err := db.AddArticle(tx, aar, user.Username, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonCreateResponse{
 			Ok:  false,
@@ -553,8 +559,8 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// check auth
-	userId := uint(c.GetInt64("user_id"))
-	if userId != article.AuthorID {
+	userID := uint(c.GetInt64("user_id"))
+	if userID != article.AuthorID {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
 			Msg: "auth failed, it's not you article, could not publish",
@@ -563,7 +569,7 @@ func PublishArticle(c *gin.Context) {
 	}
 
 	// publish
-	err = db.PublishArticle(tx, pub.Id, pub.Publish, userId)
+	err = db.PublishArticle(tx, pub.Id, pub.Publish, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -608,8 +614,8 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// check auth
-	userId := uint(c.GetInt64("user_id"))
-	if userId != article.AuthorID {
+	userID := uint(c.GetInt64("user_id"))
+	if userID != article.AuthorID {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
 			Msg: "auth failed, it's not you article, could not publish",
@@ -618,7 +624,7 @@ func DeleteArticle(c *gin.Context) {
 	}
 
 	// delete
-	err = db.DeleteArticle(tx, getter.Id, userId)
+	err = db.DeleteArticle(tx, getter.Id, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,

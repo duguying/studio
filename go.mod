@@ -9,6 +9,7 @@ require (
 	github.com/blevesearch/bleve/v2 v2.3.2
 	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
+	github.com/elastic/go-elasticsearch/v8 v8.3.0 // indirect
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7

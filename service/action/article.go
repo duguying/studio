@@ -122,6 +122,7 @@ func SearchArticle(c *gin.Context) {
 		if len(item.Fragments["content"]) > 0 {
 			content = item.Fragments["content"][0]
 		}
+		article.Keywords = keywords // 包含mark标签
 		searchList = append(searchList, &models.ArticleSearchAbstract{
 			ID:        uint(id),
 			Title:     title,

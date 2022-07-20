@@ -9,6 +9,8 @@ require (
 	github.com/blevesearch/bleve/v2 v2.3.2
 	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
+	github.com/dogenzaka/rotator v0.0.0-20141104034428-97947bef5b93 // indirect
+	github.com/elastic/go-elasticsearch/v7 v7.17.1 // indirect
 	github.com/elastic/go-elasticsearch/v8 v8.3.0 // indirect
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gin-contrib/pprof v1.3.0
@@ -23,6 +25,7 @@ require (
 	github.com/gogather/logger v0.0.0-20200203043640-cf0bf9aa076e
 	github.com/gogather/safemap v0.0.0-20170930074128-e4dc79c94fb6
 	github.com/golang/protobuf v1.5.2
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/ipipdotnet/ipdb-go v1.3.1
 	github.com/json-iterator/go v1.1.12
@@ -35,6 +38,7 @@ require (
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/satori/go.uuid v1.2.0
+	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/gin-swagger v1.3.1
 	github.com/swaggo/swag v1.7.0

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"duguying/studio/docs"
 	"duguying/studio/g"
 	"duguying/studio/modules/bleve"
@@ -10,10 +11,12 @@ import (
 	"duguying/studio/modules/ipip"
 	"duguying/studio/modules/logger"
 	"duguying/studio/modules/orm"
+	"duguying/studio/modules/rlog"
 	"duguying/studio/service"
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -100,6 +103,11 @@ func initLogger() {
 	}
 	level := g.Config.GetInt64("log", "level", 15)
 	logger.InitLogger(logDir, expire, int(level))
+
+	topic := g.Config.Get("log", "topic", "studio")
+	logFile := filepath.Join(logDir, "studio.log")
+	g.LogEntry = rlog.NewRLog(context.Background(), topic,
+		logFile).WithFields(map[string]interface{}{"app": "studio"})
 }
 
 func initIPIP() {

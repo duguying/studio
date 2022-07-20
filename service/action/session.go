@@ -19,10 +19,8 @@ func SessionValidate(forbidAnonymous bool) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		sid, err := c.Cookie("sid")
 		if err != nil {
-			// log.Printf("get cookie failed, try to get token, err: %s\n", err.Error())
 			sid = c.GetHeader("X-Token")
 		}
-		// log.Printf("get sid: %s\n", sid)
 		c.Set("sid", sid)
 		sessionDomain := g.Config.Get("session", "domain", ".duguying.net")
 		entity := session.SessionGet(sid)

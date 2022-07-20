@@ -1,6 +1,7 @@
 package rlog
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -13,10 +14,12 @@ func TestRLog(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	rl.Report(map[string]interface{}{
+	entity := map[string]interface{}{
 		"name":  "rex",
 		"age":   32,
 		"phone": 123456,
 		"uuid":  id,
-	})
+	}
+	line, _ := json.Marshal(entity)
+	rl.Report(string(line))
 }

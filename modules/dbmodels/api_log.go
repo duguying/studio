@@ -6,7 +6,7 @@ import (
 	"github.com/gogather/json"
 )
 
-type ApiLog struct {
+type APILog struct {
 	Id        uint      `json:"id"`
 	Method    string    `json:"method"`
 	Uri       string    `json:"uri"`
@@ -17,7 +17,7 @@ type ApiLog struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-func (a *ApiLog) String() string {
+func (a *APILog) String() string {
 	c, _ := json.Marshal(a)
 	return string(c)
 }

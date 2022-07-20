@@ -2,17 +2,18 @@
 // This file is part of blog project
 // Created by duguying on 2017/11/2.
 
+// Package service 服务包
 package service
 
 import (
 	_ "duguying/studio/docs"
 	"duguying/studio/g"
 	"duguying/studio/modules/logger"
-	"duguying/studio/modules/middleware"
 	"duguying/studio/service/action"
 	"duguying/studio/service/action/agent"
 	"duguying/studio/service/message/deal"
 	"duguying/studio/service/message/pipe"
+	"duguying/studio/service/middleware"
 	"duguying/studio/service/models"
 	"fmt"
 	"path/filepath"
@@ -41,7 +42,7 @@ func Run(logDir string) {
 	router.Any("/version", action.Version)
 
 	// v1 api
-	apiV1 := router.Group("/api/v1", action.SessionValidate(false))
+	apiV1 := router.Group("/api/v1", middleware.RestLog(), middleware.SessionValidate(false))
 	{
 		// needn't auth
 		{
@@ -64,7 +65,7 @@ func Run(logDir string) {
 		}
 
 		// auth require
-		auth := apiV1.Group("/admin", action.SessionValidate(true))
+		auth := apiV1.Group("/admin", middleware.RestLog(), middleware.SessionValidate(true))
 		{
 			auth.GET("/user_info", action.UserInfo)      // 用户信息
 			auth.POST("/user_logout", action.UserLogout) // 用户登出
@@ -86,8 +87,8 @@ func Run(logDir string) {
 		// agent connection point
 		agt := apiV1.Group("/agent")
 		{
-			agt.GET("/list", action.SessionValidate(true), agent.List) // agent列表
-			agt.Any("/ws", agent.Ws)                                   // agent连接点
+			agt.GET("/list", middleware.SessionValidate(true), agent.List) // agent列表
+			agt.Any("/ws", agent.Ws)                                       // agent连接点
 		}
 
 	}

@@ -2,8 +2,8 @@
 // This file is part of blog project
 // Created by duguying on 2018/5/18.
 
-// Package action 控制器包
-package action
+// Package middleware 中间件
+package middleware
 
 import (
 	"duguying/studio/g"

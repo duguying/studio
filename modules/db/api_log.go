@@ -7,8 +7,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func PutApiLog(tx *gorm.DB, apiLog *models.ApiLog) error {
-	err := tx.Model(dbmodels.ApiLog{}).Create(apiLog).Error
+// PutApiLog db中记录日志
+func PutApiLog(tx *gorm.DB, apiLog *models.APILog) error {
+	err := tx.Model(dbmodels.APILog{}).Create(apiLog).Error
 	if err != nil {
 		return err
 	}

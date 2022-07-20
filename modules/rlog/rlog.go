@@ -14,7 +14,7 @@ import (
 )
 
 type RemoteAdaptor interface {
-	Report(interface{}) error
+	Report(string) error
 	Close()
 }
 
@@ -62,6 +62,7 @@ type RLog struct {
 func NewRLog(ctx context.Context, topic string, path string) *RLog {
 	rl := &RLog{
 		enableRemote:     true,
+		remoteAddr:       "http://jump.duguying.net:19200",
 		remoteSendThread: 4,
 		logFilePath:      path,
 	}
@@ -82,7 +83,11 @@ func NewRLog(ctx context.Context, topic string, path string) *RLog {
 	rl.logrusInstance.AddHook(lineNumHook)
 
 	if rl.enableRemote {
-		rl.initRemoteClient(topic)
+		err := rl.initRemoteClient(topic)
+		if err != nil {
+			fmt.Println("init remote client err:", err)
+			return nil
+		}
 	}
 	rl.initChanReader()
 

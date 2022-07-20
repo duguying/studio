@@ -3,7 +3,6 @@ package rlog
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v7"
@@ -46,11 +45,10 @@ func (ea *EsAdaptor) Close() {
 
 }
 
-func (ea *EsAdaptor) Report(entity interface{}) error {
-	c, _ := json.Marshal(entity)
+func (ea *EsAdaptor) Report(line string) error {
 	req := esapi.IndexRequest{
 		Index:   ea.index,
-		Body:    strings.NewReader(string(c)),
+		Body:    strings.NewReader(line),
 		Refresh: "true",
 	}
 

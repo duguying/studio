@@ -21,6 +21,10 @@ func SessionValidate(forbidAnonymous bool) func(c *gin.Context) {
 		if err != nil {
 			sid = c.GetHeader("X-Token")
 		}
+		// websocket 连接，鉴权从 query 取 token
+		if c.GetHeader("Upgrade") == "websocket" {
+			sid, _ = c.GetQuery("token")
+		}
 		c.Set("sid", sid)
 		sessionDomain := g.Config.Get("session", "domain", ".duguying.net")
 		entity := session.SessionGet(sid)

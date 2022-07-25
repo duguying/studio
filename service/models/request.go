@@ -47,3 +47,7 @@ type SearchPagerRequest struct {
 	Size    uint   `json:"size" form:"size"`
 	Keyword string `json:"keyword" form:"keyword"`
 }
+
+type IntGetter struct {
+	ID uint `json:"id" form:"id,required"`
+}

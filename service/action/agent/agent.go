@@ -8,6 +8,7 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/dns"
+	"duguying/studio/service/models"
 	"net/http"
 	"time"
 
@@ -93,6 +94,25 @@ func List(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"ok":   true,
 		"list": agents,
+	})
+	return
+}
+
+// RemoveAgent 列表中移除 agent
+func RemoveAgent(c *gin.Context) {
+	getter := models.IntGetter{}
+
+	err := db.ForbidAgent(g.Db, getter.ID)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok": true,
 	})
 	return
 }

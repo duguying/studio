@@ -87,8 +87,9 @@ func Run(logDir string) {
 		// agent connection point
 		agt := apiV1.Group("/agent")
 		{
-			agt.GET("/list", middleware.SessionValidate(true), agent.List) // agent列表
-			agt.Any("/ws", agent.Ws)                                       // agent连接点
+			agt.GET("/list", middleware.SessionValidate(true), agent.List)             // agent列表
+			agt.DELETE("/remove", middleware.SessionValidate(true), agent.RemoveAgent) // agent删除（禁用）
+			agt.Any("/ws", agent.Ws)                                                   // agent连接点
 		}
 
 	}

@@ -38,6 +38,7 @@ func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmode
 		// exist, update
 		err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
 			"online": AGENT_ONLINE,
+			"status": AGENT_STATUS_ALLOW,
 			"ip":     ip,
 		}).Error
 		if err != nil {

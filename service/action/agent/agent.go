@@ -101,8 +101,16 @@ func List(c *gin.Context) {
 // RemoveAgent 列表中移除 agent
 func RemoveAgent(c *gin.Context) {
 	getter := models.IntGetter{}
+	err := c.BindQuery(&getter)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
 
-	err := db.ForbidAgent(g.Db, getter.ID)
+	err = db.ForbidAgent(g.Db, getter.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

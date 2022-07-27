@@ -30,7 +30,6 @@ type Msg struct {
 	Cmd      int    `json:"cmd"`
 	ClientId string `json:"client_id"`
 	Data     []byte `json:"data"`
-	DataLen  uint64 `json:"data_len"`
 }
 
 func (m *Msg) String() string {
@@ -57,7 +56,6 @@ func (m *Msg) Info() string {
 		"cmd":       m.Cmd,
 		"client_id": m.ClientId,
 		"_data_len": len(m.Data),
-		"@ok":       len(m.Data) == int(m.DataLen),
 	}
 	c, err := json.Marshal(ds)
 	if err != nil {

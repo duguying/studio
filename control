@@ -86,7 +86,7 @@ function status() {
 
 function proto(){
     echo "compile protobuf..."
-    protoc -I=./service/message/model --go_out=./service/message/model ./service/message/model/*.proto
+    protoc -I=./service/message/proto --go_out=./service/message/model ./service/message/proto/*.proto
     echo "compile finished."
 }
 

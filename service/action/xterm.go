@@ -10,14 +10,15 @@ import (
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/utils"
-	"github.com/gin-gonic/gin"
-	"github.com/gogather/json"
-	"github.com/golang/protobuf/proto"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gogather/json"
+	"github.com/golang/protobuf/proto"
+	"github.com/gorilla/websocket"
 )
 
 type TermLayout struct {
@@ -244,7 +245,7 @@ func ConnectXTerm(c *gin.Context) {
 		case data := <-pair.ChanIn:
 			{
 				wsLock.Lock()
-				logger.L("browserrcv").Printf("browser received: %s\n", string(data))
+				// logger.L("browserrcv").Printf("browser received: %s\n", string(data))
 				err = conn.WriteMessage(websocket.BinaryMessage, data)
 				if err != nil {
 					log.Println("即时消息发送到客户端:", err)

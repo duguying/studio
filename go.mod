@@ -44,6 +44,7 @@ require (
 	github.com/swaggo/swag v1.7.0
 	github.com/unknwon/com v1.0.1
 	golang.org/x/tools v0.1.5 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/redis.v5 v5.2.9
 	gorm.io/driver/mysql v1.1.1

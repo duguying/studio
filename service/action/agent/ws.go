@@ -79,7 +79,7 @@ func Ws(c *gin.Context) {
 			}
 
 			if g.Config.Get("ws", "log", "enable") == "enable" {
-				log.Printf("recv: %s\n", msg.String())
+				log.Printf("recv: %s\n", msg.Info())
 			}
 
 			pipe.In <- msg

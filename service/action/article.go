@@ -436,11 +436,20 @@ func ArticleViewCount(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  true,
-			Msg: "invalid",
+			Msg: "invalid referer",
 		})
 		return
 	}
-	if referURL.Host != g.Config.Get("system", "host", "www.duguying.net") {
+	sysHost := g.Config.Get("system", "host", "https://www.duguying.net")
+	sysURL, err := url.Parse(sysHost)
+	if err != nil {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  true,
+			Msg: "invalid config",
+		})
+		return
+	}
+	if referURL.Host != sysURL.Host {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  true,
 			Msg: "ignore",

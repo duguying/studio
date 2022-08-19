@@ -49,6 +49,7 @@ func Init() {
 
 func flushViewCnt() {
 	vcm := viewcnt.GetMap()
+	log.Println("vcm:", vcm.M)
 	for ident, val := range vcm.M {
 		err := db.UpdateArticleViewCount(g.Db, ident, val.(int))
 		if err != nil {

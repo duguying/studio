@@ -470,26 +470,22 @@ func ArticleViewCount(c *gin.Context) {
 // @Description 创建文章
 // @Param article body models.Article true "文章信息"
 // @Success 200 {object} models.CommonCreateResponse
-func AddArticle(c *gin.Context) {
+func AddArticle(c *CustomContext) (interface{}, error) {
 	aar := &models.Article{}
 	err := c.BindJSON(aar)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
+	}
+
+	if aar.Title == "" {
+		return nil, fmt.Errorf("标题不能为空")
 	}
 
 	tx := g.Db.WithContext(c)
 	userID := uint(c.GetInt64("user_id"))
 	user, err := db.GetUserById(tx, userID)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	article, err := db.AddArticle(tx, aar, user.Username, userID)
@@ -498,13 +494,12 @@ func AddArticle(c *gin.Context) {
 			Ok:  false,
 			Msg: err.Error(),
 		})
-		return
+		return nil, err
 	} else {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
+		return models.CommonCreateResponse{
 			Ok: true,
 			Id: article.ID,
-		})
-		return
+		}, nil
 	}
 }
 

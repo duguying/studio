@@ -16,6 +16,7 @@ require (
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7
 	github.com/gin-gonic/gin v1.7.3
+	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332 // indirect
 	github.com/gogather/com v1.0.0
 	github.com/gogather/cron v1.1.0

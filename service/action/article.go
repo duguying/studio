@@ -490,12 +490,12 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 
 	article, err := db.AddArticle(tx, aar, user.Username, userID)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
 		return nil, err
 	} else {
+		err = db.AddDraft(tx, article.ID, aar.Content)
+		if err != nil {
+			return nil, err
+		}
 		return models.CommonCreateResponse{
 			Ok: true,
 			Id: article.ID,
@@ -509,29 +509,27 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 // @Description 修改文章
 // @Param publish body models.Article true "文章信息"
 // @Success 200 {object} models.CommonResponse
-func UpdateArticle(c *gin.Context) {
+func UpdateArticle(c *CustomContext) (interface{}, error) {
 	article := models.Article{}
 	err := c.BindJSON(&article)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "解析参数失败",
-		})
-		return
+		return nil, fmt.Errorf("解析参数失败")
 	}
+
 	tx := g.Db.WithContext(c)
 	err = db.UpdateArticle(tx, article.ID, &article)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "解析参数失败",
-		})
-		return
+		return nil, err
 	}
-	c.JSON(http.StatusOK, models.CommonResponse{
+
+	err = db.AddDraft(tx, article.ID, article.Content)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
 		Ok: true,
-	})
-	return
+	}, nil
 }
 
 // PublishArticle 发布文章

@@ -91,6 +91,7 @@ func initSqlite() {
 func initOrm() {
 	g.Db.AutoMigrate(
 		&dbmodels.Article{},
+		&dbmodels.Draft{},
 		&dbmodels.User{},
 		&dbmodels.File{},
 		&dbmodels.Agent{},

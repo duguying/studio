@@ -98,7 +98,8 @@ func PutImage(c *CustomContext) (interface{}, error) {
 		ext = "." + ext
 	}
 
-	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", utils.GenUID(), ext))
+	randomName := utils.GenUID()
+	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	err := com.MkdirWithCreatePath(dir)
@@ -130,8 +131,9 @@ func PutImage(c *CustomContext) (interface{}, error) {
 
 	url := getImgRefURL(key)
 	return models.UploadResponse{
-		Ok:  true,
-		URL: url,
+		Ok:   true,
+		URL:  url,
+		Name: randomName,
 	}, nil
 }
 
@@ -160,7 +162,8 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		ext = "." + ext
 	}
 
-	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", utils.GenUID(), ext))
+	randomName := utils.GenUID()
+	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	_ = os.MkdirAll(dir, 0644)
@@ -192,8 +195,9 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 
 	url := getImgRefURL(key)
 	return models.UploadResponse{
-		Ok:  true,
-		URL: url,
+		Ok:   true,
+		URL:  url,
+		Name: randomName,
 	}, nil
 }
 

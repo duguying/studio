@@ -130,8 +130,8 @@ func PutImage(c *CustomContext) (interface{}, error) {
 
 	url := getImgRefURL(key)
 	return models.UploadResponse{
-		Ok:   true,
-		Path: url,
+		Ok:  true,
+		URL: url,
 	}, nil
 }
 
@@ -141,71 +141,60 @@ func getImgRefURL(key string) string {
 	return imgHost + key
 }
 
-func UploadImage(c *gin.Context) {
+// UploadImage 表单上传图片
+// @Router /upload/image [post]
+// @Tags 上传
+// @Description 表单上传图片
+// @Param publish body []byte true "图片内容"
+// @Success 200 {object} models.UploadResponse
+func UploadImage(c *CustomContext) (interface{}, error) {
 	fh, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	store := g.Config.Get("upload", "store-path", "store")
-	domain := g.Config.Get("upload", "file-domain", "http://file.duguying.net")
 	size := fh.Size
-	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s.png", utils.GenUID()))
+	ext := filepath.Ext(fh.Filename)
+	if ext != "" {
+		ext = "." + ext
+	}
 
+	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", utils.GenUID(), ext))
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	_ = os.MkdirAll(dir, 0644)
 
 	f, err := os.Create(fpath)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	defer f.Close()
 
 	hf, err := fh.Open()
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	defer hf.Close()
 
 	_, err = io.Copy(f, hf)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
 	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":  true,
-		"url": domain + strings.Replace(filepath.Join("/", key), `\`, `/`, -1),
-	})
+	url := getImgRefURL(key)
+	return models.UploadResponse{
+		Ok:  true,
+		URL: url,
+	}, nil
 }
 
 func UploadFile(c *gin.Context) {

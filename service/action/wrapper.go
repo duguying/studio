@@ -25,6 +25,11 @@ type CustomContext struct {
 	*gin.Context
 }
 
+// UserID 用户ID
+func (cc *CustomContext) UserID() int64 {
+	return cc.GetInt64("user_id")
+}
+
 // HandlerResponseFunc 带响应信息的处理函数
 type HandlerResponseFunc func(c *CustomContext) (interface{}, error)
 
@@ -57,7 +62,7 @@ func (al *APILog) ToMap() map[string]interface{} {
 }
 
 // APIWrapperResponse 带响应信息的api的action包裹器
-func APIWrapperResponse(handler HandlerResponseFunc) func(c *gin.Context) {
+func APIWrapper(handler HandlerResponseFunc) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {

@@ -482,7 +482,7 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 	}
 
 	tx := g.Db.WithContext(c)
-	userID := uint(c.GetInt64("user_id"))
+	userID := uint(c.UserID())
 	user, err := db.GetUserById(tx, userID)
 	if err != nil {
 		return nil, err
@@ -492,9 +492,11 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		err = db.AddDraft(tx, article.ID, aar.Content)
-		if err != nil {
-			return nil, err
+		if !aar.Draft {
+			err = db.AddDraft(tx, article.ID, aar.Content)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return models.CommonCreateResponse{
 			Ok: true,
@@ -538,52 +540,39 @@ func UpdateArticle(c *CustomContext) (interface{}, error) {
 // @Description 发布文章
 // @Param publish body models.ArticlePublishRequest true "文章信息"
 // @Success 200 {object} models.CommonResponse
-func PublishArticle(c *gin.Context) {
+func PublishArticle(c *CustomContext) (interface{}, error) {
 	pub := models.ArticlePublishRequest{}
 	err := c.BindJSON(&pub)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// get article
 	tx := g.Db.WithContext(c)
 	article, err := db.GetArticleById(tx, pub.Id)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// check auth
-	userID := uint(c.GetInt64("user_id"))
+	userID := uint(c.UserID())
 	if userID != article.AuthorID {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "auth failed, it's not you article, could not publish",
-		})
-		return
+		return nil, fmt.Errorf("auth failed, it's not you article, could not publish")
 	}
 
 	// publish
 	err = db.PublishArticle(tx, pub.Id, pub.Publish, userID)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	} else {
-		c.JSON(http.StatusOK, models.CommonResponse{
+		err = db.AddDraft(tx, article.ID, article.Content)
+		if err != nil {
+			return nil, err
+		}
+		return models.CommonResponse{
 			Ok:  true,
 			Msg: "publish success",
-		})
-		return
+		}, nil
 	}
 }
 
@@ -593,52 +582,35 @@ func PublishArticle(c *gin.Context) {
 // @Description 删除文章
 // @Param id query uint true "文章ID"
 // @Success 200 {object} models.CommonResponse
-func DeleteArticle(c *gin.Context) {
+func DeleteArticle(c *CustomContext) (interface{}, error) {
 	getter := models.CommonGetterRequest{}
 	err := c.BindQuery(&getter)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// get article
 	tx := g.Db.WithContext(c)
 	article, err := db.GetArticleById(tx, getter.Id)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// check auth
-	userID := uint(c.GetInt64("user_id"))
+	userID := uint(c.UserID())
 	if userID != article.AuthorID {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "auth failed, it's not you article, could not publish",
-		})
-		return
+		return nil, fmt.Errorf("auth failed, it's not you article, could not publish")
 	}
 
 	// delete
 	err = db.DeleteArticle(tx, getter.Id, userID)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	} else {
-		c.JSON(http.StatusOK, models.CommonResponse{
+		return models.CommonResponse{
 			Ok:  true,
 			Msg: "delete success",
-		})
-		return
+		}, nil
 	}
 }
 

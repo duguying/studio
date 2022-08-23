@@ -33,12 +33,12 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.POST("/upload", UploadFile)      // 上传归档文件
 	api.Any("/xterm", ConnectXTerm)      // 连接xterm
 
-	api.POST("/article", APIWrapperResponse(AddArticle))   // 添加文章
-	api.PUT("/article", APIWrapperResponse(UpdateArticle)) // 修改文章
-	api.PUT("/article/publish", PublishArticle)            // 发布草稿
-	api.DELETE("/article", DeleteArticle)                  // 删除文章
-	api.GET("/article/list_title", ListArticleTitle)       // 列出文章列表
-	api.GET("/article", GetArticle)                        // 获取文章
+	api.POST("/article", APIWrapper(AddArticle))            // 添加文章
+	api.PUT("/article", APIWrapper(UpdateArticle))          // 修改文章
+	api.PUT("/article/publish", APIWrapper(PublishArticle)) // 发布草稿
+	api.DELETE("/article", APIWrapper(DeleteArticle))       // 删除文章
+	api.GET("/article/list_title", ListArticleTitle)        // 列出文章列表
+	api.GET("/article", GetArticle)                         // 获取文章
 
 	api.GET("/2faqr", QrGoogleAuth)        // 获取2FA二维码
 	api.POST("/upload/image", UploadImage) // 上传图片

@@ -21,10 +21,14 @@ import (
 )
 
 func PageArticle(tx *gorm.DB, keyword string,
-	page uint, pageSize uint) (total int64, list []*dbmodels.Article, err error) {
+	page uint, pageSize uint, statusList []int) (total int64, list []*dbmodels.Article, err error) {
 	total = 0
-	query := "status=?"
-	params := []interface{}{1}
+	query := "status in (?)"
+	params := []interface{}{}
+	for _, status := range statusList {
+		params = append(params, status)
+	}
+
 	if keyword != "" {
 		query = query + " and keywords like ?"
 		params = append(params, fmt.Sprintf("%%%s%%", keyword))

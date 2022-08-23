@@ -13,7 +13,7 @@ func SetupFeAPI(api *gin.RouterGroup) {
 	api.GET("/list", ListArticleWithContent)                        // 列出文章
 	api.GET("/list_tag", ListArticleWithContentByTag)               // 按Tag列出文章
 	api.GET("/list_archive_monthly", ListArticleWithContentMonthly) // 按月归档文章内容列表
-	api.GET("/list_title", ListArticleTitle)                        // 列出文章标题
+	api.GET("/list_title", APIWrapper(ListArticleTitle))            // 列出文章标题
 	api.GET("/search_article", SearchArticle)
 	api.GET("/hot_article", HotArticleTitle)     // 热门文章列表
 	api.GET("/month_archive", MonthArchive)      // 文章按月归档列表
@@ -33,12 +33,12 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.POST("/upload", UploadFile)      // 上传归档文件
 	api.Any("/xterm", ConnectXTerm)      // 连接xterm
 
-	api.POST("/article", APIWrapper(AddArticle))            // 添加文章
-	api.PUT("/article", APIWrapper(UpdateArticle))          // 修改文章
-	api.PUT("/article/publish", APIWrapper(PublishArticle)) // 发布草稿
-	api.DELETE("/article", APIWrapper(DeleteArticle))       // 删除文章
-	api.GET("/article/list_title", ListArticleTitle)        // 列出文章列表
-	api.GET("/article", GetArticle)                         // 获取文章
+	api.POST("/article", APIWrapper(AddArticle))                    // 添加文章
+	api.PUT("/article", APIWrapper(UpdateArticle))                  // 修改文章
+	api.PUT("/article/publish", APIWrapper(PublishArticle))         // 发布草稿
+	api.DELETE("/article", APIWrapper(DeleteArticle))               // 删除文章
+	api.GET("/article/list_title", APIWrapper(ListAllArticleTitle)) // 列出文章列表
+	api.GET("/article", GetArticle)                                 // 获取文章
 
 	api.GET("/2faqr", QrGoogleAuth)        // 获取2FA二维码
 	api.POST("/upload/image", UploadImage) // 上传图片

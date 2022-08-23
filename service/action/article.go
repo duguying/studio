@@ -7,6 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dbmodels"
 	"duguying/studio/modules/viewcnt"
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
@@ -38,7 +39,7 @@ func ListArticleWithContent(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size)
+	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish})
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -163,7 +164,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size)
+	total, list, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish})
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -226,33 +227,52 @@ func ListArticleWithContentMonthly(c *gin.Context) {
 // @Param page query uint true "页码"
 // @Param size query uint true "每页数"
 // @Success 200 {object} models.ArticleTitleListResponse
-func ListArticleTitle(c *gin.Context) {
+func ListArticleTitle(c *CustomContext) (interface{}, error) {
 	pager := models.CommonPagerRequest{}
 	err := c.BindQuery(&pager)
 	if err != nil {
-		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size)
+	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish})
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
-		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+	return models.ArticleTitleListResponse{
 		Ok:    true,
 		Total: uint(total),
 		List:  db.ArticleToTitle(list),
-	})
-	return
+	}, nil
+}
+
+// ListAllArticleTitle 按标题列举文章
+// @Router /admin/article/list_title [get]
+// @Tags 文章
+// @Description 文章列表
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.ArticleTitleListResponse
+func ListAllArticleTitle(c *CustomContext) (interface{}, error) {
+	pager := models.CommonPagerRequest{}
+	err := c.BindQuery(&pager)
+	if err != nil {
+		return nil, err
+	}
+
+	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size,
+		[]int{dbmodels.ArtStatusPublish, dbmodels.ArtStatusDraft})
+	if err != nil {
+		log.Println("分页查询错误, err:", err)
+		return nil, err
+	}
+
+	return models.ArticleTitleListResponse{
+		Ok:    true,
+		Total: uint(total),
+		List:  db.ArticleToTitle(list),
+	}, nil
 }
 
 // GetArticle 获取文章

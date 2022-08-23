@@ -275,7 +275,7 @@ func GetArticle(c *gin.Context) {
 
 	var art *models.ArticleContent
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(g.Db, getter.Id)
+		dbArt, err := db.GetArticleByID(g.Db, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
 				Ok:  false,
@@ -390,7 +390,7 @@ func GetArticleShow(c *gin.Context) {
 	tx := g.Db.WithContext(c)
 	var art *models.ArticleShowContent
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(tx, getter.Id)
+		dbArt, err := db.GetArticleByID(tx, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -549,7 +549,7 @@ func PublishArticle(c *CustomContext) (interface{}, error) {
 
 	// get article
 	tx := g.Db.WithContext(c)
-	article, err := db.GetArticleById(tx, pub.Id)
+	article, err := db.GetArticleByID(tx, pub.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -591,7 +591,7 @@ func DeleteArticle(c *CustomContext) (interface{}, error) {
 
 	// get article
 	tx := g.Db.WithContext(c)
-	article, err := db.GetArticleById(tx, getter.Id)
+	article, err := db.GetArticleByID(tx, getter.Id)
 	if err != nil {
 		return nil, err
 	}

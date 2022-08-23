@@ -112,6 +112,7 @@ func PageArticleMonthly(tx *gorm.DB, year, month uint, page uint, pageSize uint)
 	return total, list, nil
 }
 
+// ArticleToShowContent article转显示结构
 func ArticleToShowContent(articles []*dbmodels.Article) (articleContent []*models.ArticleShowContent) {
 	articleContent = []*models.ArticleShowContent{}
 	for _, article := range articles {
@@ -120,6 +121,7 @@ func ArticleToShowContent(articles []*dbmodels.Article) (articleContent []*model
 	return articleContent
 }
 
+// ArticleToTitle article转标题
 func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.ArticleTitle) {
 	articleTitle = []*models.ArticleTitle{}
 	for _, article := range articles {
@@ -128,6 +130,7 @@ func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.Articl
 	return articleTitle
 }
 
+// HotArticleTitle 获取topN热文标题
 func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle, err error) {
 	var list []*dbmodels.Article
 	err = tx.Model(dbmodels.Article{}).Order("count desc").Limit(int(num)).Find(&list).Error
@@ -141,6 +144,7 @@ func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle
 	return articleTitle, nil
 }
 
+// MonthArch 按月归档
 func MonthArch(tx *gorm.DB) (archInfos []*dbmodels.ArchInfo, err error) {
 	var list []*dbmodels.Article
 	archInfos = []*dbmodels.ArchInfo{}
@@ -177,6 +181,7 @@ func MonthArch(tx *gorm.DB) (archInfos []*dbmodels.ArchInfo, err error) {
 	return archInfos, nil
 }
 
+// GetArticle 通过URI获取文章
 func GetArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
 	err = tx.Table("articles").Where("uri=?", uri).First(art).Error
@@ -186,7 +191,8 @@ func GetArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
-func GetArticleById(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
+// GetArticleByID 通过ID获取文章
+func GetArticleByID(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
 	err = tx.Table("articles").Where("id=?", aid).First(art).Error
 	if err != nil {
@@ -195,6 +201,7 @@ func GetArticleById(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
+// AddArticle 添加文章
 func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) (art *dbmodels.Article, err error) {
 	now := time.Now()
 	art = &dbmodels.Article{
@@ -228,6 +235,7 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) 
 	return art, nil
 }
 
+// PublishArticle 发布文章
 func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
 	now := time.Now()
 	status := dbmodels.ArtStatusPublish
@@ -246,8 +254,9 @@ func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
 	return nil
 }
 
+// DeleteArticle 删除文章
 func DeleteArticle(tx *gorm.DB, aid uint, uid uint) (err error) {
-	art, err := GetArticleById(tx, aid)
+	art, err := GetArticleByID(tx, aid)
 	if err != nil {
 		return err
 	}
@@ -269,6 +278,7 @@ func DeleteArticle(tx *gorm.DB, aid uint, uid uint) (err error) {
 	return nil
 }
 
+// ListAllArticleURI 列举所有文章URI
 func ListAllArticleURI(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
 	err = tx.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).Error
@@ -278,6 +288,7 @@ func ListAllArticleURI(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	return list, nil
 }
 
+// ListAllArticle 列举所有已发布文章
 func ListAllArticle(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
 	err = tx.Model(dbmodels.Article{}).Where("status=?", 1).Order("id desc").Find(&list).Error
@@ -287,6 +298,7 @@ func ListAllArticle(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	return list, nil
 }
 
+// ListAllTags 列举所有标签
 func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	list := []*dbmodels.Article{}
 	err = tx.Model(dbmodels.Article{}).Select("keywords").Where("status=?",
@@ -318,6 +330,7 @@ func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	return tags, counts, nil
 }
 
+// UpdateArticleViewCount 更新文章阅读计数
 func UpdateArticleViewCount(tx *gorm.DB, uri string, cnt int) (err error) {
 	art, err := GetArticle(tx, uri)
 	if err != nil {
@@ -332,14 +345,22 @@ func UpdateArticleViewCount(tx *gorm.DB, uri string, cnt int) (err error) {
 	return nil
 }
 
+// UpdateArticle 更新文章
 func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
-	_, err = GetArticleById(tx, id)
+	_, err = GetArticleByID(tx, id)
 	if err != nil {
 		return err
 	}
-	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(map[string]interface{}{
+	fields := map[string]interface{}{
 		"content": article.Content,
-	}).Error
+	}
+	if article.Title != "" {
+		fields["title"] = article.Title
+	}
+	if article.URI != "" {
+		fields["uri"] = article.URI
+	}
+	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(fields).Error
 	if err != nil {
 		return err
 	}

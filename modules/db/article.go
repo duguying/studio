@@ -244,10 +244,10 @@ func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
 		status = dbmodels.ArtStatusDraft
 	}
 
-	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
-		Status:      status,
-		PublishTime: &now,
-		UpdatedBy:   uid,
+	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).Updates(map[string]interface{}{
+		"status":       status,
+		"publish_time": &now,
+		"updated_by":   uid,
 	}).Error
 	if err != nil {
 		return err

@@ -24,10 +24,7 @@ func PageArticle(tx *gorm.DB, keyword string,
 	page uint, pageSize uint, statusList []int) (total int64, list []*dbmodels.Article, err error) {
 	total = 0
 	query := "status in (?)"
-	params := []interface{}{}
-	for _, status := range statusList {
-		params = append(params, status)
-	}
+	params := []interface{}{statusList}
 
 	if keyword != "" {
 		query = query + " and keywords like ?"

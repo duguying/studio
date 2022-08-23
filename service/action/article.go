@@ -602,7 +602,7 @@ func DeleteArticle(c *CustomContext) (interface{}, error) {
 	// check auth
 	userID := uint(c.UserID())
 	if userID != article.AuthorID {
-		return nil, fmt.Errorf("auth failed, it's not you article, could not publish")
+		return nil, fmt.Errorf("auth failed, it's not you article, could not delete")
 	}
 
 	// delete

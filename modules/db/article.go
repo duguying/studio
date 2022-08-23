@@ -262,7 +262,7 @@ func DeleteArticle(tx *gorm.DB, aid uint, uid uint) (err error) {
 		return err
 	}
 
-	if art.UpdatedBy != uid {
+	if art.AuthorID != uid {
 		return fmt.Errorf("无权限删除")
 	}
 

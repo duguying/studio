@@ -36,7 +36,7 @@ type Article struct {
 	AuthorID    uint       `json:"author_id" gorm:"index"`
 	Count       uint       `json:"count" gorm:"index:,sort:desc"`
 	Status      int        `json:"status" gorm:"index"`
-	PublishTime time.Time  `json:"publish_time" gorm:"index"`
+	PublishTime *time.Time `json:"publish_time" gorm:"index"`
 	UpdatedBy   uint       `json:"updated_by"`
 	UpdatedAt   time.Time  `json:"updated_at"`
 	CreatedAt   time.Time  `json:"created_at" gorm:"index:,sort:desc"`
@@ -52,7 +52,7 @@ type ArticleIndex struct {
 	Content     string     `json:"content"`
 	Author      string     `json:"author"`
 	Status      int        `json:"status"`
-	PublishTime time.Time  `json:"publish_time"`
+	PublishTime *time.Time `json:"publish_time"`
 	UpdatedBy   uint       `json:"updated_by"`
 	UpdatedAt   time.Time  `json:"updated_at"`
 	CreatedAt   time.Time  `json:"created_at"`

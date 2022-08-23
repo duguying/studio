@@ -196,6 +196,7 @@ func GetArticleById(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 }
 
 func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) (art *dbmodels.Article, err error) {
+	now := time.Now()
 	art = &dbmodels.Article{
 		Title:     aar.Title,
 		URI:       aar.URI,
@@ -206,12 +207,12 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) 
 		Author:    author,
 		AuthorID:  authorID,
 		Status:    dbmodels.ArtStatusDraft,
-		CreatedAt: time.Now(),
+		CreatedAt: now,
 	}
 
 	if !aar.Draft {
 		art.Status = dbmodels.ArtStatusPublish
-		art.PublishTime = time.Now()
+		art.PublishTime = &now
 	}
 
 	err = tx.Model(dbmodels.Article{}).Create(art).Error
@@ -228,6 +229,7 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) 
 }
 
 func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
+	now := time.Now()
 	status := dbmodels.ArtStatusPublish
 	if !publish {
 		status = dbmodels.ArtStatusDraft
@@ -235,7 +237,7 @@ func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
 
 	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
 		Status:      status,
-		PublishTime: time.Now(),
+		PublishTime: &now,
 		UpdatedBy:   uid,
 	}).Error
 	if err != nil {
@@ -267,7 +269,7 @@ func DeleteArticle(tx *gorm.DB, aid uint, uid uint) (err error) {
 	return nil
 }
 
-func ListAllArticleUri(tx *gorm.DB) (list []*dbmodels.Article, err error) {
+func ListAllArticleURI(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
 	err = tx.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).Error
 	if err != nil {

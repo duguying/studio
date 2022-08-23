@@ -1,6 +1,11 @@
 package action
 
-import "github.com/gin-gonic/gin"
+import (
+	"duguying/studio/service/action/agent"
+	"duguying/studio/service/middleware"
+
+	"github.com/gin-gonic/gin"
+)
 
 func SetupFeAPI(api *gin.RouterGroup) {
 	api.GET("/get_article", GetArticleShow)                         // 获取文章详情
@@ -37,4 +42,10 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 
 	api.GET("/2faqr", QrGoogleAuth)        // 获取2FA二维码
 	api.POST("/upload/image", UploadImage) // 上传图片
+}
+
+func SetupAgentAPI(api *gin.RouterGroup) {
+	api.GET("/list", middleware.SessionValidate(true), agent.List)             // agent列表
+	api.DELETE("/remove", middleware.SessionValidate(true), agent.RemoveAgent) // agent删除（禁用）
+	api.Any("/ws", agent.Ws)                                                   // agent连接点
 }

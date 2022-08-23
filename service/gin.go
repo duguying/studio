@@ -45,24 +45,15 @@ func Run(logDir string) {
 	apiV1 := router.Group("/api/v1", middleware.RestLog(), middleware.SessionValidate(false))
 	{
 		// needn't auth
-		{
-			action.SetupFeAPI(apiV1)
-		}
+		action.SetupFeAPI(apiV1)
 
 		// auth require
 		auth := apiV1.Group("/admin", middleware.RestLog(), middleware.SessionValidate(true))
-		{
-			action.SetupAdminAPI(auth)
-		}
+		action.SetupAdminAPI(auth)
 
 		// agent connection point
 		agt := apiV1.Group("/agent")
-		{
-			agt.GET("/list", middleware.SessionValidate(true), agent.List)             // agent列表
-			agt.DELETE("/remove", middleware.SessionValidate(true), agent.RemoveAgent) // agent删除（禁用）
-			agt.Any("/ws", agent.Ws)                                                   // agent连接点
-		}
-
+		action.SetupAgentAPI(agt)
 	}
 
 	// 兼容旧版

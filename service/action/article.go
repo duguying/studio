@@ -645,7 +645,7 @@ func DeleteArticle(c *gin.Context) {
 // SiteMap 站点地图
 func SiteMap(c *gin.Context) {
 	tx := g.Db.WithContext(c)
-	list, err := db.ListAllArticleUri(tx)
+	list, err := db.ListAllArticleURI(tx)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

@@ -117,6 +117,7 @@ func (a *Article) ToArticleContent() *models.ArticleContent {
 		Author:    a.Author,
 		Tags:      tags,
 		Type:      a.Type,
+		Status:    a.Status,
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
 		Content:   a.Content,

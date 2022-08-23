@@ -282,51 +282,34 @@ func ListAllArticleTitle(c *CustomContext) (interface{}, error) {
 // @Param id query uint false "ID"
 // @Param uri query string false "URI"
 // @Success 200 {object} models.ArticleContentGetResponse
-func GetArticle(c *gin.Context) {
+func GetArticle(c *CustomContext) (interface{}, error) {
 	getter := models.ArticleUriGetterRequest{}
 	err := c.BindQuery(&getter)
 	if err != nil {
-		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	var art *models.ArticleContent
 	if getter.Id > 0 {
 		dbArt, err := db.GetArticleByID(g.Db, getter.Id)
 		if err != nil {
-			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-				Ok:  false,
-				Msg: err.Error(),
-			})
-			return
+			return nil, err
 		}
 		art = dbArt.ToArticleContent()
 	} else if len(getter.Uri) > 0 {
 		dbArt, err := db.GetArticle(g.Db, getter.Uri)
 		if err != nil {
-			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-				Ok:  false,
-				Msg: err.Error(),
-			})
-			return
+			return nil, err
 		}
 		art = dbArt.ToArticleContent()
 	} else {
-		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-			Ok:  false,
-			Msg: "invalid id and uri",
-		})
-		return
+		return nil, fmt.Errorf("invalid id and uri")
 	}
 
-	c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+	return models.ArticleContentGetResponse{
 		Ok:   true,
 		Data: art,
-	})
-	return
+	}, nil
 }
 
 // HotArticleTitle 文章TopN列表

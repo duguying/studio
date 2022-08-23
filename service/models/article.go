@@ -50,6 +50,7 @@ type ArticleContent struct {
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
 	Type      int       `json:"type"`
+	Status    int       `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	ViewCount uint      `json:"view_count"`
 	Content   string    `json:"content"`

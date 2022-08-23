@@ -40,8 +40,9 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.GET("/article/list_title", APIWrapper(ListAllArticleTitle)) // 列出文章列表
 	api.GET("/article", APIWrapper(GetArticle))                     // 获取文章
 
-	api.GET("/2faqr", QrGoogleAuth)        // 获取2FA二维码
-	api.POST("/upload/image", UploadImage) // 上传图片
+	api.GET("/2faqr", QrGoogleAuth)              // 获取2FA二维码
+	api.POST("/upload/image", UploadImage)       // 上传图片
+	api.POST("/put/image", APIWrapper(PutImage)) // 粘贴上传文件
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

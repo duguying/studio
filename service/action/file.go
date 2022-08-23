@@ -7,6 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/service/models"
 	"duguying/studio/utils"
 	"fmt"
 	"io"
@@ -80,6 +81,57 @@ func PutFile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"ok": true,
 	})
+}
+
+// PutImage 上传粘贴图片
+// @Router /put/image [post]
+// @Tags 上传
+// @Description 上传粘贴图片
+// @Param publish body []byte true "图片内容"
+// @Success 200 {object} models.CommonResponse
+func PutImage(c *CustomContext) (interface{}, error) {
+	store := g.Config.Get("upload", "store-path", "store")
+	name := c.GetHeader("name")
+	mimeType := c.GetHeader("mime")
+	ext := filepath.Ext(name)
+	if ext != "" {
+		ext = "." + ext
+	}
+
+	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", utils.GenUID(), ext))
+	fpath := filepath.Join(store, key)
+	dir := filepath.Dir(fpath)
+	err := com.MkdirWithCreatePath(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := os.Create(fpath)
+	if err != nil {
+		return nil, fmt.Errorf("create file failed, " + err.Error())
+	}
+	defer f.Close()
+
+	written, err := io.Copy(f, c.Request.Body)
+	if err != nil {
+		return nil, fmt.Errorf("copy file failed, " + err.Error())
+	}
+
+	if mimeType != "" {
+		ext := path.Ext(key)
+		mimeType = mime.TypeByExtension(ext)
+	}
+	md5 := com.FileMD5(fpath)
+
+	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.UploadResponse{
+		Ok:   true,
+		Path: key,
+	}, nil
 }
 
 func UploadImage(c *gin.Context) {

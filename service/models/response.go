@@ -73,3 +73,9 @@ type LoginResponse struct {
 	Msg string `json:"msg"`
 	Sid string `json:"sid"`
 }
+
+type UploadResponse struct {
+	Ok   bool   `json:"ok"`
+	Msg  string `json:"msg"`
+	Path string `json:"path"`
+}

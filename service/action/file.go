@@ -94,9 +94,6 @@ func PutImage(c *CustomContext) (interface{}, error) {
 	name := c.GetHeader("name")
 	mimeType := c.GetHeader("mime")
 	ext := filepath.Ext(name)
-	if ext != "" {
-		ext = "." + ext
-	}
 
 	randomName := utils.GenUID()
 	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
@@ -158,9 +155,6 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	store := g.Config.Get("upload", "store-path", "store")
 	size := fh.Size
 	ext := filepath.Ext(fh.Filename)
-	if ext != "" {
-		ext = "." + ext
-	}
 
 	randomName := utils.GenUID()
 	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))

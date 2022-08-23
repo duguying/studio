@@ -128,10 +128,17 @@ func PutImage(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
+	url := getImgRefURL(key)
 	return models.UploadResponse{
 		Ok:   true,
-		Path: key,
+		Path: url,
 	}, nil
+}
+
+func getImgRefURL(key string) string {
+	imgHost := g.Config.Get("store", "img-host-url", "https://image.duguying.net")
+	key = strings.TrimPrefix(key, "img")
+	return imgHost + key
 }
 
 func UploadImage(c *gin.Context) {

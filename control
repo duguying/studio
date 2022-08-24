@@ -125,7 +125,7 @@ function docker_tags() {
 
 function pull_tags() {
     git fetch --tags
-    ls
+    ls -al
 }
 
 function tailf() {

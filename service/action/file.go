@@ -359,5 +359,5 @@ func imgNeedConvert(ext string) bool {
 		".png": true,
 	}
 	_, ok := notNeedConvertMap[ext]
-	return ok
+	return !ok
 }

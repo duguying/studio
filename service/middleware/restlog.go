@@ -8,6 +8,7 @@ package middleware
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -103,9 +104,13 @@ func RestLog() gin.HandlerFunc {
 		if isMethodRecord(rl.Method) {
 			rlog := &ResponseLog{}
 			rawBytes := blw.body.Bytes()
+			rsp := string(rawBytes)
 			err = json.Unmarshal(rawBytes, rlog)
 			if err != nil {
 				logger.L("request").Println("parse response failed, err:", err.Error(), "raw:", string(rawBytes))
+				if len(rawBytes) > 1024*512 {
+					rsp = fmt.Sprintf("[len:%d]", len(rawBytes))
+				}
 			} else {
 				rlog.Status = statusCode
 				logger.L("request").Println("response:", rlog.String())
@@ -116,7 +121,7 @@ func RestLog() gin.HandlerFunc {
 				URI:       rl.URI,
 				Query:     rl.Query,
 				Body:      rl.Body,
-				Response:  string(rawBytes),
+				Response:  rsp,
 				Ok:        rlog.Ok,
 				RequestID: reqID,
 				ClientIP:  c.ClientIP(),

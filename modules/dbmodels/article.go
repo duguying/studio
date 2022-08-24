@@ -66,7 +66,7 @@ func (a *Article) ToArticleIndex() *ArticleIndex {
 		Keywords:    a.Keywords,
 		Abstract:    a.Abstract,
 		Type:        a.Type,
-		Content:     utils.TrimHtml(a.Content),
+		Content:     utils.TrimHTML(a.Content),
 		Author:      a.Author,
 		Status:      a.Status,
 		PublishTime: a.PublishTime,

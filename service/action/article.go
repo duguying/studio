@@ -117,7 +117,7 @@ func SearchArticle(c *gin.Context) {
 		if len(item.Fragments["keywords"]) > 0 {
 			keywords = item.Fragments["keywords"][0]
 		}
-		content := utils.TrimHtml(article.Content)
+		content := utils.TrimHTML(article.Content)
 		if utf8.RuneCountInString(content) > 100 {
 			content = string([]rune(content)[:100])
 		}

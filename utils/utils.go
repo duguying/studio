@@ -13,11 +13,16 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/martinlindhe/base36"
 	"github.com/microcosm-cc/bluemonday"
 	uuid "github.com/satori/go.uuid"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func GenUUID() (string, error) {
 	guuid := uuid.NewV4()
@@ -90,8 +95,8 @@ func GenUID() string {
 	return strings.ToLower(mb36b.String())
 }
 
-// TrimHtml 剔除HTML标签
-func TrimHtml(content string) string {
+// TrimHTML 剔除HTML标签
+func TrimHTML(content string) string {
 	p := bluemonday.StripTagsPolicy()
 	return p.Sanitize(content)
 }

@@ -362,7 +362,7 @@ func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
 		fields["uri"] = article.URI
 	}
 	if len(article.Keywords) > 0 {
-		fields["tags"] = strings.Join(article.Keywords, ",")
+		fields["keywords"] = strings.Join(article.Keywords, ",")
 	}
 	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(fields).Error
 	if err != nil {

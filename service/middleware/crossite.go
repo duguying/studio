@@ -25,7 +25,7 @@ func CrossSite() gin.HandlerFunc {
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-CSRF-TOKEN, X-Token")
 
 		if c.Request.Method == "OPTIONS" {
-			c.Status(http.StatusOK)
+			c.Status(http.StatusNoContent)
 			c.Abort()
 		} else {
 			c.Next()

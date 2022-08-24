@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:11
 
 ADD "dockerdist" "/tmp"
 RUN "/tmp/setenv"

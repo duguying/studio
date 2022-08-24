@@ -156,7 +156,8 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 
 	store := g.Config.Get("upload", "store-path", "store")
 	size := fh.Size
-	ext := strings.ToLower(filepath.Ext(fh.Filename))
+	filename := strings.ToLower(fh.Filename)
+	ext := filepath.Ext(filename)
 
 	randomName := utils.GenUID()
 	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
@@ -176,7 +177,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		tdir := filepath.Join(os.TempDir(), utils.GenUID())
 		_ = os.MkdirAll(tdir, 0644)
 
-		tpath := filepath.Join(tdir, fh.Filename)
+		tpath := filepath.Join(tdir, filename)
 		f, err := os.Create(tpath)
 		if err != nil {
 			return nil, err
@@ -189,6 +190,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		}
 
 		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
+		key = strings.TrimSuffix(key, ext) + ".webp"
 		ext = ".webp"
 		err = ConvertImgToWebp(tpath, fpath)
 		if err != nil {

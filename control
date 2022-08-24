@@ -124,9 +124,8 @@ function docker_tags() {
 }
 
 function pull_tags() {
-    git lfs install
-    git pull
     git fetch --tags
+    ls
 }
 
 function tailf() {

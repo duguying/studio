@@ -393,7 +393,7 @@ func GetArticleShow(c *gin.Context) {
 	tx := g.Db.WithContext(c)
 	var art *models.ArticleShowContent
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleByID(tx, getter.Id)
+		dbArt, err := db.GetPublishedArticleByID(tx, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -403,7 +403,7 @@ func GetArticleShow(c *gin.Context) {
 		}
 		art = dbArt.ToArticleShowContent()
 	} else if len(getter.Uri) > 0 {
-		dbArt, err := db.GetArticle(tx, getter.Uri)
+		dbArt, err := db.GetPublishedArticle(tx, getter.Uri)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,

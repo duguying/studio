@@ -192,10 +192,30 @@ func GetArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
+// GetPublishedArticle 通过URI获取已发布文章
+func GetPublishedArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{}
+	err = tx.Table("articles").Where("uri=? and status=1", uri).First(art).Error
+	if err != nil {
+		return nil, err
+	}
+	return art, nil
+}
+
 // GetArticleByID 通过ID获取文章
 func GetArticleByID(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
 	err = tx.Table("articles").Where("id=?", aid).First(art).Error
+	if err != nil {
+		return nil, err
+	}
+	return art, nil
+}
+
+// GetPublishedArticleByID 通过ID获取已发布文章
+func GetPublishedArticleByID(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{}
+	err = tx.Table("articles").Where("id=? and status=1", aid).First(art).Error
 	if err != nil {
 		return nil, err
 	}

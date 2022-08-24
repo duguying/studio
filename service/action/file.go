@@ -164,7 +164,9 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	dir := filepath.Dir(fpath)
 	_ = os.MkdirAll(dir, 0644)
 
+	log.Println("ext:", ext, "optimize:", optimize)
 	if imgNeedConvert(ext) && optimize {
+		log.Println("ext optimize:", ext, "--> .webp")
 		hf, err := fh.Open()
 		if err != nil {
 			return nil, err

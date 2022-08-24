@@ -172,6 +172,8 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		defer hf.Close()
 
 		tdir := filepath.Join(os.TempDir(), utils.GenUID())
+		_ = os.MkdirAll(tdir, 0644)
+
 		tpath := filepath.Join(tdir, fh.Filename)
 		f, err := os.Create(tpath)
 		if err != nil {

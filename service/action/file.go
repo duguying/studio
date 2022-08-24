@@ -15,6 +15,7 @@ import (
 	"mime"
 	"net/http"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"strconv"
@@ -151,10 +152,11 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	_, optimize := c.GetPostForm("optimize")
 
 	store := g.Config.Get("upload", "store-path", "store")
 	size := fh.Size
-	ext := filepath.Ext(fh.Filename)
+	ext := strings.ToLower(filepath.Ext(fh.Filename))
 
 	randomName := utils.GenUID()
 	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
@@ -162,21 +164,50 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	dir := filepath.Dir(fpath)
 	_ = os.MkdirAll(dir, 0644)
 
-	f, err := os.Create(fpath)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
+	if imgNeedConvert(ext) && optimize {
+		hf, err := fh.Open()
+		if err != nil {
+			return nil, err
+		}
+		defer hf.Close()
 
-	hf, err := fh.Open()
-	if err != nil {
-		return nil, err
-	}
-	defer hf.Close()
+		tdir := filepath.Join(os.TempDir(), utils.GenUID())
+		tpath := filepath.Join(tdir, fh.Filename)
+		f, err := os.Create(tpath)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
 
-	_, err = io.Copy(f, hf)
-	if err != nil {
-		return nil, err
+		_, err = io.Copy(f, hf)
+		if err != nil {
+			return nil, err
+		}
+
+		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
+		ext = ".webp"
+		err = ConvertImgToWebp(tpath, fpath)
+		if err != nil {
+			return nil, fmt.Errorf("转码失败, err:" + err.Error())
+		}
+		_ = os.RemoveAll(tdir)
+	} else {
+		f, err := os.Create(fpath)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+
+		hf, err := fh.Open()
+		if err != nil {
+			return nil, err
+		}
+		defer hf.Close()
+
+		_, err = io.Copy(f, hf)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	mimeType := mime.TypeByExtension(ext)
@@ -311,4 +342,22 @@ func PageFile(c *gin.Context) {
 		"total": total,
 	})
 	return
+}
+
+// ConvertImgToWebp 图片转码到webp
+func ConvertImgToWebp(inpath string, outpath string) (err error) {
+	cmd := exec.Command("convert", inpath, outpath)
+	err = cmd.Run()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func imgNeedConvert(ext string) bool {
+	notNeedConvertMap := map[string]bool{
+		".png": true,
+	}
+	_, ok := notNeedConvertMap[ext]
+	return ok
 }

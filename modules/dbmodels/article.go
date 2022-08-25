@@ -19,6 +19,13 @@ const (
 	ArtStatusPublish = 1
 )
 
+var (
+	ArtStatusMap = map[int]string{
+		ArtStatusDraft:   "草稿",
+		ArtStatusPublish: "已发布",
+	}
+)
+
 const (
 	ContentTypeHTML     = 0
 	ContentTypeMarkDown = 1
@@ -132,6 +139,19 @@ func (a *Article) ToArticleTitle() *models.ArticleTitle {
 		Author:    a.Author,
 		CreatedAt: a.CreatedAt,
 		ViewCount: a.Count,
+	}
+}
+
+func (a *Article) ToArticleAdminTitle() *models.ArticleAdminTitle {
+	return &models.ArticleAdminTitle{
+		ID:         a.ID,
+		Title:      a.Title,
+		URI:        "/article/" + a.URI,
+		Author:     a.Author,
+		CreatedAt:  a.CreatedAt,
+		ViewCount:  a.Count,
+		Status:     a.Status,
+		StatusName: ArtStatusMap[a.Status],
 	}
 }
 

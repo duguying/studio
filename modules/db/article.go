@@ -131,6 +131,15 @@ func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.Articl
 	return articleTitle
 }
 
+// ArticleToAdminTitle article转admin标题
+func ArticleToAdminTitle(articles []*dbmodels.Article) (articleTitle []*models.ArticleAdminTitle) {
+	articleTitle = []*models.ArticleAdminTitle{}
+	for _, article := range articles {
+		articleTitle = append(articleTitle, article.ToArticleAdminTitle())
+	}
+	return articleTitle
+}
+
 // HotArticleTitle 获取topN热文标题
 func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle, err error) {
 	var list []*dbmodels.Article

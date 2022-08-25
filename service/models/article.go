@@ -70,6 +70,17 @@ type ArticleTitle struct {
 	ViewCount uint      `json:"view_count"`
 }
 
+type ArticleAdminTitle struct {
+	ID         uint      `json:"id"`
+	Title      string    `json:"title"`
+	URI        string    `json:"uri"`
+	Author     string    `json:"author"`
+	CreatedAt  time.Time `json:"created_at"`
+	ViewCount  uint      `json:"view_count"`
+	Status     int       `json:"status"`
+	StatusName string    `json:"status_name"`
+}
+
 func (at *ArticleTitle) String() string {
 	c, _ := json.Marshal(at)
 	return string(c)

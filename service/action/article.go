@@ -247,14 +247,14 @@ func ListArticleTitle(c *CustomContext) (interface{}, error) {
 	}, nil
 }
 
-// ListAllArticleTitle 按标题列举文章
+// ListAdminArticleTitle 按标题列举文章
 // @Router /admin/article/list_title [get]
 // @Tags 文章
 // @Description 文章列表
 // @Param page query uint true "页码"
 // @Param size query uint true "每页数"
 // @Success 200 {object} models.ArticleTitleListResponse
-func ListAllArticleTitle(c *CustomContext) (interface{}, error) {
+func ListAdminArticleTitle(c *CustomContext) (interface{}, error) {
 	pager := models.CommonPagerRequest{}
 	err := c.BindQuery(&pager)
 	if err != nil {
@@ -268,10 +268,10 @@ func ListAllArticleTitle(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	return models.ArticleTitleListResponse{
+	return models.ArticleAdminTitleListResponse{
 		Ok:    true,
 		Total: uint(total),
-		List:  db.ArticleToTitle(list),
+		List:  db.ArticleToAdminTitle(list),
 	}, nil
 }
 

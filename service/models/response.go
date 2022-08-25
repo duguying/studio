@@ -44,6 +44,13 @@ type ArticleTitleListResponse struct {
 	List  []*ArticleTitle `json:"list"`
 }
 
+type ArticleAdminTitleListResponse struct {
+	Ok    bool                 `json:"ok"`
+	Msg   string               `json:"msg"`
+	Total uint                 `json:"total"`
+	List  []*ArticleAdminTitle `json:"list"`
+}
+
 type ArticleArchListResponse struct {
 	Ok   bool        `json:"ok"`
 	Msg  string      `json:"msg"`

@@ -1,7 +1,5 @@
 #!/bin/sh
 
-apt-get update
-apt-get install imagemagick -y
 mkdir -p /root/studio
 mkdir -p /data
 mv /tmp/studio /root/studio/

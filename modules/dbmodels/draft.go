@@ -5,7 +5,7 @@ import "time"
 type Draft struct {
 	UUID
 
-	ArticleID uint
+	ArticleID uint   `gorm:"index"`
 	Content   string `gorm:"longtext"`
 
 	CreatedAt time.Time

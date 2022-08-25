@@ -96,7 +96,6 @@ func initOrm() {
 		&dbmodels.File{},
 		&dbmodels.Agent{},
 		&dbmodels.AgentPerform{},
-		&dbmodels.APILog{},
 		&dbmodels.Face{},
 		&dbmodels.FaceLabel{},
 	)

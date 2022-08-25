@@ -166,7 +166,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	_ = os.MkdirAll(dir, 0644)
 
 	log.Println("ext:", ext, "optimize:", optimize)
-	if imgNeedConvert(ext) && optimize {
+	if (imgNeedConvert(ext) || size >= 1024*1024) && optimize {
 		log.Println("ext optimize:", ext, "--> .webp")
 		hf, err := fh.Open()
 		if err != nil {
@@ -192,7 +192,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
 		key = strings.TrimSuffix(key, ext) + ".webp"
 		ext = ".webp"
-		err = ConvertImgToWebp(tpath, fpath)
+		size, err = ConvertImgToWebp(tpath, fpath)
 		if err != nil {
 			return nil, fmt.Errorf("转码失败, err:" + err.Error())
 		}
@@ -351,13 +351,21 @@ func PageFile(c *gin.Context) {
 }
 
 // ConvertImgToWebp 图片转码到webp
-func ConvertImgToWebp(inpath string, outpath string) (err error) {
+func ConvertImgToWebp(inpath string, outpath string) (size int64, err error) {
 	cmd := exec.Command("convert", inpath, outpath)
 	err = cmd.Run()
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return getFileSize(outpath)
+}
+
+func getFileSize(path string) (size int64, err error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return 0, err
+	}
+	return info.Size(), nil
 }
 
 func imgNeedConvert(ext string) bool {

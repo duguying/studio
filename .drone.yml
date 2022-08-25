@@ -16,6 +16,7 @@ steps:
   image: plugins/docker
   settings:
     repo: git.duguying.net/duguying/studio
+    registry: git.duguying.net
     username:
       from_secret: git_docker_username
     password:

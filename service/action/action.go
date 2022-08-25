@@ -21,7 +21,6 @@ func SetupFeAPI(api *gin.RouterGroup) {
 	api.GET("/user_simple_info", UserSimpleInfo) // 用户信息
 	api.POST("/user_login", UserLogin)           // 用户登陆
 	api.GET("/username_check", UsernameCheck)    // 用户名检查
-	api.GET("/file/list", PageFile)              // 文件列表
 	api.POST("/2fa", TfaAuth)                    // 2FA校验
 	api.GET("/sitemap", SiteMap)                 // 列出所有文章URI
 }
@@ -43,6 +42,7 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.GET("/2faqr", QrGoogleAuth)                    // 获取2FA二维码
 	api.POST("/upload/image", APIWrapper(UploadImage)) // form 表单上传图片
 	api.POST("/put/image", APIWrapper(PutImage))       // body 上传图片
+	api.GET("/file/list", APIWrapper(PageFile))        // 文件列表
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

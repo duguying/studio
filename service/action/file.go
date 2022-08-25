@@ -304,25 +304,24 @@ func UploadFile(c *gin.Context) {
 	})
 }
 
-func PageFile(c *gin.Context) {
+// PageFile 列举文件
+// @Router /admin/file/list [get]
+// @Tags 上传
+// @Description 列举文件
+// @Param page query string true "页码"
+// @Param size query int true "每页数"
+// @Success 200 {object} models.CommonResponse
+func PageFile(c *CustomContext) (interface{}, error) {
 	pageStr := c.Query("page")
 	page, err := strconv.ParseUint(pageStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	sizeStr := c.Query("size")
 	size, err := strconv.ParseUint(sizeStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	if page <= 0 {
@@ -339,15 +338,19 @@ func PageFile(c *gin.Context) {
 			"ok":  false,
 			"err": err.Error(),
 		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":    true,
-		"list":  list,
-		"total": total,
-	})
-	return
+	apiList := []*models.File{}
+	for _, item := range list {
+		apiList = append(apiList, item.ToModel())
+	}
+
+	return models.FileAdminListResponse{
+		Ok:    true,
+		List:  apiList,
+		Total: int(total),
+	}, nil
 }
 
 // ConvertImgToWebp 图片转码到webp

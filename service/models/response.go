@@ -87,3 +87,10 @@ type UploadResponse struct {
 	URL  string `json:"url"`
 	Name string `json:"name"`
 }
+
+type FileAdminListResponse struct {
+	Ok    bool    `json:"ok"`
+	Msg   string  `json:"msg"`
+	Total int     `json:"total"`
+	List  []*File `json:"list"`
+}

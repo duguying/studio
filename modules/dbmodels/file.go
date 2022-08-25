@@ -6,11 +6,13 @@ package dbmodels
 
 import (
 	"database/sql/driver"
+	"duguying/studio/service/models"
 	"fmt"
-	"github.com/gogather/json"
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/gogather/json"
 )
 
 const (
@@ -134,4 +136,19 @@ type File struct {
 func (f *File) String() string {
 	c, _ := json.Marshal(f)
 	return string(c)
+}
+
+func (f *File) ToModel() *models.File {
+	return &models.File{
+		ID:         f.Id,
+		Filename:   f.Filename,
+		Path:       f.Path,
+		Store:      int64(f.Store),
+		Mime:       f.Mime,
+		Size:       f.Size,
+		FileType:   int64(f.FileType),
+		Md5:        f.Md5,
+		Recognized: int64(f.Recognized),
+		CreatedAt:  f.CreatedAt,
+	}
 }

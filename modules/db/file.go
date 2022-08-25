@@ -39,7 +39,7 @@ func PageFile(tx *gorm.DB, page uint64, size uint64) (list []*dbmodels.File, tot
 		return nil, 0, err
 	}
 
-	err = tx.Table("files").Order("id desc").Offset(int((page - 1) * size)).Limit(int(size)).Find(&list).Error
+	err = tx.Table("files").Order("created_at desc").Offset(int((page - 1) * size)).Limit(int(size)).Find(&list).Error
 	if err != nil {
 		return nil, 0, err
 	} else {

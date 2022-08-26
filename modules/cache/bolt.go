@@ -21,8 +21,8 @@ type boltCacheItem struct {
 	CreatedAt int64  `json:"created_at"`
 }
 
-func NewBoltCache() *BoltCache {
-	db, err := bolt.Open("cache.db", 0600, &bolt.Options{
+func NewBoltCache(path string) *BoltCache {
+	db, err := bolt.Open(path, 0600, &bolt.Options{
 		Timeout:         1 * time.Second,
 		InitialMmapSize: 1024 * 1024 * 1024 * 1, // 1G
 	})

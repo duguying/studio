@@ -13,8 +13,9 @@ type CacheRedisOption struct {
 }
 
 type CacheOption struct {
-	Type  string
-	Redis *CacheRedisOption
+	Type     string
+	Redis    *CacheRedisOption
+	BoltPath string
 }
 
 type Cache interface {
@@ -28,7 +29,7 @@ func Init(option *CacheOption) Cache {
 	if option.Type == "redis" {
 		cacheCli = NewRedisCache(option.Redis)
 	} else {
-		cacheCli = NewBoltCache()
+		cacheCli = NewBoltCache(option.BoltPath)
 	}
 	return cacheCli
 }

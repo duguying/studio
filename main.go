@@ -132,5 +132,6 @@ func getCacheOption() *cache.CacheOption {
 			Password: g.Config.Get("redis", "password", ""),
 			PoolSize: int(g.Config.GetInt64("redis", "pool-size", 1000)),
 		},
+		BoltPath: g.Config.Get("cache", "path", "cache/cache.db"),
 	}
 }

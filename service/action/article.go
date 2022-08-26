@@ -19,6 +19,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gogather/com"
 )
 
 // ListArticleWithContent 文章列表
@@ -309,6 +310,46 @@ func GetArticle(c *CustomContext) (interface{}, error) {
 	return models.ArticleContentGetResponse{
 		Ok:   true,
 		Data: art,
+	}, nil
+}
+
+// GetArticleCurrentMD5 获取文章MD5
+// @Router /article/current_md5 [get]
+// @Tags 文章
+// @Description 获取文章MD5
+// @Param id query uint false "ID"
+// @Param uri query string false "URI"
+// @Success 200 {object} models.ArticleContentMD5Response
+func GetArticleCurrentMD5(c *CustomContext) (interface{}, error) {
+	getter := models.ArticleUriGetterRequest{}
+	err := c.BindQuery(&getter)
+	if err != nil {
+		return nil, err
+	}
+
+	var art *models.ArticleContent
+	if getter.Id > 0 {
+		dbArt, err := db.GetArticleByID(g.Db, getter.Id)
+		if err != nil {
+			return nil, err
+		}
+		art = dbArt.ToArticleContent()
+	} else if len(getter.Uri) > 0 {
+		dbArt, err := db.GetArticle(g.Db, getter.Uri)
+		if err != nil {
+			return nil, err
+		}
+		art = dbArt.ToArticleContent()
+	} else {
+		return nil, fmt.Errorf("invalid id and uri")
+	}
+
+	return models.ArticleContentMD5Response{
+		Ok: true,
+		Data: &models.ArticleContentMD5{
+			ID:  int(art.ID),
+			MD5: com.Md5(art.Content),
+		},
 	}, nil
 }
 

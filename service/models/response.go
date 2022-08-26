@@ -69,6 +69,17 @@ type ArticleContentGetResponse struct {
 	Data *ArticleContent `json:"data"`
 }
 
+type ArticleContentMD5 struct {
+	ID  int    `json:"id"`
+	MD5 string `json:"md5"`
+}
+
+type ArticleContentMD5Response struct {
+	Ok   bool               `json:"ok"`
+	Msg  string             `json:"msg"`
+	Data *ArticleContentMD5 `json:"data"`
+}
+
 type UserInfoResponse struct {
 	Ok   bool      `json:"ok"`
 	Msg  string    `json:"msg"`

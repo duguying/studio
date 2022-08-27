@@ -112,9 +112,10 @@ func UserLogin(c *CustomContext) (interface{}, error) {
 			} else {
 				// store session
 				entity := &session.Entity{
-					UserID:  user.Id,
-					IP:      c.ClientIP(),
-					LoginAt: time.Now(),
+					UserID:    user.Id,
+					IP:        c.ClientIP(),
+					LoginAt:   time.Now(),
+					UserAgent: c.Request.UserAgent(),
 				}
 				session.SessionSet(sid, sessionExpire, entity)
 

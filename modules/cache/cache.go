@@ -20,6 +20,7 @@ type CacheOption struct {
 
 type Cache interface {
 	SetTTL(key string, value string, ttl time.Duration) error
+	Set(key string, value string) error
 	Get(key string) (string, error)
 	Delete(key string) error
 }

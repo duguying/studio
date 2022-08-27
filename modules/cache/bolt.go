@@ -76,6 +76,35 @@ func (bc *BoltCache) SetTTL(key, value string, expiration time.Duration) error {
 	return err
 }
 
+// Set 设置
+func (bc *BoltCache) Set(key, value string) error {
+	if bc.disabled {
+		return nil
+	}
+
+	err := bc.db.Update(func(tx *bolt.Tx) error {
+		item := boltCacheItem{Value: value, CreatedAt: -1}
+		b, err := tx.CreateBucketIfNotExists([]byte(bc.bucketName))
+		if err != nil {
+			return err
+		}
+
+		existValue := b.Get([]byte(key))
+		if existValue != nil {
+			itemExist := boltCacheItem{}
+			err = ujson.Unmarshal(existValue, &itemExist)
+			if err == nil {
+				item.Value = itemExist.Value
+				item.CreatedAt = itemExist.CreatedAt
+			}
+		}
+
+		val, _ := json.Marshal(item)
+		return b.Put([]byte(key), val)
+	})
+	return err
+}
+
 // Get 获取
 func (bc *BoltCache) Get(key string) (val string, err error) {
 	if bc.disabled {

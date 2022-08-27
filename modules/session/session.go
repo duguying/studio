@@ -15,9 +15,10 @@ import (
 )
 
 type Entity struct {
-	UserID  uint      `json:"user_id"`
-	IP      string    `json:"ip"`
-	LoginAt time.Time `json:"login_at"`
+	UserID    uint      `json:"user_id"`
+	IP        string    `json:"ip"`
+	LoginAt   time.Time `json:"login_at"`
+	UserAgent string    `json:"user_agent"`
 }
 
 func (se *Entity) String() string {
@@ -32,6 +33,11 @@ func SessionID() string {
 
 func SessionSet(sessionID string, ttl time.Duration, entity *Entity) {
 	g.Cache.SetTTL(cache.SESS+sessionID, entity.String(), ttl)
+}
+
+// SessionPut 设置 session ，不设置 ttl
+func SessionPut(sessionID string, entity *Entity) {
+	g.Cache.Set(cache.SESS+sessionID, entity.String())
 }
 
 func SessionDel(sessionID string) {

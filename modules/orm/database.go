@@ -98,5 +98,6 @@ func initOrm() {
 		&dbmodels.AgentPerform{},
 		&dbmodels.Face{},
 		&dbmodels.FaceLabel{},
+		&dbmodels.LoginHistory{},
 	)
 }

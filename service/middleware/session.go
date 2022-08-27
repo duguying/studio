@@ -44,7 +44,7 @@ func SessionValidate(forbidAnonymous bool) func(c *gin.Context) {
 		} else {
 			log.Printf("the entity is: %s\n", entity.String())
 		}
-		if entity.UserId <= 0 {
+		if entity.UserID <= 0 {
 			c.SetCookie("sid", "", 0, "/", sessionDomain, true, false)
 			session.SessionDel(sid)
 			if forbidAnonymous {
@@ -59,7 +59,7 @@ func SessionValidate(forbidAnonymous bool) func(c *gin.Context) {
 				return
 			}
 		} else {
-			c.Set("user_id", int64(entity.UserId))
+			c.Set("user_id", int64(entity.UserID))
 		}
 		c.Next()
 	}

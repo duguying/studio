@@ -140,7 +140,7 @@ func (f *File) String() string {
 
 func (f *File) ToModel() *models.File {
 	return &models.File{
-		ID:         f.Id,
+		ID:         f.ID,
 		Filename:   f.Filename,
 		Path:       f.Path,
 		Store:      int64(f.Store),

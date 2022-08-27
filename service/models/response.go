@@ -105,3 +105,10 @@ type FileAdminListResponse struct {
 	Total int     `json:"total"`
 	List  []*File `json:"list"`
 }
+
+type ListUserLoginHistoryResponse struct {
+	Ok    bool            `json:"ok"`
+	Msg   string          `json:"msg"`
+	Total int             `json:"total"`
+	List  []*LoginHistory `json:"list"`
+}

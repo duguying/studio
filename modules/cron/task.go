@@ -70,14 +70,14 @@ func calendarCheck() {
 	beforeDay := g.Config.GetInt64("calendar", "before-day", 7)
 
 	for _, id := range list {
-		cal, err := db.GetCalendarById(g.Db, id)
+		cal, err := db.GetCalendarByID(g.Db, id)
 		if err != nil {
 			log.Println("获取日历详情失败, err:", err.Error())
 			continue
 		}
 		if cal.Start.Add(-time.Hour * 24 * time.Duration(beforeDay)).Before(time.Now()) {
 			utils.GenerateICS(
-				cal.Id,
+				cal.ID,
 				cal.Start, cal.End, cal.Stamp,
 				cal.Summary, cal.Address, cal.Description,
 				cal.Link, cal.Attendee,

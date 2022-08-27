@@ -15,22 +15,23 @@ func SetupFeAPI(api *gin.RouterGroup) {
 	api.GET("/list_archive_monthly", ListArticleWithContentMonthly) // 按月归档文章内容列表
 	api.GET("/list_title", APIWrapper(ListArticleTitle))            // 列出文章标题
 	api.GET("/search_article", SearchArticle)
-	api.GET("/hot_article", HotArticleTitle)     // 热门文章列表
-	api.GET("/month_archive", MonthArchive)      // 文章按月归档列表
-	api.POST("/user_register", UserRegister)     // 用户注册
-	api.GET("/user_simple_info", UserSimpleInfo) // 用户信息
-	api.POST("/user_login", UserLogin)           // 用户登陆
-	api.GET("/username_check", UsernameCheck)    // 用户名检查
-	api.POST("/2fa", TfaAuth)                    // 2FA校验
-	api.GET("/sitemap", SiteMap)                 // 列出所有文章URI
+	api.GET("/hot_article", HotArticleTitle)       // 热门文章列表
+	api.GET("/month_archive", MonthArchive)        // 文章按月归档列表
+	api.POST("/user_register", UserRegister)       // 用户注册
+	api.GET("/user_simple_info", UserSimpleInfo)   // 用户信息
+	api.POST("/user_login", APIWrapper(UserLogin)) // 用户登陆
+	api.GET("/username_check", UsernameCheck)      // 用户名检查
+	api.POST("/2fa", TfaAuth)                      // 2FA校验
+	api.GET("/sitemap", SiteMap)                   // 列出所有文章URI
 }
 
 func SetupAdminAPI(api *gin.RouterGroup) {
-	api.GET("/user_info", UserInfo)      // 用户信息
-	api.POST("/user_logout", UserLogout) // 用户登出
-	api.POST("/put", PutFile)            // 上传文件
-	api.POST("/upload", UploadFile)      // 上传归档文件
-	api.Any("/xterm", ConnectXTerm)      // 连接xterm
+	api.GET("/user_info", UserInfo)                             // 用户信息
+	api.POST("/user_logout", UserLogout)                        // 用户登出
+	api.GET("/login_history", APIWrapper(ListUserLoginHistory)) // 列举用户登录历史
+	api.POST("/put", PutFile)                                   // 上传文件
+	api.POST("/upload", UploadFile)                             // 上传归档文件
+	api.Any("/xterm", ConnectXTerm)                             // 连接xterm
 
 	api.POST("/article", APIWrapper(AddArticle))                      // 添加文章
 	api.PUT("/article", APIWrapper(UpdateArticle))                    // 修改文章

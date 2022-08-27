@@ -9,6 +9,7 @@ import (
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/session"
 	"duguying/studio/service/models"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -76,62 +77,49 @@ func UserRegister(c *gin.Context) {
 // @Description 用户登录
 // @Param auth body models.LoginArgs true "登录鉴权信息"
 // @Success 200 {object} models.LoginResponse
-func UserLogin(c *gin.Context) {
+func UserLogin(c *CustomContext) (interface{}, error) {
 	login := &models.LoginArgs{}
 	err := c.BindJSON(login)
 	if err != nil {
-		c.JSON(http.StatusOK, models.LoginResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 	user, err := db.GetUser(g.Db, login.Username)
 	if err != nil {
-		c.JSON(http.StatusOK, models.LoginResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// validate
 	passwd := com.Md5(login.Password + user.Salt)
 	if passwd != user.Password {
-		c.JSON(http.StatusOK, models.LoginResponse{
-			Ok:  false,
-			Msg: "login failed, invalid password",
-		})
-		return
+		return nil, fmt.Errorf("登陆失败，密码错误")
 	} else {
 		sid := session.SessionID()
 		if sid == "" {
-			c.JSON(http.StatusOK, models.LoginResponse{
-				Ok:  false,
-				Msg: "generate sid failed",
-			})
-			return
+			return nil, fmt.Errorf("生成会话失败")
 		} else {
 			defaultSessionTime := time.Hour * 24
 			sessionTimeCfg := g.Config.Get("session", "expire", defaultSessionTime.String())
 			sessionExpire, err := time.ParseDuration(sessionTimeCfg)
 			if err != nil {
-				c.JSON(http.StatusOK, models.LoginResponse{
-					Ok:  false,
-					Msg: err.Error(),
-				})
-				return
+				return nil, err
 			} else {
 				// store session
-				session.SessionSet(sid, sessionExpire, &session.Entity{
-					UserId: user.Id,
-				})
+				entity := &session.Entity{
+					UserID:  user.Id,
+					IP:      c.ClientIP(),
+					LoginAt: time.Now(),
+				}
+				session.SessionSet(sid, sessionExpire, entity)
 
-				c.JSON(http.StatusOK, models.LoginResponse{
+				err = db.AddLoginHistory(g.Db, sid, entity)
+				if err != nil {
+					return nil, err
+				}
+
+				return models.LoginResponse{
 					Ok:  true,
 					Sid: sid,
-				})
-				return
+				}, nil
 			}
 
 		}
@@ -140,12 +128,12 @@ func UserLogin(c *gin.Context) {
 
 func UserLogout(c *gin.Context) {
 	sid := c.GetString("sid")
-	userId := uint(c.GetInt64("user_id"))
+	userID := uint(c.GetInt64("user_id"))
 	session.SessionDel(sid)
 	c.JSON(http.StatusOK, gin.H{
 		"ok":      true,
 		"msg":     "logout success",
-		"user_id": userId,
+		"user_id": userID,
 	})
 }
 
@@ -173,4 +161,39 @@ func UsernameCheck(c *gin.Context) {
 			return
 		}
 	}
+}
+
+// ListUserLoginHistory 登陆历史列表
+// @Router admin/login_history [get]
+// @Tags 用户
+// @Description 登陆历史列表
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.ListUserLoginHistoryResponse
+func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
+	req := models.UserIDGetter{}
+	err := c.BindQuery(&req)
+	if err != nil {
+		return nil, err
+	}
+	list, err := db.ListLoginHistoryByUserID(req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	apiList := []*models.LoginHistory{}
+	for _, item := range list {
+		hist := item.ToModel()
+		entity := session.SessionGet(hist.SessionID)
+		if entity != nil {
+			hist.Expired = false
+		} else {
+			hist.Expired = true
+		}
+		apiList = append(apiList, hist)
+	}
+	return models.ListUserLoginHistoryResponse{
+		Ok:    true,
+		Total: len(list),
+		List:  apiList,
+	}, nil
 }

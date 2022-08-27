@@ -2,6 +2,7 @@
 // This file is part of blog project
 // Created by duguying on 2018/5/18.
 
+// Package session 会话管理
 package session
 
 import (
@@ -14,7 +15,9 @@ import (
 )
 
 type Entity struct {
-	UserId uint `json:"user_id"`
+	UserID  uint      `json:"user_id"`
+	IP      string    `json:"ip"`
+	LoginAt time.Time `json:"login_at"`
 }
 
 func (se *Entity) String() string {
@@ -27,16 +30,16 @@ func SessionID() string {
 	return guid
 }
 
-func SessionSet(sessionId string, ttl time.Duration, entity *Entity) {
-	g.Cache.SetTTL(cache.SESS+sessionId, entity.String(), ttl)
+func SessionSet(sessionID string, ttl time.Duration, entity *Entity) {
+	g.Cache.SetTTL(cache.SESS+sessionID, entity.String(), ttl)
 }
 
-func SessionDel(sessionId string) {
-	g.Cache.Delete(cache.SESS + sessionId)
+func SessionDel(sessionID string) {
+	g.Cache.Delete(cache.SESS + sessionID)
 }
 
-func SessionGet(sessionId string) (entity *Entity) {
-	value, err := g.Cache.Get(cache.SESS + sessionId)
+func SessionGet(sessionID string) (entity *Entity) {
+	value, err := g.Cache.Get(cache.SESS + sessionID)
 	if err != nil {
 		// log.Println("get session from cache failed, err:", err.Error())
 		return nil

@@ -6,10 +6,10 @@ import (
 )
 
 type UUID struct {
-	Id string `gorm:"type:varchar(40);primary_key;" sql:"comment:'UUID'"`
+	ID string `gorm:"type:varchar(40);primary_key;" sql:"comment:'UUID'"`
 }
 
 func (b *UUID) BeforeCreate(tx *gorm.DB) error {
-	b.Id = uuid.NewV4().String()
+	b.ID = uuid.NewV4().String()
 	return nil
 }

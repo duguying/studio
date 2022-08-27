@@ -51,3 +51,7 @@ type SearchPagerRequest struct {
 type IntGetter struct {
 	ID uint `json:"id" form:"id" binding:"required"`
 }
+
+type UserIDGetter struct {
+	UserID uint `json:"user_id" form:"user_id" binding:"required"`
+}

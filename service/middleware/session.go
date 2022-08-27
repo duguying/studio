@@ -28,6 +28,7 @@ func SessionValidate(forbidAnonymous bool) func(c *gin.Context) {
 		c.Set("sid", sid)
 		sessionDomain := g.Config.Get("session", "domain", ".duguying.net")
 		entity := session.SessionGet(sid)
+		log.Println("sid:", sid, "entity:", entity)
 		if entity == nil {
 			c.SetCookie("sid", "", 0, "/", sessionDomain, true, false)
 			if forbidAnonymous {

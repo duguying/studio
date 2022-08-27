@@ -19,12 +19,20 @@ func AddLoginHistory(tx *gorm.DB, sessionID string, entity *session.Entity) erro
 	return tx.Model(dbmodels.LoginHistory{}).Create(hist).Error
 }
 
-// ListLoginHistoryByUserID 按用户列举登陆历史
-func ListLoginHistoryByUserID(userID uint) (list []*dbmodels.LoginHistory, err error) {
+// PageLoginHistoryByUserID 按用户列举登陆历史
+func PageLoginHistoryByUserID(tx *gorm.DB, userID uint, page uint, pageSize uint) (list []*dbmodels.LoginHistory, total int64, err error) {
+	total = 0
 	list = []*dbmodels.LoginHistory{}
-	err = g.Db.Model(dbmodels.LoginHistory{}).Where("user_id=?", userID).Find(&list).Error
+
+	err = tx.Model(dbmodels.LoginHistory{}).Where("user_id=?", userID).Count(&total).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return list, nil
+
+	err = g.Db.Model(dbmodels.LoginHistory{}).Where("user_id=?", userID).Order("id desc").
+		Offset(int((page - 1) * pageSize)).Limit(int(pageSize)).Find(&list).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return list, total, nil
 }

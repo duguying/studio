@@ -21,7 +21,7 @@ import (
 )
 
 func PageArticle(tx *gorm.DB, keyword string,
-	page uint, pageSize uint, statusList []int) (total int64, list []*dbmodels.Article, err error) {
+	page uint, pageSize uint, statusList []int) (list []*dbmodels.Article, total int64, err error) {
 	total = 0
 	query := "status in (?)"
 	params := []interface{}{statusList}
@@ -33,17 +33,17 @@ func PageArticle(tx *gorm.DB, keyword string,
 
 	err = tx.Table("articles").Where(query, params...).Count(&total).Error
 	if err != nil {
-		return 0, nil, err
+		return nil, 0, err
 	}
 
 	list = []*dbmodels.Article{}
 	err = tx.Table("articles").Where(query, params...).Order("id desc").Offset(int((page - 1) * pageSize)).Limit(int(
 		pageSize)).Find(&list).Error
 	if err != nil {
-		return 0, nil, err
+		return nil, 0, err
 	}
 
-	return total, list, nil
+	return list, total, nil
 }
 
 // SearchArticle 搜索文章

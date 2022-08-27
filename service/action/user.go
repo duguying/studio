@@ -17,17 +17,23 @@ import (
 	"github.com/gogather/com"
 )
 
-func UserSimpleInfo(c *gin.Context) {
-
+// UserSimpleInfo 用户简单信息
+// @Router /admin/user_info [get]
+// @Tags 用户
+// @Description 当前用户信息
+// @Success 200 {object} models.UserInfoResponse
+func UserSimpleInfo(c *CustomContext) (interface{}, error) {
+	return models.CommonResponse{Ok: true}, nil
 }
 
+// UserInfo 用户信息
 // @Router /admin/user_info [get]
 // @Tags 用户
 // @Description 当前用户信息
 // @Success 200 {object} models.UserInfoResponse
 func UserInfo(c *gin.Context) {
-	userId := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(g.Db, userId)
+	userID := uint(c.GetInt64("user_id"))
+	user, err := db.GetUserById(g.Db, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.UserInfoResponse{
 			Ok:  false,
@@ -72,6 +78,7 @@ func UserRegister(c *gin.Context) {
 	}
 }
 
+// UserLogin 用户登录
 // @Router /user_login [put]
 // @Tags 用户
 // @Description 用户登录
@@ -172,10 +179,17 @@ func UsernameCheck(c *gin.Context) {
 // @Success 200 {object} models.ListUserLoginHistoryResponse
 func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
 	userID := uint(c.UserID())
-	list, err := db.ListLoginHistoryByUserID(userID)
+	req := models.CommonPagerRequest{}
+	err := c.BindQuery(&req)
 	if err != nil {
 		return nil, err
 	}
+
+	list, total, err := db.PageLoginHistoryByUserID(g.Db, userID, req.Page, req.Size)
+	if err != nil {
+		return nil, err
+	}
+
 	apiList := []*models.LoginHistory{}
 	for _, item := range list {
 		hist := item.ToModel()
@@ -187,9 +201,10 @@ func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
 		}
 		apiList = append(apiList, hist)
 	}
+
 	return models.ListUserLoginHistoryResponse{
 		Ok:    true,
-		Total: len(list),
+		Total: int(total),
 		List:  apiList,
 	}, nil
 }

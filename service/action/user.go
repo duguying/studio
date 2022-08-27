@@ -171,12 +171,8 @@ func UsernameCheck(c *gin.Context) {
 // @Param size query uint true "每页数"
 // @Success 200 {object} models.ListUserLoginHistoryResponse
 func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
-	req := models.UserIDGetter{}
-	err := c.BindQuery(&req)
-	if err != nil {
-		return nil, err
-	}
-	list, err := db.ListLoginHistoryByUserID(req.UserID)
+	userID := uint(c.UserID())
+	list, err := db.ListLoginHistoryByUserID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -196,4 +192,8 @@ func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
 		Total: len(list),
 		List:  apiList,
 	}, nil
+}
+
+func UserMessageCount(c *CustomContext) (interface{}, error) {
+	return models.CommonResponse{Ok: true}, nil
 }

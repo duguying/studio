@@ -725,3 +725,7 @@ func SiteMap(c *gin.Context) {
 	})
 	return
 }
+
+func SaveErrorLogger(c *CustomContext) (interface{}, error) {
+	return models.CommonResponse{Ok: true}, nil
+}

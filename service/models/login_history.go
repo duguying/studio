@@ -10,4 +10,5 @@ type LoginHistory struct {
 	Area      string     `json:"area"`
 	Expired   bool       `json:"expired"`
 	LoginAt   *time.Time `json:"login_at"`
+	UserAgent string     `json:"user_agent"`
 }

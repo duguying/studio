@@ -14,6 +14,7 @@ type LoginHistory struct {
 	SessionID string     `json:"session_id"`
 	IP        string     `json:"ip"`
 	LoginAt   *time.Time `json:"login_at"`
+	UserAgent string     `json:"user_agent"`
 }
 
 func (lh *LoginHistory) ToModel() *models.LoginHistory {
@@ -32,5 +33,6 @@ func (lh *LoginHistory) ToModel() *models.LoginHistory {
 		IP:        lh.IP,
 		Area:      area,
 		LoginAt:   lh.LoginAt,
+		UserAgent: lh.UserAgent,
 	}
 }

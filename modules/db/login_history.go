@@ -29,7 +29,7 @@ func PageLoginHistoryByUserID(tx *gorm.DB, userID uint, page uint, pageSize uint
 		return nil, 0, err
 	}
 
-	err = g.Db.Model(dbmodels.LoginHistory{}).Where("user_id=?", userID).Order("id desc").
+	err = g.Db.Model(dbmodels.LoginHistory{}).Where("user_id=?", userID).Order("login_at desc").
 		Offset(int((page - 1) * pageSize)).Limit(int(pageSize)).Find(&list).Error
 	if err != nil {
 		return nil, 0, err

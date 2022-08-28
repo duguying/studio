@@ -15,6 +15,7 @@ func AddLoginHistory(tx *gorm.DB, sessionID string, entity *session.Entity) erro
 		SessionID: sessionID,
 		IP:        entity.IP,
 		LoginAt:   &entity.LoginAt,
+		UserAgent: entity.UserAgent,
 	}
 	return tx.Model(dbmodels.LoginHistory{}).Create(hist).Error
 }

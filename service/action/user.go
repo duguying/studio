@@ -211,5 +211,10 @@ func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
 }
 
 func UserMessageCount(c *CustomContext) (interface{}, error) {
-	return models.CommonResponse{Ok: true}, nil
+	return gin.H{
+		"ok": true,
+		"data": map[string]interface{}{
+			"count": 0,
+		},
+	}, nil
 }

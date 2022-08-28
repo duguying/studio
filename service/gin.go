@@ -42,17 +42,17 @@ func Run(logDir string) {
 	router.Any("/version", action.Version)
 
 	// v1 api
-	apiV1 := router.Group("/api/v1", middleware.RestLog(), middleware.SessionValidate(false))
+	apiV1 := router.Group("/api/v1", middleware.RestLog())
 	{
 		// needn't auth
 		action.SetupFeAPI(apiV1)
 
 		// auth require
-		auth := apiV1.Group("/admin", middleware.RestLog(), middleware.SessionValidate(true))
+		auth := apiV1.Group("/admin", middleware.SessionValidate(true))
 		action.SetupAdminAPI(auth)
 
 		// agent connection point
-		agt := apiV1.Group("/agent")
+		agt := apiV1.Group("/agent", middleware.SessionValidate(false))
 		action.SetupAgentAPI(agt)
 	}
 

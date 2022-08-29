@@ -13,7 +13,7 @@ func TestGenUUID(t *testing.T) {
 }
 
 func TestParseMath(t *testing.T) {
-	content := "asdfasdf$$123$$dfgdf$$skdfjhkds$$ sdfs$$"
+	content := "asdfa放一串中文就移位了sdf$$123$$dfgdf$$skdfjhkds$$ sdfs$$"
 	out := ParseMath(content)
 	fmt.Println(out)
 }

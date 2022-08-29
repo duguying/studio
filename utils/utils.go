@@ -109,7 +109,7 @@ func ParseMath(content string) string {
 	lexer := NewLexer(rd)
 	for {
 		start, pos, tok := lexer.Lex()
-		out = out + content[start:pos]
+		out = out + string([]rune(content)[start:pos])
 
 		if tok == EOF {
 			break

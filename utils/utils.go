@@ -117,11 +117,11 @@ func ParseMath(content string) string {
 		if tok == MATH {
 			count++
 			if count%2 == 1 {
-				out = out + "${1}" //`<div v-katex:auto>`
+				out = out + "${1}" //`<span v-katex:auto>`
 			} else if count%2 == 0 {
-				out = out + "${0}" //`</div>`
-				out = strings.ReplaceAll(out, "${1}", `<div v-katex:auto>`)
-				out = strings.ReplaceAll(out, "${0}", `</div>`)
+				out = out + "${0}" //`</span>`
+				out = strings.ReplaceAll(out, "${1}", `<span v-katex:auto>`)
+				out = strings.ReplaceAll(out, "${0}", `</span>`)
 			}
 		}
 	}

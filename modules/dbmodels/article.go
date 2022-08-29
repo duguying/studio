@@ -93,6 +93,7 @@ func (a *Article) ToArticleShowContent() *models.ArticleShowContent {
 	content := []byte(a.Content)
 	if a.Type == ContentTypeMarkDown {
 		content = blackfriday.Run([]byte(a.Content))
+		content = []byte(utils.ParseMath(string(content)))
 	}
 	tags := []string{}
 	segs := strings.Split(strings.Replace(a.Keywords, "，", ",", -1), ",")

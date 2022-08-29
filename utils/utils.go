@@ -100,3 +100,32 @@ func TrimHTML(content string) string {
 	p := bluemonday.StripTagsPolicy()
 	return p.Sanitize(content)
 }
+
+// ParseMath 解析数学公式标签
+func ParseMath(content string) string {
+	count := 0
+	out := ""
+	rd := strings.NewReader(content)
+	lexer := NewLexer(rd)
+	for {
+		start, pos, tok := lexer.Lex()
+		out = out + content[start:pos]
+
+		if tok == EOF {
+			break
+		}
+		if tok == MATH {
+			count++
+			if count%2 == 1 {
+				out = out + "${1}" //`<div v-katex:auto>`
+			} else if count%2 == 0 {
+				out = out + "${0}" //`</div>`
+				out = strings.ReplaceAll(out, "${1}", `<div v-katex:auto>`)
+				out = strings.ReplaceAll(out, "${0}", `</div>`)
+			}
+		}
+	}
+
+	out = strings.ReplaceAll(out, "${1}", "$$")
+	return out
+}

@@ -12,6 +12,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -101,6 +102,10 @@ func TrimHTML(content string) string {
 	return p.Sanitize(content)
 }
 
+var (
+	inlineMathReg, _ = regexp.Compile(`\$([\d\D][^\$]+)\$`)
+)
+
 // ParseMath 解析数学公式标签
 func ParseMath(content string) string {
 	count := 0
@@ -117,15 +122,28 @@ func ParseMath(content string) string {
 		if tok == MATH {
 			count++
 			if count%2 == 1 {
-				out = out + "${1}" //`<span v-katex:auto>`
+				out = out + "${1}" //`<div v-katex:auto>`
 			} else if count%2 == 0 {
-				out = out + "${0}" //`</span>`
-				out = strings.ReplaceAll(out, "${1}", `<span v-katex:auto>`)
-				out = strings.ReplaceAll(out, "${0}", `</span>`)
+				out = out + "${0}" //`</div>`
+				out = strings.ReplaceAll(out, "${1}", `<div v-katex:auto>`)
+				out = strings.ReplaceAll(out, "${0}", `</div>`)
 			}
 		}
 	}
 
 	out = strings.ReplaceAll(out, "${1}", "$$")
+
+	// 处理行内 math
+	matches := inlineMathReg.FindAllString(out, -1)
+	for _, match := range matches {
+		policy := bluemonday.StripTagsPolicy()
+		strippedMatch := policy.Sanitize(match)
+		if strippedMatch == match {
+			matchTmp := "<span v-katex:auto>" + strings.TrimPrefix(match, "$")
+			matchTmp = strings.TrimSuffix(matchTmp, "$") + "</span>"
+			out = strings.ReplaceAll(out, match, matchTmp)
+		}
+	}
+
 	return out
 }

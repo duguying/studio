@@ -242,7 +242,19 @@ func ChangePassword(c *CustomContext) (interface{}, error) {
 		return nil, fmt.Errorf("旧密码错误")
 	}
 
-	err = db.UserChangePassword(g.Db, req.Username, req.NewPassword)
+	tx := g.Db.Begin()
+	err = db.UserChangePassword(tx, req.Username, req.NewPassword)
+	if err != nil {
+		return nil, err
+	}
+	list, _, err := db.PageLoginHistoryByUserID(tx, user.ID, 1, 1000)
+	if err != nil {
+		return nil, err
+	}
+	for _, sess := range list {
+		session.SessionDel(sess.SessionID)
+	}
+	err = tx.Commit().Error
 	if err != nil {
 		return nil, err
 	}

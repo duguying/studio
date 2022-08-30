@@ -1,7 +1,7 @@
 package deal
 
 import (
-	"duguying/studio/modules/logger"
+	"duguying/studio/g"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/service/message/store"
@@ -35,7 +35,7 @@ func DealWithMessage(rcvMsgPack model.Msg) (err error) {
 			pair, exist := pipe.GetCliChanPair(session, pid)
 			if exist {
 				//log.Println("cli ---> xterm:", pipeData.Data)
-				logger.L("agentsnt").Printf("agent sent out: %d, equal expect: %v\n",
+				g.LogEntry.WithField("slice", "agentsnt").Printf("agent sent out: %d, equal expect: %v\n",
 					pipeData.DataLen, pipeData.DataLen == uint32(len(pipeData.Data)))
 				pair.ChanIn <- append([]byte{model.TERM_PIPE}, pipeData.Data...)
 			}

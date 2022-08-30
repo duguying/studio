@@ -4,7 +4,6 @@ package action
 import (
 	"bytes"
 	"duguying/studio/g"
-	"duguying/studio/modules/logger"
 	"duguying/studio/service/middleware"
 	"duguying/studio/service/models"
 	"fmt"
@@ -34,13 +33,11 @@ func (cc *CustomContext) UserID() int64 {
 type HandlerResponseFunc func(c *CustomContext) (interface{}, error)
 
 type APILog struct {
-	Method string `json:"method"`
-	URI    string `json:"uri"`
-	Query  string `json:"query"`
-	User   string `json:"user"`
-	// 如果存在模拟用户的情况,staff记录真实的用户名,user 记录被模拟的用户
-	Staff      string `json:"staff"`
-	Acquires   string `json:"acquires"`
+	Method     string `json:"method"`
+	URI        string `json:"uri"`
+	Query      string `json:"query"`
+	User       string `json:"user"`
+	SessionID  string `json:"session_id"`
 	Body       string `json:"body" sql:"type:longtext"`
 	Response   string `json:"response" sql:"type:longtext"`
 	Ok         bool   `json:"ok"`
@@ -61,7 +58,7 @@ func (al *APILog) ToMap() map[string]interface{} {
 	return out
 }
 
-// APIWrapperResponse 带响应信息的api的action包裹器
+// APIWrapper 带响应信息的api的action包裹器
 func APIWrapper(handler HandlerResponseFunc) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		defer func() {
@@ -114,7 +111,7 @@ func recordPanicReq(c *gin.Context, stack string) {
 
 	buf, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		logger.L("request").Println("read body error:", err.Error())
+		g.LogEntry.WithField("slice", "request").Println("read body error:", err.Error())
 	}
 	rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 	c.Request.Body = rdr2
@@ -127,7 +124,7 @@ func recordPanicReq(c *gin.Context, stack string) {
 		URI:       rl.URI,
 		Query:     rl.Query,
 		User:      c.GetString("user"),
-		Acquires:  c.GetString("acquires"),
+		SessionID: c.GetString("sid"),
 		Body:      rl.Body,
 		Ok:        false,
 		Trace:     stack,

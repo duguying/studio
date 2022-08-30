@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"duguying/studio/g"
-	"duguying/studio/modules/logger"
 	"duguying/studio/service/models"
 
 	"github.com/gin-gonic/gin"
@@ -92,13 +91,13 @@ func RestLog() gin.HandlerFunc {
 		}
 		buf, err := ioutil.ReadAll(c.Request.Body)
 		if err != nil {
-			logger.L("request").Println("read body error:", err.Error())
+			g.LogEntry.WithField("slice", "request").Println("read body error:", err.Error())
 		}
 		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 		c.Request.Body = rdr2
 		body := string(buf)
 		rl.Body = body
-		logger.L("request").Println("request:", rl.String())
+		g.LogEntry.WithField("slice", "request").Println("request:", rl.String())
 		c.Next()
 		statusCode := c.Writer.Status()
 		if isMethodRecord(rl.Method) {
@@ -107,13 +106,13 @@ func RestLog() gin.HandlerFunc {
 			rsp := string(rawBytes)
 			err = json.Unmarshal(rawBytes, rlog)
 			if err != nil {
-				logger.L("request").Println("parse response failed, err:", err.Error(), "raw:", string(rawBytes))
+				g.LogEntry.WithField("slice", "request").Println("parse response failed, err:", err.Error(), "raw:", string(rawBytes))
 				if len(rawBytes) > 1024*512 {
 					rsp = fmt.Sprintf("[len:%d]", len(rawBytes))
 				}
 			} else {
 				rlog.Status = statusCode
-				logger.L("request").Println("response:", rlog.String())
+				g.LogEntry.WithField("slice", "request").Println("response:", rlog.String())
 			}
 
 			apiLog := &models.APILog{

@@ -11,7 +11,6 @@ require (
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/dogenzaka/rotator v0.0.0-20141104034428-97947bef5b93 // indirect
 	github.com/elastic/go-elasticsearch/v7 v7.17.1 // indirect
-	github.com/elastic/go-elasticsearch/v8 v8.3.0 // indirect
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7

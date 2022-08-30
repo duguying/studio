@@ -527,7 +527,7 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 
 	tx := g.Db.WithContext(c)
 	userID := uint(c.UserID())
-	user, err := db.GetUserById(tx, userID)
+	user, err := db.GetUserByID(tx, userID)
 	if err != nil {
 		return nil, err
 	}

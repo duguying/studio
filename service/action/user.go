@@ -33,7 +33,7 @@ func UserSimpleInfo(c *CustomContext) (interface{}, error) {
 // @Success 200 {object} models.UserInfoResponse
 func UserInfo(c *gin.Context) {
 	userID := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(g.Db, userID)
+	user, err := db.GetUserByID(g.Db, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.UserInfoResponse{
 			Ok:  false,
@@ -70,7 +70,7 @@ func UserRegister(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"ok": true,
 			"user": gin.H{
-				"id":       user.Id,
+				"id":       user.ID,
 				"username": user.Username,
 			},
 		})
@@ -112,7 +112,7 @@ func UserLogin(c *CustomContext) (interface{}, error) {
 			} else {
 				// store session
 				entity := &session.Entity{
-					UserID:    user.Id,
+					UserID:    user.ID,
 					IP:        c.ClientIP(),
 					LoginAt:   time.Now(),
 					UserAgent: c.Request.UserAgent(),
@@ -216,5 +216,38 @@ func UserMessageCount(c *CustomContext) (interface{}, error) {
 		"data": map[string]interface{}{
 			"count": 0,
 		},
+	}, nil
+}
+
+// ChangePassword 修改密码
+// @Router /admin/change_password [put]
+// @Tags 用户
+// @Description 修改密码
+// @Param auth body models.LoginArgs true "登录鉴权信息"
+// @Success 200 {object} models.LoginResponse
+func ChangePassword(c *CustomContext) (interface{}, error) {
+	req := models.ChangePasswordRequest{}
+	err := c.BindJSON(&req)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := db.GetUser(g.Db, req.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	passwd := com.Md5(req.OldPassword + user.Salt)
+	if passwd != user.Password {
+		return nil, fmt.Errorf("旧密码错误")
+	}
+
+	err = db.UserChangePassword(g.Db, req.Username, req.NewPassword)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
+		Ok: true,
 	}, nil
 }

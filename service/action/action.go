@@ -29,6 +29,7 @@ func SetupFeAPI(api *gin.RouterGroup) {
 func SetupAdminAPI(api *gin.RouterGroup) {
 	api.GET("/user_info", UserInfo)                             // 用户信息
 	api.POST("/user_logout", UserLogout)                        // 用户登出
+	api.PUT("/change_password", APIWrapper(ChangePassword))     // 修改密码
 	api.GET("/login_history", APIWrapper(ListUserLoginHistory)) // 列举用户登录历史
 	api.GET("/message/count", APIWrapper(UserMessageCount))     // 用户消息计数
 	api.POST("/put", PutFile)                                   // 上传文件

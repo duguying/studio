@@ -20,7 +20,7 @@ const (
 var role = []string{"user", "admin"}
 
 type User struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Username  string    `json:"username"`
 	Password  string    `json:"password"`
 	Salt      string    `json:"salt"`
@@ -38,7 +38,7 @@ func (u *User) String() string {
 func (u *User) ToInfo() *models.UserInfo {
 	host := g.Config.Get("system", "host", "http://duguying.net")
 	return &models.UserInfo{
-		Id:       u.Id,
+		ID:       u.ID,
 		Username: u.Username,
 		Email:    u.Email,
 		Avatar:   host + "/logo.png",

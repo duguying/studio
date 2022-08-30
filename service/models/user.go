@@ -3,12 +3,13 @@
 // I am coding in Tencent
 // Created by rainesli on 2019/8/27.
 
+// Package models 接口模型
 package models
 
 import "time"
 
 type UserInfo struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Avatar    string    `json:"avatar"`
@@ -26,4 +27,10 @@ type RegisterArgs struct {
 	Password string `json:"password"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
+}
+
+type ChangePasswordRequest struct {
+	Username    string `json:"username"`
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
 }

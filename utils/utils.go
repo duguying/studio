@@ -125,8 +125,8 @@ func ParseMath(content string) string {
 				out = out + "${1}" //`<div v-katex:auto>`
 			} else if count%2 == 0 {
 				out = out + "${0}" //`</div>`
-				out = strings.ReplaceAll(out, "${1}", `<div v-katex:auto>`)
-				out = strings.ReplaceAll(out, "${0}", `</div>`)
+				out = strings.ReplaceAll(out, "${1}", `<span v-katex:auto class="katex-display">`)
+				out = strings.ReplaceAll(out, "${0}", `</span>`)
 			}
 		}
 	}

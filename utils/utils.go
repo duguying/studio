@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha1"
+	"duguying/studio/g"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -146,4 +147,11 @@ func ParseMath(content string) string {
 	}
 
 	return out
+}
+
+// GetFileURL 获取文件地址
+func GetFileURL(key string) string {
+	imgHost := g.Config.Get("store", "img-host-url", "https://image.duguying.net")
+	key = strings.TrimPrefix(key, "img")
+	return imgHost + key
 }

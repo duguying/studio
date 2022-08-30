@@ -85,6 +85,7 @@ func PutFile(c *gin.Context) {
 }
 
 // PutImage 上传粘贴图片
+// Deprecated
 // @Router /put/image [post]
 // @Tags 上传
 // @Description 上传粘贴图片
@@ -127,18 +128,12 @@ func PutImage(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	url := getImgRefURL(key)
+	url := utils.GetFileURL(key)
 	return models.UploadResponse{
 		Ok:   true,
 		URL:  url,
 		Name: randomName,
 	}, nil
-}
-
-func getImgRefURL(key string) string {
-	imgHost := g.Config.Get("store", "img-host-url", "https://image.duguying.net")
-	key = strings.TrimPrefix(key, "img")
-	return imgHost + key
 }
 
 // UploadImage 表单上传图片
@@ -152,19 +147,42 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// 图像是否优化，开启则调用 imagemagick 转码
 	_, optimize := c.GetPostForm("optimize")
 
+	// 图片存储子目录
+	storeDir := time.Now().Format("2006/01")
+	uploadType, ok := c.GetPostForm("upload_type")
+	if ok {
+		if uploadType == "avatar" {
+			storeDir = "avatar"
+		}
+	}
+
+	// 图片存储根目录
+	root := "img"
+	_, private := c.GetPostForm("private")
+	if private {
+		root = "private"
+	}
+
+	// 文件存储根目录
 	store := g.Config.Get("upload", "store-path", "store")
+
+	// 文件信息
 	size := fh.Size
 	filename := strings.ToLower(fh.Filename)
 	ext := filepath.Ext(filename)
 
+	// 生成随机文件名，拼接路径
 	randomName := utils.GenUID()
-	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
+	key := filepath.Join(root, storeDir, fmt.Sprintf("%s%s", randomName, ext))
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	_ = os.MkdirAll(dir, 0644)
 
+	// 转码与转储
 	log.Println("ext:", ext, "optimize:", optimize)
 	if (imgNeedConvert(ext) || size >= 1024*1024) && optimize {
 		log.Println("ext optimize:", ext, "--> .webp")
@@ -219,12 +237,14 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
+	// 存储文件信息到数据库
 	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
 	if err != nil {
 		return nil, err
 	}
 
-	url := getImgRefURL(key)
+	// 返回文件路径
+	url := utils.GetFileURL(key)
 	return models.UploadResponse{
 		Ok:   true,
 		URL:  url,

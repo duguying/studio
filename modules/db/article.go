@@ -25,6 +25,11 @@ func PageArticle(tx *gorm.DB, keyword string,
 	total = 0
 	query := "status in (?)"
 	params := []interface{}{statusList}
+	order := "publish_time desc"
+
+	if statusContain(statusList, dbmodels.ArtStatusDraft) {
+		order = "created_at desc"
+	}
 
 	if keyword != "" {
 		query = query + " and keywords like ?"
@@ -37,13 +42,22 @@ func PageArticle(tx *gorm.DB, keyword string,
 	}
 
 	list = []*dbmodels.Article{}
-	err = tx.Model(dbmodels.Article{}).Where(query, params...).Order("publish_time desc").Offset(int((page - 1) * pageSize)).Limit(int(
+	err = tx.Model(dbmodels.Article{}).Where(query, params...).Order(order).Offset(int((page - 1) * pageSize)).Limit(int(
 		pageSize)).Find(&list).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
 	return list, total, nil
+}
+
+func statusContain(statusList []int, status int) bool {
+	for _, item := range statusList {
+		if item == status {
+			return true
+		}
+	}
+	return false
 }
 
 // SearchArticle 搜索文章
@@ -268,16 +282,18 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) 
 // PublishArticle 发布文章
 func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
 	now := time.Now()
-	status := dbmodels.ArtStatusPublish
-	if !publish {
-		status = dbmodels.ArtStatusDraft
+	fields := map[string]interface{}{
+		"updated_by": uid,
 	}
 
-	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).Updates(map[string]interface{}{
-		"status":       status,
-		"publish_time": &now,
-		"updated_by":   uid,
-	}).Error
+	if !publish {
+		fields["status"] = dbmodels.ArtStatusDraft
+	} else {
+		fields["status"] = dbmodels.ArtStatusPublish
+		fields["publish_time"] = &now
+	}
+
+	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).Updates(fields).Error
 	if err != nil {
 		return err
 	}

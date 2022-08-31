@@ -7,6 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dbmodels"
 	"duguying/studio/modules/session"
 	"duguying/studio/service/models"
 	"fmt"
@@ -232,16 +233,32 @@ func ChangePassword(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
+	userID := c.UserID()
+	currentUser, err := db.GetUserByID(g.Db, uint(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	// 非管理员不能修改他人密码
+	if currentUser.Role != dbmodels.RoleAdmin && currentUser.Username != req.Username {
+		return nil, fmt.Errorf("非管理员不能修改他人密码")
+	}
+
+	// 获取要修改密码的账号信息
 	user, err := db.GetUser(g.Db, req.Username)
 	if err != nil {
 		return nil, err
 	}
 
-	passwd := com.Md5(req.OldPassword + user.Salt)
-	if passwd != user.Password {
-		return nil, fmt.Errorf("旧密码错误")
+	// 如果管理员修改他人密码，不需要校验原密码
+	if currentUser.Username != req.Username {
+		passwd := com.Md5(req.OldPassword + user.Salt)
+		if passwd != user.Password {
+			return nil, fmt.Errorf("旧密码错误")
+		}
 	}
 
+	// 修改密码并登出账号
 	tx := g.Db.Begin()
 	err = db.UserChangePassword(tx, req.Username, req.NewPassword)
 	if err != nil {

@@ -31,13 +31,13 @@ func PageArticle(tx *gorm.DB, keyword string,
 		params = append(params, fmt.Sprintf("%%%s%%", keyword))
 	}
 
-	err = tx.Table("articles").Where(query, params...).Count(&total).Error
+	err = tx.Model(dbmodels.Article{}).Where(query, params...).Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
 	list = []*dbmodels.Article{}
-	err = tx.Table("articles").Where(query, params...).Order("id desc").Offset(int((page - 1) * pageSize)).Limit(int(
+	err = tx.Model(dbmodels.Article{}).Where(query, params...).Order("publish_time desc").Offset(int((page - 1) * pageSize)).Limit(int(
 		pageSize)).Find(&list).Error
 	if err != nil {
 		return nil, 0, err
@@ -377,7 +377,7 @@ func UpdateArticleViewCount(tx *gorm.DB, uri string, cnt int) (err error) {
 
 // UpdateArticle 更新文章
 func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
-	_, err = GetArticleByID(tx, id)
+	art, err := GetArticleByID(tx, id)
 	if err != nil {
 		return err
 	}
@@ -392,6 +392,9 @@ func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
 	}
 	if len(article.Keywords) > 0 {
 		fields["keywords"] = strings.Join(article.Keywords, ",")
+	}
+	if art.Status == dbmodels.ArtStatusPublish {
+		fields["publish_time"] = time.Now()
 	}
 	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(fields).Error
 	if err != nil {

@@ -38,7 +38,7 @@ func PageArticle(tx *gorm.DB, keyword string,
 	}
 
 	if userID > 0 {
-		query = query + " and auth_id=?"
+		query = query + " and author_id=?"
 		params = append(params, userID)
 	}
 

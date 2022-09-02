@@ -276,14 +276,14 @@ func ListAdminArticleTitle(c *CustomContext) (interface{}, error) {
 	}, nil
 }
 
-// GetArticle 获取文章
+// AdminGetArticle 管理后台获取文章
 // @Router /article [get]
 // @Tags 文章
 // @Description 获取文章
 // @Param id query uint false "ID"
 // @Param uri query string false "URI"
 // @Success 200 {object} models.ArticleContentGetResponse
-func GetArticle(c *CustomContext) (interface{}, error) {
+func AdminGetArticle(c *CustomContext) (interface{}, error) {
 	getter := models.ArticleUriGetterRequest{}
 	err := c.BindQuery(&getter)
 	if err != nil {
@@ -296,11 +296,17 @@ func GetArticle(c *CustomContext) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
+		if dbArt.AuthorID != uint(c.UserID()) {
+			return nil, fmt.Errorf("当前用户无权限获取该文章详情")
+		}
 		art = dbArt.ToArticleContent()
 	} else if len(getter.Uri) > 0 {
 		dbArt, err := db.GetArticle(g.Db, getter.Uri)
 		if err != nil {
 			return nil, err
+		}
+		if dbArt.AuthorID != uint(c.UserID()) {
+			return nil, fmt.Errorf("当前用户无权限获取该文章详情")
 		}
 		art = dbArt.ToArticleContent()
 	} else {

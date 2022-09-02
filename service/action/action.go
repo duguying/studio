@@ -41,7 +41,7 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.PUT("/article/publish", APIWrapper(PublishArticle))           // 发布草稿
 	api.DELETE("/article", APIWrapper(DeleteArticle))                 // 删除文章
 	api.GET("/article/list_title", APIWrapper(ListAdminArticleTitle)) // 列出文章列表
-	api.GET("/article", APIWrapper(GetArticle))                       // 获取文章
+	api.GET("/article", APIWrapper(AdminGetArticle))                  // 获取文章
 	api.GET("/article/current_md5", APIWrapper(GetArticleCurrentMD5)) // 获取文章当前内容MD5
 
 	api.GET("/2faqr", QrGoogleAuth)                    // 获取2FA二维码

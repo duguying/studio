@@ -250,8 +250,8 @@ func ChangePassword(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	// 如果管理员修改他人密码，不需要校验原密码
-	if currentUser.Username != req.Username {
+	// 如果管理员修改他人密码，不需要校验原密码，修改自己帐号的密码，才需要校验旧密码
+	if currentUser.Username == req.Username {
 		passwd := com.Md5(req.OldPassword + user.Salt)
 		if passwd != user.Password {
 			return nil, fmt.Errorf("旧密码错误")

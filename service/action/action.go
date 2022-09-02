@@ -27,13 +27,13 @@ func SetupFeAPI(api *gin.RouterGroup) {
 }
 
 func SetupAdminAPI(api *gin.RouterGroup) {
-	api.GET("/user_info", UserInfo)                             // 用户信息
-	api.POST("/user_logout", UserLogout)                        // 用户登出
+	api.GET("/user_info", APIWrapper(UserInfo))                 // 用户信息
+	api.POST("/user_logout", APIWrapper(UserLogout))            // 用户登出
 	api.PUT("/change_password", APIWrapper(ChangePassword))     // 修改密码
 	api.GET("/login_history", APIWrapper(ListUserLoginHistory)) // 列举用户登录历史
 	api.GET("/message/count", APIWrapper(UserMessageCount))     // 用户消息计数
-	api.POST("/put", PutFile)                                   // 上传文件
-	api.POST("/upload", UploadFile)                             // 上传归档文件
+	api.POST("/put", APIWrapper(PutFile))                       // 上传文件
+	api.POST("/upload", APIWrapper(UploadFile))                 // 上传归档文件
 	api.Any("/xterm", ConnectXTerm)                             // 连接xterm
 
 	api.POST("/article", APIWrapper(AddArticle))                      // 添加文章

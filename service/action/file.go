@@ -26,62 +26,42 @@ import (
 	"github.com/gogather/com"
 )
 
-func PutFile(c *gin.Context) {
+func PutFile(c *CustomContext) (interface{}, error) {
 	key := c.Query("path")
 	if key == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "query path is required",
-		})
-		return
+		return nil, fmt.Errorf("query path is required")
 	}
 	store := g.Config.Get("upload", "store-path", "store")
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	err := com.MkdirWithCreatePath(dir)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	f, err := os.Create(fpath)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "create file failed, " + err.Error(),
-		})
-		return
+		return nil, fmt.Errorf("create file failed, " + err.Error())
 	}
 	defer f.Close()
 
 	written, err := io.Copy(f, c.Request.Body)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "copy file failed, " + err.Error(),
-		})
-		return
+		return nil, fmt.Errorf("copy file failed, " + err.Error())
 	}
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	return gin.H{
 		"ok": true,
-	})
+	}, nil
 }
 
 // PutImage 上传粘贴图片
@@ -123,7 +103,7 @@ func PutImage(c *CustomContext) (interface{}, error) {
 	}
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID())
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +218,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	md5 := com.FileMD5(fpath)
 
 	// 存储文件信息到数据库
-	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
 	if err != nil {
 		return nil, err
 	}
@@ -252,14 +232,10 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	}, nil
 }
 
-func UploadFile(c *gin.Context) {
+func UploadFile(c *CustomContext) (interface{}, error) {
 	fh, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	store := g.Config.Get("upload", "store-path", "store")
 	domain := g.Config.Get("upload", "file-domain", "http://file.duguying.net")
@@ -278,50 +254,34 @@ func UploadFile(c *gin.Context) {
 
 	f, err := os.Create(fpath)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	defer f.Close()
 
 	hf, err := fh.Open()
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	defer hf.Close()
 
 	_, err = io.Copy(f, hf)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
+	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	return gin.H{
 		"ok":  true,
 		"url": domain + strings.Replace(filepath.Join("/", key), `\`, `/`, -1),
-	})
+	}, nil
 }
 
 // PageFile 列举文件

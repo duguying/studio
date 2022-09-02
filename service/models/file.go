@@ -12,5 +12,6 @@ type File struct {
 	FileType   int64     `json:"file_type"`
 	Md5        string    `json:"md5"`
 	Recognized int64     `json:"recognized"`
+	UserID     uint      `json:"user_id"`
 	CreatedAt  time.Time `json:"created_at"`
 }

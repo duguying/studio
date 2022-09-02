@@ -69,7 +69,7 @@ func Run(logDir string) {
 		deployer := api.Group("/deploy", action.CheckToken)
 		{
 			deployer.POST("/upload", action.PackageUpload)
-			deployer.POST("/archive", action.UploadFile)
+			deployer.POST("/archive", action.APIWrapper(action.UploadFile))
 		}
 	}
 

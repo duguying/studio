@@ -32,22 +32,16 @@ func UserSimpleInfo(c *CustomContext) (interface{}, error) {
 // @Tags 用户
 // @Description 当前用户信息
 // @Success 200 {object} models.UserInfoResponse
-func UserInfo(c *gin.Context) {
-	userID := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserByID(g.Db, userID)
+func UserInfo(c *CustomContext) (interface{}, error) {
+	user, err := db.GetUserByID(g.Db, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, models.UserInfoResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, models.UserInfoResponse{
+	return models.UserInfoResponse{
 		Ok:   true,
 		Data: user.ToInfo(),
-	})
-	return
+	}, nil
 }
 
 func UserRegister(c *gin.Context) {
@@ -135,15 +129,14 @@ func UserLogin(c *CustomContext) (interface{}, error) {
 	}
 }
 
-func UserLogout(c *gin.Context) {
+func UserLogout(c *CustomContext) (interface{}, error) {
 	sid := c.GetString("sid")
-	userID := uint(c.GetInt64("user_id"))
 	session.SessionDel(sid)
-	c.JSON(http.StatusOK, gin.H{
+	return gin.H{
 		"ok":      true,
 		"msg":     "logout success",
-		"user_id": userID,
-	})
+		"user_id": c.UserID(),
+	}, nil
 }
 
 func UsernameCheck(c *gin.Context) {
@@ -180,14 +173,13 @@ func UsernameCheck(c *gin.Context) {
 // @Param size query uint true "每页数"
 // @Success 200 {object} models.ListUserLoginHistoryResponse
 func ListUserLoginHistory(c *CustomContext) (interface{}, error) {
-	userID := uint(c.UserID())
 	req := models.CommonPagerRequest{}
 	err := c.BindQuery(&req)
 	if err != nil {
 		return nil, err
 	}
 
-	list, total, err := db.PageLoginHistoryByUserID(g.Db, userID, req.Page, req.Size)
+	list, total, err := db.PageLoginHistoryByUserID(g.Db, c.UserID(), req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -233,8 +225,7 @@ func ChangePassword(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	userID := c.UserID()
-	currentUser, err := db.GetUserByID(g.Db, uint(userID))
+	currentUser, err := db.GetUserByID(g.Db, c.UserID())
 	if err != nil {
 		return nil, err
 	}

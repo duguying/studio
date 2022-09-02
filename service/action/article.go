@@ -263,7 +263,7 @@ func ListAdminArticleTitle(c *CustomContext) (interface{}, error) {
 	}
 
 	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size,
-		[]int{dbmodels.ArtStatusPublish, dbmodels.ArtStatusDraft}, uint(c.UserID()))
+		[]int{dbmodels.ArtStatusPublish, dbmodels.ArtStatusDraft}, c.UserID())
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		return nil, err
@@ -296,7 +296,7 @@ func AdminGetArticle(c *CustomContext) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		if dbArt.AuthorID != uint(c.UserID()) {
+		if dbArt.AuthorID != c.UserID() {
 			return nil, fmt.Errorf("当前用户无权限获取该文章详情")
 		}
 		art = dbArt.ToArticleContent()
@@ -305,7 +305,7 @@ func AdminGetArticle(c *CustomContext) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		if dbArt.AuthorID != uint(c.UserID()) {
+		if dbArt.AuthorID != c.UserID() {
 			return nil, fmt.Errorf("当前用户无权限获取该文章详情")
 		}
 		art = dbArt.ToArticleContent()
@@ -532,13 +532,12 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 	}
 
 	tx := g.Db.WithContext(c)
-	userID := uint(c.UserID())
-	user, err := db.GetUserByID(tx, userID)
+	user, err := db.GetUserByID(tx, c.UserID())
 	if err != nil {
 		return nil, err
 	}
 
-	article, err := db.AddArticle(tx, aar, user.Username, userID)
+	article, err := db.AddArticle(tx, aar, user.Username, c.UserID())
 	if err != nil {
 		return nil, err
 	} else {
@@ -605,13 +604,12 @@ func PublishArticle(c *CustomContext) (interface{}, error) {
 	}
 
 	// check auth
-	userID := uint(c.UserID())
-	if userID != article.AuthorID {
+	if c.UserID() != article.AuthorID {
 		return nil, fmt.Errorf("auth failed, it's not you article, could not publish")
 	}
 
 	// publish
-	err = db.PublishArticle(tx, pub.Id, pub.Publish, userID)
+	err = db.PublishArticle(tx, pub.Id, pub.Publish, c.UserID())
 	if err != nil {
 		return nil, err
 	} else {
@@ -647,13 +645,12 @@ func DeleteArticle(c *CustomContext) (interface{}, error) {
 	}
 
 	// check auth
-	userID := uint(c.UserID())
-	if userID != article.AuthorID {
+	if c.UserID() != article.AuthorID {
 		return nil, fmt.Errorf("auth failed, it's not you article, could not delete")
 	}
 
 	// delete
-	err = db.DeleteArticle(tx, getter.Id, userID)
+	err = db.DeleteArticle(tx, getter.Id, c.UserID())
 	if err != nil {
 		return nil, err
 	} else {

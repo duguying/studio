@@ -130,6 +130,7 @@ type File struct {
 	FileType   FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
 	Md5        string          `json:"md5" sql:"comment:'MD5'"`
 	Recognized RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
+	UserID     uint            `json:"user_id" gorm:"comment:'文件所有者';index"`
 	CreatedAt  time.Time       `json:"created_at"`
 }
 
@@ -149,6 +150,7 @@ func (f *File) ToModel() *models.File {
 		FileType:   int64(f.FileType),
 		Md5:        f.Md5,
 		Recognized: int64(f.Recognized),
+		UserID:     f.UserID,
 		CreatedAt:  f.CreatedAt,
 	}
 }

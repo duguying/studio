@@ -25,8 +25,8 @@ type CustomContext struct {
 }
 
 // UserID 用户ID
-func (cc *CustomContext) UserID() int64 {
-	return cc.GetInt64("user_id")
+func (cc *CustomContext) UserID() uint {
+	return uint(cc.GetInt64("user_id"))
 }
 
 // HandlerResponseFunc 带响应信息的处理函数

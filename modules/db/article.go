@@ -20,8 +20,9 @@ import (
 	"gorm.io/gorm"
 )
 
+// PageArticle 文章分页查询
 func PageArticle(tx *gorm.DB, keyword string,
-	page uint, pageSize uint, statusList []int) (list []*dbmodels.Article, total int64, err error) {
+	page uint, pageSize uint, statusList []int, userID uint) (list []*dbmodels.Article, total int64, err error) {
 	total = 0
 	query := "status in (?)"
 	params := []interface{}{statusList}
@@ -34,6 +35,11 @@ func PageArticle(tx *gorm.DB, keyword string,
 	if keyword != "" {
 		query = query + " and keywords like ?"
 		params = append(params, fmt.Sprintf("%%%s%%", keyword))
+	}
+
+	if userID > 0 {
+		query = query + " and auth_id=?"
+		params = append(params, userID)
 	}
 
 	err = tx.Model(dbmodels.Article{}).Where(query, params...).Count(&total).Error

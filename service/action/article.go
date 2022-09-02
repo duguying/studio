@@ -40,7 +40,7 @@ func ListArticleWithContent(c *gin.Context) {
 		return
 	}
 
-	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish})
+	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish}, 0)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -165,7 +165,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 		return
 	}
 
-	list, total, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish})
+	list, total, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish}, 0)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -235,7 +235,7 @@ func ListArticleTitle(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish})
+	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish}, 0)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		return nil, err
@@ -263,7 +263,7 @@ func ListAdminArticleTitle(c *CustomContext) (interface{}, error) {
 	}
 
 	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size,
-		[]int{dbmodels.ArtStatusPublish, dbmodels.ArtStatusDraft})
+		[]int{dbmodels.ArtStatusPublish, dbmodels.ArtStatusDraft}, uint(c.UserID()))
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		return nil, err

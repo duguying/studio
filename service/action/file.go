@@ -64,58 +64,6 @@ func PutFile(c *CustomContext) (interface{}, error) {
 	}, nil
 }
 
-// PutImage 上传粘贴图片
-// Deprecated
-// @Router /put/image [post]
-// @Tags 上传
-// @Description 上传粘贴图片
-// @Param publish body []byte true "图片内容"
-// @Success 200 {object} models.CommonResponse
-func PutImage(c *CustomContext) (interface{}, error) {
-	store := g.Config.Get("upload", "store-path", "store")
-	name := c.GetHeader("name")
-	mimeType := c.GetHeader("mime")
-	ext := filepath.Ext(name)
-
-	randomName := utils.GenUID()
-	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s%s", randomName, ext))
-	fpath := filepath.Join(store, key)
-	dir := filepath.Dir(fpath)
-	err := com.MkdirWithCreatePath(dir)
-	if err != nil {
-		return nil, err
-	}
-
-	f, err := os.Create(fpath)
-	if err != nil {
-		return nil, fmt.Errorf("create file failed, " + err.Error())
-	}
-	defer f.Close()
-
-	written, err := io.Copy(f, c.Request.Body)
-	if err != nil {
-		return nil, fmt.Errorf("copy file failed, " + err.Error())
-	}
-
-	if mimeType != "" {
-		ext := path.Ext(key)
-		mimeType = mime.TypeByExtension(ext)
-	}
-	md5 := com.FileMD5(fpath)
-
-	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID())
-	if err != nil {
-		return nil, err
-	}
-
-	url := utils.GetFileURL(key)
-	return models.UploadResponse{
-		Ok:   true,
-		URL:  url,
-		Name: randomName,
-	}, nil
-}
-
 // UploadImage 表单上传图片
 // @Router /upload/image [post]
 // @Tags 上传
@@ -311,7 +259,7 @@ func PageFile(c *CustomContext) (interface{}, error) {
 		size = 20
 	}
 
-	list, total, err := db.PageFile(g.Db, page, size)
+	list, total, err := db.PageFile(g.Db, page, size, c.UserID())
 	if err != nil {
 		log.Println("page file failed, err:", err.Error())
 		c.JSON(http.StatusOK, gin.H{

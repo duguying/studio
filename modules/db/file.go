@@ -32,15 +32,15 @@ func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, u
 	}
 }
 
-func PageFile(tx *gorm.DB, page uint64, size uint64) (list []*dbmodels.File, total int64, err error) {
+func PageFile(tx *gorm.DB, page uint64, size uint64, userID uint) (list []*dbmodels.File, total int64, err error) {
 	list = []*dbmodels.File{}
 	total = 0
-	err = tx.Table("files").Count(&total).Error
+	err = tx.Model(dbmodels.File{}).Where("user_id=?", userID).Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	err = tx.Table("files").Order("created_at desc").Offset(int((page - 1) * size)).Limit(int(size)).Find(&list).Error
+	err = tx.Model(dbmodels.File{}).Where("user_id=?", userID).Order("created_at desc").Offset(int((page - 1) * size)).Limit(int(size)).Find(&list).Error
 	if err != nil {
 		return nil, 0, err
 	} else {

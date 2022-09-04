@@ -46,8 +46,7 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 
 	api.GET("/2faqr", QrGoogleAuth)                    // 获取2FA二维码
 	api.POST("/upload/image", APIWrapper(UploadImage)) // form 表单上传图片
-	// api.POST("/put/image", APIWrapper(PutImage))       // body 上传图片
-	api.GET("/file/list", APIWrapper(PageFile)) // 文件列表
+	api.GET("/file/list", APIWrapper(PageFile))        // 文件列表
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

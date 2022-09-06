@@ -8,6 +8,7 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/dns"
+	"duguying/studio/modules/ipip"
 	"duguying/studio/service/models"
 	"net/http"
 	"time"
@@ -91,9 +92,19 @@ func List(c *gin.Context) {
 		return
 	}
 
+	apiAgents := []*models.Agent{}
+	for _, agent := range agents {
+		apiAgent := agent.ToModel()
+		loc, err := ipip.GetLocation(apiAgent.Ip)
+		if err == nil {
+			apiAgent.Area = loc.CityName
+		}
+		apiAgents = append(apiAgents, apiAgent)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"ok":   true,
-		"list": agents,
+		"list": apiAgents,
 	})
 	return
 }

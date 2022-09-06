@@ -57,6 +57,6 @@ type UserIDGetter struct {
 }
 
 type FileSyncRequest struct {
-	FileID  string `json:"file_id"`
-	CosType string `json:"cos_type"`
+	FileID  string `json:"file_id" form:"file_id"`
+	CosType string `json:"cos_type" form:"cos_type"`
 }

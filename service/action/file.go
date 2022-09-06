@@ -359,7 +359,7 @@ func getLocalPath(path string) string {
 
 func DeleteFile(c *CustomContext) (interface{}, error) {
 	req := &models.FileSyncRequest{}
-	err := c.BindJSON(&req)
+	err := c.BindQuery(&req)
 	if err != nil {
 		return nil, err
 	}

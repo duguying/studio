@@ -46,6 +46,7 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 
 	api.GET("/2faqr", QrGoogleAuth)                      // 获取2FA二维码
 	api.POST("/upload/image", APIWrapper(UploadImage))   // form 表单上传图片
+	api.DELETE("/file", APIWrapper(DeleteFile))          // 删除文件
 	api.GET("/file/list", APIWrapper(PageFile))          // 文件列表
 	api.PUT("/file/sync_cos", APIWrapper(FileSyncToCos)) // 文件同步到 cos
 }

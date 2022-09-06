@@ -356,3 +356,26 @@ func getLocalPath(path string) string {
 	store := g.Config.Get("upload", "store-path", "store")
 	return filepath.Join(store, path)
 }
+
+func DeleteFile(c *CustomContext) (interface{}, error) {
+	req := &models.FileSyncRequest{}
+	err := c.BindJSON(&req)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := db.GetFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = os.Remove(getLocalPath(file.Path))
+	err = db.DeleteFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
+		Ok: true,
+	}, nil
+}

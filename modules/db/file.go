@@ -32,6 +32,11 @@ func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, u
 	}
 }
 
+// DeleteFile 删除文件
+func DeleteFile(tx *gorm.DB, id string) (err error) {
+	return tx.Model(dbmodels.File{}).Where("id=?", id).Delete(&dbmodels.File{}).Error
+}
+
 func PageFile(tx *gorm.DB, page uint64, size uint64, userID uint) (list []*dbmodels.File, total int64, err error) {
 	list = []*dbmodels.File{}
 	total = 0

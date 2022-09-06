@@ -273,6 +273,12 @@ func PageFile(c *CustomContext) (interface{}, error) {
 	apiList := []*models.File{}
 	for _, item := range list {
 		apiItem := item.ToModel()
+		url := utils.GetFileURL(apiItem.Path)
+		count, err := db.FileCountArticleRef(g.Db, url)
+		if err != nil {
+			continue
+		}
+		apiItem.ArticleRefCount = int(count)
 		apiItem.LocalExist = com.FileExist(getLocalPath(apiItem.Path))
 		apiList = append(apiList, apiItem)
 	}

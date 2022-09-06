@@ -424,3 +424,13 @@ func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
 	}
 	return nil
 }
+
+// FileCountArticleRef 统计文件的文章引用数
+func FileCountArticleRef(tx *gorm.DB, keywords string) (count int64, err error) {
+	count = 0
+	err = tx.Model(dbmodels.Article{}).Where("content like ?", fmt.Sprintf("%%%s%%", keywords)).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}

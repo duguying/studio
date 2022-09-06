@@ -48,7 +48,8 @@ func NewCos(l *logrus.Entry, cosType string) (Storage, error) {
 			skey := g.Config.Get("qcloud-cos", "skey", "")
 			bucket := g.Config.Get("qcloud-cos", "bucket", "")
 			region := g.Config.Get("qcloud-cos", "region", "")
-			return NewQcloudOss(l, sid, skey, bucket, region)
+			protocol := g.Config.Get("qcloud-cos", "protocol", "http")
+			return NewQcloudOss(l, sid, skey, bucket, region, protocol)
 		}
 	default:
 		{

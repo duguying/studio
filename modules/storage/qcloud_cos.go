@@ -25,7 +25,7 @@ type QcloudCos struct {
 	ctx    context.Context
 }
 
-func NewQcloudOss(l *logrus.Entry, sid string, skey string, bucket string, region string) (storage *QcloudCos, err error) {
+func NewQcloudOss(l *logrus.Entry, sid string, skey string, bucket, region, protocol string) (storage *QcloudCos, err error) {
 	storage = &QcloudCos{
 		sid:    sid,
 		skey:   skey,
@@ -34,7 +34,7 @@ func NewQcloudOss(l *logrus.Entry, sid string, skey string, bucket string, regio
 		ctx:    l.Context,
 	}
 
-	u, err := url.Parse(fmt.Sprintf("https://%s.cos.%s.myqcloud.com", bucket, region))
+	u, err := url.Parse(fmt.Sprintf("%s://%s.cos.%s.myqcloud.com", protocol, bucket, region))
 	if err != nil {
 		return nil, err
 	}

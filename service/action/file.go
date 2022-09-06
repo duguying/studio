@@ -272,7 +272,9 @@ func PageFile(c *CustomContext) (interface{}, error) {
 
 	apiList := []*models.File{}
 	for _, item := range list {
-		apiList = append(apiList, item.ToModel())
+		apiItem := item.ToModel()
+		apiItem.LocalExist = com.FileExist(getLocalPath(apiItem.Path))
+		apiList = append(apiList, apiItem)
 	}
 
 	return models.FileAdminListResponse{

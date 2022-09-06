@@ -47,3 +47,13 @@ func PageFile(tx *gorm.DB, page uint64, size uint64, userID uint) (list []*dbmod
 		return list, total, nil
 	}
 }
+
+// GetFile 获取文件信息
+func GetFile(tx *gorm.DB, id string) (file *dbmodels.File, err error) {
+	file = &dbmodels.File{}
+	err = tx.Model(dbmodels.File{}).Where("id=?", id).First(file).Error
+	if err != nil {
+		return nil, err
+	}
+	return file, nil
+}

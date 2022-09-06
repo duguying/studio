@@ -7,6 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/storage"
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
 	"fmt"
@@ -305,4 +306,38 @@ func imgNeedConvert(ext string) bool {
 	}
 	_, ok := notNeedConvertMap[ext]
 	return !ok
+}
+
+// FileSyncToCos 文件同步到COS
+// @Router /admin/file/sync_cos [get]
+// @Tags 上传
+// @Description 文件同步到COS
+// @Param page query string true "页码"
+// @Param size query int true "每页数"
+// @Success 200 {object} models.CommonResponse
+func FileSyncToCos(c *CustomContext) (interface{}, error) {
+	req := models.FileSyncRequest{}
+	err := c.BindJSON(&req)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := db.GetFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	store, err := storage.NewCos(req.CosType)
+	if err != nil {
+		return nil, err
+	}
+
+	err = store.PutFile(file.Path, file.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
+		Ok: true,
+	}, nil
 }

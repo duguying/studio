@@ -44,9 +44,10 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.GET("/article", APIWrapper(AdminGetArticle))                  // 获取文章
 	api.GET("/article/current_md5", APIWrapper(GetArticleCurrentMD5)) // 获取文章当前内容MD5
 
-	api.GET("/2faqr", QrGoogleAuth)                    // 获取2FA二维码
-	api.POST("/upload/image", APIWrapper(UploadImage)) // form 表单上传图片
-	api.GET("/file/list", APIWrapper(PageFile))        // 文件列表
+	api.GET("/2faqr", QrGoogleAuth)                      // 获取2FA二维码
+	api.POST("/upload/image", APIWrapper(UploadImage))   // form 表单上传图片
+	api.GET("/file/list", APIWrapper(PageFile))          // 文件列表
+	api.PUT("/file/sync_cos", APIWrapper(FileSyncToCos)) // 文件同步到 cos
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

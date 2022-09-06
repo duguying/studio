@@ -55,3 +55,8 @@ type IntGetter struct {
 type UserIDGetter struct {
 	UserID uint `json:"user_id" form:"user_id" binding:"required"`
 }
+
+type FileSyncRequest struct {
+	FileID  string `json:"file_id"`
+	CosType string `json:"cos_type"`
+}

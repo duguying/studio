@@ -25,6 +25,7 @@ require (
 	github.com/gogather/logger v0.0.0-20200203043640-cf0bf9aa076e
 	github.com/gogather/safemap v0.0.0-20170930074128-e4dc79c94fb6
 	github.com/golang/protobuf v1.5.2
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/ipipdotnet/ipdb-go v1.3.1
@@ -34,6 +35,8 @@ require (
 	github.com/libp2p/go-libp2p-net v0.1.0
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.15
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/mozillazg/go-httpheader v0.3.1 // indirect
 	github.com/multiformats/go-multiaddr v0.4.0
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/russross/blackfriday/v2 v2.1.0
@@ -42,6 +45,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/gin-swagger v1.3.1
 	github.com/swaggo/swag v1.7.0
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.38 // indirect
 	github.com/unknwon/com v1.0.1
 	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect

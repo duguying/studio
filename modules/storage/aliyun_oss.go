@@ -28,7 +28,7 @@ func (AliyunOss) GetFileInfo(remotePath string) (info *FileInfo, err error) {
 	panic("implement me")
 }
 
-func (AliyunOss) AddFile(localPath string, remotePath string) (err error) {
+func (AliyunOss) PutFile(localPath string, remotePath string) (err error) {
 	panic("implement me")
 }
 

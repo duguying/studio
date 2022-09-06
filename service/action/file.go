@@ -327,7 +327,7 @@ func FileSyncToCos(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	store, err := storage.NewCos(req.CosType)
+	store, err := storage.NewCos(g.LogEntry.WithContext(c), req.CosType)
 	if err != nil {
 		return nil, err
 	}

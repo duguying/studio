@@ -21,11 +21,11 @@ type QcloudCos struct {
 	skey   string
 	bucket string
 	client *cos.Client
-	l      logrus.Entry
+	l      *logrus.Entry
 	ctx    context.Context
 }
 
-func NewQcloudOss(l logrus.Entry, sid string, skey string, bucket string, region string) (storage *QcloudCos, err error) {
+func NewQcloudOss(l *logrus.Entry, sid string, skey string, bucket string, region string) (storage *QcloudCos, err error) {
 	storage = &QcloudCos{
 		sid:    sid,
 		skey:   skey,

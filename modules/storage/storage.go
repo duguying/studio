@@ -8,6 +8,8 @@ package storage
 import (
 	"duguying/studio/g"
 	"fmt"
+
+	"github.com/sirupsen/logrus"
 )
 
 type FileInfo struct {
@@ -31,7 +33,7 @@ var (
 )
 
 // NewCos 创建 cos 实例
-func NewCos(cosType string) (Storage, error) {
+func NewCos(l *logrus.Entry, cosType string) (Storage, error) {
 	switch cosType {
 	case AliyunCosType:
 		{
@@ -46,7 +48,7 @@ func NewCos(cosType string) (Storage, error) {
 			skey := g.Config.Get("qcloud-cos", "skey", "")
 			bucket := g.Config.Get("qcloud-cos", "bucket", "")
 			region := g.Config.Get("qcloud-cos", "region", "")
-			return NewQcloudOss(*g.LogEntry, sid, skey, bucket, region)
+			return NewQcloudOss(l, sid, skey, bucket, region)
 		}
 	default:
 		{

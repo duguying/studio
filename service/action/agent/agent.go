@@ -95,7 +95,7 @@ func List(c *gin.Context) {
 	apiAgents := []*models.Agent{}
 	for _, agent := range agents {
 		apiAgent := agent.ToModel()
-		loc, err := ipip.GetLocation(apiAgent.Ip)
+		loc, err := ipip.GetLocation(apiAgent.IP)
 		if err == nil {
 			apiAgent.Area = loc.CityName
 		}

@@ -3,16 +3,16 @@ package models
 import "time"
 
 type Agent struct {
-	Id          uint
-	Online      uint
-	ClientId    string
-	Os          string
-	Arch        string
-	Hostname    string
-	Ip          string
-	Area        string
-	IpIns       string
-	Status      uint
-	OnlineTime  time.Time
-	OfflineTime time.Time
+	ID          uint      `json:"id"`
+	Online      uint      `json:"online"`
+	ClientID    string    `json:"client_id"`
+	OS          string    `json:"os"`
+	Arch        string    `json:"arch"`
+	Hostname    string    `json:"hostname"`
+	IP          string    `json:"ip"`
+	Area        string    `json:"area"`
+	IPIns       string    `json:"ip_ins"`
+	Status      uint      `json:"status"`
+	OnlineTime  time.Time `json:"online_time"`
+	OfflineTime time.Time `json:"offline_time"`
 }

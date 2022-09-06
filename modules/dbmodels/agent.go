@@ -28,14 +28,14 @@ func (a *Agent) String() string {
 
 func (a *Agent) ToModel() *models.Agent {
 	return &models.Agent{
-		Id:          a.ID,
+		ID:          a.ID,
 		Online:      a.Online,
-		ClientId:    a.ClientId,
-		Os:          a.Os,
+		ClientID:    a.ClientId,
+		OS:          a.Os,
 		Arch:        a.Arch,
 		Hostname:    a.Hostname,
-		Ip:          a.Ip,
-		IpIns:       a.IpIns,
+		IP:          a.Ip,
+		IPIns:       a.IpIns,
 		Status:      a.Status,
 		OnlineTime:  a.OnlineTime,
 		OfflineTime: a.OfflineTime,

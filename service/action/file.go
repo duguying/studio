@@ -332,7 +332,9 @@ func FileSyncToCos(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
-	err = store.PutFile(file.Path, file.Path)
+	localPath := getLocalPath(file.Path)
+	remotePath := file.Path
+	err = store.PutFile(localPath, remotePath)
 	if err != nil {
 		return nil, err
 	}
@@ -340,4 +342,9 @@ func FileSyncToCos(c *CustomContext) (interface{}, error) {
 	return models.CommonResponse{
 		Ok: true,
 	}, nil
+}
+
+func getLocalPath(path string) string {
+	store := g.Config.Get("upload", "store-path", "store")
+	return filepath.Join(store, path)
 }

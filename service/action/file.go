@@ -10,6 +10,7 @@ import (
 	"duguying/studio/modules/storage"
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -79,6 +80,11 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 
 	// 图像是否优化，开启则调用 imagemagick 转码
 	_, optimize := c.GetPostForm("optimize")
+	maxWidth := int64(0)
+	scaleWidth, exist := c.GetPostForm("scale_width")
+	if exist {
+		maxWidth, _ = strconv.ParseInt(scaleWidth, 10, 32)
+	}
 
 	// 图片存储子目录
 	storeDir := time.Now().Format("2006/01")
@@ -109,56 +115,51 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	key := filepath.Join(root, storeDir, fmt.Sprintf("%s%s", randomName, ext))
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
-	_ = os.MkdirAll(dir, 0644)
+	if !com.PathExist(dir) {
+		_ = os.MkdirAll(dir, 0644)
+	}
 
-	// 转码与转储
+	// 创建临时文件
+	tdir := filepath.Join(filepath.Join(os.TempDir(), utils.GenUUID()), utils.GenUID())
+	_ = os.MkdirAll(tdir, 0644)
+	tpath := filepath.Join(tdir, filename)
+	tf, err := os.Create(tpath)
+	if err != nil {
+		return nil, err
+	}
+
+	// 存储到临时文件
+	hf, err := fh.Open()
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(tf, hf)
+	if err != nil {
+		return nil, err
+	}
+	hf.Close()
+	tf.Close()
+
+	// 获取宽度
+	width, _, _ := GetImgSize(tpath)
+
+	// 转码
 	log.Println("ext:", ext, "optimize:", optimize)
 	optimizeSize := g.Config.GetInt64("image-optimize", "size", 512)
-	if (imgNeedConvert(ext) || size >= 1024*optimizeSize) && optimize {
+	if (imgNeedConvert(ext) || size >= 1024*optimizeSize || (width > maxWidth && maxWidth > 0)) && optimize {
 		log.Println("ext optimize:", ext, "--> .webp")
-		hf, err := fh.Open()
-		if err != nil {
-			return nil, err
-		}
-		defer hf.Close()
-
-		tdir := filepath.Join(os.TempDir(), utils.GenUID())
-		_ = os.MkdirAll(tdir, 0644)
-
-		tpath := filepath.Join(tdir, filename)
-		f, err := os.Create(tpath)
-		if err != nil {
-			return nil, err
-		}
-		defer f.Close()
-
-		_, err = io.Copy(f, hf)
-		if err != nil {
-			return nil, err
-		}
 
 		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
 		key = strings.TrimSuffix(key, ext) + ".webp"
 		ext = ".webp"
-		size, err = ConvertImgToWebp(tpath, fpath)
+		size, err = ConvertImgToWebp(tpath, fpath, maxWidth)
 		if err != nil {
 			return nil, fmt.Errorf("转码失败, err:" + err.Error())
 		}
+
 		_ = os.RemoveAll(tdir)
 	} else {
-		f, err := os.Create(fpath)
-		if err != nil {
-			return nil, err
-		}
-		defer f.Close()
-
-		hf, err := fh.Open()
-		if err != nil {
-			return nil, err
-		}
-		defer hf.Close()
-
-		_, err = io.Copy(f, hf)
+		err = os.Rename(tpath, fpath)
 		if err != nil {
 			return nil, err
 		}
@@ -292,13 +293,55 @@ func PageFile(c *CustomContext) (interface{}, error) {
 }
 
 // ConvertImgToWebp 图片转码到webp
-func ConvertImgToWebp(inpath string, outpath string) (size int64, err error) {
-	cmd := exec.Command("convert", inpath, outpath)
+func ConvertImgToWebp(inpath string, outpath string, scaleWidth int64) (size int64, err error) {
+	args := []string{}
+	if scaleWidth > 0 {
+		args = append(args, "-resize", fmt.Sprintf("%dx", scaleWidth))
+	}
+	args = append(args, inpath, outpath)
+	cmd := exec.Command("convert", args...)
 	err = cmd.Run()
 	if err != nil {
 		return 0, err
 	}
 	return getFileSize(outpath)
+}
+
+func GetImgInfo(path string) (info []interface{}, err error) {
+	cmd := exec.Command("convert", path, "json:")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, err
+	}
+	info = []interface{}{}
+	err = json.Unmarshal(output, &info)
+	if err != nil {
+		return nil, err
+	}
+	return info, nil
+}
+
+func GetImgSize(path string) (width, height int64, err error) {
+	// identify -ping -format '%w %h' /Users/rainesli/Desktop/F335F72D-3E57-4DE2-AE4F-947103583079.heic
+	cmd := exec.Command("identify", "-ping", "-format", "%w %h", path)
+	output, err := cmd.Output()
+	if err != nil {
+		return 0, 0, err
+	}
+	segs := strings.Split(string(output), " ")
+	if len(segs) < 2 {
+		return 0, 0, fmt.Errorf("invalid output")
+	}
+	width, err = strconv.ParseInt(segs[0], 10, 32)
+	if err != nil {
+		return 0, 0, err
+	}
+	height, err = strconv.ParseInt(segs[1], 10, 32)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return width, height, nil
 }
 
 func getFileSize(path string) (size int64, err error) {

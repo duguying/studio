@@ -42,15 +42,7 @@ func ConnectXTerm(c *gin.Context) {
 	}
 
 	// create cli
-	reqID, err := utils.GenUUID()
-	if err != nil {
-		log.Println("generate uuid failed:", err)
-		c.JSON(http.StatusForbidden, map[string]interface{}{
-			"ok":    false,
-			"error": err.Error(),
-		})
-		return
-	}
+	reqID := utils.GenUUID()
 	openCliCmd := model.CliCmd{
 		Cmd:       model.CliCmd_OPEN,
 		Session:   clientID,

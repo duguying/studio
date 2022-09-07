@@ -27,7 +27,7 @@ func (se *Entity) String() string {
 }
 
 func SessionID() string {
-	guid, _ := utils.GenUUID()
+	guid := utils.GenUUID()
 	return guid
 }
 

@@ -40,7 +40,6 @@ require (
 	github.com/multiformats/go-multiaddr v0.4.0
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/russross/blackfriday/v2 v2.1.0
-	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/gin-swagger v1.3.1

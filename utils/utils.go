@@ -17,18 +17,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/martinlindhe/base36"
 	"github.com/microcosm-cc/bluemonday"
-	uuid "github.com/satori/go.uuid"
 )
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func GenUUID() (string, error) {
-	guuid := uuid.NewV4()
-	return strings.Replace(guuid.String(), "-", "", -1), nil
+func GenUUID() string {
+	guuid := uuid.New()
+	return strings.Replace(guuid.String(), "-", "", -1)
 }
 
 func HmacSha1(content string, key string) string {

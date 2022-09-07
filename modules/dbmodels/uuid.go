@@ -1,7 +1,7 @@
 package dbmodels
 
 import (
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -10,6 +10,6 @@ type UUID struct {
 }
 
 func (b *UUID) BeforeCreate(tx *gorm.DB) error {
-	b.ID = uuid.NewV4().String()
+	b.ID = uuid.New().String()
 	return nil
 }

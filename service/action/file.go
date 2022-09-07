@@ -113,7 +113,8 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 
 	// 转码与转储
 	log.Println("ext:", ext, "optimize:", optimize)
-	if (imgNeedConvert(ext) || size >= 1024*1024) && optimize {
+	optimizeSize := g.Config.GetInt64("image-optimize", "size", 512)
+	if (imgNeedConvert(ext) || size >= 1024*optimizeSize) && optimize {
 		log.Println("ext optimize:", ext, "--> .webp")
 		hf, err := fh.Open()
 		if err != nil {

@@ -32,7 +32,7 @@ func (cc *CustomContext) UserID() uint {
 
 // Logger 获取 logger
 func (cc *CustomContext) Logger() *logrus.Entry {
-	return g.LogEntry.WithField("request_id", cc.RequestID())
+	return g.LogEntry.WithContext(cc).WithField("request_id", cc.RequestID())
 }
 
 // RequestID 获取 request_id

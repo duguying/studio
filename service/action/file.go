@@ -422,6 +422,7 @@ func getLocalPath(path string) string {
 }
 
 func DeleteFile(c *CustomContext) (interface{}, error) {
+	l := c.Logger()
 	req := &models.FileSyncRequest{}
 	err := c.BindQuery(&req)
 	if err != nil {
@@ -429,6 +430,15 @@ func DeleteFile(c *CustomContext) (interface{}, error) {
 	}
 
 	file, err := db.GetFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	cos, err := storage.NewCos(l, storage.QcloudCosType)
+	if err != nil {
+		return nil, err
+	}
+	err = cos.RemoveFile(file.Path)
 	if err != nil {
 		return nil, err
 	}

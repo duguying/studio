@@ -17,6 +17,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-errors/errors"
 	"github.com/gogather/json"
+	"github.com/sirupsen/logrus"
 )
 
 // CustomContext 自定义web上下文(Context)
@@ -24,9 +25,19 @@ type CustomContext struct {
 	*gin.Context
 }
 
-// UserID 用户ID
+// UserID 用户 ID
 func (cc *CustomContext) UserID() uint {
 	return uint(cc.GetInt64("user_id"))
+}
+
+// Logger 获取 logger
+func (cc *CustomContext) Logger() *logrus.Entry {
+	return g.LogEntry.WithField("request_id", cc.RequestID())
+}
+
+// RequestID 获取 request_id
+func (cc *CustomContext) RequestID() string {
+	return cc.GetString("X-RequestId")
 }
 
 // HandlerResponseFunc 带响应信息的处理函数

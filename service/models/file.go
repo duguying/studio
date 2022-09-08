@@ -14,6 +14,7 @@ type File struct {
 	Recognized      int64     `json:"recognized"`
 	LocalExist      bool      `json:"local_exist"`
 	ArticleRefCount int       `json:"article_ref_count"`
+	COS             bool      `json:"cos"`
 	UserID          uint      `json:"user_id"`
 	CreatedAt       time.Time `json:"created_at"`
 }

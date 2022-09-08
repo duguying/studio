@@ -21,6 +21,7 @@ type FileInfo struct {
 type Storage interface {
 	List(remotePrefix string) (list []*FileInfo, err error)
 	GetFileInfo(remotePath string) (info *FileInfo, err error)
+	IsExist(remotePath string) (exist bool, err error)
 	PutFile(localPath string, remotePath string) (err error)
 	RenameFile(remotePath string, newRemotePath string) (err error)
 	RemoveFile(remotePath string) (err error)

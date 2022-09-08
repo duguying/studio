@@ -60,6 +60,10 @@ func (q QcloudCos) GetFileInfo(remotePath string) (info *FileInfo, err error) {
 	panic("implement me")
 }
 
+func (q QcloudCos) IsExist(remotePath string) (exist bool, err error) {
+	return q.client.Object.IsExist(q.ctx, remotePath)
+}
+
 func (q QcloudCos) PutFile(localPath string, remotePath string) (err error) {
 	_, err = q.client.Object.PutFromFile(q.ctx, remotePath, localPath, nil)
 	if err != nil {

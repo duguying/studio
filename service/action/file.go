@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -243,6 +244,7 @@ func UploadFile(c *CustomContext) (interface{}, error) {
 // @Param size query int true "每页数"
 // @Success 200 {object} models.CommonResponse
 func PageFile(c *CustomContext) (interface{}, error) {
+	l := c.Logger()
 	pageStr := c.Query("page")
 	page, err := strconv.ParseUint(pageStr, 10, 32)
 	if err != nil {
@@ -272,6 +274,12 @@ func PageFile(c *CustomContext) (interface{}, error) {
 		return nil, err
 	}
 
+	cos, err := storage.NewCos(l, storage.QcloudCosType)
+	if err != nil {
+		return nil, err
+	}
+
+	wg := sync.WaitGroup{}
 	apiList := []*models.File{}
 	for _, item := range list {
 		apiItem := item.ToModel()
@@ -282,8 +290,20 @@ func PageFile(c *CustomContext) (interface{}, error) {
 		}
 		apiItem.ArticleRefCount = int(count)
 		apiItem.LocalExist = com.FileExist(getLocalPath(apiItem.Path))
+
+		wg.Add(1)
+		go func(fileItem *models.File) {
+			defer wg.Add(-1)
+			exist, err := cos.IsExist(fileItem.Path)
+			if err != nil {
+				return
+			}
+			fileItem.COS = exist
+		}(apiItem)
+
 		apiList = append(apiList, apiItem)
 	}
+	wg.Wait()
 
 	return models.FileAdminListResponse{
 		Ok:    true,

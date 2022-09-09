@@ -7,6 +7,7 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dbmodels"
 	"duguying/studio/modules/imgtools"
 	"duguying/studio/modules/storage"
 	"duguying/studio/service/models"
@@ -57,7 +58,7 @@ func PutFile(c *CustomContext) (interface{}, error) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	_, err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID())
+	_, err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID(), dbmodels.FileTypeArchive)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +172,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	md5 := com.FileMD5(fpath)
 
 	// 存储文件信息到数据库
-	fileInfo, err := db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
+	fileInfo, err := db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID(), dbmodels.FileTypeImage)
 	if err != nil {
 		return nil, err
 	}
@@ -241,7 +242,7 @@ func UploadFile(c *CustomContext) (interface{}, error) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	_, err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
+	_, err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID(), dbmodels.FileTypeArchive)
 	if err != nil {
 		return nil, err
 	}

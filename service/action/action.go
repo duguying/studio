@@ -49,6 +49,8 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.DELETE("/file/delete", APIWrapper(DeleteFile))   // 删除文件
 	api.GET("/file/list", APIWrapper(PageFile))          // 文件列表
 	api.PUT("/file/sync_cos", APIWrapper(FileSyncToCos)) // 文件同步到 cos
+
+	api.GET("/album/list", APIWrapper(ListAlbumFiles))
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

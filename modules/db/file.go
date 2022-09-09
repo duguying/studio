@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, userID uint) (f *dbmodels.File, err error) {
+func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, userID uint, fileType dbmodels.FileType) (f *dbmodels.File, err error) {
 	filename := path.Base(fpath)
 	f = &dbmodels.File{
 		Filename:  filename,
@@ -20,6 +20,7 @@ func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, u
 		Store:     dbmodels.LOCAL,
 		Mime:      mime,
 		Size:      size,
+		FileType:  fileType,
 		Md5:       md5,
 		UserID:    userID,
 		CreatedAt: time.Now(),
@@ -61,4 +62,16 @@ func GetFile(tx *gorm.DB, id string) (file *dbmodels.File, err error) {
 		return nil, err
 	}
 	return file, nil
+}
+
+// ListAllMediaFile 列举媒体文件
+func ListAllMediaFile(tx *gorm.DB, userID uint) (list []*dbmodels.File, err error) {
+	list = []*dbmodels.File{}
+	err = tx.Model(dbmodels.File{}).Where("file_type in (?) and user_id=?",
+		[]int{int(dbmodels.FileTypeImage), int(dbmodels.FileTypeVideo)}, userID).Order("created_at desc").Find(&list).Error
+	if err != nil {
+		return nil, err
+	} else {
+		return list, nil
+	}
 }

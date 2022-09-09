@@ -13,7 +13,7 @@ type CommonResponse struct {
 type CommonCreateResponse struct {
 	Ok  bool   `json:"ok"`
 	Msg string `json:"msg"`
-	Id  uint   `json:"id"`
+	ID  uint   `json:"id"`
 }
 
 type CommonListResponse struct {
@@ -111,4 +111,10 @@ type ListUserLoginHistoryResponse struct {
 	Msg   string          `json:"msg"`
 	Total int             `json:"total"`
 	List  []*LoginHistory `json:"list"`
+}
+
+type ListMediaFileResponse struct {
+	Ok   bool         `json:"ok"`
+	Msg  string       `json:"msg"`
+	List []*MediaFile `json:"list"`
 }

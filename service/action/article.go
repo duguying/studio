@@ -549,7 +549,7 @@ func AddArticle(c *CustomContext) (interface{}, error) {
 		}
 		return models.CommonCreateResponse{
 			Ok: true,
-			Id: article.ID,
+			ID: article.ID,
 		}, nil
 	}
 }

@@ -7,6 +7,7 @@ package dbmodels
 import (
 	"database/sql/driver"
 	"duguying/studio/service/models"
+	"duguying/studio/utils"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -19,11 +20,22 @@ const (
 	LOCAL StorageType = 0
 	OSS   StorageType = 1
 
-	FileTypeArchive FileType = 0
+	FileTypeUnknown FileType = 0
 	FileTypeImage   FileType = 1
+	FileTypeVideo   FileType = 2
+	FileTypeArchive FileType = 3
 
 	RecognizeNotNeed RecognizeStatus = 0
 	RecognizeDone    RecognizeStatus = 1
+)
+
+var (
+	FileTypeMap = map[FileType]string{
+		FileTypeUnknown: "unknown",
+		FileTypeImage:   "image",
+		FileTypeVideo:   "video",
+		FileTypeArchive: "archive",
+	}
 )
 
 type StorageType int64
@@ -152,5 +164,19 @@ func (f *File) ToModel() *models.File {
 		Recognized: int64(f.Recognized),
 		UserID:     f.UserID,
 		CreatedAt:  f.CreatedAt,
+	}
+}
+
+func (f *File) ToMediaFile() *models.MediaFile {
+	return &models.MediaFile{
+		ID:        f.ID,
+		Filename:  f.Filename,
+		URL:       utils.GetFileURL(f.Path),
+		Mime:      f.Mime,
+		Size:      f.Size,
+		FileType:  FileTypeMap[f.FileType],
+		Md5:       f.Md5,
+		UserID:    f.UserID,
+		CreatedAt: f.CreatedAt,
 	}
 }

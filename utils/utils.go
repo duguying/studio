@@ -13,6 +13,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -154,4 +155,10 @@ func GetFileURL(key string) string {
 	imgHost := g.Config.Get("store", "img-host-url", "https://image.duguying.net")
 	key = strings.TrimPrefix(key, "img")
 	return imgHost + key
+}
+
+// GetFileLocalPath 获取文件本地路径
+func GetFileLocalPath(key string) string {
+	store := g.Config.Get("upload", "store-path", "store")
+	return filepath.Join(store, key)
 }

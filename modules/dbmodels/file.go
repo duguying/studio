@@ -134,16 +134,18 @@ func (rs *RecognizeStatus) Scan(value interface{}) error {
 type File struct {
 	UUID
 
-	Filename   string          `json:"filename"`
-	Path       string          `json:"path"`
-	Store      StorageType     `json:"store"`
-	Mime       string          `json:"mime"`
-	Size       uint64          `json:"size"`
-	FileType   FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
-	Md5        string          `json:"md5" sql:"comment:'MD5'"`
-	Recognized RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
-	UserID     uint            `json:"user_id" gorm:"comment:'文件所有者';index"`
-	CreatedAt  time.Time       `json:"created_at"`
+	Filename    string          `json:"filename"`
+	Path        string          `json:"path"`
+	Store       StorageType     `json:"store"`
+	Mime        string          `json:"mime"`
+	Size        uint64          `json:"size"`
+	FileType    FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
+	Md5         string          `json:"md5" sql:"comment:'MD5'"`
+	Recognized  RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
+	UserID      uint            `json:"user_id" gorm:"comment:'文件所有者';index"`
+	MediaWidth  int             `json:"media_width"`
+	MediaHeight int             `json:"media_height"`
+	CreatedAt   time.Time       `json:"created_at"`
 }
 
 func (f *File) String() string {
@@ -153,17 +155,19 @@ func (f *File) String() string {
 
 func (f *File) ToModel() *models.File {
 	return &models.File{
-		ID:         f.ID,
-		Filename:   f.Filename,
-		Path:       f.Path,
-		Store:      int64(f.Store),
-		Mime:       f.Mime,
-		Size:       f.Size,
-		FileType:   int64(f.FileType),
-		Md5:        f.Md5,
-		Recognized: int64(f.Recognized),
-		UserID:     f.UserID,
-		CreatedAt:  f.CreatedAt,
+		ID:          f.ID,
+		Filename:    f.Filename,
+		Path:        f.Path,
+		Store:       int64(f.Store),
+		Mime:        f.Mime,
+		Size:        f.Size,
+		FileType:    int64(f.FileType),
+		Md5:         f.Md5,
+		Recognized:  int64(f.Recognized),
+		UserID:      f.UserID,
+		MediaWidth:  f.MediaWidth,
+		MediaHeight: f.MediaHeight,
+		CreatedAt:   f.CreatedAt,
 	}
 }
 
@@ -177,6 +181,8 @@ func (f *File) ToMediaFile() *models.MediaFile {
 		FileType:  FileTypeMap[f.FileType],
 		Md5:       f.Md5,
 		UserID:    f.UserID,
+		Width:     f.MediaWidth,
+		Height:    f.MediaHeight,
 		CreatedAt: f.CreatedAt,
 	}
 }

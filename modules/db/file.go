@@ -67,11 +67,24 @@ func GetFile(tx *gorm.DB, id string) (file *dbmodels.File, err error) {
 // ListAllMediaFile 列举媒体文件
 func ListAllMediaFile(tx *gorm.DB, userID uint) (list []*dbmodels.File, err error) {
 	list = []*dbmodels.File{}
-	err = tx.Model(dbmodels.File{}).Where("file_type in (?) and user_id=?",
-		[]int{int(dbmodels.FileTypeImage), int(dbmodels.FileTypeVideo)}, userID).Order("created_at desc").Find(&list).Error
+	where := "file_type in (?)"
+	params := []interface{}{[]int{int(dbmodels.FileTypeImage), int(dbmodels.FileTypeVideo)}}
+	if userID > 0 {
+		where = where + " and user_id=?"
+		params = append(params, userID)
+	}
+	err = tx.Model(dbmodels.File{}).Where(where, params...).Order("created_at desc").Find(&list).Error
 	if err != nil {
 		return nil, err
 	} else {
 		return list, nil
 	}
+}
+
+// UpdateFileMediaSize 更新媒体文件尺寸
+func UpdateFileMediaSize(tx *gorm.DB, fileID string, width, height int) (err error) {
+	return tx.Model(dbmodels.File{}).Where("id=?", fileID).Updates(map[string]interface{}{
+		"media_width":  width,
+		"media_height": height,
+	}).Error
 }

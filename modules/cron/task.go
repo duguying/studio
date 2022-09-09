@@ -45,6 +45,13 @@ func Init() {
 	}
 
 	task.Start()
+
+	go func() {
+		for {
+			scanFile()
+			time.Sleep(time.Minute)
+		}
+	}()
 }
 
 func flushViewCnt() {

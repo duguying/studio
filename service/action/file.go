@@ -7,17 +7,16 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/imgtools"
 	"duguying/studio/modules/storage"
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"mime"
 	"net/http"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"strconv"
@@ -27,6 +26,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
+	"github.com/sirupsen/logrus"
 )
 
 func PutFile(c *CustomContext) (interface{}, error) {
@@ -57,7 +57,7 @@ func PutFile(c *CustomContext) (interface{}, error) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID())
+	_, err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID())
 	if err != nil {
 		return nil, err
 	}
@@ -74,6 +74,7 @@ func PutFile(c *CustomContext) (interface{}, error) {
 // @Param publish body []byte true "图片内容"
 // @Success 200 {object} models.UploadResponse
 func UploadImage(c *CustomContext) (interface{}, error) {
+	l := c.Logger()
 	fh, err := c.FormFile("file")
 	if err != nil {
 		return nil, err
@@ -142,7 +143,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	tf.Close()
 
 	// 获取宽度
-	width, _, _ := GetImgSize(tpath)
+	width, _, _ := imgtools.GetImgSize(tpath)
 
 	// 转码
 	log.Println("ext:", ext, "optimize:", optimize)
@@ -153,7 +154,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
 		key = strings.TrimSuffix(key, ext) + ".webp"
 		ext = ".webp"
-		size, err = ConvertImgToWebp(tpath, fpath, maxWidth)
+		size, err = imgtools.ConvertImgToWebp(tpath, fpath, maxWidth)
 		if err != nil {
 			return nil, fmt.Errorf("转码失败, err:" + err.Error())
 		}
@@ -170,10 +171,12 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	md5 := com.FileMD5(fpath)
 
 	// 存储文件信息到数据库
-	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
+	fileInfo, err := db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
 	if err != nil {
 		return nil, err
 	}
+
+	go extractImgMetaAndSave(l, fileInfo.ID, fpath)
 
 	// 返回文件路径
 	url := utils.GetFileURL(key)
@@ -182,6 +185,19 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 		URL:  url,
 		Name: randomName,
 	}, nil
+}
+
+func extractImgMetaAndSave(l *logrus.Entry, fileID, path string) {
+	meta, metas, err := imgtools.ExtractImgMeta(path)
+	if err != nil {
+		l.Printf("extract image meta data failed, err: %s, path: %s\n", err.Error(), path)
+		return
+	}
+	_, err = db.AddImageMeta(g.Db, fileID, meta, metas)
+	if err != nil {
+		l.Printf("add image meta data into db failed, err: %s\n", err.Error())
+		return
+	}
 }
 
 func UploadFile(c *CustomContext) (interface{}, error) {
@@ -225,7 +241,7 @@ func UploadFile(c *CustomContext) (interface{}, error) {
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
+	_, err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID())
 	if err != nil {
 		return nil, err
 	}
@@ -310,66 +326,6 @@ func PageFile(c *CustomContext) (interface{}, error) {
 		List:  apiList,
 		Total: int(total),
 	}, nil
-}
-
-// ConvertImgToWebp 图片转码到webp
-func ConvertImgToWebp(inpath string, outpath string, scaleWidth int64) (size int64, err error) {
-	args := []string{}
-	if scaleWidth > 0 {
-		args = append(args, "-resize", fmt.Sprintf("%dx", scaleWidth))
-	}
-	args = append(args, inpath, outpath)
-	cmd := exec.Command("convert", args...)
-	err = cmd.Run()
-	if err != nil {
-		return 0, err
-	}
-	return getFileSize(outpath)
-}
-
-func GetImgInfo(path string) (info []interface{}, err error) {
-	cmd := exec.Command("convert", path, "json:")
-	output, err := cmd.Output()
-	if err != nil {
-		return nil, err
-	}
-	info = []interface{}{}
-	err = json.Unmarshal(output, &info)
-	if err != nil {
-		return nil, err
-	}
-	return info, nil
-}
-
-func GetImgSize(path string) (width, height int64, err error) {
-	// identify -ping -format '%w %h' /Users/rainesli/Desktop/F335F72D-3E57-4DE2-AE4F-947103583079.heic
-	cmd := exec.Command("identify", "-ping", "-format", "%w %h", path)
-	output, err := cmd.Output()
-	if err != nil {
-		return 0, 0, err
-	}
-	segs := strings.Split(string(output), " ")
-	if len(segs) < 2 {
-		return 0, 0, fmt.Errorf("invalid output")
-	}
-	width, err = strconv.ParseInt(segs[0], 10, 32)
-	if err != nil {
-		return 0, 0, err
-	}
-	height, err = strconv.ParseInt(segs[1], 10, 32)
-	if err != nil {
-		return 0, 0, err
-	}
-
-	return width, height, nil
-}
-
-func getFileSize(path string) (size int64, err error) {
-	info, err := os.Stat(path)
-	if err != nil {
-		return 0, err
-	}
-	return info.Size(), nil
 }
 
 func imgNeedConvert(ext string) bool {

@@ -12,9 +12,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, userID uint) (err error) {
+func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, userID uint) (f *dbmodels.File, err error) {
 	filename := path.Base(fpath)
-	f := &dbmodels.File{
+	f = &dbmodels.File{
 		Filename:  filename,
 		Path:      fpath,
 		Store:     dbmodels.LOCAL,
@@ -24,11 +24,11 @@ func SaveFile(tx *gorm.DB, fpath string, mime string, size uint64, md5 string, u
 		UserID:    userID,
 		CreatedAt: time.Now(),
 	}
-	err = tx.Table("files").Create(f).Error
+	err = tx.Model(dbmodels.File{}).Create(f).Error
 	if err != nil {
-		return err
+		return nil, err
 	} else {
-		return nil
+		return f, nil
 	}
 }
 

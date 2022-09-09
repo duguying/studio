@@ -143,8 +143,8 @@ type File struct {
 	Md5         string          `json:"md5" sql:"comment:'MD5'"`
 	Recognized  RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
 	UserID      uint            `json:"user_id" gorm:"comment:'文件所有者';index"`
-	MediaWidth  int             `json:"media_width"`
-	MediaHeight int             `json:"media_height"`
+	MediaWidth  uint64          `json:"media_width"`
+	MediaHeight uint64          `json:"media_height"`
 	CreatedAt   time.Time       `json:"created_at"`
 }
 

@@ -16,8 +16,8 @@ type File struct {
 	ArticleRefCount int       `json:"article_ref_count"`
 	COS             bool      `json:"cos"`
 	UserID          uint      `json:"user_id"`
-	MediaWidth      int       `json:"media_width"`
-	MediaHeight     int       `json:"media_height"`
+	MediaWidth      uint64    `json:"media_width"`
+	MediaHeight     uint64    `json:"media_height"`
 	CreatedAt       time.Time `json:"created_at"`
 }
 
@@ -30,7 +30,7 @@ type MediaFile struct {
 	FileType  string    `json:"file_type" `
 	Md5       string    `json:"md5"`
 	UserID    uint      `json:"user_id"`
-	Width     int       `json:"width"`
-	Height    int       `json:"height"`
+	Width     uint64    `json:"width"`
+	Height    uint64    `json:"height"`
 	CreatedAt time.Time `json:"created_at"`
 }

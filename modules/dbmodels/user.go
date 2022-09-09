@@ -22,7 +22,7 @@ var role = []string{"user", "admin"}
 
 type User struct {
 	ID            uint      `json:"id"`
-	Username      string    `json:"username"`
+	Username      string    `json:"username" gorm:"index"`
 	Password      string    `json:"password"`
 	Salt          string    `json:"salt"`
 	Email         string    `json:"email"`

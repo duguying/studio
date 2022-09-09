@@ -9,14 +9,14 @@ import (
 
 type Agent struct {
 	ID          uint      `json:"id"`
-	Online      uint      `json:"online"` // 1 online, 0 offline
+	Online      uint      `json:"online" gorm:"index"` // 1 online, 0 offline
 	ClientId    string    `json:"client_id" gorm:"unique;not null"`
-	Os          string    `json:"os"`
-	Arch        string    `json:"arch"`
-	Hostname    string    `json:"hostname"`
-	Ip          string    `json:"ip"`
-	IpIns       string    `json:"ip_ins"` // json
-	Status      uint      `json:"status"`
+	Os          string    `json:"os" gorm:"index"`
+	Arch        string    `json:"arch" gorm:"index"`
+	Hostname    string    `json:"hostname" gorm:"index"`
+	Ip          string    `json:"ip" gorm:"index"`
+	IpIns       string    `json:"ip_ins" gorm:"index:,class:FULLTEXT"` // json
+	Status      uint      `json:"status" gorm:"index"`
 	OnlineTime  time.Time `json:"online_time"`
 	OfflineTime time.Time `json:"offline_time"`
 }

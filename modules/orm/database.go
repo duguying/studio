@@ -62,8 +62,11 @@ func initMysql() {
 	password := g.Config.Get("database", "password", "password")
 	dbname := g.Config.Get("database", "name", "blog")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname)
-	dbInstance := mysql.Open(dsn)
-	g.Db, err = gorm.Open(dbInstance, &gorm.Config{Logger: newLogger})
+
+	g.Db, err = gorm.Open(mysql.New(mysql.Config{
+		DSN:               dsn,
+		DefaultStringSize: 256, // default size for string fields
+	}), &gorm.Config{Logger: newLogger})
 	if err != nil {
 		log.Fatalf("数据库连接失败 err:%v\n", err)
 	}

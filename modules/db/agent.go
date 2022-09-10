@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	AGENT_STATUS_ALLOW  = 0
-	AGENT_STATUS_FOBBID = 1
+	AgentStatusAllow   = 0
+	AgentStatusForbbid = 1
 
-	AGENT_OFFLINE = 0
-	AGENT_ONLINE  = 1
+	AgentOffline = 0
+	AgentOnline  = 1
 )
 
 // CreateOrUpdateAgent 创建或更新 agent
@@ -23,10 +23,10 @@ func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmode
 	if err != nil {
 		// not exist, create
 		agent = &dbmodels.Agent{
-			ClientId:    clientId,
-			Ip:          ip,
-			Online:      AGENT_ONLINE,
-			Status:      AGENT_STATUS_ALLOW,
+			ClientID:    clientId,
+			IP:          ip,
+			Online:      AgentOnline,
+			Status:      AgentStatusAllow,
 			OnlineTime:  time.Now(),
 			OfflineTime: time.Now(),
 		}
@@ -37,8 +37,8 @@ func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmode
 	} else {
 		// exist, update
 		err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
-			"online": AGENT_ONLINE,
-			"status": AGENT_STATUS_ALLOW,
+			"online": AgentOnline,
+			"status": AgentStatusAllow,
 			"ip":     ip,
 		}).Error
 		if err != nil {
@@ -53,7 +53,7 @@ func PutPerf(tx *gorm.DB, clientId string, os string, arch string, hostname stri
 	ipInBytes, _ := json.Marshal(ipIns)
 
 	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
-		"online":   AGENT_ONLINE,
+		"online":   AgentOnline,
 		"os":       os,
 		"arch":     arch,
 		"hostname": hostname,
@@ -91,7 +91,7 @@ func GetAgentByClientId(tx *gorm.DB, clientId string) (agent *dbmodels.Agent, er
 // ListAllAvailableAgents 列出所有可用 agent
 func ListAllAvailableAgents(tx *gorm.DB) (agents []*dbmodels.Agent, err error) {
 	agents = []*dbmodels.Agent{}
-	err = tx.Table("agents").Where("status=?", AGENT_STATUS_ALLOW).Find(&agents).Error
+	err = tx.Table("agents").Where("status=?", AgentStatusAllow).Find(&agents).Error
 	if err != nil {
 		return nil, err
 	} else {
@@ -107,7 +107,7 @@ func ForbidAgent(tx *gorm.DB, id uint) (err error) {
 		return err
 	}
 
-	err = tx.Table("agents").Where("id=?", id).Update("status", AGENT_STATUS_FOBBID).Error
+	err = tx.Table("agents").Where("id=?", id).Update("status", AgentStatusForbbid).Error
 	if err != nil {
 		return err
 	}
@@ -117,7 +117,7 @@ func ForbidAgent(tx *gorm.DB, id uint) (err error) {
 
 func UpdateAgentOffline(tx *gorm.DB, clientId string) (err error) {
 	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
-		"online":       AGENT_OFFLINE,
+		"online":       AgentOffline,
 		"offline_time": time.Now(),
 	}).Error
 	if err != nil {

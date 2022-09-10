@@ -17,14 +17,14 @@ const (
 )
 
 // CreateOrUpdateAgent 创建或更新 agent
-func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmodels.Agent, err error) {
+func CreateOrUpdateAgent(tx *gorm.DB, clientID string, IP string) (agent *dbmodels.Agent, err error) {
 	existAgent := &dbmodels.Agent{}
-	err = tx.Table("agents").Where("client_id=?", clientId).First(existAgent).Error
+	err = tx.Table("agents").Where("client_id=?", clientID).First(existAgent).Error
 	if err != nil {
 		// not exist, create
 		agent = &dbmodels.Agent{
-			ClientID:    clientId,
-			IP:          ip,
+			ClientID:    clientID,
+			IP:          IP,
 			Online:      AgentOnline,
 			Status:      AgentStatusAllow,
 			OnlineTime:  time.Now(),
@@ -36,10 +36,10 @@ func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmode
 		}
 	} else {
 		// exist, update
-		err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
+		err = tx.Table("agents").Where("client_id=?", clientID).Updates(map[string]interface{}{
 			"online": AgentOnline,
 			"status": AgentStatusAllow,
-			"ip":     ip,
+			"ip":     IP,
 		}).Error
 		if err != nil {
 			return nil, err
@@ -49,10 +49,10 @@ func CreateOrUpdateAgent(tx *gorm.DB, clientId string, ip string) (agent *dbmode
 	return agent, nil
 }
 
-func PutPerf(tx *gorm.DB, clientId string, os string, arch string, hostname string, ipIns []string) (err error) {
-	ipInBytes, _ := json.Marshal(ipIns)
+func PutPerf(tx *gorm.DB, clientID string, os string, arch string, hostname string, IPIns []string) (err error) {
+	ipInBytes, _ := json.Marshal(IPIns)
 
-	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
+	err = tx.Table("agents").Where("client_id=?", clientID).Updates(map[string]interface{}{
 		"online":   AgentOnline,
 		"os":       os,
 		"arch":     arch,
@@ -77,10 +77,10 @@ func GetAgent(tx *gorm.DB, id uint) (agent *dbmodels.Agent, err error) {
 	}
 }
 
-// GetAgentByClientId 通过 clientId 获取 agent
-func GetAgentByClientId(tx *gorm.DB, clientId string) (agent *dbmodels.Agent, err error) {
+// GetAgentByClientID 通过 clientID 获取 agent
+func GetAgentByClientID(tx *gorm.DB, clientID string) (agent *dbmodels.Agent, err error) {
 	agent = &dbmodels.Agent{}
-	err = tx.Table("agents").Where("client_id=?", clientId).First(agent).Error
+	err = tx.Table("agents").Where("client_id=?", clientID).First(agent).Error
 	if err != nil {
 		return nil, err
 	} else {
@@ -115,8 +115,8 @@ func ForbidAgent(tx *gorm.DB, id uint) (err error) {
 	return nil
 }
 
-func UpdateAgentOffline(tx *gorm.DB, clientId string) (err error) {
-	err = tx.Table("agents").Where("client_id=?", clientId).Updates(map[string]interface{}{
+func UpdateAgentOffline(tx *gorm.DB, clientID string) (err error) {
+	err = tx.Table("agents").Where("client_id=?", clientID).Updates(map[string]interface{}{
 		"online":       AgentOffline,
 		"offline_time": time.Now(),
 	}).Error

@@ -145,6 +145,7 @@ type File struct {
 	UserID      uint            `json:"user_id" gorm:"comment:'文件所有者';index"`
 	MediaWidth  uint64          `json:"media_width"`
 	MediaHeight uint64          `json:"media_height"`
+	Thumbnail   string          `json:"thumbnail"`
 	CreatedAt   time.Time       `json:"created_at"`
 }
 
@@ -173,16 +174,17 @@ func (f *File) ToModel() *models.File {
 
 func (f *File) ToMediaFile() *models.MediaFile {
 	return &models.MediaFile{
-		ID:        f.ID,
-		Filename:  f.Filename,
-		URL:       utils.GetFileURL(f.Path),
-		Mime:      f.Mime,
-		Size:      f.Size,
-		FileType:  FileTypeMap[f.FileType],
-		Md5:       f.Md5,
-		UserID:    f.UserID,
-		Width:     f.MediaWidth,
-		Height:    f.MediaHeight,
-		CreatedAt: f.CreatedAt,
+		ID:           f.ID,
+		Filename:     f.Filename,
+		URL:          utils.GetFileURL(f.Path),
+		Mime:         f.Mime,
+		Size:         f.Size,
+		FileType:     FileTypeMap[f.FileType],
+		Md5:          f.Md5,
+		UserID:       f.UserID,
+		Width:        f.MediaWidth,
+		Height:       f.MediaHeight,
+		ThumbnailURL: utils.GetFileURL(f.Thumbnail),
+		CreatedAt:    f.CreatedAt,
 	}
 }

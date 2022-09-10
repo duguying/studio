@@ -88,3 +88,10 @@ func UpdateFileMediaSize(tx *gorm.DB, fileID string, width, height int) (err err
 		"media_height": height,
 	}).Error
 }
+
+// UpdateFileThumbneil 更新媒体缩略图
+func UpdateFileThumbneil(tx *gorm.DB, fileID string, thumbneil string) (err error) {
+	return tx.Model(dbmodels.File{}).Where("id=?", fileID).Updates(map[string]interface{}{
+		"thumbnail": thumbneil,
+	}).Error
+}

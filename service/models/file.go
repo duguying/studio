@@ -22,15 +22,16 @@ type File struct {
 }
 
 type MediaFile struct {
-	ID        string    `json:"id"`
-	Filename  string    `json:"filename"`
-	URL       string    `json:"url"`
-	Mime      string    `json:"mime"`
-	Size      uint64    `json:"size"`
-	FileType  string    `json:"file_type" `
-	Md5       string    `json:"md5"`
-	UserID    uint      `json:"user_id"`
-	Width     uint64    `json:"width"`
-	Height    uint64    `json:"height"`
-	CreatedAt time.Time `json:"created_at"`
+	ID           string    `json:"id"`
+	Filename     string    `json:"filename"`
+	URL          string    `json:"url"`
+	Mime         string    `json:"mime"`
+	Size         uint64    `json:"size"`
+	FileType     string    `json:"file_type" `
+	Md5          string    `json:"md5"`
+	UserID       uint      `json:"user_id"`
+	Width        uint64    `json:"width"`
+	Height       uint64    `json:"height"`
+	ThumbnailURL string    `json:"thumbnail"`
+	CreatedAt    time.Time `json:"created_at"`
 }

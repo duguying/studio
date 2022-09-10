@@ -1,12 +1,16 @@
 package imgtools
 
 import (
+	"duguying/studio/utils"
 	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/unknwon/com"
 )
 
 // ConvertImgToWebp 图片转码到webp
@@ -79,4 +83,28 @@ func ExtractImgMeta(path string) (meta, metas string, err error) {
 	}
 
 	return meta, metas, nil
+}
+
+// MakeThumbnail 制作缩略图
+func MakeThumbnail(path string, maxHeight int) (thumbKey string, err error) {
+	if maxHeight <= 0 {
+		return "", fmt.Errorf("invalid maxHeight")
+	}
+
+	args := []string{"-resize", fmt.Sprintf("x%d", maxHeight)}
+	thumbKey = filepath.Join("img", "cache", fmt.Sprintf("%s.webp", utils.GenUUID()))
+	thumbPath := utils.GetFileLocalPath(thumbKey)
+	cacheDir := filepath.Dir(thumbPath)
+
+	if !com.IsExist(cacheDir) {
+		os.MkdirAll(cacheDir, 0644)
+	}
+
+	args = append(args, path, thumbPath)
+	cmd := exec.Command("convert", args...)
+	err = cmd.Run()
+	if err != nil {
+		return "", err
+	}
+	return thumbKey, nil
 }

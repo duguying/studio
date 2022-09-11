@@ -21,3 +21,21 @@ func ListAlbumFiles(c *CustomContext) (interface{}, error) {
 		List: apiFiles,
 	}, nil
 }
+
+func MediaDetail(c *CustomContext) (interface{}, error) {
+	req := models.StringGetter{}
+	err := c.BindQuery(&req)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := db.GetFile(g.Db, req.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.MediaDetailResponse{
+		Ok:   true,
+		Data: file.ToMediaFile(),
+	}, nil
+}

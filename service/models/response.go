@@ -118,3 +118,9 @@ type ListMediaFileResponse struct {
 	Msg  string       `json:"msg"`
 	List []*MediaFile `json:"list"`
 }
+
+type MediaDetailResponse struct {
+	Ok   bool       `json:"ok"`
+	Msg  string     `json:"msg"`
+	Data *MediaFile `json:"data"`
+}

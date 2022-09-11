@@ -11,9 +11,9 @@ type CommonPagerRequest struct {
 	Status int  `json:"status" form:"status"`
 }
 
-type CommonGetterRequest struct {
-	Id uint `json:"id" form:"id"`
-}
+// type CommonGetterRequest struct {
+// 	Id uint `json:"id" form:"id"`
+// }
 
 type MonthlyPagerRequest struct {
 	Page  uint `json:"page" form:"page"`
@@ -50,6 +50,10 @@ type SearchPagerRequest struct {
 
 type IntGetter struct {
 	ID uint `json:"id" form:"id" binding:"required"`
+}
+
+type StringGetter struct {
+	ID string `json:"id" form:"id" binding:"required"`
 }
 
 type UserIDGetter struct {

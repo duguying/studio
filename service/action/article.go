@@ -631,7 +631,7 @@ func PublishArticle(c *CustomContext) (interface{}, error) {
 // @Param id query uint true "文章ID"
 // @Success 200 {object} models.CommonResponse
 func DeleteArticle(c *CustomContext) (interface{}, error) {
-	getter := models.CommonGetterRequest{}
+	getter := models.IntGetter{}
 	err := c.BindQuery(&getter)
 	if err != nil {
 		return nil, err
@@ -639,7 +639,7 @@ func DeleteArticle(c *CustomContext) (interface{}, error) {
 
 	// get article
 	tx := g.Db.WithContext(c)
-	article, err := db.GetArticleByID(tx, getter.Id)
+	article, err := db.GetArticleByID(tx, getter.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -650,7 +650,7 @@ func DeleteArticle(c *CustomContext) (interface{}, error) {
 	}
 
 	// delete
-	err = db.DeleteArticle(tx, getter.Id, c.UserID())
+	err = db.DeleteArticle(tx, getter.ID, c.UserID())
 	if err != nil {
 		return nil, err
 	} else {

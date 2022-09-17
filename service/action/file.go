@@ -162,7 +162,7 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 
 		_ = os.RemoveAll(tdir)
 	} else {
-		err = os.Rename(tpath, fpath)
+		err = utils.Movefile(tpath, fpath)
 		if err != nil {
 			return nil, err
 		}

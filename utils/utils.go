@@ -10,6 +10,7 @@ import (
 	"crypto/sha1"
 	"duguying/studio/g"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"os"
@@ -161,4 +162,39 @@ func GetFileURL(key string) string {
 func GetFileLocalPath(key string) string {
 	store := g.Config.Get("upload", "store-path", "store")
 	return filepath.Join(store, key)
+}
+
+// Movefile 移动文件
+func Movefile(src, dest string) error {
+	_, err := Copyfile(src, dest)
+	if err != nil {
+		return err
+	}
+	return os.Remove(src)
+}
+
+// Copyfile 复制文件
+func Copyfile(src, dst string) (int64, error) {
+	sourceFileStat, err := os.Stat(src)
+	if err != nil {
+		return 0, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", src)
+	}
+
+	source, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer destination.Close()
+	nBytes, err := io.Copy(destination, source)
+	return nBytes, err
 }

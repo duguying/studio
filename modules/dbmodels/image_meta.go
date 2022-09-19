@@ -10,8 +10,8 @@ type ImageMeta struct {
 	UUID
 
 	FileID string         `json:"file_id" gorm:"index"`
-	Meta   datatypes.JSON `json:"meta" gorm:"index:,class:FULLTEXT"`
-	Metas  datatypes.JSON `json:"metas" gorm:"index:,class:FULLTEXT"`
+	Meta   datatypes.JSON `json:"meta"`
+	Metas  datatypes.JSON `json:"metas"`
 
 	CreatedAt time.Time `json:"created_at"`
 }

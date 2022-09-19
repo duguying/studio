@@ -39,3 +39,29 @@ func MediaDetail(c *CustomContext) (interface{}, error) {
 		Data: file.ToMediaFile(),
 	}, nil
 }
+
+// ListCover 列举博客封面
+// @Router /admin/cover/list [get]
+// @Tags 文章
+// @Description 列举博客封面
+// @Success 200 {object} models.CoverListResponse
+func ListCover(c *CustomContext) (interface{}, error) {
+	covers, err := db.ListCover(g.Db)
+	if err != nil {
+		return nil, err
+	}
+	coverApis := []*models.Cover{}
+	for _, cover := range covers {
+		c := cover.ToModel()
+		file, err := db.GetFile(g.Db, c.FileID)
+		if err != nil {
+			continue
+		}
+		c.URL = file.ToMediaFile().URL
+		coverApis = append(coverApis, c)
+	}
+	return &models.CoverListResponse{
+		Ok:   true,
+		List: coverApis,
+	}, nil
+}

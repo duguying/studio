@@ -124,3 +124,9 @@ type MediaDetailResponse struct {
 	Msg  string     `json:"msg"`
 	Data *MediaFile `json:"data"`
 }
+
+type CoverListResponse struct {
+	Ok   bool     `json:"ok"`
+	Msg  string   `json:"msg"`
+	List []*Cover `json:"list"`
+}

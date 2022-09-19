@@ -51,6 +51,7 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.PUT("/file/sync_cos", APIWrapper(FileSyncToCos))    // 文件同步到 cos
 	api.GET("/album/list", APIWrapper(ListAlbumFiles))      // 相册图片列表
 	api.GET("/album/media/detail", APIWrapper(MediaDetail)) // 媒体文件详情
+	api.GET("/cover/list", APIWrapper(ListCover))           // 获取博客封面
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

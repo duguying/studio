@@ -103,5 +103,6 @@ func initOrm() {
 		&dbmodels.FaceLabel{},
 		&dbmodels.LoginHistory{},
 		&dbmodels.ImageMeta{},
+		&dbmodels.Cover{},
 	)
 }

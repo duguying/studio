@@ -74,8 +74,8 @@ func ExtractImgMeta(path string) (meta, metas string, err error) {
 	}
 	metas = string(output)
 
-	if len(metas) > 0 {
-		metaRaw, err := json.Marshal(metas[0])
+	if len(info) > 0 {
+		metaRaw, err := json.Marshal(info[0])
 		if err != nil {
 			return "", "", err
 		}

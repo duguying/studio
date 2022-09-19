@@ -152,6 +152,9 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	if (imgNeedConvert(ext) || size >= 1024*optimizeSize || (width > maxWidth && maxWidth > 0)) && optimize {
 		log.Println("ext optimize:", ext, "--> .webp")
 
+		if width <= maxWidth {
+			maxWidth = width
+		}
 		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
 		key = strings.TrimSuffix(key, ext) + ".webp"
 		ext = ".webp"

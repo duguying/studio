@@ -24,6 +24,7 @@ func SetupFeAPI(api *gin.RouterGroup) {
 	api.POST("/2fa", TfaAuth)                                       // 2FA校验
 	api.GET("/sitemap", SiteMap)                                    // 列出所有文章URI
 	api.POST("/save_error_logger", APIWrapper(SaveErrorLogger))     // 前端错误日志
+	api.GET("/cover/list", APIWrapper(ListCover))                   // 获取博客封面
 }
 
 func SetupAdminAPI(api *gin.RouterGroup) {
@@ -51,7 +52,6 @@ func SetupAdminAPI(api *gin.RouterGroup) {
 	api.PUT("/file/sync_cos", APIWrapper(FileSyncToCos))    // 文件同步到 cos
 	api.GET("/album/list", APIWrapper(ListAlbumFiles))      // 相册图片列表
 	api.GET("/album/media/detail", APIWrapper(MediaDetail)) // 媒体文件详情
-	api.GET("/cover/list", APIWrapper(ListCover))           // 获取博客封面
 }
 
 func SetupAgentAPI(api *gin.RouterGroup) {

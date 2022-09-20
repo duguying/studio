@@ -1,3 +1,4 @@
+// Package imgtools 图片处理工具库
 package imgtools
 
 import (

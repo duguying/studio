@@ -399,10 +399,6 @@ func UpdateArticleViewCount(tx *gorm.DB, uri string, cnt int) (err error) {
 
 // UpdateArticle 更新文章
 func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
-	art, err := GetArticleByID(tx, id)
-	if err != nil {
-		return err
-	}
 	fields := map[string]interface{}{
 		"content": article.Content,
 	}
@@ -414,9 +410,6 @@ func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
 	}
 	if len(article.Keywords) > 0 {
 		fields["keywords"] = strings.Join(article.Keywords, ",")
-	}
-	if art.Status == dbmodels.ArtStatusPublish {
-		fields["publish_time"] = time.Now()
 	}
 	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(fields).Error
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/unknwon/com"
+	"github.com/gogather/com"
 )
 
 // ConvertImgToWebp 图片转码到webp
@@ -96,7 +96,7 @@ func MakeThumbnail(path string, maxHeight int) (thumbKey string, err error) {
 	thumbPath := utils.GetFileLocalPath(thumbKey)
 	cacheDir := filepath.Dir(thumbPath)
 
-	if !com.IsExist(cacheDir) {
+	if !com.PathExist(cacheDir) {
 		os.MkdirAll(cacheDir, 0644)
 	}
 

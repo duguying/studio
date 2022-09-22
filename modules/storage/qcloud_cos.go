@@ -52,12 +52,39 @@ func NewQcloudOss(l *logrus.Entry, sid string, skey string, bucket, region, prot
 	return storage, nil
 }
 
+// List 列举文件
 func (q QcloudCos) List(remotePrefix string) (list []*FileInfo, err error) {
-	panic("implement me")
+	opt := &cos.BucketGetOptions{
+		Prefix:  remotePrefix,
+		MaxKeys: 3,
+	}
+
+	v, _, err := q.client.Bucket.Get(context.Background(), opt)
+	if err != nil {
+		return nil, err
+	}
+
+	list = []*FileInfo{}
+	for _, c := range v.Contents {
+		list = append(list, &FileInfo{
+			Path: c.Key,
+			Size: c.Size,
+		})
+	}
+
+	return list, nil
 }
 
+// GetFileInfo 获取文件信息
 func (q QcloudCos) GetFileInfo(remotePath string) (info *FileInfo, err error) {
-	panic("implement me")
+	list, err := q.List(remotePath)
+	if err != nil {
+		return nil, err
+	}
+	if len(list) > 0 {
+		info = list[0]
+	}
+	return info, nil
 }
 
 func (q QcloudCos) IsExist(remotePath string) (exist bool, err error) {

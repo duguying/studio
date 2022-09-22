@@ -8,20 +8,29 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha1"
+	"duguying/studio/g"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"os"
+	"path/filepath"
+	"regexp"
 	"strings"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/martinlindhe/base36"
 	"github.com/microcosm-cc/bluemonday"
-	uuid "github.com/satori/go.uuid"
 )
 
-func GenUUID() (string, error) {
-	guuid := uuid.NewV4()
-	return strings.Replace(guuid.String(), "-", "", -1), nil
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+func GenUUID() string {
+	guuid := uuid.New()
+	return strings.Replace(guuid.String(), "-", "", -1)
 }
 
 func HmacSha1(content string, key string) string {
@@ -90,8 +99,102 @@ func GenUID() string {
 	return strings.ToLower(mb36b.String())
 }
 
-// TrimHtml 剔除HTML标签
-func TrimHtml(content string) string {
+// TrimHTML 剔除HTML标签
+func TrimHTML(content string) string {
 	p := bluemonday.StripTagsPolicy()
 	return p.Sanitize(content)
+}
+
+var (
+	inlineMathReg, _ = regexp.Compile(`\$([\d\D][^\$]+)\$`)
+)
+
+// ParseMath 解析数学公式标签
+func ParseMath(content string) string {
+	count := 0
+	out := ""
+	rd := strings.NewReader(content)
+	lexer := NewLexer(rd)
+	for {
+		start, pos, tok := lexer.Lex()
+		out = out + string([]rune(content)[start:pos])
+
+		if tok == EOF {
+			break
+		}
+		if tok == MATH {
+			count++
+			if count%2 == 1 {
+				out = out + "${1}" //`<span v-katex:auto>`
+			} else if count%2 == 0 {
+				out = out + "${0}" //`</span>`
+				out = strings.ReplaceAll(out, "${1}", `<span v-katex:auto class="katex-display">`)
+				out = strings.ReplaceAll(out, "${0}", `</span>`)
+			}
+		}
+	}
+
+	out = strings.ReplaceAll(out, "${1}", "$$")
+
+	// 处理行内 math
+	matches := inlineMathReg.FindAllString(out, -1)
+	for _, match := range matches {
+		policy := bluemonday.StripTagsPolicy()
+		strippedMatch := policy.Sanitize(match)
+		if strippedMatch == match {
+			matchTmp := "<span v-katex:auto>" + strings.TrimPrefix(match, "$")
+			matchTmp = strings.TrimSuffix(matchTmp, "$") + "</span>"
+			out = strings.ReplaceAll(out, match, matchTmp)
+		}
+	}
+
+	return out
+}
+
+// GetFileURL 获取文件地址
+func GetFileURL(key string) string {
+	imgHost := g.Config.Get("store", "img-host-url", "https://image.duguying.net")
+	key = strings.TrimPrefix(key, "img")
+	return imgHost + key
+}
+
+// GetFileLocalPath 获取文件本地路径
+func GetFileLocalPath(key string) string {
+	store := g.Config.Get("upload", "store-path", "store")
+	return filepath.Join(store, key)
+}
+
+// Movefile 移动文件
+func Movefile(src, dest string) error {
+	_, err := Copyfile(src, dest)
+	if err != nil {
+		return err
+	}
+	return os.Remove(src)
+}
+
+// Copyfile 复制文件
+func Copyfile(src, dst string) (int64, error) {
+	sourceFileStat, err := os.Stat(src)
+	if err != nil {
+		return 0, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", src)
+	}
+
+	source, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer destination.Close()
+	nBytes, err := io.Copy(destination, source)
+	return nBytes, err
 }

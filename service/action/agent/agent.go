@@ -8,6 +8,8 @@ import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
 	"duguying/studio/modules/dns"
+	"duguying/studio/modules/ipip"
+	"duguying/studio/service/models"
 	"net/http"
 	"time"
 
@@ -90,9 +92,46 @@ func List(c *gin.Context) {
 		return
 	}
 
+	apiAgents := []*models.Agent{}
+	for _, agent := range agents {
+		apiAgent := agent.ToModel()
+		loc, err := ipip.GetLocation(apiAgent.IP)
+		if err == nil {
+			apiAgent.Area = loc.CityName
+		}
+		apiAgents = append(apiAgents, apiAgent)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"ok":   true,
-		"list": agents,
+		"list": apiAgents,
+	})
+	return
+}
+
+// RemoveAgent 列表中移除 agent
+func RemoveAgent(c *gin.Context) {
+	getter := models.IntGetter{}
+	err := c.BindQuery(&getter)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	err = db.ForbidAgent(g.Db, getter.ID)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"ok":  false,
+			"err": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok": true,
 	})
 	return
 }

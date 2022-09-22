@@ -25,7 +25,6 @@ var (
 
 func InitDatabase() {
 	initDatabase()
-	initTjDatabase()
 }
 
 func initDatabase() {
@@ -63,10 +62,24 @@ func initMysql() {
 	password := g.Config.Get("database", "password", "password")
 	dbname := g.Config.Get("database", "name", "blog")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname)
-	g.Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: newLogger})
+
+	g.Db, err = gorm.Open(mysql.New(mysql.Config{
+		DSN:               dsn,
+		DefaultStringSize: 256, // default size for string fields
+	}), &gorm.Config{Logger: newLogger})
 	if err != nil {
-		log.Printf("数据库连接失败 err:%v\n", err)
+		log.Fatalf("数据库连接失败 err:%v\n", err)
 	}
+
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	db, _ := g.Db.DB()
+	db.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	db.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	db.SetConnMaxLifetime(time.Hour)
 }
 
 func initSqlite() {
@@ -81,12 +94,15 @@ func initSqlite() {
 func initOrm() {
 	g.Db.AutoMigrate(
 		&dbmodels.Article{},
+		&dbmodels.Draft{},
 		&dbmodels.User{},
 		&dbmodels.File{},
 		&dbmodels.Agent{},
 		&dbmodels.AgentPerform{},
-		&dbmodels.ApiLog{},
 		&dbmodels.Face{},
 		&dbmodels.FaceLabel{},
+		&dbmodels.LoginHistory{},
+		&dbmodels.ImageMeta{},
+		&dbmodels.Cover{},
 	)
 }

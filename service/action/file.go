@@ -7,6 +7,10 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dbmodels"
+	"duguying/studio/modules/imgtools"
+	"duguying/studio/modules/storage"
+	"duguying/studio/service/models"
 	"duguying/studio/utils"
 	"fmt"
 	"io"
@@ -18,145 +22,192 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogather/com"
+	"github.com/sirupsen/logrus"
 )
 
-func PutFile(c *gin.Context) {
+func PutFile(c *CustomContext) (interface{}, error) {
 	key := c.Query("path")
 	if key == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "query path is required",
-		})
-		return
+		return nil, fmt.Errorf("query path is required")
 	}
 	store := g.Config.Get("upload", "store-path", "store")
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
 	err := com.MkdirWithCreatePath(dir)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	f, err := os.Create(fpath)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "create file failed, " + err.Error(),
-		})
-		return
+		return nil, fmt.Errorf("create file failed, " + err.Error())
 	}
 	defer f.Close()
 
 	written, err := io.Copy(f, c.Request.Body)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": "copy file failed, " + err.Error(),
-		})
-		return
+		return nil, fmt.Errorf("copy file failed, " + err.Error())
 	}
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5)
+	_, err = db.SaveFile(g.Db, key, mimeType, uint64(written), md5, c.UserID(), dbmodels.FileTypeArchive)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	return gin.H{
 		"ok": true,
-	})
+	}, nil
 }
 
-func UploadImage(c *gin.Context) {
+// UploadImage 表单上传图片
+// @Router /upload/image [post]
+// @Tags 上传
+// @Description 表单上传图片
+// @Param publish body []byte true "图片内容"
+// @Success 200 {object} models.UploadResponse
+func UploadImage(c *CustomContext) (interface{}, error) {
+	l := c.Logger()
 	fh, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	store := g.Config.Get("upload", "store-path", "store")
-	domain := g.Config.Get("upload", "file-domain", "http://file.duguying.net")
-	size := fh.Size
-	key := filepath.Join("img", time.Now().Format("2006/01"), fmt.Sprintf("%s.png", utils.GenUID()))
+	// 图像是否优化，开启则调用 imagemagick 转码
+	_, optimize := c.GetPostForm("optimize")
+	maxWidth := int64(0)
+	scaleWidth, exist := c.GetPostForm("scale_width")
+	if exist {
+		maxWidth, _ = strconv.ParseInt(scaleWidth, 10, 32)
+	}
 
+	// 图片存储子目录
+	storeDir := time.Now().Format("2006/01")
+	uploadType, ok := c.GetPostForm("upload_type")
+	if ok {
+		if uploadType == "avatar" {
+			storeDir = "avatar"
+		}
+	}
+
+	// 图片存储根目录
+	root := "img"
+	_, private := c.GetPostForm("private")
+	if private {
+		root = "private"
+	}
+
+	// 文件存储根目录
+	store := g.Config.Get("upload", "store-path", "store")
+
+	// 文件信息
+	size := fh.Size
+	filename := strings.ToLower(fh.Filename)
+	ext := filepath.Ext(filename)
+
+	// 生成随机文件名，拼接路径
+	randomName := utils.GenUID()
+	key := filepath.Join(root, storeDir, fmt.Sprintf("%s%s", randomName, ext))
 	fpath := filepath.Join(store, key)
 	dir := filepath.Dir(fpath)
-	_ = os.MkdirAll(dir, 0644)
-
-	f, err := os.Create(fpath)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+	if !com.PathExist(dir) {
+		_ = os.MkdirAll(dir, 0644)
 	}
-	defer f.Close()
 
+	// 创建临时文件
+	tdir := filepath.Join(filepath.Join(os.TempDir(), utils.GenUUID()), utils.GenUID())
+	_ = os.MkdirAll(tdir, 0644)
+	tpath := filepath.Join(tdir, filename)
+	tf, err := os.Create(tpath)
+	if err != nil {
+		return nil, err
+	}
+
+	// 存储到临时文件
 	hf, err := fh.Open()
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
-	defer hf.Close()
-
-	_, err = io.Copy(f, hf)
+	_, err = io.Copy(tf, hf)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
+	}
+	hf.Close()
+	tf.Close()
+
+	// 获取宽度
+	width, _, _ := imgtools.GetImgSize(tpath)
+
+	// 转码
+	log.Println("ext:", ext, "optimize:", optimize)
+	optimizeSize := g.Config.GetInt64("image-optimize", "size", 512)
+	if (imgNeedConvert(ext) || size >= 1024*optimizeSize || (width > maxWidth && maxWidth > 0)) && optimize {
+		log.Println("ext optimize:", ext, "--> .webp")
+
+		if width <= maxWidth {
+			maxWidth = width
+		}
+		fpath = strings.TrimSuffix(fpath, ext) + ".webp"
+		key = strings.TrimSuffix(key, ext) + ".webp"
+		ext = ".webp"
+		size, err = imgtools.ConvertImgToWebp(tpath, fpath, maxWidth)
+		if err != nil {
+			return nil, fmt.Errorf("转码失败, err:" + err.Error())
+		}
+
+		_ = os.RemoveAll(tdir)
+	} else {
+		err = utils.Movefile(tpath, fpath)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
+	// 存储文件信息到数据库
+	fileInfo, err := db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID(), dbmodels.FileTypeImage)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":  true,
-		"url": domain + strings.Replace(filepath.Join("/", key), `\`, `/`, -1),
-	})
+	go extractImgMetaAndSave(l, fileInfo.ID, fpath)
+
+	// 返回文件路径
+	url := utils.GetFileURL(key)
+	return models.UploadResponse{
+		Ok:   true,
+		URL:  url,
+		Name: randomName,
+	}, nil
 }
 
-func UploadFile(c *gin.Context) {
+func extractImgMetaAndSave(l *logrus.Entry, fileID, path string) {
+	meta, metas, err := imgtools.ExtractImgMeta(path)
+	if err != nil {
+		l.Printf("extract image meta data failed, err: %s, path: %s\n", err.Error(), path)
+		return
+	}
+	_, err = db.AddImageMeta(g.Db, fileID, meta, metas)
+	if err != nil {
+		l.Printf("add image meta data into db failed, err: %s\n", err.Error())
+		return
+	}
+}
+
+func UploadFile(c *CustomContext) (interface{}, error) {
 	fh, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	store := g.Config.Get("upload", "store-path", "store")
 	domain := g.Config.Get("upload", "file-domain", "http://file.duguying.net")
@@ -175,71 +226,55 @@ func UploadFile(c *gin.Context) {
 
 	f, err := os.Create(fpath)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	defer f.Close()
 
 	hf, err := fh.Open()
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 	defer hf.Close()
 
 	_, err = io.Copy(f, hf)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	ext := path.Ext(key)
 	mimeType := mime.TypeByExtension(ext)
 	md5 := com.FileMD5(fpath)
 
-	err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5)
+	_, err = db.SaveFile(g.Db, key, mimeType, uint64(size), md5, c.UserID(), dbmodels.FileTypeArchive)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	return gin.H{
 		"ok":  true,
 		"url": domain + strings.Replace(filepath.Join("/", key), `\`, `/`, -1),
-	})
+	}, nil
 }
 
-func PageFile(c *gin.Context) {
+// PageFile 列举文件
+// @Router /admin/file/list [get]
+// @Tags 上传
+// @Description 列举文件
+// @Param page query string true "页码"
+// @Param size query int true "每页数"
+// @Success 200 {object} models.CommonResponse
+func PageFile(c *CustomContext) (interface{}, error) {
+	l := c.Logger()
 	pageStr := c.Query("page")
 	page, err := strconv.ParseUint(pageStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	sizeStr := c.Query("size")
 	size, err := strconv.ParseUint(sizeStr, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"ok":  false,
-			"err": err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	if page <= 0 {
@@ -249,20 +284,132 @@ func PageFile(c *gin.Context) {
 		size = 20
 	}
 
-	list, total, err := db.PageFile(g.Db, page, size)
+	list, total, err := db.PageFile(g.Db, page, size, c.UserID())
 	if err != nil {
 		log.Println("page file failed, err:", err.Error())
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
 			"err": err.Error(),
 		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"ok":    true,
-		"list":  list,
-		"total": total,
-	})
-	return
+	cos, err := storage.NewCos(l, storage.QcloudCosType)
+	if err != nil {
+		return nil, err
+	}
+
+	wg := sync.WaitGroup{}
+	apiList := []*models.File{}
+	for _, item := range list {
+		apiItem := item.ToModel()
+		url := utils.GetFileURL(apiItem.Path)
+		count, err := db.FileCountArticleRef(g.Db, url)
+		if err != nil {
+			continue
+		}
+		apiItem.ArticleRefCount = int(count)
+		apiItem.LocalExist = com.FileExist(getLocalPath(apiItem.Path))
+
+		wg.Add(1)
+		go func(fileItem *models.File) {
+			defer wg.Add(-1)
+			exist, err := cos.IsExist(fileItem.Path)
+			if err != nil {
+				return
+			}
+			fileItem.COS = exist
+		}(apiItem)
+
+		apiList = append(apiList, apiItem)
+	}
+	wg.Wait()
+
+	return models.FileAdminListResponse{
+		Ok:    true,
+		List:  apiList,
+		Total: int(total),
+	}, nil
+}
+
+func imgNeedConvert(ext string) bool {
+	notNeedConvertMap := map[string]bool{
+		".png": true,
+	}
+	_, ok := notNeedConvertMap[ext]
+	return !ok
+}
+
+// FileSyncToCos 文件同步到COS
+// @Router /admin/file/sync_cos [get]
+// @Tags 上传
+// @Description 文件同步到COS
+// @Param page query string true "页码"
+// @Param size query int true "每页数"
+// @Success 200 {object} models.CommonResponse
+func FileSyncToCos(c *CustomContext) (interface{}, error) {
+	req := models.FileSyncRequest{}
+	err := c.BindJSON(&req)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := db.GetFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	store, err := storage.NewCos(g.LogEntry.WithContext(c), req.CosType)
+	if err != nil {
+		return nil, err
+	}
+
+	localPath := getLocalPath(file.Path)
+	remotePath := file.Path
+	err = store.PutFile(localPath, remotePath)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
+		Ok: true,
+	}, nil
+}
+
+func getLocalPath(path string) string {
+	store := g.Config.Get("upload", "store-path", "store")
+	return filepath.Join(store, path)
+}
+
+func DeleteFile(c *CustomContext) (interface{}, error) {
+	l := c.Logger()
+	req := &models.FileSyncRequest{}
+	err := c.BindQuery(&req)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := db.GetFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	cos, err := storage.NewCos(l, storage.QcloudCosType)
+	if err != nil {
+		return nil, err
+	}
+	err = cos.RemoveFile(file.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = os.Remove(getLocalPath(file.Path))
+	err = db.DeleteFile(g.Db, req.FileID)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
+		Ok: true,
+	}, nil
 }

@@ -36,13 +36,13 @@ func ListAllCalendarIds(tx *gorm.DB) (ids []string, err error) {
 	}
 	ids = []string{}
 	for _, calendar := range list {
-		ids = append(ids, calendar.Id)
+		ids = append(ids, calendar.ID)
 	}
 	return ids, nil
 }
 
-// GetCalendarById 按ID获取日历
-func GetCalendarById(tx *gorm.DB, id string) (calendar *dbmodels.Calendar, err error) {
+// GetCalendarByID 按ID获取日历
+func GetCalendarByID(tx *gorm.DB, id string) (calendar *dbmodels.Calendar, err error) {
 	calendar = &dbmodels.Calendar{}
 	err = tx.Model(dbmodels.Calendar{}).Where("id=?", id).First(calendar).Error
 	if err != nil {

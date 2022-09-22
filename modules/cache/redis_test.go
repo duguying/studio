@@ -2,29 +2,33 @@
 // This file is part of ofs project
 // Created by duguying on 2017/11/29.
 
-package redis
+package cache
 
 import (
 	"fmt"
-	"gopkg.in/redis.v5"
 	"log"
-	"duguying/studio/g"
+	"sort"
 	"testing"
 	"time"
-	"sort"
+
+	"gopkg.in/redis.v5"
+)
+
+var (
+	redisCli *redis.Client
 )
 
 func initRedis() {
 	readTimeout := 4
 	db := 2
-	g.Redis = redis.NewClient(&redis.Options{
+	redisCli = redis.NewClient(&redis.Options{
 		Addr:        "127.0.0.1:6379",
 		Password:    "",
 		DB:          db,
 		PoolSize:    10000,
 		ReadTimeout: time.Duration(time.Second * time.Duration(readTimeout)),
 	})
-	err := g.Redis.Ping().Err()
+	err := redisCli.Ping().Err()
 
 	if err != nil {
 		log.Println("[system]", err.Error())
@@ -42,12 +46,12 @@ func TestSetTTL(t *testing.T) {
 	//fmt.Println(GetMap("hi"))
 	//DelMapField("hi","hello")
 
-	Set("hi","hello")
-	fmt.Println(Get("hi"))
+	redisCli.Set("hi", "hello", 0)
+	fmt.Println(redisCli.Get("hi"))
 }
 
 func TestGet(t *testing.T) {
-	args:=[]string{"casdf","badfadf","basd","a"}
+	args := []string{"casdf", "badfadf", "basd", "a"}
 	fmt.Println(args)
 
 	sort.Strings(args)

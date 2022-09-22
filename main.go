@@ -1,19 +1,23 @@
 package main
 
 import (
+	"context"
 	"duguying/studio/docs"
 	"duguying/studio/g"
 	"duguying/studio/modules/bleve"
+	"duguying/studio/modules/cache"
 	"duguying/studio/modules/configuration"
 	"duguying/studio/modules/cron"
 	"duguying/studio/modules/ipip"
 	"duguying/studio/modules/logger"
 	"duguying/studio/modules/orm"
-	"duguying/studio/modules/redis"
+	"duguying/studio/modules/rlog"
 	"duguying/studio/service"
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -51,7 +55,7 @@ func main() {
 	//p2p.Init()
 
 	// 初始化 redis
-	redis.InitRedisConn()
+	g.Cache = cache.Init(getCacheOption())
 
 	// 初始化 database
 	orm.InitDatabase()
@@ -99,6 +103,11 @@ func initLogger() {
 	}
 	level := g.Config.GetInt64("log", "level", 15)
 	logger.InitLogger(logDir, expire, int(level))
+
+	topic := g.Config.Get("log", "topic", "studio")
+	logFile := filepath.Join(logDir, "studio.log")
+	g.LogEntry = rlog.NewRLog(context.Background(), topic,
+		logFile).WithFields(map[string]interface{}{"app": "studio"})
 }
 
 func initIPIP() {
@@ -109,4 +118,20 @@ func initIPIP() {
 func initSwagger() {
 	listenAddress := g.Config.Get("system", "listen", "127.0.0.1:20192")
 	docs.SwaggerInfo.Host = listenAddress
+}
+
+func getCacheOption() *cache.CacheOption {
+	readTimeout, _ := strconv.Atoi(g.Config.Get("redis", "timeout", "4"))
+	db, _ := strconv.Atoi(g.Config.Get("redis", "db", "11"))
+	return &cache.CacheOption{
+		Type: g.Config.Get("cache", "type", "bolt"),
+		Redis: &cache.CacheRedisOption{
+			Timeout:  readTimeout,
+			DB:       db,
+			Addr:     g.Config.Get("redis", "addr", ""),
+			Password: g.Config.Get("redis", "password", ""),
+			PoolSize: int(g.Config.GetInt64("redis", "pool-size", 1000)),
+		},
+		BoltPath: g.Config.Get("cache", "path", "cache/cache.db"),
+	}
 }

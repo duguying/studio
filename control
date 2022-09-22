@@ -21,7 +21,7 @@ function check_pid() {
 }
 
 function tagversion() {
-    git tag | tail -1
+    git tag -l --sort=v:refname | tail -1
 }
 
 function build() {
@@ -86,7 +86,7 @@ function status() {
 
 function proto(){
     echo "compile protobuf..."
-    protoc -I=./service/message/model --go_out=./service/message/model ./service/message/model/*.proto
+    protoc -I=./service/message/proto --go_out=./service/message/model ./service/message/proto/*.proto
     echo "compile finished."
 }
 
@@ -125,6 +125,7 @@ function docker_tags() {
 
 function pull_tags() {
     git fetch --tags
+    ls -al
 }
 
 function tailf() {

@@ -5,20 +5,22 @@
 package g
 
 import (
+	"duguying/studio/modules/cache"
 	"duguying/studio/modules/configuration"
 
-	"github.com/blevesearch/bleve"
-	"gopkg.in/redis.v5"
+	"github.com/blevesearch/bleve/v2"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
 var (
-	Config  *configuration.Config
-	Db      *gorm.DB
-	GfwDb   *gorm.DB
-	Redis   *redis.Client
-	Index   bleve.Index
-	P2pAddr string
+	Config   *configuration.Config
+	Db       *gorm.DB
+	GfwDb    *gorm.DB
+	Cache    cache.Cache
+	Index    bleve.Index
+	P2pAddr  string
+	LogEntry *logrus.Entry
 
 	InstallMode bool = false
 

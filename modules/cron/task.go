@@ -37,7 +37,7 @@ func Init() {
 	}
 
 	spec3 := g.Config.Get("bleve", "cron", "@every 2h")
-	t3, err := task.AddFunc(spec3, flushArticleBleve)
+	t3, err := task.AddFunc(spec3, FlushArticleBleve)
 	if err != nil {
 		log.Println("create cron task failed, err:", err.Error())
 	} else {
@@ -45,10 +45,18 @@ func Init() {
 	}
 
 	task.Start()
+
+	go func() {
+		for {
+			scanFile()
+			time.Sleep(time.Minute)
+		}
+	}()
 }
 
 func flushViewCnt() {
 	vcm := viewcnt.GetMap()
+	log.Println("vcm:", vcm.M)
 	for ident, val := range vcm.M {
 		err := db.UpdateArticleViewCount(g.Db, ident, val.(int))
 		if err != nil {
@@ -69,14 +77,14 @@ func calendarCheck() {
 	beforeDay := g.Config.GetInt64("calendar", "before-day", 7)
 
 	for _, id := range list {
-		cal, err := db.GetCalendarById(g.Db, id)
+		cal, err := db.GetCalendarByID(g.Db, id)
 		if err != nil {
 			log.Println("获取日历详情失败, err:", err.Error())
 			continue
 		}
 		if cal.Start.Add(-time.Hour * 24 * time.Duration(beforeDay)).Before(time.Now()) {
 			utils.GenerateICS(
-				cal.Id,
+				cal.ID,
 				cal.Start, cal.End, cal.Stamp,
 				cal.Summary, cal.Address, cal.Description,
 				cal.Link, cal.Attendee,
@@ -85,7 +93,7 @@ func calendarCheck() {
 	}
 }
 
-func flushArticleBleve() {
+func FlushArticleBleve() {
 	articles, err := db.ListAllArticle(g.Db)
 	if err != nil {
 		log.Println("list all article failed, err:", err.Error())
@@ -93,9 +101,9 @@ func flushArticleBleve() {
 	}
 
 	for _, article := range articles {
-		err = g.Index.Index(fmt.Sprintf("%d", article.Id), article.ToArticleIndex())
+		err = g.Index.Index(fmt.Sprintf("%d", article.ID), article.ToArticleIndex())
 		if err != nil {
-			log.Printf("index article [%s] failed, err: %s\n", article.Uri, err.Error())
+			log.Printf("index article [%s] failed, err: %s\n", article.URI, err.Error())
 			continue
 		}
 	}

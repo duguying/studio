@@ -11,9 +11,9 @@ type CommonPagerRequest struct {
 	Status int  `json:"status" form:"status"`
 }
 
-type CommonGetterRequest struct {
-	Id uint `json:"id" form:"id"`
-}
+// type CommonGetterRequest struct {
+// 	Id uint `json:"id" form:"id"`
+// }
 
 type MonthlyPagerRequest struct {
 	Page  uint `json:"page" form:"page"`
@@ -46,4 +46,21 @@ type SearchPagerRequest struct {
 	Page    uint   `json:"page" form:"page"`
 	Size    uint   `json:"size" form:"size"`
 	Keyword string `json:"keyword" form:"keyword"`
+}
+
+type IntGetter struct {
+	ID uint `json:"id" form:"id" binding:"required"`
+}
+
+type StringGetter struct {
+	ID string `json:"id" form:"id" binding:"required"`
+}
+
+type UserIDGetter struct {
+	UserID uint `json:"user_id" form:"user_id" binding:"required"`
+}
+
+type FileSyncRequest struct {
+	FileID  string `json:"file_id" form:"file_id"`
+	CosType string `json:"cos_type" form:"cos_type"`
 }

@@ -13,7 +13,7 @@ type CommonResponse struct {
 type CommonCreateResponse struct {
 	Ok  bool   `json:"ok"`
 	Msg string `json:"msg"`
-	Id  uint   `json:"id"`
+	ID  uint   `json:"id"`
 }
 
 type CommonListResponse struct {
@@ -23,10 +23,17 @@ type CommonListResponse struct {
 	List  interface{} `json:"list"`
 }
 
+type CommonSearchListResponse struct {
+	Ok    bool        `json:"ok"`
+	Msg   string      `json:"msg"`
+	Total uint        `json:"total"`
+	List  interface{} `json:"list"`
+}
+
 type ArticleContentListResponse struct {
-	Ok    bool              `json:"ok"`
-	Msg   string            `json:"msg"`
-	Total uint              `json:"total"`
+	Ok    bool                  `json:"ok"`
+	Msg   string                `json:"msg"`
+	Total uint                  `json:"total"`
 	List  []*ArticleShowContent `json:"list"`
 }
 
@@ -35,6 +42,13 @@ type ArticleTitleListResponse struct {
 	Msg   string          `json:"msg"`
 	Total uint            `json:"total"`
 	List  []*ArticleTitle `json:"list"`
+}
+
+type ArticleAdminTitleListResponse struct {
+	Ok    bool                 `json:"ok"`
+	Msg   string               `json:"msg"`
+	Total uint                 `json:"total"`
+	List  []*ArticleAdminTitle `json:"list"`
 }
 
 type ArticleArchListResponse struct {
@@ -55,6 +69,17 @@ type ArticleContentGetResponse struct {
 	Data *ArticleContent `json:"data"`
 }
 
+type ArticleContentMD5 struct {
+	ID  int    `json:"id"`
+	MD5 string `json:"md5"`
+}
+
+type ArticleContentMD5Response struct {
+	Ok   bool               `json:"ok"`
+	Msg  string             `json:"msg"`
+	Data *ArticleContentMD5 `json:"data"`
+}
+
 type UserInfoResponse struct {
 	Ok   bool      `json:"ok"`
 	Msg  string    `json:"msg"`
@@ -65,4 +90,43 @@ type LoginResponse struct {
 	Ok  bool   `json:"ok"`
 	Msg string `json:"msg"`
 	Sid string `json:"sid"`
+}
+
+type UploadResponse struct {
+	Ok   bool   `json:"ok"`
+	Msg  string `json:"msg"`
+	URL  string `json:"url"`
+	Name string `json:"name"`
+}
+
+type FileAdminListResponse struct {
+	Ok    bool    `json:"ok"`
+	Msg   string  `json:"msg"`
+	Total int     `json:"total"`
+	List  []*File `json:"list"`
+}
+
+type ListUserLoginHistoryResponse struct {
+	Ok    bool            `json:"ok"`
+	Msg   string          `json:"msg"`
+	Total int             `json:"total"`
+	List  []*LoginHistory `json:"list"`
+}
+
+type ListMediaFileResponse struct {
+	Ok   bool         `json:"ok"`
+	Msg  string       `json:"msg"`
+	List []*MediaFile `json:"list"`
+}
+
+type MediaDetailResponse struct {
+	Ok   bool       `json:"ok"`
+	Msg  string     `json:"msg"`
+	Data *MediaFile `json:"data"`
+}
+
+type CoverListResponse struct {
+	Ok   bool     `json:"ok"`
+	Msg  string   `json:"msg"`
+	List []*Cover `json:"list"`
 }

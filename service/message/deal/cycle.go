@@ -1,7 +1,6 @@
 package deal
 
 import (
-	"duguying/studio/modules/logger"
 	"duguying/studio/service/message/pipe"
 	"log"
 )
@@ -17,6 +16,5 @@ func Start() {
 				}
 			}
 		}
-		logger.L("ws").Println("[ws] ⚠️⚠️⚠️消息处服务已终止")
 	}()
 }

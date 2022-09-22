@@ -10,66 +10,51 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
-	qcos "github.com/tencentyun/cos-go-sdk-v5"
+	"github.com/sirupsen/logrus"
+	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
-// QCloudCos 腾讯云 COS 存储
-type QCloudCos struct {
-	ak         string
-	sk         string
-	bucket     string
-	appID      string
-	region     string
-	bucketHost string
-	client     *qcos.Client
+type QcloudCos struct {
+	sid    string
+	skey   string
+	bucket string
+	client *cos.Client
+	l      *logrus.Entry
+	ctx    context.Context
 }
 
-// NewQCloudCos 新建 QCloudCos
-func NewQCloudCos(ak string, sk string, bucket string, appID string, region string) (storage *QCloudCos, err error) {
-	storage = &QCloudCos{
-		ak:     ak,
-		sk:     sk,
+func NewQcloudOss(l *logrus.Entry, sid string, skey string, bucket, region, protocol string) (storage *QcloudCos, err error) {
+	storage = &QcloudCos{
+		sid:    sid,
+		skey:   skey,
 		bucket: bucket,
-		appID:  appID,
-		region: region,
+		l:      l,
+		ctx:    l.Context,
 	}
 
-	// 将 examplebucket-1250000000 和 COS_REGION 修改为用户真实的信息
-	// 存储桶名称，由bucketname-appid 组成，appid必须填入，可以在COS控制台查看存储桶名称。https://console.cloud.tencent.com/cos5/bucket
-	// COS_REGION 可以在控制台查看，https://console.cloud.tencent.com/cos5/bucket, 关于地域的详情见 https://cloud.tencent.com/document/product/436/6224
-	u, err := url.Parse(fmt.Sprintf("https://%s-%s.cos.%s.myqcloud.com", storage.bucket, storage.appID, storage.region))
+	u, err := url.Parse(fmt.Sprintf("%s://%s.cos.%s.myqcloud.com", protocol, bucket, region))
 	if err != nil {
 		return nil, err
 	}
-	storage.bucketHost = u.Host
-
-	// 用于Get Service 查询，默认全地域 service.cos.myqcloud.com
-	su, err := url.Parse(fmt.Sprintf("https://cos.%s.myqcloud.com", storage.region))
-	if err != nil {
-		return nil, err
-	}
-
-	b := &qcos.BaseURL{
-		BucketURL:  u,
-		ServiceURL: su,
-	}
-
-	// 创建 client
-	client := qcos.NewClient(b, &http.Client{
-		Transport: &qcos.AuthorizationTransport{
-			SecretID:  "",
-			SecretKey: "",
+	b := &cos.BaseURL{BucketURL: u}
+	storage.client = cos.NewClient(b, &http.Client{
+		//设置超时时间
+		Timeout: 100 * time.Second,
+		Transport: &cos.AuthorizationTransport{
+			//如实填写账号和密钥，也可以设置为环境变量
+			SecretID:  storage.sid,
+			SecretKey: storage.skey,
 		},
 	})
-	storage.client = client
 
 	return storage, nil
 }
 
 // List 列举文件
-func (q *QCloudCos) List(remotePrefix string) (list []*FileInfo, err error) {
-	opt := &qcos.BucketGetOptions{
+func (q QcloudCos) List(remotePrefix string) (list []*FileInfo, err error) {
+	opt := &cos.BucketGetOptions{
 		Prefix:  remotePrefix,
 		MaxKeys: 3,
 	}
@@ -91,7 +76,7 @@ func (q *QCloudCos) List(remotePrefix string) (list []*FileInfo, err error) {
 }
 
 // GetFileInfo 获取文件信息
-func (q *QCloudCos) GetFileInfo(remotePath string) (info *FileInfo, err error) {
+func (q QcloudCos) GetFileInfo(remotePath string) (info *FileInfo, err error) {
 	list, err := q.List(remotePath)
 	if err != nil {
 		return nil, err
@@ -102,47 +87,44 @@ func (q *QCloudCos) GetFileInfo(remotePath string) (info *FileInfo, err error) {
 	return info, nil
 }
 
-// AddFile 向存储桶上传文件
-func (q *QCloudCos) AddFile(localPath string, remotePath string) (err error) {
-	// 通过本地文件上传对象
-	_, err = q.client.Object.PutFromFile(context.Background(), remotePath, localPath, nil)
+func (q QcloudCos) IsExist(remotePath string) (exist bool, err error) {
+	return q.client.Object.IsExist(q.ctx, remotePath)
+}
+
+func (q QcloudCos) PutFile(localPath string, remotePath string) (err error) {
+	_, err = q.client.Object.PutFromFile(q.ctx, remotePath, localPath, nil)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// RenameFile 重命名文件
-func (q *QCloudCos) RenameFile(sourceRemotePath string, destRemotePath string) (err error) {
-	sourceURL := fmt.Sprintf("%s/%s", q.bucketHost, sourceRemotePath)
-	_, _, err = q.client.Object.Copy(context.Background(), destRemotePath, sourceURL, nil)
-	if err != nil {
-		return err
-	}
-	_, err = q.client.Object.Delete(context.Background(), sourceRemotePath, nil)
+func (q QcloudCos) copyFile(remotePath string, newRemotePath string) (err error) {
+	_, _, err = q.client.Object.Copy(q.ctx, newRemotePath, remotePath, nil)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// RemoveFile 删除文件
-func (q *QCloudCos) RemoveFile(remotePath string) (err error) {
-	_, err = q.client.Object.Delete(context.Background(), remotePath)
+func (q QcloudCos) RenameFile(remotePath string, newRemotePath string) (err error) {
+	err = q.copyFile(remotePath, newRemotePath)
+	if err != nil {
+		return err
+	}
+	return q.RemoveFile(remotePath)
+}
+
+func (q QcloudCos) RemoveFile(remotePath string) (err error) {
+	_, err = q.client.Object.Delete(q.ctx, remotePath, nil)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// FetchFile 获取文件（下载）
-func (q *QCloudCos) FetchFile(remotePath string, localPath string) (err error) {
-	opt := &qcos.MultiDownloadOptions{
-		ThreadPoolSize: 5,
-	}
-	_, err = q.client.Object.Download(
-		context.Background(), remotePath, localPath, opt,
-	)
+func (q QcloudCos) FetchFile(remotePath string, localPath string) (err error) {
+	_, err = q.client.Object.GetToFile(q.ctx, remotePath, localPath, nil)
 	if err != nil {
 		return err
 	}

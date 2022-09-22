@@ -6,14 +6,15 @@
 package models
 
 import (
-	"github.com/gogather/json"
 	"time"
+
+	"github.com/gogather/json"
 )
 
 type Article struct {
-	Id       uint     `json:"id"`
+	ID       uint     `json:"id"`
 	Title    string   `json:"title"`
-	Uri      string   `json:"uri"`
+	URI      string   `json:"uri"`
 	Keywords []string `json:"keywords"`
 	Abstract string   `json:"abstract"`
 	Content  string   `json:"content"`
@@ -27,9 +28,9 @@ func (aar *Article) String() string {
 }
 
 type ArticleShowContent struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
-	Uri       string    `json:"uri"`
+	URI       string    `json:"uri"`
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
 	CreatedAt time.Time `json:"created_at"`
@@ -43,12 +44,13 @@ func (ac *ArticleShowContent) String() string {
 }
 
 type ArticleContent struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
-	Uri       string    `json:"uri"`
+	URI       string    `json:"uri"`
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
 	Type      int       `json:"type"`
+	Status    int       `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	ViewCount uint      `json:"view_count"`
 	Content   string    `json:"content"`
@@ -60,16 +62,43 @@ func (asc *ArticleContent) String() string {
 }
 
 type ArticleTitle struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
-	Uri       string    `json:"uri"`
+	URI       string    `json:"uri"`
 	Author    string    `json:"author"`
 	CreatedAt time.Time `json:"created_at"`
 	ViewCount uint      `json:"view_count"`
 }
 
+type ArticleAdminTitle struct {
+	ID         uint      `json:"id"`
+	Title      string    `json:"title"`
+	URI        string    `json:"uri"`
+	Author     string    `json:"author"`
+	CreatedAt  time.Time `json:"created_at"`
+	ViewCount  uint      `json:"view_count"`
+	Status     int       `json:"status"`
+	StatusName string    `json:"status_name"`
+}
+
 func (at *ArticleTitle) String() string {
 	c, _ := json.Marshal(at)
+	return string(c)
+}
+
+type ArticleSearchAbstract struct {
+	ID        uint       `json:"id"`
+	Title     string     `json:"title"`
+	URI       string     `json:"uri"`
+	Tags      []string   `json:"tags"`
+	Author    string     `json:"author"`
+	Keywords  string     `json:"keywords"`
+	Content   string     `json:"content"`
+	CreatedAt *time.Time `json:"created_at"`
+}
+
+func (asa *ArticleSearchAbstract) String() string {
+	c, _ := json.Marshal(asa)
 	return string(c)
 }
 

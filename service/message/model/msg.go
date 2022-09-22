@@ -6,9 +6,10 @@ package model
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/gogather/json"
 	"github.com/gorilla/websocket"
-	"log"
 )
 
 const (
@@ -41,6 +42,20 @@ func (m *Msg) String() string {
 		ds["data"] = fmt.Sprintf("%s", string(m.Data))
 	} else {
 		ds["data"] = fmt.Sprintf("%v", m.Data)
+	}
+	c, err := json.Marshal(ds)
+	if err != nil {
+		log.Println("json marshal failed, err:", err.Error())
+	}
+	return string(c)
+}
+
+func (m *Msg) Info() string {
+	ds := map[string]interface{}{
+		"type":      m.Type,
+		"cmd":       m.Cmd,
+		"client_id": m.ClientId,
+		"_data_len": len(m.Data),
 	}
 	c, err := json.Marshal(ds)
 	if err != nil {

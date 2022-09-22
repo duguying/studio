@@ -16,57 +16,73 @@ import (
 	"strings"
 	"time"
 
-	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/v2"
 	"gorm.io/gorm"
 )
 
+// PageArticle 文章分页查询
 func PageArticle(tx *gorm.DB, keyword string,
-	page uint, pageSize uint) (total int64, list []*dbmodels.Article, err error) {
+	page uint, pageSize uint, statusList []int, userID uint) (list []*dbmodels.Article, total int64, err error) {
 	total = 0
-	query := "status=?"
-	params := []interface{}{1}
+	query := "status in (?)"
+	params := []interface{}{statusList}
+	order := "publish_time desc"
+
+	if statusContain(statusList, dbmodels.ArtStatusDraft) {
+		order = "created_at desc"
+	}
+
 	if keyword != "" {
 		query = query + " and keywords like ?"
 		params = append(params, fmt.Sprintf("%%%s%%", keyword))
 	}
 
-	err = tx.Table("articles").Where(query, params...).Count(&total).Error
+	if userID > 0 {
+		query = query + " and author_id=?"
+		params = append(params, userID)
+	}
+
+	err = tx.Model(dbmodels.Article{}).Where(query, params...).Count(&total).Error
 	if err != nil {
-		return 0, nil, err
+		return nil, 0, err
 	}
 
 	list = []*dbmodels.Article{}
-	err = tx.Table("articles").Where(query, params...).Order("id desc").Offset(int((page - 1) * pageSize)).Limit(int(
+	err = tx.Model(dbmodels.Article{}).Where(query, params...).Order(order).Offset(int((page - 1) * pageSize)).Limit(int(
 		pageSize)).Find(&list).Error
 	if err != nil {
-		return 0, nil, err
+		return nil, 0, err
 	}
 
-	return total, list, nil
+	return list, total, nil
+}
+
+func statusContain(statusList []int, status int) bool {
+	for _, item := range statusList {
+		if item == status {
+			return true
+		}
+	}
+	return false
 }
 
 // SearchArticle 搜索文章
-func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, list []*dbmodels.Article, err error) {
+func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, result *bleve.SearchResult, articleMap map[uint]*dbmodels.Article, err error) {
 	query := bleve.NewQueryStringQuery(keyword)
-	searchRequest := bleve.NewSearchRequest(query)
-	result, err := g.Index.Search(searchRequest)
+	from := size * (page - 1)
+	searchRequest := bleve.NewSearchRequestOptions(query, int(size), int(from), false)
+	searchRequest.SortBy([]string{"-_score"})
+	searchRequest.Highlight = bleve.NewHighlight()
+	result, err = g.Index.Search(searchRequest)
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, nil, err
 	}
 
 	total = uint(result.Total)
+
+	// gather ids
 	ids := []uint{}
-	from := size * (page - 1)
-	to := size * page
-
-	if int(from) > result.Hits.Len() || result.Hits.Len() <= 0 {
-		return total, list, nil
-	}
-	if int(to) > result.Hits.Len() {
-		to = uint(result.Hits.Len())
-	}
-
-	for _, hit := range result.Hits[from:to] {
+	for _, hit := range result.Hits {
 		id, err := strconv.ParseUint(hit.ID, 10, 64)
 		if err != nil {
 			continue
@@ -74,12 +90,17 @@ func SearchArticle(tx *gorm.DB, keyword string, page, size uint) (total uint, li
 		ids = append(ids, uint(id))
 	}
 
-	list, err = LoadArticleByIds(tx, ids)
+	// load article list as map
+	list, err := LoadArticleByIds(tx, ids)
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, nil, err
+	}
+	articleMap = make(map[uint]*dbmodels.Article)
+	for _, article := range list {
+		articleMap[article.ID] = article
 	}
 
-	return total, list, nil
+	return total, result, articleMap, nil
 }
 
 func LoadArticleByIds(tx *gorm.DB, ids []uint) (list []*dbmodels.Article, err error) {
@@ -112,6 +133,7 @@ func PageArticleMonthly(tx *gorm.DB, year, month uint, page uint, pageSize uint)
 	return total, list, nil
 }
 
+// ArticleToShowContent article转显示结构
 func ArticleToShowContent(articles []*dbmodels.Article) (articleContent []*models.ArticleShowContent) {
 	articleContent = []*models.ArticleShowContent{}
 	for _, article := range articles {
@@ -120,6 +142,7 @@ func ArticleToShowContent(articles []*dbmodels.Article) (articleContent []*model
 	return articleContent
 }
 
+// ArticleToTitle article转标题
 func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.ArticleTitle) {
 	articleTitle = []*models.ArticleTitle{}
 	for _, article := range articles {
@@ -128,9 +151,19 @@ func ArticleToTitle(articles []*dbmodels.Article) (articleTitle []*models.Articl
 	return articleTitle
 }
 
+// ArticleToAdminTitle article转admin标题
+func ArticleToAdminTitle(articles []*dbmodels.Article) (articleTitle []*models.ArticleAdminTitle) {
+	articleTitle = []*models.ArticleAdminTitle{}
+	for _, article := range articles {
+		articleTitle = append(articleTitle, article.ToArticleAdminTitle())
+	}
+	return articleTitle
+}
+
+// HotArticleTitle 获取topN热文标题
 func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle, err error) {
 	var list []*dbmodels.Article
-	err = tx.Table("articles").Order("count desc").Limit(int(num)).Find(&list).Error
+	err = tx.Model(dbmodels.Article{}).Order("count desc").Limit(int(num)).Find(&list).Error
 	if err != nil {
 		return nil, err
 	}
@@ -141,10 +174,11 @@ func HotArticleTitle(tx *gorm.DB, num uint) (articleTitle []*models.ArticleTitle
 	return articleTitle, nil
 }
 
+// MonthArch 按月归档
 func MonthArch(tx *gorm.DB) (archInfos []*dbmodels.ArchInfo, err error) {
 	var list []*dbmodels.Article
 	archInfos = []*dbmodels.ArchInfo{}
-	err = tx.Table("articles").Select("created_at").Where("status=?", 1).Find(&list).Error
+	err = tx.Model(dbmodels.Article{}).Select("created_at").Where("status=?", 1).Find(&list).Error
 	if err != nil {
 		return nil, err
 	}
@@ -177,6 +211,7 @@ func MonthArch(tx *gorm.DB) (archInfos []*dbmodels.ArchInfo, err error) {
 	return archInfos, nil
 }
 
+// GetArticle 通过URI获取文章
 func GetArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
 	err = tx.Table("articles").Where("uri=?", uri).First(art).Error
@@ -186,7 +221,18 @@ func GetArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
-func GetArticleById(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
+// GetPublishedArticle 通过URI获取已发布文章
+func GetPublishedArticle(tx *gorm.DB, uri string) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{}
+	err = tx.Table("articles").Where("uri=? and status=1", uri).First(art).Error
+	if err != nil {
+		return nil, err
+	}
+	return art, nil
+}
+
+// GetArticleByID 通过ID获取文章
+func GetArticleByID(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 	art = &dbmodels.Article{}
 	err = tx.Table("articles").Where("id=?", aid).First(art).Error
 	if err != nil {
@@ -195,23 +241,35 @@ func GetArticleById(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
 	return art, nil
 }
 
-func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorId uint) (art *dbmodels.Article, err error) {
+// GetPublishedArticleByID 通过ID获取已发布文章
+func GetPublishedArticleByID(tx *gorm.DB, aid uint) (art *dbmodels.Article, err error) {
+	art = &dbmodels.Article{}
+	err = tx.Table("articles").Where("id=? and status=1", aid).First(art).Error
+	if err != nil {
+		return nil, err
+	}
+	return art, nil
+}
+
+// AddArticle 添加文章
+func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorID uint) (art *dbmodels.Article, err error) {
+	now := time.Now()
 	art = &dbmodels.Article{
 		Title:     aar.Title,
-		Uri:       aar.Uri,
+		URI:       aar.URI,
 		Keywords:  strings.Join(aar.Keywords, ","),
 		Abstract:  aar.Abstract,
 		Type:      aar.Type,
 		Content:   aar.Content,
 		Author:    author,
-		AuthorId:  authorId,
-		Status:    dbmodels.ArtStatus_Draft,
-		CreatedAt: time.Now(),
+		AuthorID:  authorID,
+		Status:    dbmodels.ArtStatusDraft,
+		CreatedAt: now,
 	}
 
 	if !aar.Draft {
-		art.Status = dbmodels.ArtStatus_Publish
-		art.PublishTime = time.Now()
+		art.Status = dbmodels.ArtStatusPublish
+		art.PublishTime = &now
 	}
 
 	err = tx.Model(dbmodels.Article{}).Create(art).Error
@@ -219,7 +277,7 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorId uint) 
 		return nil, err
 	}
 
-	err = g.Index.Index(fmt.Sprintf("%d", art.Id), art.ToArticleIndex())
+	err = g.Index.Index(fmt.Sprintf("%d", art.ID), art.ToArticleIndex())
 	if err != nil {
 		return nil, err
 	}
@@ -227,30 +285,35 @@ func AddArticle(tx *gorm.DB, aar *models.Article, author string, authorId uint) 
 	return art, nil
 }
 
+// PublishArticle 发布文章
 func PublishArticle(tx *gorm.DB, aid uint, publish bool, uid uint) (err error) {
-	status := dbmodels.ArtStatus_Publish
-	if !publish {
-		status = dbmodels.ArtStatus_Draft
+	now := time.Now()
+	fields := map[string]interface{}{
+		"updated_by": uid,
 	}
 
-	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).UpdateColumns(dbmodels.Article{
-		Status:      status,
-		PublishTime: time.Now(),
-		UpdatedBy:   uid,
-	}).Error
+	if !publish {
+		fields["status"] = dbmodels.ArtStatusDraft
+	} else {
+		fields["status"] = dbmodels.ArtStatusPublish
+		fields["publish_time"] = &now
+	}
+
+	err = tx.Model(dbmodels.Article{}).Where("id=?", aid).Updates(fields).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
+// DeleteArticle 删除文章
 func DeleteArticle(tx *gorm.DB, aid uint, uid uint) (err error) {
-	art, err := GetArticleById(tx, aid)
+	art, err := GetArticleByID(tx, aid)
 	if err != nil {
 		return err
 	}
 
-	if art.UpdatedBy != uid {
+	if art.AuthorID != uid {
 		return fmt.Errorf("无权限删除")
 	}
 
@@ -267,7 +330,8 @@ func DeleteArticle(tx *gorm.DB, aid uint, uid uint) (err error) {
 	return nil
 }
 
-func ListAllArticleUri(tx *gorm.DB) (list []*dbmodels.Article, err error) {
+// ListAllArticleURI 列举所有文章URI
+func ListAllArticleURI(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
 	err = tx.Table("articles").Select("uri").Where("status=?", 1).Order("id desc").Find(&list).Error
 	if err != nil {
@@ -276,19 +340,21 @@ func ListAllArticleUri(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	return list, nil
 }
 
+// ListAllArticle 列举所有已发布文章
 func ListAllArticle(tx *gorm.DB) (list []*dbmodels.Article, err error) {
 	list = []*dbmodels.Article{}
-	err = tx.Table("articles").Where("status=?", 1).Order("id desc").Find(&list).Error
+	err = tx.Model(dbmodels.Article{}).Where("status=?", 1).Order("id desc").Find(&list).Error
 	if err != nil {
 		return nil, err
 	}
 	return list, nil
 }
 
+// ListAllTags 列举所有标签
 func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	list := []*dbmodels.Article{}
 	err = tx.Model(dbmodels.Article{}).Select("keywords").Where("status=?",
-		dbmodels.ArtStatus_Publish).Find(&list).Error
+		dbmodels.ArtStatusPublish).Find(&list).Error
 	if err != nil {
 		return nil, nil, err
 	}
@@ -306,7 +372,7 @@ func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	counts = []int64{}
 	for _, tag := range tags {
 		total := int64(0)
-		err := tx.Model(dbmodels.Article{}).Where("status=? and keywords like ?", dbmodels.ArtStatus_Publish,
+		err := tx.Model(dbmodels.Article{}).Where("status=? and keywords like ?", dbmodels.ArtStatusPublish,
 			fmt.Sprintf("%%%s%%", tag)).Count(&total).Error
 		if err != nil {
 			log.Println("count keyword failed, err:", err.Error())
@@ -316,6 +382,7 @@ func ListAllTags(tx *gorm.DB) (tags []string, counts []int64, err error) {
 	return tags, counts, nil
 }
 
+// UpdateArticleViewCount 更新文章阅读计数
 func UpdateArticleViewCount(tx *gorm.DB, uri string, cnt int) (err error) {
 	art, err := GetArticle(tx, uri)
 	if err != nil {
@@ -330,16 +397,33 @@ func UpdateArticleViewCount(tx *gorm.DB, uri string, cnt int) (err error) {
 	return nil
 }
 
+// UpdateArticle 更新文章
 func UpdateArticle(tx *gorm.DB, id uint, article *models.Article) (err error) {
-	_, err = GetArticleById(tx, id)
-	if err != nil {
-		return err
-	}
-	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(map[string]interface{}{
+	fields := map[string]interface{}{
 		"content": article.Content,
-	}).Error
+	}
+	if article.Title != "" {
+		fields["title"] = article.Title
+	}
+	if article.URI != "" {
+		fields["uri"] = article.URI
+	}
+	if len(article.Keywords) > 0 {
+		fields["keywords"] = strings.Join(article.Keywords, ",")
+	}
+	err = tx.Model(dbmodels.Article{}).Where("id=?", id).Updates(fields).Error
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// FileCountArticleRef 统计文件的文章引用数
+func FileCountArticleRef(tx *gorm.DB, keywords string) (count int64, err error) {
+	count = 0
+	err = tx.Model(dbmodels.Article{}).Where("content like ?", fmt.Sprintf("%%%s%%", keywords)).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }

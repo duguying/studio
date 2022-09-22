@@ -27,7 +27,7 @@ func QrGoogleAuth(c *gin.Context) {
 		return
 	}
 
-	user, err := db.GetUserById(g.Db, uint(uid))
+	user, err := db.GetUserByID(g.Db, uint(uid))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -71,7 +71,7 @@ func QrGoogleAuth(c *gin.Context) {
 }
 
 type TfaAuthRequest struct {
-	Uid   uint   `json:"uid"`
+	UID   uint   `json:"uid"`
 	Token string `json:"token"`
 }
 
@@ -91,7 +91,7 @@ func TfaAuth(c *gin.Context) {
 		return
 	}
 
-	user, err := db.GetUserById(g.Db, tar.Uid)
+	user, err := db.GetUserByID(g.Db, tar.UID)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,

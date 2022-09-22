@@ -6,18 +6,18 @@ package action
 
 import (
 	"duguying/studio/g"
-	"duguying/studio/modules/logger"
 	"duguying/studio/service/message/model"
 	"duguying/studio/service/message/pipe"
 	"duguying/studio/utils"
-	"github.com/gin-gonic/gin"
-	"github.com/gogather/json"
-	"github.com/golang/protobuf/proto"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gogather/json"
+	"github.com/gorilla/websocket"
+	"google.golang.org/protobuf/proto"
 )
 
 type TermLayout struct {
@@ -31,9 +31,9 @@ func (tl *TermLayout) String() string {
 }
 
 func ConnectXTerm(c *gin.Context) {
-	clientId := c.Query("client_id")
+	clientID := c.Query("client_id")
 
-	if clientId == "" {
+	if clientID == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
 			"err": "client_id is required",
@@ -42,19 +42,11 @@ func ConnectXTerm(c *gin.Context) {
 	}
 
 	// create cli
-	reqId, err := utils.GenUUID()
-	if err != nil {
-		log.Println("generate uuid failed:", err)
-		c.JSON(http.StatusForbidden, map[string]interface{}{
-			"ok":    false,
-			"error": err.Error(),
-		})
-		return
-	}
+	reqID := utils.GenUUID()
 	openCliCmd := model.CliCmd{
 		Cmd:       model.CliCmd_OPEN,
-		Session:   clientId,
-		RequestId: reqId,
+		Session:   clientID,
+		RequestId: reqID,
 		Pid:       0,
 	}
 	pcmdData, err := proto.Marshal(&openCliCmd)
@@ -65,10 +57,10 @@ func ConnectXTerm(c *gin.Context) {
 		})
 		return
 	}
-	success := pipe.SendMsg(clientId, model.Msg{
+	success := pipe.SendMsg(clientID, model.Msg{
 		Type:     websocket.BinaryMessage,
 		Cmd:      model.CMD_CLI_CMD,
-		ClientId: clientId,
+		ClientId: clientID,
 		Data:     pcmdData,
 	})
 	if !success {
@@ -84,7 +76,7 @@ func ConnectXTerm(c *gin.Context) {
 	for i := 0; i < 10000; i++ {
 		time.Sleep(time.Millisecond)
 		var exist = false
-		pid, exist = pipe.GetCliPid(clientId, reqId)
+		pid, exist = pipe.GetCliPid(clientID, reqID)
 		if exist {
 			break
 		}
@@ -118,8 +110,8 @@ func ConnectXTerm(c *gin.Context) {
 	defer func() { wsExit = true }()
 
 	pair := pipe.NewCliChanPair()
-	pipe.SetCliChanPair(clientId, pid, pair)
-	pipe.SetPidCon(clientId, pid, conn) // store connection
+	pipe.SetCliChanPair(clientID, pid, pair)
+	pipe.SetPidCon(clientID, pid, conn) // store connection
 
 	// send xterm data into cli
 	go func() {
@@ -131,11 +123,11 @@ func ConnectXTerm(c *gin.Context) {
 						return
 					}
 					pipeStruct := model.CliPipe{
-						Session: clientId,
+						Session: clientID,
 						Pid:     pid,
 						Data:    data,
 					}
-					logger.L("agentrcv").Printf("agent received in: %s\n", string(data))
+					g.LogEntry.WithField("slice", "agentrcv").Printf("agent received in: %s\n", string(data))
 					pipeData, err := proto.Marshal(&pipeStruct)
 					if err != nil {
 						log.Println("proto marshal failed, err:", err.Error())
@@ -144,10 +136,10 @@ func ConnectXTerm(c *gin.Context) {
 					msg := model.Msg{
 						Type:     websocket.BinaryMessage,
 						Cmd:      model.CMD_CLI_PIPE,
-						ClientId: clientId,
+						ClientId: clientID,
 						Data:     pipeData,
 					}
-					pipe.SendMsg(clientId, msg)
+					pipe.SendMsg(clientID, msg)
 				}
 			}
 		}
@@ -162,12 +154,12 @@ func ConnectXTerm(c *gin.Context) {
 				log.Println("read:", err)
 
 				// try to send close cmd to agent cli
-				_, exist := pipe.GetPidCon(clientId, pid)
+				_, exist := pipe.GetPidCon(clientID, pid)
 				if exist {
 					cliCmdStruct := model.CliCmd{
 						Cmd:       model.CliCmd_CLOSE,
-						Session:   clientId,
-						RequestId: reqId,
+						Session:   clientID,
+						RequestId: reqID,
 						Pid:       pid,
 					}
 					cliCmdData, err := proto.Marshal(&cliCmdStruct)
@@ -177,10 +169,10 @@ func ConnectXTerm(c *gin.Context) {
 						cmdCloseMsg := model.Msg{
 							Type:     websocket.BinaryMessage,
 							Cmd:      model.CMD_CLI_CMD,
-							ClientId: clientId,
+							ClientId: clientID,
 							Data:     cliCmdData,
 						}
-						pipe.SendMsg(clientId, cmdCloseMsg)
+						pipe.SendMsg(clientID, cmdCloseMsg)
 					}
 				}
 				break
@@ -198,8 +190,8 @@ func ConnectXTerm(c *gin.Context) {
 				log.Println("resize...", layout)
 				cliCmdStruct := model.CliCmd{
 					Cmd:       model.CliCmd_RESIZE,
-					Session:   clientId,
-					RequestId: reqId,
+					Session:   clientID,
+					RequestId: reqID,
 					Pid:       pid,
 					Width:     layout.Width,
 					Height:    layout.Height,
@@ -211,14 +203,14 @@ func ConnectXTerm(c *gin.Context) {
 					cmdCloseMsg := model.Msg{
 						Type:     websocket.BinaryMessage,
 						Cmd:      model.CMD_CLI_CMD,
-						ClientId: clientId,
+						ClientId: clientID,
 						Data:     cliCmdData,
 					}
-					pipe.SendMsg(clientId, cmdCloseMsg)
+					pipe.SendMsg(clientID, cmdCloseMsg)
 				}
 			} else if data[0] == model.TERM_PIPE {
 				//log.Printf("what's header: %d\n", data[0])
-				logger.L("browsersnt").Printf("browser sent: %s\n", string(data[1:]))
+				g.LogEntry.WithField("slice", "browsersnt").Printf("browser sent: %s\n", string(data[1:]))
 				pair.ChanOut <- data[1:]
 			}
 
@@ -244,7 +236,7 @@ func ConnectXTerm(c *gin.Context) {
 		case data := <-pair.ChanIn:
 			{
 				wsLock.Lock()
-				logger.L("browserrcv").Printf("browser received: %s\n", string(data))
+				g.LogEntry.WithField("slice", "browserrcv").Printf("browser received: len --> %d\n", len(data))
 				err = conn.WriteMessage(websocket.BinaryMessage, data)
 				if err != nil {
 					log.Println("即时消息发送到客户端:", err)
@@ -254,7 +246,4 @@ func ConnectXTerm(c *gin.Context) {
 			}
 		}
 	}
-
-	log.Println("一个 xterm 连接顺利退出")
-
 }

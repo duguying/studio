@@ -8,6 +8,7 @@ import (
 	"duguying/studio/modules/dbmodels"
 
 	"github.com/gogather/com"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -29,6 +30,17 @@ func RegisterUser(tx *gorm.DB, username string, password string, email string) (
 	return user, nil
 }
 
+// UserChangePassword 修改密码
+func UserChangePassword(tx *gorm.DB, username string, newPassword string) (err error) {
+	newSalt := com.Md5(uuid.New().String())
+	newPasswd := com.Md5(newPassword + newSalt)
+
+	return tx.Model(dbmodels.User{}).Where("username=?", username).Updates(map[string]interface{}{
+		"salt":     newSalt,
+		"password": newPasswd,
+	}).Error
+}
+
 func GetUser(tx *gorm.DB, username string) (user *dbmodels.User, err error) {
 	user = &dbmodels.User{}
 	err = tx.Table("users").Where("username=?", username).First(user).Error
@@ -38,7 +50,7 @@ func GetUser(tx *gorm.DB, username string) (user *dbmodels.User, err error) {
 	return user, nil
 }
 
-func GetUserById(tx *gorm.DB, uid uint) (user *dbmodels.User, err error) {
+func GetUserByID(tx *gorm.DB, uid uint) (user *dbmodels.User, err error) {
 	user = &dbmodels.User{}
 	err = tx.Table("users").Where("id=?", uid).First(user).Error
 	if err != nil {

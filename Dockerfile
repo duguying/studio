@@ -1,4 +1,4 @@
-FROM debian
+FROM git.duguying.net/duguying/studio-base:latest
 
 ADD "dockerdist" "/tmp"
 RUN "/tmp/setenv"

@@ -7,16 +7,22 @@ package action
 import (
 	"duguying/studio/g"
 	"duguying/studio/modules/db"
+	"duguying/studio/modules/dbmodels"
 	"duguying/studio/modules/viewcnt"
 	"duguying/studio/service/models"
+	"duguying/studio/utils"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
+	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gogather/com"
 )
 
+// ListArticleWithContent 文章列表
 // @Router /list [get]
 // @Tags 文章
 // @Description 文章列表
@@ -34,7 +40,7 @@ func ListArticleWithContent(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size)
+	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish}, 0)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -71,6 +77,14 @@ func SearchArticle(c *gin.Context) {
 		return
 	}
 
+	// 关键词为空，直接返回空
+	if len(req.Keyword) <= 0 {
+		c.JSON(http.StatusOK, models.CommonSearchListResponse{
+			Ok: true,
+		})
+		return
+	}
+
 	// 默认参数
 	if req.Page <= 0 {
 		req.Page = 1
@@ -80,7 +94,7 @@ func SearchArticle(c *gin.Context) {
 	}
 
 	tx := g.Db.WithContext(c)
-	total, list, err := db.SearchArticle(tx, req.Keyword, req.Page, req.Size)
+	total, result, articleMap, err := db.SearchArticle(tx, req.Keyword, req.Page, req.Size)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  false,
@@ -89,10 +103,45 @@ func SearchArticle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, models.CommonListResponse{
+	searchList := []*models.ArticleSearchAbstract{}
+	for _, item := range result.Hits {
+		id, err := strconv.ParseUint(item.ID, 10, 64)
+		if err != nil {
+			continue
+		}
+		article := articleMap[uint(id)]
+		title := article.Title
+		if len(item.Fragments["title"]) > 0 {
+			title = item.Fragments["title"][0]
+		}
+		keywords := article.Keywords
+		if len(item.Fragments["keywords"]) > 0 {
+			keywords = item.Fragments["keywords"][0]
+		}
+		content := utils.TrimHTML(article.Content)
+		if utf8.RuneCountInString(content) > 100 {
+			content = string([]rune(content)[:100])
+		}
+		if len(item.Fragments["content"]) > 0 {
+			content = item.Fragments["content"][0]
+		}
+		article.Keywords = keywords // 包含mark标签
+		searchList = append(searchList, &models.ArticleSearchAbstract{
+			ID:        uint(id),
+			Title:     title,
+			URI:       article.URI,
+			Tags:      article.ToArticleContent().Tags,
+			Author:    article.Author,
+			Keywords:  keywords,
+			Content:   content,
+			CreatedAt: &article.CreatedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, models.CommonSearchListResponse{
 		Ok:    true,
 		Total: total,
-		List:  list,
+		List:  searchList,
 	})
 	return
 }
@@ -116,7 +165,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 		return
 	}
 
-	total, list, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size)
+	list, total, err := db.PageArticle(g.Db, pager.Tag, pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish}, 0)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
 		c.JSON(http.StatusOK, models.ArticleContentListResponse{
@@ -134,6 +183,7 @@ func ListArticleWithContentByTag(c *gin.Context) {
 	return
 }
 
+// ListArticleWithContentMonthly 文章按月列表
 // @Router /list_archive_monthly [get]
 // @Tags 文章
 // @Description 文章列表
@@ -171,94 +221,145 @@ func ListArticleWithContentMonthly(c *gin.Context) {
 	return
 }
 
+// ListArticleTitle 按标题列举文章
 // @Router /list_title [get]
 // @Tags 文章
 // @Description 文章列表
 // @Param page query uint true "页码"
 // @Param size query uint true "每页数"
 // @Success 200 {object} models.ArticleTitleListResponse
-func ListArticleTitle(c *gin.Context) {
+func ListArticleTitle(c *CustomContext) (interface{}, error) {
 	pager := models.CommonPagerRequest{}
 	err := c.BindQuery(&pager)
 	if err != nil {
-		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	total, list, err := db.PageArticle(g.Db, "", pager.Page, pager.Size)
+	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size, []int{dbmodels.ArtStatusPublish}, 0)
 	if err != nil {
 		log.Println("分页查询错误, err:", err)
-		c.JSON(http.StatusOK, models.ArticleTitleListResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	c.JSON(http.StatusOK, models.ArticleTitleListResponse{
+	return models.ArticleTitleListResponse{
 		Ok:    true,
 		Total: uint(total),
 		List:  db.ArticleToTitle(list),
-	})
-	return
+	}, nil
 }
 
+// ListAdminArticleTitle 按标题列举文章
+// @Router /admin/article/list_title [get]
+// @Tags 文章
+// @Description 文章列表
+// @Param page query uint true "页码"
+// @Param size query uint true "每页数"
+// @Success 200 {object} models.ArticleTitleListResponse
+func ListAdminArticleTitle(c *CustomContext) (interface{}, error) {
+	pager := models.CommonPagerRequest{}
+	err := c.BindQuery(&pager)
+	if err != nil {
+		return nil, err
+	}
+
+	list, total, err := db.PageArticle(g.Db, "", pager.Page, pager.Size,
+		[]int{dbmodels.ArtStatusPublish, dbmodels.ArtStatusDraft}, c.UserID())
+	if err != nil {
+		log.Println("分页查询错误, err:", err)
+		return nil, err
+	}
+
+	return models.ArticleAdminTitleListResponse{
+		Ok:    true,
+		Total: uint(total),
+		List:  db.ArticleToAdminTitle(list),
+	}, nil
+}
+
+// AdminGetArticle 管理后台获取文章
 // @Router /article [get]
 // @Tags 文章
 // @Description 获取文章
 // @Param id query uint false "ID"
 // @Param uri query string false "URI"
 // @Success 200 {object} models.ArticleContentGetResponse
-func GetArticle(c *gin.Context) {
+func AdminGetArticle(c *CustomContext) (interface{}, error) {
 	getter := models.ArticleUriGetterRequest{}
 	err := c.BindQuery(&getter)
 	if err != nil {
-		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	art := &models.ArticleContent{}
+	var art *models.ArticleContent
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(g.Db, getter.Id)
+		dbArt, err := db.GetArticleByID(g.Db, getter.Id)
 		if err != nil {
-			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-				Ok:  false,
-				Msg: err.Error(),
-			})
-			return
+			return nil, err
+		}
+		if dbArt.AuthorID != c.UserID() {
+			return nil, fmt.Errorf("当前用户无权限获取该文章详情")
 		}
 		art = dbArt.ToArticleContent()
 	} else if len(getter.Uri) > 0 {
 		dbArt, err := db.GetArticle(g.Db, getter.Uri)
 		if err != nil {
-			c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-				Ok:  false,
-				Msg: err.Error(),
-			})
-			return
+			return nil, err
+		}
+		if dbArt.AuthorID != c.UserID() {
+			return nil, fmt.Errorf("当前用户无权限获取该文章详情")
 		}
 		art = dbArt.ToArticleContent()
 	} else {
-		c.JSON(http.StatusOK, models.ArticleContentGetResponse{
-			Ok:  false,
-			Msg: "invalid id and uri",
-		})
-		return
+		return nil, fmt.Errorf("invalid id and uri")
 	}
 
-	c.JSON(http.StatusOK, models.ArticleContentGetResponse{
+	return models.ArticleContentGetResponse{
 		Ok:   true,
 		Data: art,
-	})
-	return
+	}, nil
 }
 
+// GetArticleCurrentMD5 获取文章MD5
+// @Router /article/current_md5 [get]
+// @Tags 文章
+// @Description 获取文章MD5
+// @Param id query uint false "ID"
+// @Param uri query string false "URI"
+// @Success 200 {object} models.ArticleContentMD5Response
+func GetArticleCurrentMD5(c *CustomContext) (interface{}, error) {
+	getter := models.ArticleUriGetterRequest{}
+	err := c.BindQuery(&getter)
+	if err != nil {
+		return nil, err
+	}
+
+	var art *models.ArticleContent
+	if getter.Id > 0 {
+		dbArt, err := db.GetArticleByID(g.Db, getter.Id)
+		if err != nil {
+			return nil, err
+		}
+		art = dbArt.ToArticleContent()
+	} else if len(getter.Uri) > 0 {
+		dbArt, err := db.GetArticle(g.Db, getter.Uri)
+		if err != nil {
+			return nil, err
+		}
+		art = dbArt.ToArticleContent()
+	} else {
+		return nil, fmt.Errorf("invalid id and uri")
+	}
+
+	return models.ArticleContentMD5Response{
+		Ok: true,
+		Data: &models.ArticleContentMD5{
+			ID:  int(art.ID),
+			MD5: com.Md5(art.Content),
+		},
+	}, nil
+}
+
+// HotArticleTitle 文章TopN列表
 // @Router /hot_article [get]
 // @Tags 文章
 // @Description 文章TopN列表
@@ -290,6 +391,7 @@ func HotArticleTitle(c *gin.Context) {
 	return
 }
 
+// MonthArchive 文章按月归档
 // @Router /month_archive [get]
 // @Tags 文章
 // @Description 文章按月归档
@@ -336,9 +438,9 @@ func GetArticleShow(c *gin.Context) {
 	}
 
 	tx := g.Db.WithContext(c)
-	art := &models.ArticleShowContent{}
+	var art *models.ArticleShowContent
 	if getter.Id > 0 {
-		dbArt, err := db.GetArticleById(tx, getter.Id)
+		dbArt, err := db.GetPublishedArticleByID(tx, getter.Id)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -348,7 +450,7 @@ func GetArticleShow(c *gin.Context) {
 		}
 		art = dbArt.ToArticleShowContent()
 	} else if len(getter.Uri) > 0 {
-		dbArt, err := db.GetArticle(tx, getter.Uri)
+		dbArt, err := db.GetPublishedArticle(tx, getter.Uri)
 		if err != nil {
 			c.JSON(http.StatusOK, models.ArticleShowContentGetResponse{
 				Ok:  false,
@@ -380,25 +482,34 @@ func GetArticleShow(c *gin.Context) {
 func ArticleViewCount(c *gin.Context) {
 	ident := c.Query("ident")
 	refer := c.GetHeader("Referer")
-	referUrl, err := url.Parse(refer)
+	referURL, err := url.Parse(refer)
 	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  true,
-			Msg: "",
+			Msg: "invalid referer",
 		})
 		return
 	}
-	if referUrl.Host != g.Config.Get("system", "host", "www.duguying.net") {
+	sysHost := g.Config.Get("system", "host", "https://www.duguying.net")
+	sysURL, err := url.Parse(sysHost)
+	if err != nil {
 		c.JSON(http.StatusOK, models.CommonResponse{
 			Ok:  true,
-			Msg: "",
+			Msg: "invalid config",
+		})
+		return
+	}
+	if referURL.Host != sysURL.Host {
+		c.JSON(http.StatusOK, models.CommonResponse{
+			Ok:  true,
+			Msg: "ignore",
 		})
 		return
 	}
 	viewcnt.ViewHit(ident)
 	c.JSON(http.StatusOK, models.CommonResponse{
 		Ok:  true,
-		Msg: "",
+		Msg: "hit",
 	})
 	return
 }
@@ -409,41 +520,37 @@ func ArticleViewCount(c *gin.Context) {
 // @Description 创建文章
 // @Param article body models.Article true "文章信息"
 // @Success 200 {object} models.CommonCreateResponse
-func AddArticle(c *gin.Context) {
+func AddArticle(c *CustomContext) (interface{}, error) {
 	aar := &models.Article{}
 	err := c.BindJSON(aar)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
+	}
+
+	if aar.Title == "" {
+		return nil, fmt.Errorf("标题不能为空")
 	}
 
 	tx := g.Db.WithContext(c)
-	userId := uint(c.GetInt64("user_id"))
-	user, err := db.GetUserById(tx, userId)
+	user, err := db.GetUserByID(tx, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
-	article, err := db.AddArticle(tx, aar, user.Username, userId)
+	article, err := db.AddArticle(tx, aar, user.Username, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	} else {
-		c.JSON(http.StatusOK, models.CommonCreateResponse{
+		if !aar.Draft {
+			err = db.AddDraft(tx, article.ID, aar.Content)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return models.CommonCreateResponse{
 			Ok: true,
-			Id: article.Id,
-		})
-		return
+			ID: article.ID,
+		}, nil
 	}
 }
 
@@ -453,29 +560,27 @@ func AddArticle(c *gin.Context) {
 // @Description 修改文章
 // @Param publish body models.Article true "文章信息"
 // @Success 200 {object} models.CommonResponse
-func UpdateArticle(c *gin.Context) {
+func UpdateArticle(c *CustomContext) (interface{}, error) {
 	article := models.Article{}
 	err := c.BindJSON(&article)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "解析参数失败",
-		})
-		return
+		return nil, fmt.Errorf("解析参数失败")
 	}
+
 	tx := g.Db.WithContext(c)
-	err = db.UpdateArticle(tx, article.Id, &article)
+	err = db.UpdateArticle(tx, article.ID, &article)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "解析参数失败",
-		})
-		return
+		return nil, err
 	}
-	c.JSON(http.StatusOK, models.CommonResponse{
+
+	err = db.AddDraft(tx, article.ID, article.Content)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.CommonResponse{
 		Ok: true,
-	})
-	return
+	}, nil
 }
 
 // PublishArticle 发布文章
@@ -484,52 +589,38 @@ func UpdateArticle(c *gin.Context) {
 // @Description 发布文章
 // @Param publish body models.ArticlePublishRequest true "文章信息"
 // @Success 200 {object} models.CommonResponse
-func PublishArticle(c *gin.Context) {
+func PublishArticle(c *CustomContext) (interface{}, error) {
 	pub := models.ArticlePublishRequest{}
 	err := c.BindJSON(&pub)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// get article
 	tx := g.Db.WithContext(c)
-	article, err := db.GetArticleById(tx, pub.Id)
+	article, err := db.GetArticleByID(tx, pub.Id)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// check auth
-	userId := uint(c.GetInt64("user_id"))
-	if userId != article.AuthorId {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "auth failed, it's not you article, could not publish",
-		})
-		return
+	if c.UserID() != article.AuthorID {
+		return nil, fmt.Errorf("auth failed, it's not you article, could not publish")
 	}
 
 	// publish
-	err = db.PublishArticle(tx, pub.Id, pub.Publish, userId)
+	err = db.PublishArticle(tx, pub.Id, pub.Publish, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	} else {
-		c.JSON(http.StatusOK, models.CommonResponse{
+		err = db.AddDraft(tx, article.ID, article.Content)
+		if err != nil {
+			return nil, err
+		}
+		return models.CommonResponse{
 			Ok:  true,
 			Msg: "publish success",
-		})
-		return
+		}, nil
 	}
 }
 
@@ -539,59 +630,41 @@ func PublishArticle(c *gin.Context) {
 // @Description 删除文章
 // @Param id query uint true "文章ID"
 // @Success 200 {object} models.CommonResponse
-func DeleteArticle(c *gin.Context) {
-	getter := models.CommonGetterRequest{}
+func DeleteArticle(c *CustomContext) (interface{}, error) {
+	getter := models.IntGetter{}
 	err := c.BindQuery(&getter)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// get article
 	tx := g.Db.WithContext(c)
-	article, err := db.GetArticleById(tx, getter.Id)
+	article, err := db.GetArticleByID(tx, getter.ID)
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	}
 
 	// check auth
-	userId := uint(c.GetInt64("user_id"))
-	if userId != article.AuthorId {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: "auth failed, it's not you article, could not publish",
-		})
-		return
+	if c.UserID() != article.AuthorID {
+		return nil, fmt.Errorf("auth failed, it's not you article, could not delete")
 	}
 
 	// delete
-	err = db.DeleteArticle(tx, getter.Id, userId)
+	err = db.DeleteArticle(tx, getter.ID, c.UserID())
 	if err != nil {
-		c.JSON(http.StatusOK, models.CommonResponse{
-			Ok:  false,
-			Msg: err.Error(),
-		})
-		return
+		return nil, err
 	} else {
-		c.JSON(http.StatusOK, models.CommonResponse{
+		return models.CommonResponse{
 			Ok:  true,
 			Msg: "delete success",
-		})
-		return
+		}, nil
 	}
 }
 
 // SiteMap 站点地图
 func SiteMap(c *gin.Context) {
 	tx := g.Db.WithContext(c)
-	list, err := db.ListAllArticleUri(tx)
+	list, err := db.ListAllArticleURI(tx)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"ok":  false,
@@ -607,7 +680,7 @@ func SiteMap(c *gin.Context) {
 
 	// articles
 	for _, item := range list {
-		sitemap = append(sitemap, fmt.Sprintf("/article/%s", item.Uri))
+		sitemap = append(sitemap, fmt.Sprintf("/article/%s", item.URI))
 	}
 
 	// list pages
@@ -654,4 +727,8 @@ func SiteMap(c *gin.Context) {
 		List: sitemap,
 	})
 	return
+}
+
+func SaveErrorLogger(c *CustomContext) (interface{}, error) {
+	return models.CommonResponse{Ok: true}, nil
 }

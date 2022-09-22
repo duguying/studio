@@ -1,17 +1,18 @@
 package logger
 
 import (
-	"github.com/gogather/logger"
 	"io"
 	"log"
 	"os"
 	"time"
+
+	"github.com/gogather/logger"
 )
 
 var gl *logger.GroupLogger
 
 func InitLogger(dir string, expire time.Duration, level int) {
-	logSlice := []string{"blog", "orm", "ws", "browserrcv", "browsersnt", "agentrcv", "agentsnt"}
+	logSlice := []string{}
 	gl = logger.NewGroupLogger(dir, "studio", expire, logSlice, log.Ldate|log.Ltime|log.Lshortfile, level)
 }
 

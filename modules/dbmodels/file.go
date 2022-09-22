@@ -6,22 +6,36 @@ package dbmodels
 
 import (
 	"database/sql/driver"
+	"duguying/studio/service/models"
+	"duguying/studio/utils"
 	"fmt"
-	"github.com/gogather/json"
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/gogather/json"
 )
 
 const (
 	LOCAL StorageType = 0
 	OSS   StorageType = 1
 
-	FileTypeArchive FileType = 0
+	FileTypeUnknown FileType = 0
 	FileTypeImage   FileType = 1
+	FileTypeVideo   FileType = 2
+	FileTypeArchive FileType = 3
 
 	RecognizeNotNeed RecognizeStatus = 0
 	RecognizeDone    RecognizeStatus = 1
+)
+
+var (
+	FileTypeMap = map[FileType]string{
+		FileTypeUnknown: "unknown",
+		FileTypeImage:   "image",
+		FileTypeVideo:   "video",
+		FileTypeArchive: "archive",
+	}
 )
 
 type StorageType int64
@@ -120,18 +134,57 @@ func (rs *RecognizeStatus) Scan(value interface{}) error {
 type File struct {
 	UUID
 
-	Filename   string          `json:"filename"`
-	Path       string          `json:"path"`
-	Store      StorageType     `json:"store"`
-	Mime       string          `json:"mime"`
-	Size       uint64          `json:"size"`
-	FileType   FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
-	Md5        string          `json:"md5" sql:"comment:'MD5'"`
-	Recognized RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
-	CreatedAt  time.Time       `json:"created_at"`
+	Filename    string          `json:"filename"`
+	Path        string          `json:"path"`
+	Store       StorageType     `json:"store"`
+	Mime        string          `json:"mime"`
+	Size        uint64          `json:"size"`
+	FileType    FileType        `json:"file_type" gorm:"default:0" sql:"comment:'文件类型'"`
+	Md5         string          `json:"md5" sql:"comment:'MD5'"`
+	Recognized  RecognizeStatus `json:"recognized" gorm:"default:0" sql:"comment:'识别状态'"`
+	UserID      uint            `json:"user_id" gorm:"comment:'文件所有者';index"`
+	MediaWidth  uint64          `json:"media_width"`
+	MediaHeight uint64          `json:"media_height"`
+	Thumbnail   string          `json:"thumbnail"`
+	CreatedAt   time.Time       `json:"created_at"`
 }
 
 func (f *File) String() string {
 	c, _ := json.Marshal(f)
 	return string(c)
+}
+
+func (f *File) ToModel() *models.File {
+	return &models.File{
+		ID:          f.ID,
+		Filename:    f.Filename,
+		Path:        f.Path,
+		Store:       int64(f.Store),
+		Mime:        f.Mime,
+		Size:        f.Size,
+		FileType:    int64(f.FileType),
+		Md5:         f.Md5,
+		Recognized:  int64(f.Recognized),
+		UserID:      f.UserID,
+		MediaWidth:  f.MediaWidth,
+		MediaHeight: f.MediaHeight,
+		CreatedAt:   f.CreatedAt,
+	}
+}
+
+func (f *File) ToMediaFile() *models.MediaFile {
+	return &models.MediaFile{
+		ID:           f.ID,
+		Filename:     f.Filename,
+		URL:          utils.GetFileURL(f.Path),
+		Mime:         f.Mime,
+		Size:         f.Size,
+		FileType:     FileTypeMap[f.FileType],
+		Md5:          f.Md5,
+		UserID:       f.UserID,
+		Width:        f.MediaWidth,
+		Height:       f.MediaHeight,
+		ThumbnailURL: utils.GetFileURL(f.Thumbnail),
+		CreatedAt:    f.CreatedAt,
+	}
 }

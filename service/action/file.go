@@ -381,6 +381,7 @@ func getLocalPath(path string) string {
 	return filepath.Join(store, path)
 }
 
+// DeleteFile 删除文件
 func DeleteFile(c *CustomContext) (interface{}, error) {
 	l := c.Logger()
 	req := &models.FileSyncRequest{}
@@ -401,6 +402,14 @@ func DeleteFile(c *CustomContext) (interface{}, error) {
 	err = cos.RemoveFile(file.Path)
 	if err != nil {
 		return nil, err
+	}
+
+	cnt, err := db.CheckFileRef(g.Db, file)
+	if err != nil {
+		return nil, err
+	}
+	if cnt > 0 {
+		return nil, fmt.Errorf("该文件存在 %d 处引用，不能删除", cnt)
 	}
 
 	_ = os.Remove(getLocalPath(file.Path))

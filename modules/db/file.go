@@ -6,6 +6,7 @@ package db
 
 import (
 	"duguying/studio/modules/dbmodels"
+	"duguying/studio/utils"
 	"path"
 	"time"
 
@@ -38,6 +39,30 @@ func DeleteFile(tx *gorm.DB, id string) (err error) {
 	return tx.Model(dbmodels.File{}).Where("id=?", id).Delete(&dbmodels.File{}).Error
 }
 
+// CheckFileRef 检查文件引用
+func CheckFileRef(tx *gorm.DB, file *dbmodels.File) (cnt int64, err error) {
+	url := utils.GetFileURL(file.Path)
+	cnt, err = FileCountArticleRef(tx, url)
+	if err != nil {
+		return 0, err
+	}
+	coverRefCnt, err := FileCountCoverRef(tx, file.ID)
+	if err != nil {
+		return 0, err
+	}
+	return cnt + coverRefCnt, nil
+}
+
+// FileCountCoverRef 封面文件引用计数
+func FileCountCoverRef(tx *gorm.DB, fileID string) (cnt int64, err error) {
+	err = tx.Model(dbmodels.Cover{}).Where("file_id=?", fileID).Count(&cnt).Error
+	if err != nil {
+		return 0, err
+	}
+	return cnt, nil
+}
+
+// PageFile 文件分页列表
 func PageFile(tx *gorm.DB, page uint64, size uint64, userID uint) (list []*dbmodels.File, total int64, err error) {
 	list = []*dbmodels.File{}
 	total = 0

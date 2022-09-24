@@ -310,6 +310,11 @@ func PageFile(c *CustomContext) (interface{}, error) {
 		}
 		apiItem.ArticleRefCount = int(count)
 		apiItem.LocalExist = com.FileExist(getLocalPath(apiItem.Path))
+		coverRefCnt, err := db.FileCountCoverRef(g.Db, item.ID)
+		if err != nil {
+			continue
+		}
+		apiItem.CoverRefCount = int(coverRefCnt)
 
 		wg.Add(1)
 		go func(fileItem *models.File) {

@@ -14,6 +14,7 @@ type File struct {
 	Recognized      int64     `json:"recognized"`
 	LocalExist      bool      `json:"local_exist"`
 	ArticleRefCount int       `json:"article_ref_count"`
+	CoverRefCount   int       `json:"cover_ref_count"`
 	COS             bool      `json:"cos"`
 	UserID          uint      `json:"user_id"`
 	MediaWidth      uint64    `json:"media_width"`

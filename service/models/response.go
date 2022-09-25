@@ -106,6 +106,12 @@ type FileAdminListResponse struct {
 	List  []*File `json:"list"`
 }
 
+type FileLsResponse struct {
+	Ok   bool      `json:"ok"`
+	Msg  string    `json:"msg"`
+	List []*FsItem `json:"list"`
+}
+
 type ListUserLoginHistoryResponse struct {
 	Ok    bool            `json:"ok"`
 	Msg   string          `json:"msg"`

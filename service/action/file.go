@@ -345,6 +345,24 @@ func imgNeedConvert(ext string) bool {
 	return !ok
 }
 
+// FileLs 列举文件
+// @Router /admin/file/ls [get]
+// @Tags 上传
+// @Description 列举文件
+// @Param prefix query int true "路径前缀"
+// @Success 200 {object} models.CommonResponse
+func FileLs(c *CustomContext) (interface{}, error) {
+	prefix := c.Query("prefix")
+	list, err := db.ListCurrentDir(g.Db, c.UserID(), prefix)
+	if err != nil {
+		return nil, err
+	}
+	return &models.FileLsResponse{
+		Ok:   true,
+		List: list,
+	}, nil
+}
+
 // FileSyncToCos 文件同步到COS
 // @Router /admin/file/sync_cos [get]
 // @Tags 上传

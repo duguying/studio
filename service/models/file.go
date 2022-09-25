@@ -36,3 +36,14 @@ type MediaFile struct {
 	ThumbnailURL string    `json:"thumbnail"`
 	CreatedAt    time.Time `json:"created_at"`
 }
+
+const (
+	FileType = "file"
+	DirType  = "dir"
+)
+
+// FsItem 文件元素，文件或目录
+type FsItem struct {
+	Type string `json:"type"`
+	Name string `json:"name"`
+}

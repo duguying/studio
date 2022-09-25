@@ -6,8 +6,11 @@ package db
 
 import (
 	"duguying/studio/modules/dbmodels"
+	"duguying/studio/service/models"
 	"duguying/studio/utils"
+	"fmt"
 	"path"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -104,6 +107,61 @@ func ListAllMediaFile(tx *gorm.DB, userID uint) (list []*dbmodels.File, err erro
 	} else {
 		return list, nil
 	}
+}
+
+// ListAllFile 列举文件
+func ListAllFile(tx *gorm.DB, userID uint, dirPrefix string) (list []*dbmodels.File, err error) {
+	dirPrefix = strings.TrimPrefix(dirPrefix, "/")
+
+	list = []*dbmodels.File{}
+	where := "1=1 "
+	params := []interface{}{}
+	if userID > 0 {
+		where = where + " and user_id=?"
+		params = append(params, userID)
+	}
+	if dirPrefix != "" {
+		where = where + " and path like ?"
+		params = append(params, fmt.Sprintf("%s%%", dirPrefix))
+	}
+	err = tx.Model(dbmodels.File{}).Where(where, params...).Order("created_at desc").Find(&list).Error
+	if err != nil {
+		return nil, err
+	} else {
+		return list, nil
+	}
+}
+
+// ListCurrentDir 列举当前目录下的内容
+func ListCurrentDir(tx *gorm.DB, userID uint, dirPrefix string) (list []*models.FsItem, err error) {
+	dirPrefix = strings.TrimPrefix(dirPrefix, "/")
+
+	files, err := ListAllFile(tx, userID, dirPrefix)
+	if err != nil {
+		return nil, err
+	}
+
+	list = []*models.FsItem{}
+	for _, file := range files {
+		if file.Path == "" {
+			continue
+		}
+		segs := strings.Split(file.Path, "/")
+		if len(segs) <= 0 {
+			continue
+		}
+		fsItem := &models.FsItem{
+			Name: segs[0],
+		}
+		if len(segs) == 1 {
+			fsItem.Type = models.FileType
+		} else {
+			fsItem.Type = models.DirType
+		}
+		list = append(list)
+	}
+
+	return list, nil
 }
 
 // UpdateFileMediaSize 更新媒体文件尺寸

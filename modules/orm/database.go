@@ -104,5 +104,6 @@ func initOrm() {
 		&dbmodels.LoginHistory{},
 		&dbmodels.ImageMeta{},
 		&dbmodels.Cover{},
+		&dbmodels.Calendar{},
 	)
 }

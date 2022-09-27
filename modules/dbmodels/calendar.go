@@ -6,13 +6,11 @@ import "time"
 type Calendar struct {
 	UUID
 
-	Start       time.Time  `json:"start"`
-	End         time.Time  `json:"end"`
-	Stamp       time.Time  `json:"stamp"`
-	Summary     string     `json:"summary"`
-	Address     string     `json:"address"`
-	Description string     `json:"description"`
-	Link        string     `json:"link"`
-	Attendee    string     `json:"attendee"`
-	SendAt      *time.Time `json:"send_at"`
+	Date        time.Time     `json:"date" gorm:"index"`
+	Period      time.Duration `json:"period" gorm:"index"`
+	Summary     string        `json:"summary" gorm:"type:text"`
+	Address     string        `json:"address" gorm:"type:text"`
+	Description string        `json:"description" gorm:"type:text"`
+	Link        string        `json:"link"`
+	Attendee    string        `json:"attendee"`
 }

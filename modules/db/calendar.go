@@ -9,11 +9,10 @@ import (
 )
 
 // AddCalendar 添加日志事件
-func AddCalendar(tx *gorm.DB, start, end time.Time,
+func AddCalendar(tx *gorm.DB, date time.Time,
 	summary, address, description, link, attendee string) (added *dbmodels.Calendar, err error) {
 	added = &dbmodels.Calendar{
-		Start:       start,
-		End:         end,
+		Date:        date,
 		Summary:     summary,
 		Address:     address,
 		Description: description,

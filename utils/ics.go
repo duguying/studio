@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arran4/golang-ical"
+	ics "github.com/arran4/golang-ical"
 )
 
 // GenerateICS 生成日历事件
-func GenerateICS(id string, start, end, stamp time.Time,
+func GenerateICS(id string, date, end time.Time, period time.Duration,
 	summary, address, description, link, attendee string) string {
 	cal := ics.NewCalendar()
 	cal.SetMethod(ics.MethodRequest)
 	event := cal.AddEvent(fmt.Sprintf("%s@ics.duguying.net", id))
 	event.SetCreatedTime(time.Now())
-	event.SetDtStampTime(stamp)
+	event.SetDtStampTime(date)
 	event.SetModifiedAt(time.Now())
-	event.SetStartAt(start)
-	event.SetEndAt(end)
+	event.SetStartAt(date)
+	event.SetEndAt(date.Add(period))
 	event.SetSummary(summary)
 	event.SetLocation(address)
 	event.SetDescription(description)

@@ -20,7 +20,7 @@ func ConvertImgToWebp(inpath string, outpath string, scaleWidth int64) (size int
 	if scaleWidth > 0 {
 		args = append(args, "-resize", fmt.Sprintf("%dx", scaleWidth))
 	}
-	args = append(args, inpath, outpath)
+	args = append(args, inpath, "-auto-orient", outpath)
 	cmd := exec.Command("convert", args...)
 	err = cmd.Run()
 	if err != nil {

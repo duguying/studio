@@ -16,7 +16,7 @@ import (
 
 // ConvertImgToWebp 图片转码到webp
 func ConvertImgToWebp(inpath string, outpath string, scaleWidth int64) (size int64, err error) {
-	args := []string{}
+	args := []string{"-limit", "memory", "100mb", "-limit", "map", "100mb"}
 	if scaleWidth > 0 {
 		args = append(args, "-resize", fmt.Sprintf("%dx", scaleWidth))
 	}

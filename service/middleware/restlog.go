@@ -76,6 +76,10 @@ func RestLog() gin.HandlerFunc {
 		} else {
 			uri = u.Path
 		}
+		if skipURI(uri) {
+			c.Next()
+			return
+		}
 		reqID := uuid.New().String()
 		if c.GetHeader("X-RequestId") != "" {
 			reqID = c.GetHeader("X-RequestId")
@@ -152,4 +156,13 @@ func isMethodRecord(method string) bool {
 	} else {
 		return true
 	}
+}
+
+func skipURI(uri string) bool {
+	skipURIMap := g.Config.GetSectionAsMap("skip-uri-log")
+	val, ok := skipURIMap[uri]
+	if ok && val == "enable" {
+		return true
+	}
+	return false
 }

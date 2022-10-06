@@ -46,6 +46,7 @@ require (
 	github.com/swaggo/swag v1.8.5
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.38
 	github.com/unknwon/com v1.0.1
+	go.uber.org/automaxprocs v1.5.1
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/redis.v5 v5.2.9

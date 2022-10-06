@@ -19,6 +19,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+
+	_ "go.uber.org/automaxprocs"
 )
 
 var (

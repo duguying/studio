@@ -61,7 +61,7 @@ func initMysql() {
 	username := g.Config.Get("database", "username", "user")
 	password := g.Config.Get("database", "password", "password")
 	dbname := g.Config.Get("database", "name", "blog")
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, port, dbname)
 
 	g.Db, err = gorm.Open(mysql.New(mysql.Config{
 		DSN:               dsn,

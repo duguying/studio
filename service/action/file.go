@@ -82,7 +82,10 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 	}
 
 	// 图像是否优化，开启则调用 imagemagick 转码
-	_, optimize := c.GetPostForm("optimize")
+	optimizeOption, optimize := c.GetPostForm("optimize")
+	if optimize && optimizeOption == "false" {
+		optimize = false
+	}
 	maxWidth := int64(0)
 	scaleWidth, exist := c.GetPostForm("scale_width")
 	if exist {

@@ -185,6 +185,18 @@ func UploadImage(c *CustomContext) (interface{}, error) {
 
 	go extractImgMetaAndSave(l, fileInfo.ID, fpath)
 
+	// 存储到云存储
+	costore, err := storage.NewCos(g.LogEntry.WithContext(c), storage.DefaultCosType)
+	if err != nil {
+		return nil, err
+	}
+	localPath := getLocalPath(fileInfo.Path)
+	remotePath := fileInfo.Path
+	err = costore.PutFile(localPath, remotePath)
+	if err != nil {
+		return nil, err
+	}
+
 	// 返回文件路径
 	url := utils.GetFileURL(key)
 	return models.UploadResponse{

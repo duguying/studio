@@ -31,6 +31,8 @@ type Storage interface {
 var (
 	AliyunCosType = "aliyun"
 	QcloudCosType = "qcloud"
+
+	DefaultCosType = QcloudCosType
 )
 
 // NewCos 创建 cos 实例

@@ -105,5 +105,6 @@ func initOrm() {
 		&dbmodels.ImageMeta{},
 		&dbmodels.Cover{},
 		&dbmodels.Calendar{},
+		&dbmodels.Node{},
 	)
 }

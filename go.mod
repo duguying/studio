@@ -30,14 +30,10 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/ipipdotnet/ipdb-go v1.3.1
 	github.com/json-iterator/go v1.1.12
-	github.com/libp2p/go-libp2p v0.14.4
-	github.com/libp2p/go-libp2p-crypto v0.1.0
-	github.com/libp2p/go-libp2p-net v0.1.0
 	github.com/martinlindhe/base36 v1.1.0
 	github.com/microcosm-cc/bluemonday v1.0.15
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mozillazg/go-httpheader v0.3.1 // indirect
-	github.com/multiformats/go-multiaddr v0.4.0
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/sirupsen/logrus v1.9.0

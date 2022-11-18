@@ -53,9 +53,6 @@ func main() {
 	// 初始化 ipip
 	initIPIP()
 
-	// 初始化 p2p
-	//p2p.Init()
-
 	// 初始化 redis
 	g.Cache = cache.Init(getCacheOption())
 

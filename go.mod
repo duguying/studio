@@ -35,7 +35,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mozillazg/go-httpheader v0.3.1 // indirect
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
-	github.com/russross/blackfriday/v2 v2.1.0
+	github.com/gogather/blackfriday/v2 v2.2.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/gin-swagger v1.3.1

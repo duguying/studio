@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gogather/blackfriday/v2"
 	"github.com/gogather/json"
-	"github.com/russross/blackfriday/v2"
 )
 
 const (
@@ -89,11 +89,23 @@ func (a *Article) String() string {
 	return string(c)
 }
 
+func (a *Article) MarkdownFull(input []byte) []byte {
+	// set up the HTML renderer
+	renderer := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{
+		Flags:      blackfriday.CommonHTMLFlags,
+		Extensions: blackfriday.CommonExtensions | blackfriday.LaTeXMath,
+	})
+	options := blackfriday.Options{
+		Extensions: blackfriday.CommonExtensions | blackfriday.LaTeXMath,
+	}
+	return blackfriday.Markdown(input, renderer, options)
+}
+
 func (a *Article) ToArticleShowContent() *models.ArticleShowContent {
 	content := []byte(a.Content)
 	if a.Type == ContentTypeMarkDown {
-		content = blackfriday.Run([]byte(a.Content))
-		content = []byte(utils.ParseMath(string(content)))
+		content = a.MarkdownFull([]byte(a.Content))
+		// content = []byte(utils.ParseMath(string(content)))
 	}
 	tags := []string{}
 	segs := strings.Split(strings.Replace(a.Keywords, "，", ",", -1), ",")

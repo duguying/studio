@@ -16,6 +16,7 @@ require (
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-errors/errors v1.4.2
+	github.com/gogather/blackfriday/v2 v2.2.5
 	github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332 // indirect
 	github.com/gogather/com v1.0.0
 	github.com/gogather/cron v1.1.0
@@ -35,9 +36,8 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mozillazg/go-httpheader v0.3.1 // indirect
 	github.com/nosixtools/solarlunar v0.0.0-20200711032723-669c9e27ecc5
-	github.com/gogather/blackfriday/v2 v2.2.1
 	github.com/sirupsen/logrus v1.9.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.2
 	github.com/swaggo/gin-swagger v1.3.1
 	github.com/swaggo/swag v1.8.5
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.38

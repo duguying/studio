@@ -63,3 +63,6 @@ dockerdist/
 bleve/
 
 .tags
+
+cache/
+log/

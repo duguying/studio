@@ -33,7 +33,11 @@ test
 $$
 a=b+c
 $$
-	`
+
+` +
+		"```go\n" +
+		"var a = 1;\n" +
+		"```"
 
 	content = string(markdownFull([]byte(content)))
 

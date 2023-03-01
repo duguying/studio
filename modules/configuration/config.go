@@ -39,8 +39,6 @@ func NewConfig(path string) *Config {
 }
 
 func (dc *Config) initWithDefault() (err error) {
-	dc.Get("system", "port", "9080")
-
 	return nil
 }
 

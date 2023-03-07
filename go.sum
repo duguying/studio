@@ -303,6 +303,8 @@ github.com/gogather/blackfriday/v2 v2.2.5 h1:ae5k2e5HnyQ6zmtn4RCR4oYw11N95j0VIxr
 github.com/gogather/blackfriday/v2 v2.2.5/go.mod h1:+WbK6tPtZDxEG1d11dT2TXBTgu/tbrLYMTuzR+Ky1W4=
 github.com/gogather/blackfriday/v2 v2.2.6 h1:E3X+kIuoDYc/NUra+gh60aZpZ255fdkPViEA1jKQCx8=
 github.com/gogather/blackfriday/v2 v2.2.6/go.mod h1:+WbK6tPtZDxEG1d11dT2TXBTgu/tbrLYMTuzR+Ky1W4=
+github.com/gogather/blackfriday/v2 v2.2.7 h1:1FvXDepVFYQIkZZ6TM2hgvmr6Gs09iN5BPXzQgyaDU0=
+github.com/gogather/blackfriday/v2 v2.2.7/go.mod h1:+WbK6tPtZDxEG1d11dT2TXBTgu/tbrLYMTuzR+Ky1W4=
 github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332 h1:gWSM54Pvl13nFkE+6nWADwjtn6C0Nko5S2xkeQOZiSI=
 github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332/go.mod h1:PgPWsezX7uBdDSctBZjHuO3ePDQDOA5xPfihIOuziwM=
 github.com/gogather/com v1.0.0 h1:7v0CfKNe0FZ66ncO50bbbMkEg4V9NWATcan2QkautPM=

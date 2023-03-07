@@ -16,7 +16,7 @@ require (
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-errors/errors v1.4.2
-	github.com/gogather/blackfriday/v2 v2.2.6
+	github.com/gogather/blackfriday/v2 v2.2.7
 	github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332 // indirect
 	github.com/gogather/com v1.0.0
 	github.com/gogather/cron v1.1.0

@@ -106,5 +106,6 @@ func initOrm() {
 		&dbmodels.Cover{},
 		&dbmodels.Calendar{},
 		&dbmodels.Node{},
+		&dbmodels.ShareLock{},
 	)
 }

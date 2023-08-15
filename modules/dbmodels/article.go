@@ -5,12 +5,14 @@
 package dbmodels
 
 import (
+	"duguying/studio/g"
 	"duguying/studio/service/models"
 	"duguying/studio/utils"
 	"strings"
 	"time"
 
 	"github.com/gogather/blackfriday/v2"
+	"github.com/gogather/com"
 	"github.com/gogather/json"
 )
 
@@ -89,7 +91,20 @@ func (a *Article) String() string {
 	return string(c)
 }
 
+// MarkdownFull markdown全量转html，带缓存
 func (a *Article) MarkdownFull(input []byte) []byte {
+	md5sign := com.Md5(string(input))
+	key := "art:" + md5sign
+	output, err := g.Cache.Get(key)
+	if err != nil {
+		htmlContent := a.markdownFull(input)
+		g.Cache.SetTTL(key, string(htmlContent), time.Hour*24*30)
+		return htmlContent
+	}
+	return []byte(output)
+}
+
+func (a *Article) markdownFull(input []byte) []byte {
 	// set up the HTML renderer
 	renderer := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{
 		Flags:      blackfriday.CommonHTMLFlags,

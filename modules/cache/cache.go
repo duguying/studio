@@ -1,3 +1,4 @@
+// Package cache 缓存
 package cache
 
 import (
@@ -18,6 +19,7 @@ type CacheOption struct {
 	BoltPath string
 }
 
+// Cache 缓存接口
 type Cache interface {
 	SetTTL(key string, value string, ttl time.Duration) error
 	Set(key string, value string) error
@@ -25,6 +27,7 @@ type Cache interface {
 	Delete(key string) error
 }
 
+// Init 初始化
 func Init(option *CacheOption) Cache {
 	var cacheCli Cache
 	if option.Type == "redis" {

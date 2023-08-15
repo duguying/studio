@@ -16,6 +16,7 @@ require (
 	github.com/gin-contrib/sentry v0.0.0-20191119142041-ff0e9556d1b7
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-errors/errors v1.4.2
+	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/gogather/blackfriday/v2 v2.2.7
 	github.com/gogather/cleaner v0.0.0-20190625151327-c9276b274332 // indirect
 	github.com/gogather/com v1.0.0
@@ -43,12 +44,15 @@ require (
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.38
 	github.com/unknwon/com v1.0.1
 	go.uber.org/automaxprocs v1.5.1
+	golang.org/x/tools v0.11.0 // indirect
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/redis.v5 v5.2.9
-	gorm.io/datatypes v1.0.7
-	gorm.io/driver/mysql v1.3.2
-	gorm.io/driver/sqlite v1.3.1
-	gorm.io/gorm v1.23.6
+	gorm.io/datatypes v1.2.0
+	gorm.io/driver/mysql v1.5.1
+	gorm.io/driver/sqlite v1.5.0
+	gorm.io/gorm v1.25.2
+	gorm.io/hints v1.1.2 // indirect
+	gorm.io/plugin/dbresolver v1.4.1 // indirect
 	rsc.io/qr v0.2.0
 )
